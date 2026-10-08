@@ -19,5 +19,12 @@ export default defineConfig({
     url: "http://localhost:3100",
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
+    // Proměnné z procesu mají přednost před .env.local – testy nikdy nesáhnou na ostré služby.
+    // Supabase míří na nedostupnou adresu: ověřujeme, že návštěvník srovnání dostane i bez databáze.
+    env: {
+      SUPABASE_URL: "http://127.0.0.1:9",
+      SUPABASE_SECRET_KEY: "e2e-not-a-key",
+      LEAD_TOKEN_SECRET: "e2e-secret",
+    },
   },
 });

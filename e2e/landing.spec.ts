@@ -106,7 +106,8 @@ test("375 px: žádný vodorovný scroll, pole mají popisky", async ({ page }) 
     expect(width, url).toBeLessThanOrEqual(375);
   }
   await page.goto("/");
-  for (const input of await page.locator("main input:not([type=radio]):not(.sr-only)").all()) {
+  // honeypot [name=website] je záměrně skrytý i před čtečkami (aria-hidden)
+  for (const input of await page.locator("main input:not([type=radio]):not(.sr-only):not([name=website])").all()) {
     await expect(input).toHaveAccessibleName(/.+/);
   }
 });
@@ -134,4 +135,26 @@ test("měření: celá cesta v pořadí funnelu s ad_variant a UTM", async ({ pa
   for (const entry of layer) {
     expect(entry).toMatchObject({ ad_variant: "a", utm_source: "meta", utm_content: "a-uspora" });
   }
+});
+
+test("nedostupná databáze: srovnání se zobrazí i tak a stránka to řekne", async ({ page }) => {
+  await page.goto("/#formular");
+  // déle než časová past proti robotům (MIN_FILL_MS), aby šel požadavek opravdu do databáze
+  await page.waitForTimeout(2100);
+  await page.getByRole("textbox", { name: "E-mail" }).fill("jana@example.cz");
+  await page.getByRole("button", { name: "Zobrazit plné srovnání" }).click();
+  const thanks = page.getByTestId("thank-you");
+  await expect(thanks.getByTestId("pair")).toHaveCount(5);
+  await expect(page.getByTestId("delivery")).toContainText("nepodařilo", { timeout: 10_000 });
+});
+
+test("robot s vyplněným honeypotem dostane stejný děkovací stav", async ({ page }) => {
+  await page.goto("/#formular");
+  const honeypot = page.locator('input[name="website"]');
+  await expect(honeypot).toHaveAttribute("tabindex", "-1");
+  await honeypot.fill("https://spam.example", { force: true });
+  await page.getByRole("textbox", { name: "E-mail" }).fill("bot@example.cz");
+  await page.getByRole("button", { name: "Zobrazit plné srovnání" }).click();
+  await expect(page.getByTestId("thank-you").getByTestId("pair")).toHaveCount(5);
+  await expect(page.getByTestId("delivery")).toContainText("Kopii vám pošleme");
 });
