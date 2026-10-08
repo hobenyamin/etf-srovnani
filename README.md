@@ -66,6 +66,13 @@ TODO – pokyny agentům. Chyby: [`docs/ai-chyby.md`](docs/ai-chyby.md), exporty
 15. **V účtence jen UCITS fondy (dostupné v ČR) seskupené podle TER, plus dva průměry ESMA.** US fondy v kalkulačce nejsou – stránka je nenabízí. Žádný řádek není označen jako „nejlepší“.
 16. **Varianta hero podle `utm_content`:** hodnota začínající `b` → hero B, jinak A. `proxy.ts` přepisuje na staticky předrenderovanou `/v/b` (noindex, canonical `/`), takže hero při načtení nebliká a URL s UTM zůstává.
 17. **Formulář: e-mail + jeden nepovinný nepředvyplněný souhlas s novinkami.** Doručení srovnání je vyřízení žádosti (čl. 6 odst. 1 písm. b GDPR), novinky jen se souhlasem (480/2004) – oba texty jsou na stránce oddělené. Údaje provozovatele zatím viditelně „[doplnit]“ – nevymýšlíme je.
+18. **Jeden řádek na e-mail, první atribuce zůstává.** Opakované odeslání nepřepíše UTM, variantu ani kalkulačku z prvního příchodu. Souhlas s novinkami se jen přidá (nové znění a čas). Odškrtnutý checkbox při dalším odeslání není odvolání souhlasu, to jde odkazem v e-mailu. Řeší to atomicky SQL funkce `upsert_lead` ([migrace](supabase/migrations/20261009_leads.sql)).
+19. **Srovnání se zobrazí hned, lead se ukládá na pozadí.** Když databáze nebo limit selže, návštěvník srovnání stejně dostane a stránka mu řekne, že kopie e-mailem nepřijde. Slib „zobrazí se hned“ tak platí vždy.
+20. **Ochrana proti spamu bez tření pro člověka:** skryté pole (honeypot), odeslání do 2 s od zobrazení a limit 20 odeslání za 10 minut na IP v paměti serveru. Limit je volnější, protože mobilní operátoři sdílejí IP mezi mnoha lidmi (CGNAT). Robot dostane stejnou odpověď jako člověk, ale nic se neuloží. CAPTCHA (Turnstile) zatím ne: snižuje konverzi a je to další třetí strana.
+21. **IP adresu neukládáme.** Slouží jen jako klíč limitu v paměti. Do databáze ani do logů nejde, e-mail se nelogují ani při chybě.
+22. **Výsledek kalkulačky k leadu přepočítává server** ze vstupů oříznutých na povolené rozsahy. Číslům z prohlížeče nevěříme.
+23. **Nepotvrzené adresy mažeme po 30 dnech** (pg_cron, denně). Kdo nepotvrdil e-mail, nemá s námi vztah, který by delší uložení odůvodnil. Lhůtu pro potvrzené adresy určí provozovatel.
+24. **Zápis do databáze jen ze serveru.** RLS je zapnuté bez jediné politiky, práva má jen role `service_role` (tajný klíč, jen na serveru, hlídá balíček `server-only`). Veřejný klíč nic nepřečte ani nezapíše.
 
 ## Co chybí a proč
 
@@ -75,6 +82,10 @@ TODO – pokyny agentům. Chyby: [`docs/ai-chyby.md`](docs/ai-chyby.md), exporty
 - **Průměrné náklady fondů přímo v ČR.** ESMA má přílohu po zemích (Annexes PDF); hodnotu za ČR jsme zatím nedohledali. Tisk uvádí průměr kolem 2 % (e15), ale jde o sekundární zdroj bez metodiky, proto ho nepoužíváme.
 - **Údaje skutečného provozovatele.** Stránka je ukázkový projekt do výběrového řízení a jako autor je uveden Nikolas Hošek (hosek@weborio.cz). **Před ostrým spuštěním je nutné doplnit údaje skutečného provozovatele**: název, IČO, sídlo a kontakt v patičce i u formuláře (správce osobních údajů). Vyžaduje to zákon a reklamní platformy.
 - **Plné znění zásad ochrany osobních údajů** (`/zasady` je kostra).
+- **Limit odeslání je jen v paměti jedné instance.** Na Vercelu může běžet víc instancí, takže limit je orientační. Pro ostrý provoz: rate limiting ve Vercel Firewall nebo Upstash Redis. Turnstile až při skutečném spamu.
+- **Free plán Supabase se po týdnu nečinnosti uspí** a mazání přes pg_cron pak neběží. Pro ostrý provoz Pro plán.
+- **Lhůta uložení potvrzených adres a příjemci údajů** v zásadách: musí doplnit provozovatel.
+- **Migrace se spouští ručně** v SQL editoru Supabase (bez Supabase CLI). Logika SQL funkcí byla během vývoje ověřena v PGlite (Postgres ve WASM): upsert, práva rolí, mazání po 30 dnech, opakované spuštění.
 - **Daňový tahák (W-8BEN, časový test).** Zatím neexistuje, proto ho stránka neslibuje – ani ve formuláři, ani na děkovací obrazovce. Vrátí se, až bude text se zdroji hotový a zkontrolovaný.
 
 ## Zdroje dat
@@ -111,7 +122,13 @@ npm run build
 npm test             # unit testy výpočtu (Vitest)
 npm run check-data   # kontrola zdrojů v data/
 npx playwright install --with-deps chromium   # jednou
-npm run e2e          # Playwright, mobil 375 px
+npm run e2e          # Playwright, mobil 375 px (ostré služby nevolá, viz playwright.config.ts)
 ```
+
+### Nastavení služeb
+
+1. `cp .env.example .env.local` a doplnit hodnoty podle komentářů v souboru. `.env.local` se necommituje.
+2. Supabase: celý obsah [`supabase/migrations/20261009_leads.sql`](supabase/migrations/20261009_leads.sql) spustit v SQL Editoru. Když selže `create extension pg_cron`, zapnout Cron v Dashboardu (Integrations → Cron) a spustit zbytek souboru.
+3. Na Vercelu nastavit stejné proměnné (Settings → Environment Variables).
 
 Variantu hero B zobrazíte přes `/?utm_content=b-zvedavost`.
