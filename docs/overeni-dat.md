@@ -221,9 +221,9 @@ Na těchto třech polích stojí celé srovnání a kalkulačka poplatků.
 
 ## 3. Referenční náklady ESMA (`data/benchmarks.json`)
 
-Pro kalkulačku poplatků a tvrzení reklamy A. Staženo **2026-10-09**. Otevři PDF, vyhledej „passive equity ETFs (0.2%)“ a zkontroluj i číslo strany.
+Pro kalkulačku poplatků a tvrzení reklamy A. Staženo **2026-10-09**. Ověřeno ručně v PDF 2026-10-09: citace na straně 21 sedí.
 
 | ✓ | Hodnota | Zdroj | Co ověřit |
 | --- | --- | --- | --- |
-| ☐ | Průměrný pasivní akciový ETF v EU: 0,2 % | [ESMA, Costs and Performance of EU Retail Investment Products 2025](https://www.esma.europa.eu/sites/default/files/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and_Performance_of_EU_Retail_Investment_Products.pdf) | Úryvek „active equity ETFs have higher ongoing costs (0.3%) than passive equity ETFs (0.2%)…“, strana 21? |
-| ☐ | Průměrný aktivní akciový fond v EU (bez ETF): 1,2 % | tamtéž | „… far below active equity funds excluding ETFs (1.2%)“, data za rok 2024, horizont 1 rok |
+| ☑ | Průměrný pasivní akciový ETF v EU: 0,2 % | [ESMA, Costs and Performance of EU Retail Investment Products 2025](https://www.esma.europa.eu/sites/default/files/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and_Performance_of_EU_Retail_Investment_Products.pdf) | Úryvek „active equity ETFs have higher ongoing costs (0.3%) than passive equity ETFs (0.2%)…“, strana 21 |
+| ☑ | Průměrný aktivní akciový fond v EU (bez ETF): 1,2 % | tamtéž | „… far below active equity funds excluding ETFs (1.2%)“, data za rok 2024, horizont 1 rok |
