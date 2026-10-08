@@ -1,12 +1,23 @@
 "use client";
 
 import { type ReactNode, useEffect, useId, useRef, useState } from "react";
+import { saveQualify } from "@/app/actions/lead";
+import { QUALIFY_ANSWERS } from "@/lib/lead";
 import { track } from "@/lib/track";
 
-const BROKER_ANSWERS = ["Ano", "Ne", "Zvažuji"] as const;
+/** Stav uložení leadu: čeká se na server / uloženo / nepovedlo se (Supabase nedostupný, limit). */
+export type Delivery = "pending" | "sent" | "failed";
 
 /** Děkovací stav: slíbený obsah hned na stránce, ne „čekejte na e-mail“. Jedna nepovinná otázka. */
-export function ThankYou({ children }: { children: ReactNode }) {
+export function ThankYou({
+  delivery,
+  leadRef,
+  children,
+}: {
+  delivery: Delivery;
+  leadRef: string | null;
+  children: ReactNode;
+}) {
   const heading = useRef<HTMLHeadingElement>(null);
   const [answer, setAnswer] = useState<string | null>(null);
   const questionId = useId();
@@ -16,17 +27,23 @@ export function ThankYou({ children }: { children: ReactNode }) {
     heading.current?.scrollIntoView({ block: "start" });
   }, []);
 
+  // Odpověď se uloží, jakmile je známý lead – i když návštěvník odpoví dřív, než server odpoví.
+  useEffect(() => {
+    if (answer && leadRef) saveQualify(leadRef, answer).catch(() => {});
+  }, [answer, leadRef]);
+
   return (
     <div data-testid="thank-you">
       <h2 ref={heading} tabIndex={-1} id="formular-h" className="font-display text-2xl leading-8 font-semibold outline-none">
         Hotovo. Tady je plné srovnání.
       </h2>
-      <p className="mt-2 text-[15px] leading-6 text-muted">
-        Kopii vám pošleme e-mailem. Potvrďte prosím adresu odkazem, který vám přijde.
+      <p className="mt-2 text-[15px] leading-6 text-muted" role="status" data-testid="delivery">
+        {delivery === "failed"
+          ? "E-mail se nám teď nepodařilo zpracovat, kopie proto nepřijde. Srovnání máte celé tady na stránce."
+          : "Kopii vám pošleme e-mailem. Potvrďte prosím adresu odkazem, který vám přijde."}
       </p>
 
       <div className="mt-8 space-y-8">{children}</div>
-
 
       <fieldset className="mt-10 rounded-sm bg-card p-4" aria-describedby={questionId}>
         <legend className="float-left font-semibold">Máte už účet u&nbsp;brokera?</legend>
@@ -39,18 +56,17 @@ export function ThankYou({ children }: { children: ReactNode }) {
           </p>
         ) : (
           <div className="mt-3 grid grid-cols-3 gap-2">
-            {BROKER_ANSWERS.map((a) => (
+            {QUALIFY_ANSWERS.map((a) => (
               <button
-                key={a}
+                key={a.value}
                 type="button"
                 onClick={() => {
-                  // Krok 4: uložit k leadu
-                  track("qualify_answer", { has_broker: a });
-                  setAnswer(a);
+                  track("qualify_answer", { has_broker: a.value });
+                  setAnswer(a.value);
                 }}
                 className="h-11 rounded-sm border border-ink text-[15px]"
               >
-                {a}
+                {a.label}
               </button>
             ))}
           </div>

@@ -1,41 +1,74 @@
 "use client";
 
 import Link from "next/link";
-import { type FormEvent, type ReactNode, useId, useRef, useState } from "react";
-import { ThankYou } from "@/components/ThankYou";
+import { type FormEvent, type ReactNode, useEffect, useId, useRef, useState, useTransition } from "react";
+import { submitLead } from "@/app/actions/lead";
+import { type Delivery, ThankYou } from "@/components/ThankYou";
 import { TrackView } from "@/components/TrackView";
-import { CONSENT, OPERATOR } from "@/lib/site";
+import { isValidEmail, type LeadPayload, normalizeEmail } from "@/lib/lead";
+import { CONSENT } from "@/lib/site";
 import { trackOnce } from "@/lib/track";
+import { getAdVariant, getCalcInput, utmFromUrl } from "@/lib/visit";
 
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-
-/** E-mail + nepovinný souhlas s novinkami. Po odeslání se hned zobrazí slíbený obsah (krok 3: bez backendu). */
+/**
+ * E-mail + nepovinný souhlas s novinkami. Po odeslání se slíbený obsah zobrazí hned – uložení leadu
+ * běží na pozadí, a když selže (Supabase nedostupný), návštěvník srovnání stejně dostane.
+ */
 export function LeadForm({ fullComparison }: { fullComparison: ReactNode }) {
   const [email, setEmail] = useState("");
   const [marketing, setMarketing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [delivery, setDelivery] = useState<Delivery>("pending");
+  const [leadRef, setLeadRef] = useState<string | null>(null);
+  const [, startTransition] = useTransition();
   const emailRef = useRef<HTMLInputElement>(null);
+  const honeypotRef = useRef<HTMLInputElement>(null);
+  const shownAt = useRef(0);
   const ids = { email: useId(), error: useId(), consent: useId(), gdpr: useId() };
+
+  useEffect(() => {
+    shownAt.current = Date.now();
+  }, []);
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
-    const value = email.trim();
-    if (!EMAIL.test(value)) {
+    const value = normalizeEmail(email);
+    if (!isValidEmail(value)) {
       setError(value ? "Zkontrolujte prosím e-mail, něco v něm chybí." : "Vyplňte prosím e-mail.");
       emailRef.current?.focus();
       return;
     }
     setError(null);
-    // Krok 4: uložení leadu (Supabase), consent_text + consent_at, double opt-in
     trackOnce("form_submit", { marketing_consent: marketing });
     setSubmitted(true);
+
+    const payload: LeadPayload = {
+      email: value,
+      marketing,
+      adVariant: getAdVariant(),
+      utm: utmFromUrl(),
+      calcInput: getCalcInput(),
+      website: honeypotRef.current?.value ?? "",
+      elapsedMs: Date.now() - shownAt.current,
+    };
+    startTransition(async () => {
+      try {
+        const result = await submitLead(payload);
+        setDelivery(result.ok && result.stored ? "sent" : "failed");
+        if (result.ok) setLeadRef(result.ref);
+      } catch {
+        setDelivery("failed");
+      }
+    });
   }
 
   return (
     <section id="formular" aria-labelledby="formular-h" className="scroll-mt-4 border-t border-rule px-4 py-10">
       {submitted ? (
-        <ThankYou>{fullComparison}</ThankYou>
+        <ThankYou delivery={delivery} leadRef={leadRef}>
+          {fullComparison}
+        </ThankYou>
       ) : (
         <TrackView event="form_view">
           <h2 id="formular-h" className="font-display text-2xl leading-8 font-semibold">
@@ -49,7 +82,7 @@ export function LeadForm({ fullComparison }: { fullComparison: ReactNode }) {
           </ul>
           <p className="mt-3 text-[15px] font-semibold">Zobrazí se hned po odeslání, kopii pošleme e-mailem.</p>
 
-          <form noValidate onSubmit={onSubmit} className="mt-6" aria-describedby={ids.gdpr}>
+          <form noValidate onSubmit={onSubmit} className="relative mt-6" aria-describedby={ids.gdpr}>
             <label htmlFor={ids.email} className="block font-semibold">
               E-mail
             </label>
@@ -73,6 +106,14 @@ export function LeadForm({ fullComparison }: { fullComparison: ReactNode }) {
               </p>
             )}
 
+            {/* Past na roboty: člověk pole nevidí ani na něj nedojde klávesnicí. */}
+            <div aria-hidden className="absolute -left-[9999px] h-px w-px overflow-hidden">
+              <label>
+                Nevyplňujte
+                <input ref={honeypotRef} name="website" type="text" tabIndex={-1} autoComplete="off" defaultValue="" />
+              </label>
+            </div>
+
             <div className="mt-4 flex gap-3">
               <input
                 id={ids.consent}
@@ -95,8 +136,7 @@ export function LeadForm({ fullComparison }: { fullComparison: ReactNode }) {
             </button>
 
             <p id={ids.gdpr} className="mt-4 text-[13px] leading-5 text-muted">
-              Správce: {OPERATOR.name} ({OPERATOR.email}). {CONSENT.delivery} Novinky posíláme jen se
-              souhlasem výše (čl. 6 odst. 1 písm. a&nbsp;GDPR). Podrobnosti v{" "}
+              {CONSENT.notice} Podrobnosti v{" "}
               <Link href="/zasady" className="underline">
                 zásadách ochrany osobních údajů
               </Link>

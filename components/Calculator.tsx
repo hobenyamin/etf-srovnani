@@ -6,6 +6,7 @@ import { clampInput, DEFAULT_INPUT, LIMITS, RETURN_OPTIONS } from "@/lib/calc";
 import { computeFees, type FeeRow } from "@/lib/fees";
 import { formatInteger, parseAmount } from "@/lib/format";
 import { trackOnce } from "@/lib/track";
+import { setCalcInput } from "@/lib/visit";
 
 const MONTHLY_PRESETS = [1000, 2000, 5000];
 
@@ -34,11 +35,13 @@ export function Calculator({ rows }: { rows: FeeRow[] }) {
     setInteracted(true);
   }
 
-  // calc_result: první ustálený výsledek po interakci (návštěvník přestal měnit vstupy)
+  // calc_result: první ustálený výsledek po interakci (návštěvník přestal měnit vstupy).
+  // Každý ustálený vstup se pamatuje pro formulář – k leadu se ukládá ten poslední.
   const gap = result.esmaGap;
   useEffect(() => {
     if (!interacted) return;
     const timer = setTimeout(() => {
+      setCalcInput(input);
       trackOnce("calc_result", { calc_input: input, calc_result: { esma_gap: Math.round(gap) } });
       setResultShown(true);
     }, 800);
