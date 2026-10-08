@@ -4,7 +4,7 @@ Dvě verze reklamy. Kampaň cílí jen na ČR.
 
 | Složka | Varianta | Slib |
 | --- | --- | --- |
-| `a-uspora/` | A – úspora | Rozdíl v poplatcích fondů dělá za 20 let desítky tisíc Kč, i bez jakéhokoli výnosu. Spočítejte si to. |
+| `a-uspora/` | A – úspora | Při 2 000 Kč měsíčně je rozdíl v poplatcích fondů za 20 let přes 40 000 Kč – i bez jakéhokoli výnosu. Spočítejte si to. |
 | `b-zvedavost/` | B – zvědavost | Proč si v Česku nekoupíte VOO? A jaké alternativy jsou v ČR dostupné. |
 
 ## Obsah každé varianty
@@ -21,7 +21,21 @@ Původní text „Na poplatcích ETF můžete za 20 let ztratit desítky tisíc 
 - ESMA, *Costs and Performance of EU Retail Investment Products 2025* (3. 3. 2026, data 2024): pasivní akciové ETF 0,2 %, aktivní akciové fondy bez ETF 1,2 % průběžných nákladů ročně (`data/benchmarks.json`).
 - 2 000 Kč měsíčně, 20 let, výnos 0 %: rozdíl **44 246 Kč** (zamčeno unit testem `lib/calc.test.ts`, v reklamě a hero zaokrouhleno na 44 200 Kč).
 
-Proto nový text (sloveso „ztratit“ je nepřesné – poplatek se platí) a povinný disclaimer v reklamě:
+Proto nový text (sloveso „ztratit“ je nepřesné – poplatek se platí):
+
+> Při 2 000 Kč měsíčně je rozdíl v poplatcích fondů za 20 let přes 40 000 Kč – i bez jakéhokoli výnosu. Spočítejte si to.
+
+Podmínka „při 2 000 Kč měsíčně“ je v textu nutná. Rozdíl roste s částkou, bez ní by tvrzení neplatilo pro každého (výnos 0 %, 20 let):
+
+| Měsíčně | Rozdíl ESMA 0,2 % vs. 1,2 % |
+| --- | --- |
+| 500 Kč | 11 061 Kč |
+| 1 000 Kč | 22 123 Kč |
+| 2 000 Kč | 44 246 Kč |
+
+Historie: (1) „Na poplatcích ETF můžete za 20 let ztratit desítky tisíc Kč“ – mezi ETF neplatí; (2) „Rozdíl v poplatcích fondů dělá za 20 let desítky tisíc Kč, i bez jakéhokoli výnosu“ – bez podmínky výše vkladu, při 500 Kč měsíčně neplatí (odhalila lidská revize); (3) aktuální text.
+
+Povinný disclaimer v reklamě:
 
 > Průměrné průběžné náklady ETF (0,2 %) vs. aktivních akciových fondů v EU (1,2 %) podle ESMA (2026, data 2024), 2 000 Kč měsíčně po dobu 20 let, výnos 0 %: rozdíl 44 200 Kč. Modelový výpočet, ne doporučení.
 
