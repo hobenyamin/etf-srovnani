@@ -1,0 +1,1674 @@
+
+❯ <ide_opened_file>The user opened the file
+  /home/snnikol/work/etf-srovnani/2026-10-08-kostra-projektu.txt in the IDE.
+  This may or may not be related to the current task.</ide_opened_file>
+
+❯ Přečti CLAUDE.md a data/README.md. Commituj, ale nepushuj, push dělám ručně.
+
+  Nejdřív drobnost: v ai-log/README.md změň konvenci názvu na
+  YYYY-MM-DD-tema.txt (export je prostý text, GitHub by .md vykreslil
+  rozházeně) a commitni.
+
+  Pak krok 2: data ETF. Navrhni plán:
+
+  5–8 ETF, které jsou skutečně kotované na NYSE (NYSE nebo NYSE Arca). U
+  každého uveď, na které stránce emitenta burzu ověříš.
+  Ke každému UCITS ekvivalent (ISIN, burza v EU, akumulační/distribuční) a
+  zdroj, ze kterého ho vezmeš.
+  Pro každé pole z data/README.md konkrétní URL stránky, ze které ho vezmeš.
+  Jak budeme data ověřovat: co zkontroluješ sám a co mám zkontrolovat já ručně.
+
+  Data zatím nestahuj ani nezapisuj. Nevymýšlej čísla ani tickery. Když si
+  něčím nejsi jistý, napiš to.
+
+  Searched for 1 pattern, ran 1 shell command (ctrl+o to expand)
+
+● Updated plan
+  ⎿  /plan to preview
+  ⎿  Error: The user doesn't want to proceed with this tool use. The tool use
+     was rejected (eg. if it was a file edit, the new_string was NOT written to
+     the file). The user provided the following reason for the rejection:  Plán
+     schvaluji s úpravami:
+
+     Dostupnost v ČR přes ČNB (JERRS): zkus to max. 15 minut. Pokud nejde
+     vyhledávat podle ISIN, vynech to a zapiš do README do „Co chybí“.
+     SCHD nepřidávej, zůstaň u 6 US fondů.
+     V checklistu docs/overeni-dat.md seřaď pole podle důležitosti: nejdřív
+     burza, ISIN a TER u všech fondů, AUM a ostatní až potom. Kritická pole
+     označ.
+
+     Jinak beze změny.
+
+● User answered Claude's questions:
+  ⎿  · Moje chyba v plánu: v nadpisu jsem napsal „6 US ETF“, ale tabulka
+     obsahuje jen 5 (SPY, VOO, IVV, VT, VTI). Kolik fondů chceš? → 5 fondů podle
+     tabulky (Doporučeno)
+
+● Updated plan
+  ⎿  /plan to preview
+
+● Updated plan
+  ⎿  /plan to preview
+
+● Updated plan
+  ⎿  /plan to preview
+
+● Updated plan
+  ⎿  /plan to preview
+
+● Updated plan
+  ⎿  /plan to preview
+
+● Updated plan
+  ⎿  /plan to preview
+
+● User approved Claude's plan
+  ⎿  Plan saved to:
+     ~/.claude/plans/pasted-content-id-38a9-p-e-ti-claude-md-stateful-lantern.md
+     · /plan to edit
+     Plán: konvence ai-logu + krok 2 (data ETF)
+
+     Kontext
+
+     Krok 1 je hotový: kostra repa a README. Než se začne stavět kalkulačka a
+     porovnání, potřebujeme podklad data/etfs.json se skutečnými a ověřenými
+     daty. Tento plán říká co budeme stahovat a odkud. Data se zatím nestahují
+     ani nezapisují. Commity dělám lokálně, push dělá uživatel.
+
+     ---
+
+     Část A – drobnost (provedu hned po schválení)
+
+     - ai-log/README.md: místo YYYY-MM-DD-tema.md napsat YYYY-MM-DD-tema.txt.
+       Jako příklad uvést skutečný soubor 2026-10-08-kostra-projektu.txt, ne
+       datum z harmonogramu (to už jednou bylo chybou, viz docs/ai-chyby.md).
+       Doplnit jednu větu proč: export je prostý text a GitHub by .md vykreslil
+       rozházeně.
+     - Commit: ai-log: konvence názvu exportu .txt místo .md (+ Co-Authored-By).
+       Bez push.
+
+     ---
+
+     Část B – výběr fondů (5 US ETF, 5 párů – schváleno, SCHD ani 6. fond se
+     nepřidává)
+
+     (Původní nadpis „6 US ETF“ byl chybný. Zapíšu to do docs/ai-chyby.md.)
+
+     U všech uvedených tickerů vím z tréninkových dat, že jsou na NYSE Arca.
+     Přesto to u každého ověřím na stránce emitenta a v prospektu (SEC EDGAR,
+     summary prospectus 497K). Na titulní straně prospektu je uvedeno „listed on
+     NYSE Arca“.
+
+     US ETF: SPY (SPDR S&P 500 ETF Trust)
+     Index: S&P 500
+     Ověření burzy (stránka emitenta):
+     ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy
+     (pole „Exchange“)
+     UCITS ekvivalent (návrh): SPDR S&P 500 UCITS ETF: SPY5 (dist.,
+     IE00B6YX5C33) /
+     SPYL (acc.)
+     Jistota: ISIN SPY5 jistý, ISIN SPYL nejistý, ověřím na ssga.com/ie
+     ────────────────────────────────────────
+     US ETF: VOO (Vanguard S&P 500 ETF)
+     Index: S&P 500
+     Ověření burzy (stránka emitenta):
+     investor.vanguard.com/investment-products/etfs/profile/voo;
+     pokud tam burza není, tak advisors.vanguard.com
+     UCITS ekvivalent (návrh): Vanguard S&P 500 UCITS ETF: VUSA (dist.,
+     IE00B3XXRP09) / VUAA (acc., IE00BFMXXD54)
+     Jistota: vysoká, ověřit
+     ────────────────────────────────────────
+     US ETF: IVV (iShares Core S&P 500 ETF)
+     Index: S&P 500
+     Ověření burzy (stránka emitenta): ishares.com/us/products/239726/ (ID
+     produktu
+     ověřím)
+     UCITS ekvivalent (návrh): iShares Core S&P 500 UCITS ETF: CSPX / na Xetra
+     SXR8
+     (acc., IE00B5BMR087); dist. varianta IUSA (IE0031442068)
+     Jistota: vysoká, ověřit
+     ────────────────────────────────────────
+     US ETF: VT (Vanguard Total World Stock ETF)
+     Index: FTSE Global All Cap
+     Ověření burzy (stránka emitenta): investor.vanguard.com/…/profile/vt
+     UCITS ekvivalent (návrh): Vanguard FTSE All-World UCITS ETF: VWRL (dist.,
+     IE00B3RBWM25) / VWCE (acc., IE00BK5BQT80)
+     Jistota: vysoká. Pozor: jiný index (All-World = large + mid cap, VT = i
+     small
+     cap), na stránce to uvedeme
+     ────────────────────────────────────────
+     US ETF: VTI (Vanguard Total Stock Market ETF)
+     Index: CRSP US Total Market
+     Ověření burzy (stránka emitenta): investor.vanguard.com/…/profile/vti
+     UCITS ekvivalent (návrh): Přesný ekvivalent nevím. Vanguard podle mě UCITS
+     fond
+     na CRSP Total Market nemá. Kandidát na „nejbližší alternativu“ (MSCI USA
+     nebo
+      S&P 500) dohledám a ukážu ti ho ke schválení
+     Jistota: nízká
+
+     Proč takhle:
+     - Tři S&P 500 fondy jsou jádro stránky. Navazují na reklamu B („Proč si
+       nekoupíte VOO“) a na bolest cílové skupiny. Každý US fond párujeme s
+       UCITS fondem stejného emitenta na stejný index, takže srovnání je čisté.
+     - VT a VTI ukazují „širší trh“ a cílovka je zná z diskuzí. VTI ukazuje i
+       to, že ne každý US fond má 1:1 náhradu. To je poctivé a dává to důvod si
+       stáhnout plné srovnání.
+     - Vynechané: QQQ a QQQM (obojí Nasdaq), VXUS a BND (myslím, že jsou na
+       Nasdaqu). SCHD vynechán (rozhodnutí uživatele).
+
+     EU burza UCITS: primárně Xetra (EUR), protože ji nabízí většina brokerů
+     dostupných v ČR. Sekundárně LSE (USD). Ticker na Xetře se může lišit od
+     londýnského (CSPX → SXR8). Na každé burze proto ticker ověřím zvlášť na
+     stránce emitenta, v záložce „Listings / Trading information“.
+
+     ---
+
+     Část C – zdroj pro každé pole
+
+     Struktura záznamu (návrh): každé pole je { value, source_url, retrieved_at,
+     note }. Tak splníme pravidlo „každá hodnota má zdroj a datum“.
+
+     Pole: ticker
+     US ETF – zdroj: stránka emitenta (viz tabulka B)
+     UCITS – zdroj: stránka emitenta, záložka Listings
+     Poznámka / nejistota: UCITS: ticker podle burzy
+     ────────────────────────────────────────
+     Pole: name
+     US ETF – zdroj: stránka emitenta + titul prospektu (EDGAR)
+     UCITS – zdroj: KID nebo factsheet emitenta
+     Poznámka / nejistota:
+     ────────────────────────────────────────
+     Pole: issuer
+     US ETF – zdroj: stránka emitenta
+     UCITS – zdroj: stránka emitenta
+     Poznámka / nejistota: SPY: emitent je SPDR/State Street, formálně je to
+     trust,
+     sponzor PDR Services. Uvedu „State Street (SPDR)“
+     ────────────────────────────────────────
+     Pole: isin
+     US ETF – zdroj: Nejistota: US weby emitentů většinou ukazují jen CUSIP.
+     Postup:
+     CUSIP z webu emitenta → ISIN (US + CUSIP + kontrolní číslice) → křížová
+     kontrola proti OpenFIGI (openfigi.com) nebo nyse.com
+     UCITS – zdroj: KID / factsheet (ISIN je vždy uveden)
+     Poznámka / nejistota: Kontrolní číslici ověřím skriptem (Luhn)
+     ────────────────────────────────────────
+     Pole: exchange
+     US ETF – zdroj: stránka emitenta + summary prospectus 497K na sec.gov/edgar
+     UCITS – zdroj: stránka emitenta, záložka Listings
+     Poznámka / nejistota: Doplňkově nyse.com/quote/ARCX:<ticker>. Web je
+     postavený
+     na JS, nemusí jít načíst
+     ────────────────────────────────────────
+     Pole: domicile
+     US ETF – zdroj: prospekt (US, trust/registered investment company)
+     UCITS – zdroj: KID/factsheet (Irsko)
+     Poznámka / nejistota:
+     ────────────────────────────────────────
+     Pole: currency
+     US ETF – zdroj: stránka emitenta (USD)
+     UCITS – zdroj: stránka emitenta: měna fondu (USD) vs. měna obchodování na
+     Xetře
+     (EUR)
+     Poznámka / nejistota: Nejasnost ve schématu – viz rozhodnutí níže
+     ────────────────────────────────────────
+     Pole: ter
+     US ETF – zdroj: stránka emitenta („expense ratio“) + prospekt (fee table)
+     UCITS – zdroj: KID / factsheet („TER“/„OCF“)
+     Poznámka / nejistota: SPY má gross vs. net. U US je to „expense ratio“, u
+     UCITS
+     TER. V poznámce uvedu přesný název metriky
+     ────────────────────────────────────────
+     Pole: aum
+     US ETF – zdroj: stránka emitenta („Net assets“, s datem „as of“)
+     UCITS – zdroj: stránka emitenta („Fund size“ / „Net assets of fund“)
+     Poznámka / nejistota: Mění se denně. Uložíme datum „as of“ ze zdroje, nejen
+
+     datum stažení. Pozor: Vanguard udává AUM třídy ETF zvlášť a celého fondu
+     zvlášť. Uvedu, které číslo bereme
+     ────────────────────────────────────────
+     Pole: distribution
+     US ETF – zdroj: prospekt / web (frekvence výplat)
+     UCITS – zdroj: KID / název fondu (Acc/Dist)
+     Poznámka / nejistota:
+     ────────────────────────────────────────
+     Pole: ucits_equivalent
+     US ETF – zdroj: –
+     UCITS – zdroj: odkaz (ISIN) na UCITS záznam ve stejném JSONu + match:
+     "same_index" | "closest"
+     Poznámka / nejistota: VT↔VWCE a VTI↔? = closest
+
+     Dostupnost v ČR (zadání ji chce v plném srovnání): zdroj bude seznam
+     zahraničních fondů oznámených ČNB (JERRS). Časový limit: max. 15 minut.
+     Pokud se v něm nedá vyhledávat podle ISIN, pole vynecháme a zapíšeme to do
+     README do sekce „Co chybí“. Konkrétní brokery („koupíte u X“) neuvádět:
+     hrozí zastarání dat a vypadalo by to jako doporučení.
+
+     Agregátory (justETF apod.) jen jako křížová kontrola, nikdy jako
+     source_url. Yahoo Finance vůbec.
+
+     ---
+
+     Část D – ověřování
+
+     Co udělám já:
+     1. Každou stránku načtu (WebFetch) a do note uložím doslovný úryvek, ze
+        kterého hodnota pochází.
+     2. Každé číslo (TER, AUM) porovnám se dvěma zdroji: web emitenta a
+        prospekt/KID. Když se liší, zapíšu obojí a označím to.
+     3. Skriptem ověřím kontrolní číslice ISIN a to, že u párů same_index sedí
+        název indexu.
+     4. Když stránku nenačtu (JS, cookie wall), nic nedoplním. Pole zůstane null
+        + poznámka „nutné ruční stažení“ a dám ti seznam URL.
+     5. Každou chybu, kterou najdeš ty, zapíšu do docs/ai-chyby.md.
+
+     Co zkontroluješ ty ručně (připravím checklist docs/overeni-dat.md: tabulka
+     fond × pole × URL × hodnota × ☐).
+     Pořadí v checklistu: nejdřív blok KRITICKÉ (označený), tedy exchange, isin
+     a ter u všech 10 fondů. Potom aum a nakonec ostatní pole.
+     - Otevřít každý source_url v prohlížeči a porovnat TER, ISIN, burzu, AUM
+       hodnotu po hodnotě.
+     - Schválit páry closest (hlavně VTI).
+     - Ověřit stránky, které se mi nepodaří načíst (pravděpodobně Vanguard a
+       nyse.com).
+     - Volitelně se podívat u svého brokera, jestli se UCITS fondy v ČR dají
+       koupit (jen pro kontrolu, do dat to nedáváme).
+     - Commit dat proběhne až po tvém odškrtnutí checklistu.
+
+     ---
+
+     Rozhodnutí k zapsání do README („Rozhodnutí v nejasnostech“)
+
+     1. Měna: currency = měna obchodování na zvolené burze (podle schématu).
+        Přidám base_currency (měna fondu), protože pro měnové riziko USD/CZK je
+        podstatná ona.
+     2. Párování: stejný emitent a stejný index, kde to jde. Jinak closest s
+        vysvětlením.
+     3. AUM s datem „as of“ ze zdroje, ne jen s datem stažení.
+     4. Dostupnost v ČR = registrace u ČNB, ne seznam brokerů. Pokud se do 15
+        minut nepodaří dohledat podle ISIN, zapíšeme ji do „Co chybí“.
+
+     Navazující commity (až po schválení dat)
+
+     1. data: schéma záznamu se zdrojem u každé hodnoty (úprava data/README.md)
+     2. data: US ETF z NYSE Arca se zdroji (etfs.json)
+     3. data: UCITS ekvivalenty se zdroji
+     4. docs: checklist ručního ověření dat
+     5. README: rozhodnutí + připomenutí /export do ai-log/
+
+     Ověření hotového kroku
+
+     - etfs.json projde JSON validací a každé pole má source_url i retrieved_at
+       (malý kontrolní skript).
+     - Checklist od uživatele je odškrtnutý. npm run build projde.
+
+● Bash(cat > ai-log/README.md <<'EOF'
+      # ai-log…)
+  ⎿  Updated ai-log/README.md (+3 -1)
+      2  
+      3  Exporty konverzací z Claude Code (`/export`) po každé větší sess
+         ion.
+      4  
+      5 -Název souboru: `YYYY-MM-DD-tema.md`, např. `2026-10-09-kostra-pr
+        -ojektu.md`.                                                     
+      5 +Název souboru: `YYYY-MM-DD-tema.txt`, např. `2026-10-08-kostra-p
+        +rojektu.txt`.                                                   
+      6 +                                                                
+      7 +Přípona `.txt`, ne `.md`: export je prostý text a GitHub by ho j
+        +ako Markdown vykreslil rozházeně.                               
+
+● Ještě zapíšu chybu z plánu (6 vs. 5 fondů) do deníku chyb AI:
+
+● Bash(echo '| 2026-10-08 | V plánu kroku 2 napsal v nadpisu „6 US ETF“, ale
+      tabulka obsahovala jen 5 fondů (SPY, VOO, IVV, VT, VTI) | Uživatel ve
+      schválení napsal „zů…)
+  ⎿  Updated docs/ai-chyby.md (+1 -0)
+      5  | Datum | Co AI udělala špatně | Jak se to zjistilo | Oprava |
+      6  | --- | --- | --- | --- |
+      7  | 2026-10-08 | Navrhl název exportu s datem 2026-10-09 (převzal 
+         ho z harmonogramu, ne ze skutečného data) | Ruční kontrola proti
+          dnešnímu datu | Export pojmenován 2026-10-08 |
+      8 +| 2026-10-08 | V plánu kroku 2 napsal v nadpisu „6 US ETF“, ale 
+        +tabulka obsahovala jen 5 fondů (SPY, VOO, IVV, VT, VTI) | Uživat
+        +el ve schválení napsal „zůstaň u 6 fondů“; AI nesoulad dohledala
+        + a nechala uživatele rozhodnout | Opraveno na 5 fondů podle tabu
+        +lky |                                                           
+
+❯ Do docs/ai-chyby.md přidej záznam: 2026-10-08 | V plánu kroku 2 nadpis uváděl
+  „6 US ETF“, tabulka obsahovala 5 | Odhalila AI sama při kontrole plánu (a
+  přehlédl to i člověk při revizi plánu) | Opraveno na 5 fondů. Commitni spolu
+  s úpravou ai-log/README.md.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Oba commity jsou jen lokální, takže je sloučím do jednoho a záznam přepíšu
+  tvým zněním.
+
+● Bash(git reset -q --soft HEAD~2 && sed -i '$d' docs/ai-chyby.md && echo '|
+      2026-10-08 | V plánu kroku 2 nadpis uváděl „6 US ETF“, tabulka obsahovala
+      5 | Odhalila AI…)
+  ⎿  Updated docs/ai-chyby.md (+1 -1)
+      5  | Datum | Co AI udělala špatně | Jak se to zjistilo | Oprava |
+      6  | --- | --- | --- | --- |
+      7  | 2026-10-08 | Navrhl název exportu s datem 2026-10-09 (převzal 
+         ho z harmonogramu, ne ze skutečného data) | Ruční kontrola proti
+          dnešnímu datu | Export pojmenován 2026-10-08 |
+      8 -| 2026-10-08 | V plánu kroku 2 napsal v nadpisu „6 US ETF“, ale 
+        -tabulka obsahovala jen 5 fondů (SPY, VOO, IVV, VT, VTI) | Uživat
+        -el ve schválení napsal „zůstaň u 6 fondů“; AI nesoulad dohledala
+        - a nechala uživatele rozhodnout | Opraveno na 5 fondů podle tabu
+        -lky |                                                           
+      8 +| 2026-10-08 | V plánu kroku 2 nadpis uváděl „6 US ETF“, tabulka
+        + obsahovala 5 | Odhalila AI sama při kontrole plánu (a přehlédl 
+        +to i člověk při revizi plánu) | Opraveno na 5 fondů |           
+
+● Obě úpravy jsou v jednom commitu d3d39b5, který je jen lokálně, push je na
+  tobě.
+
+  - ai-log/README.md: konvence názvu je teď YYYY-MM-DD-tema.txt. Jako příklad
+    uvádí skutečný soubor 2026-10-08-kostra-projektu.txt a jednou větou
+    vysvětluje, proč ne .md.
+  - docs/ai-chyby.md: přidaný záznam o nesouladu „6 vs. 5 fondů“ s tvým zněním.
+
+  Než jsem si tvou zprávu přečetl, stihl jsem už udělat dva samostatné commity a
+  záznam v nich měl moje znění. Protože ještě nebyly pushnuté, sloučil jsem je
+  pomocí git reset --soft do jednoho a záznam přepsal tvým textem. Na origin se
+  nic nezměnilo.
+
+  Plán kroku 2 je schválený, ale data ještě nestahuju, jak jsi chtěl. Až
+  napíšeš, začnu podle plánu s burzou, ISIN a TER u všech 10 fondů a dostupnost
+  přes ČNB zkusím nejdéle 15 minut.
+
+  Teď je dobrá chvíle na /export do ai-log/, třeba jako 2026-10-08-plan-dat.txt.
+
+❯ Pokračuj podle schváleného plánu: stáhni a ověř data (nejdřív burza, ISIN a
+  TER u všech 10 fondů, pak ostatní pole), připrav etfs.json a checklist
+  docs/overeni-dat.md. Data necommituj, dokud checklist neodškrtnu. Až budeš
+  hotový, napiš mi shrnutí: co se podařilo ověřit ze dvou zdrojů, co zůstalo
+  null a proč, a kde se zdroje lišily.
+
+● Začnu kritickými poli u US fondů ze stránek emitentů.
+
+● Fetch(https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy)  ⎿  Received 231.6KB (200 OK)
+
+● Fetch(https://www.ishares.com/us/products/239726/ishares-core-sp-500-etf)
+  ⎿  Received 2.8MB (200 OK)
+
+● Fetch(https://investor.vanguard.com/investment-products/etfs/profile/voo)
+  ⎿  Received 257.8KB (200 OK)
+
+● WebFetch odpovídá přes menší model, takže čísla z něj nepřebírám naslepo.
+  Stáhnu surové HTML a hodnoty v něm dohledám sám.
+
+  Ran 4 shell commands (ctrl+o to expand)
+
+● SPY a IVV mám doslovně z HTML emitenta. Vanguard stránky vykresluje JS, zkusím
+  jeho datová API.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Stránka advisors.vanguard.com má data vložená přímo v HTML. Stáhnu ji pro VOO,
+  VTI a VT.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Zajímavost: VTI se na webu Vanguardu jmenuje „Vanguard Morningstar Total Stock
+  Market ETF“. Index se tedy možná změnil a musím ho ověřit. Burzu a CUSIP
+  hledám dál.
+
+  Ran 4 shell commands (ctrl+o to expand)
+
+● U Vanguardu chybí na stránce burza. Druhý zdroj pro všechny US fondy bude
+  prospekt na SEC EDGAR, zkusím fulltextové vyhledávání.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Našel jsem summary prospectus VOO (497K, 28. 4. 2026). Stejným způsobem
+  dohledám prospekty ostatních fondů.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● sec.gov bez kontaktního e-mailu v hlavičce User-Agent stahování blokuje. Tvůj
+  e-mail tam posílat nechci, takže prospekty načtu přes WebFetch.
+
+● Fetch(https://www.sec.gov/Archives/edgar/data/36405/000003640526000183/f44783d
+       1.htm)
+  ⎿  Received 110.1KB (200 OK)
+
+● Fetch(https://www.sec.gov/Archives/edgar/data/36405/000003640526000197/f44849d
+       1.htm)
+  ⎿  Received 104.4KB (200 OK)
+
+● Fetch(https://www.sec.gov/Archives/edgar/data/857489/000119312526077566/f44201
+       d1.htm)
+  ⎿  Received 106.6KB (200 OK)
+
+● Fetch(https://www.sec.gov/Archives/edgar/data/1100663/000119312526327930/d1138
+       52d497k.htm)
+  ⎿  Received 98.9KB (200 OK)
+
+● Fetch(https://www.sec.gov/Archives/edgar/data/884394/000119312526022316/d77353
+       d485bpos.htm)
+  ⎿  Received 1.2MB (200 OK)
+
+● Fetch(https://www.sec.gov/Archives/edgar/data/36405/000003640526000197/f44849d
+       1.htm)
+  ⎿  Received 104.4KB (200 OK)
+
+● Web Search("Vanguard Total Stock Market ETF VTI index change Morningstar US
+            Total Market Index CRSP")
+  ⎿  Did 1 search in 6s
+
+● Vysvětlení: Morningstar koupil CRSP a Vanguard index přejmenoval. Název fondu
+  se měnil v červenci 2026, tedy až po vydání dubnového prospektu. Dohledám
+  oznámení přímo u Vanguardu.
+
+● Web Search("Vanguard announces name changes CRSP Morningstar index funds 2026
+            Vanguard Morningstar Total Stock Market")
+  ⎿  Did 1 search in 6s
+
+● Teď ISIN u US fondů: z CUSIPu emitenta dopočítám kontrolní číslici a výsledek
+  ověřím proti OpenFIGI. Druhý zdroj burzy zkusím z NYSE.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Všech 5 ISINů sedí: kontrolní číslice dopočítané z CUSIPu emitenta odpovídají
+  OpenFIGI. U SPY je ISIN přímo i na stránce SSGA. Druhý zdroj burzy zkusím z
+  NYSE.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● NYSE adresář uvádí VOO s prefixem ARCX (MIC kód NYSE Arca). Stejně ověřím
+  všech 5 fondů:
+  Ran 3 shell commands (ctrl+o to expand)
+
+● CSPX: web emitenta potvrzuje ISIN IE00B5BMR087, TER 0,07 % a Xetra SXR8 v EUR.
+  Druhý zdroj bude KID, najdu na něj odkaz.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Napadlo mě: existence KID v češtině u emitenta je silný a ověřitelný signál
+  dostupnosti v ČR. Zkusím ho najít.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Hádaná adresa českého KID nefunguje, URL proto dál hádat nebudu. Na čtení PDF
+  si do scratchpadu (mimo projekt) nainstaluju parser.
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● CSPX je ověřený ze dvou zdrojů. Pozor, britský „KIID“ je dokument podle UCITS,
+  ne PRIIPs KID pro EU, poznamenám to. Teď Vanguard UCITS (VUAA, VWCE).
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Port 9679 je ve skutečnosti VWCE (FTSE All-World Acc, IE00BK5BQT80), slug v
+  URL Vanguard ignoruje. To se hodí, ale port pro VUAA musím najít jinak.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Web Search("vanguard.co.uk "S&P 500 UCITS ETF (USD) Accumulating" product etf
+            equity")
+  ⎿  Did 1 search in 6s
+
+● Port VUAA je 9694. Vanguard má PRIIPs KID ve vzoru
+  {isin}_priipskid_{jazyk}.pdf. Zkusím i českou verzi, protože by to byl doklad,
+  že fond je určen pro český trh.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Česká verze KID u Vanguardu neexistuje (403), u ostatních jazyků vrací 200.
+  Teď vytáhnu údaje z anglických PRIIPs KID a ze stránek VUAA a VWCE.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Pozor u VWCE: KID uvádí „management fees and other costs 0.14 %“. Na stránce
+  9679 se objevilo „0.07%“, ale nevím, ke kterému údaji patří. Podívám se na
+  kontext.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● VWCE má OCF/TER 0,14 % na webu i v KID, takže zdroje se shodují. Ono „0.07%“
+  ze stránky 9679 patřilo k jinému prvku stránky. Doplním datum k AUM a pak se
+  pustím do SPDR.
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● Datum „as at“ u AUM se na stránce Vanguardu doplňuje až v prohlížeči. AUM
+  proto vezmu z factsheetu, kde je datum v textu. Factsheet zároveň poslouží
+  jako třetí zdroj TER.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Oba Vanguard UCITS fondy mají TER ze tří zdrojů (web, KID, factsheet) a
+  hodnoty se shodují. Teď SPDR S&P 500 UCITS (SPYL), u kterého jsem si v plánu
+  nebyl jistý ISINem.
+
+● Web Search("ssga.com SPDR S&P 500 UCITS ETF (Acc) SPYL ISIN")
+  ⎿  Did 1 search in 4s
+
+● SSGA má u KID v URL parametr country. Zkusím i variantu pro ČR.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● SSGA vrací KID pro ČR v češtině, obsah ale ještě ověřím. Stránka navíc uvádí
+  seznam zemí, kde je fond registrován k prodeji. To by mohl být lepší zdroj
+  dostupnosti v ČR než ČNB.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● SPYL i CSPX uvádějí na stránce emitenta mezi zeměmi registrace „Czech
+  Republic“ a SPYL má KID v češtině. Teď časově omezený pokus s ČNB (max. 15
+  minut, start 23:20).
+
+● Web Search("ČNB JERRS seznam zahraničních investičních fondů vyhledávání ISIN
+            UCITS notifikace")
+  ⎿  Did 1 search in 6s
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● Vyhledávání v JERRS je za CAPTCHA a tu obcházet nebudu. Zbývá zkontrolovat,
+  jestli webová služba WS JERRS umožňuje hledat podle ISIN.
+
+● Fetch(https://www.cnb.cz/cs/dohled-financni-trh/seznamy/webove-sluzby-ws-jerrs
+       /)
+  ⎿  Received 70KB (200 200)
+
+● Web Search("UCITS ETF US total market index small mid large cap "Total Market"
+            OR "MSCI USA IMI" OR "Russell 3000" Ireland ETF")
+  ⎿  Did 1 search in 6s
+
+● Kandidát je SPDR Russell 3000 US Total Market UCITS ETF: ISIN z agregátoru je
+  IE00BKY7WX37, ale ověřit ho musím u emitenta.
+● Web Search("ssga.com SPDR Russell 3000 US Total Market UCITS ETF")
+  ⎿  Did 1 search in 4s
+
+● Výsledky z ssga.com u Russell 3000 UCITS jsou staré dokumenty z let 2016 a
+  2018. Fond mohl mezitím zaniknout, ověřím to přes KID podle ISIN.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Fond Russell 3000 UCITS OpenFIGI nezná a KID u SSGA vrací 404. Pravděpodobně
+  už neexistuje, a proto ho nepoužiju. Zkusím ještě širokou alternativu MSCI USA
+  u iShares.
+
+● Web Search("ishares.com "iShares MSCI USA UCITS ETF" Acc ISIN IE00")
+  ⎿  Did 1 search in 6s
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Vlastní data mám pohromadě. Než zapíšu soubory, podívám se na README a ověřím
+  strukturu sekcí.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Zapisuju data/etfs.json. Kvůli konzistenci struktury ho vygeneruju skriptem ve
+  scratchpadu, všechny hodnoty v něm jsou ty ověřené výše.
+
+  Made 1 scratchpad edit +226 (ctrl+o to expand)
+
+● Write(scripts/check-etfs.mjs)
+  ⎿  Wrote 57 lines to scripts/check-etfs.mjs
+       1 // Kontrola data/etfs.json: zdroj a datum u každého pole, ISIN,
+         vazby na UCITS ekvivalenty.
+       3 import { readFileSync } from 'node:fs';
+       4
+       5 const FIELDS = ['ticker', 'name', 'issuer', 'isin', 'exchange',
+         tion', 'index'];
+       6 const DATE = /^\d{4}-\d{2}-\d{2}$/;
+       7
+       9 function isinValid(isin) {
+      10   if (!/^[A-Z]{2}[A-Z0-9]{9}\d$/.test(isin)) return false;
+     … +65 lines (ctrl+o to expand)
+
+● Bash(node /tmp/claude-1000/-home-snnikol-work-etf-srovnani/aa371e17-355f-47d8-
+      96d4-3f5599efeb21/scratchpad/gen-etfs.mjs data/etfs.json && node
+      scripts/check-etfs.mjs)
+  ⎿  1 file changed (binary, mode only or too large to show)
+
+● Kontrola prošla. Ještě ověřím, že skript chyby opravdu zachytí: podstrčím mu
+  poškozenou kopii dat.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Skript chyby zachytí. Teď vygeneruju checklist přímo z JSONu, aby hodnoty v
+  něm nemohly obsahovat překlepy.
+
+● Bash(cat > /tmp/claude-1000/-home-snnikol-work-etf-srovnani/aa371e17-355f-47d8
+      -96d4-3f5599efeb21/scratchpad/gen-checklist.mjs <<'EOF'
+      import fs from 'fs';…)
+  ⎿  Created docs/overeni-dat.md (+205 -0)
+        1 +# Ruční ověření dat ETF                                       
+        2 +                                                              
+        3 +Kontrola `data/etfs.json` před commitem. Data stažena **2026-1
+          +0-08**.                                                       
+        4 +Postup: otevři hlavní zdroj, najdi hodnotu a odškrtni ☐ → ☑. K
+          +dyž hodnota nesedí, napiš správnou hodnotu vedle a dej vědět –
+          + oprava jde do `docs/ai-chyby.md`.                            
+        5 +                                                              
+        6 +Data se commitují až po odškrtnutí bloků 1–3. Pak v `etfs.json
+          +` nastavit `meta.verified_by_human: true`.                    
+        7 +                                                              
+        8 +Tipy:                                                         
+        9 +- Vanguard US (advisors.vanguard.com) a nyse.com se vykreslují
+          + přes JavaScript – otevři je v prohlížeči.                    
+       10 +- U NYSE ověř, že stránka je `ARCX:<ticker>` (= NYSE Arca).   
+       11 +- ISIN US fondů není na stránkách emitentů: zkontroluj CUSIP n
+          +a stránce emitenta (ISIN = `US` + CUSIP + číslice) nebo ISIN z
+          +adej do [OpenFIGI](https://www.openfigi.com/search).          
+       12 +                                                              
+       13 +## 1. KRITICKÉ – burza, ISIN, TER (všech 10 fondů)            
+       14 +                                                              
+       15 +Na těchto třech polích stojí celé srovnání a kalkulačka poplat
+          +ků.                                                           
+       16 +                                                              
+       17 +### 🔴 Burza (`exchange`)                                     
+       18 +                                                              
+       19 +| ✓ | Fond | Hodnota | Hlavní zdroj | Další zdroje |          
+       20 +| --- | --- | --- | --- | --- |                               
+       21 +| ☐ | SPY | NYSE Arca | [ssga.com](https://www.ssga.com/us/en/
+          +intermediary/etfs/spdr-sp-500-etf-trust-spy) | [ověření 1: sec
+          +.gov](https://www.sec.gov/Archives/edgar/data/884394/000119312
+          +526022316/d77353d485bpos.htm), [ověření 2: nyse.com](https://w
+          +ww.nyse.com/quote/ARCX:SPY) |                                 
+       22 +| ☐ | VOO | NYSE Arca | [sec.gov](https://www.sec.gov/Archives
+          +/edgar/data/36405/000003640526000183/f44783d1.htm) | [ověření 
+          +1: nyse.com](https://www.nyse.com/quote/ARCX:VOO) |           
+       23 +| ☐ | IVV | NYSE Arca | [ishares.com](https://www.ishares.com/
+          +us/products/239726/ishares-core-sp-500-etf) | [ověření 1: sec.
+          +gov](https://www.sec.gov/Archives/edgar/data/1100663/000119312
+          +526327930/d113852d497k.htm), [ověření 2: nyse.com](https://www
+          +.nyse.com/quote/ARCX:IVV) |                                   
+       24 +| ☐ | VTI | NYSE Arca | [sec.gov](https://www.sec.gov/Archives
+          +/edgar/data/36405/000003640526000197/f44849d1.htm) | [ověření 
+          +1: nyse.com](https://www.nyse.com/quote/ARCX:VTI) |           
+       25 +| ☐ | VT | NYSE Arca | [sec.gov](https://www.sec.gov/Archives/
+          +edgar/data/857489/000119312526077566/f44201d1.htm) | [ověření 
+          +1: nyse.com](https://www.nyse.com/quote/ARCX:VT) |            
+       26 +| ☐ | SPYL | Deutsche Börse (Xetra) | [ssga.com](https://www.s
+          +sga.com/ie/en_gb/institutional/etfs/spdr-sp-500-ucits-etf-acc-
+          +spyl-gy) | – |                                                
+       27 +| ☐ | VUAA | Deutsche Börse (Xetra) | [vanguard.co.uk](https:/
+          +/www.vanguard.co.uk/professional/product/etf/equity/9694/sp-50
+          +0-ucits-etf-usd-accumulating) | – |                           
+       28 +| ☐ | SXR8 | Deutsche Börse (Xetra) | [ishares.com](https://ww
+          +w.ishares.com/uk/individual/en/products/253743/ishares-sp-500-
+          +b-ucits-etf-acc-fund) | – |                                   
+       29 +| ☐ | SXR4 | Deutsche Börse (Xetra) | [ishares.com](https://ww
+          +w.ishares.com/uk/individual/en/products/253740/ishares-msci-us
+          +a-b-ucits-etf) | – |                                          
+       30 +| ☐ | VWCE | Deutsche Börse (Xetra) | [vanguard.co.uk](https:/
+          +/www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-
+          +all-world-ucits-etf-usd-accumulating) | – |                   
+       31 +                                                              
+       32 +### 🔴 ISIN (`isin`)                                          
+       33 +                                                              
+       34 +| ✓ | Fond | Hodnota | Hlavní zdroj | Další zdroje |          
+       35 +| --- | --- | --- | --- | --- |                               
+       36 +| ☐ | SPY | US78462F1030 | [ssga.com](https://www.ssga.com/us/
+          +en/intermediary/etfs/spdr-sp-500-etf-trust-spy) | [ověření 1: 
+          +openfigi.com](https://www.openfigi.com/search) |              
+       37 +| ☐ | VOO | US9229083632 | [advisors.vanguard.com](https://adv
+          +isors.vanguard.com/investments/products/voo/vanguard-sp-500-et
+          +f) | [ověření 1: openfigi.com](https://www.openfigi.com/search
+          +) |                                                           
+       38 +| ☐ | IVV | US4642872000 | [ishares.com](https://www.ishares.c
+          +om/us/products/239726/ishares-core-sp-500-etf) | [ověření 1: o
+          +penfigi.com](https://www.openfigi.com/search) |               
+       39 +| ☐ | VTI | US9229087690 | [advisors.vanguard.com](https://adv
+          +isors.vanguard.com/investments/products/vti/vanguard-total-sto
+          +ck-market-etf) | [ověření 1: openfigi.com](https://www.openfig
+          +i.com/search) |                                               
+       40 +| ☐ | VT | US9220427424 | [advisors.vanguard.com](https://advi
+          +sors.vanguard.com/investments/products/vt/vanguard-total-world
+          +-stock-etf) | [ověření 1: openfigi.com](https://www.openfigi.c
+          +om/search) |                                                  
+     … 165 more lines (ctrl+o to expand)
+
+● Checklist je hotový. Teď doplním dokumentaci: schéma v data/README.md,
+  rozhodnutí, „Co chybí“ a zdroje v README a chyby AI.
+
+  Read 3 files (ctrl+o to expand)
+
+● Write(data/README.md)
+  ⎿  Added 32 lines, removed 8 lines
+       2  
+       3  Statická data o ETF v `etfs.json`. Ceny v reálném čase nepotřeb
+          ujeme.
+       4  
+       5 +5 ETF kotovaných na NYSE Arca (SPY, VOO, IVV, VTI, VT) a k nim 
+         +5 UCITS alternativ obchodovaných na Xetře (SPYL, VUAA, SXR8, SX
+         +R4, VWCE). U UCITS bereme akumulační třídu; distribuční třídy j
+         +sou zmíněné jen v poznámce.                                    
+       6 +                                                               
+       7  ## Schéma záznamu
+       8  
+       9 +Každé pole kromě `id`, `kind` a `ucits_equivalent` má tvar:    
+      10 +                                                               
+      11 +```json                                                        
+      12 +{ "value": …, "source_url": "https://…", "retrieved_at": "YYYY-
+         +MM-DD", "note": "…", "cross_check": [{ "source_url", "value", "
+         +retrieved_at", "note" }] }                                     
+      13 +```                                                            
+      14 +                                                               
+      15 +`cross_check` jsou další nezávislé zdroje téže hodnoty (prospek
+         +t, KID, NYSE…). Do `note` se píše doslovný úryvek ze zdroje neb
+         +o důvod `null`.                                                
+      16 +                                                               
+      17  | Pole | Význam |
+      18  | --- | --- |
+       9 -| `ticker` | Ticker fondu |                                    
+      19 +| `id` | Krátký identifikátor (ticker na hlavní burze) |       
+      20 +| `kind` | `us` (NYSE ETF) / `ucits` (evropská alternativa) |  
+      21 +| `ticker` | Ticker fondu na uvedené burze |                   
+      22  | `name` | Celý název fondu |
+      23  | `issuer` | Emitent (Vanguard, iShares, SPDR…) |
+      24  | `isin` | ISIN |
+      13 -| `exchange` | Burza kotace (u US fondů ověřit NYSE / NYSE Arca
+         - u emitenta) |                                                 
+      25 +| `exchange` | Burza kotace (US: NYSE Arca, UCITS: Deutsche Bör
+         +se / Xetra) |                                                  
+      26  | `domicile` | Domicil fondu |
+      15 -| `currency` | Měna obchodování |                              
+      16 -| `ter` | Celková nákladovost (TER) |                          
+      17 -| `aum` | Velikost fondu |                                     
+      18 -| `distribution` | Akumulační / distribuční |                  
+      19 -| `ucits_equivalent` | Odkaz na evropskou UCITS alternativu |  
+      27 +| `currency` | Měna obchodování na uvedené burze |             
+      28 +| `base_currency` | Měna fondu – podstatná pro měnové riziko US
+         +D/CZK |                                                        
+      29 +| `ter` | Roční nákladovost v % (`0.03` = 0,03 %). US: expense 
+         +ratio, UCITS: TER/OCF |                                        
+      30 +| `aum` | `{ amount, currency, as_of }` – aktiva celého fondu (
+         +všechny třídy) k datu ze zdroje |                              
+      31 +| `distribution` | `accumulating` / `distributing` |           
+      32 +| `index` | Sledovaný index |                                  
+      33 +| `ucits_equivalent` | Jen u `us`: `{ isin, match, note }`, `ma
+         +tch` = `same_index` (stejný index) / `closest` (nejbližší alter
+         +nativa) |                                                      
+      34  
+      35 +`meta.verified_by_human` se přepne na `true` po ručním ověření 
+         +podle [`docs/overeni-dat.md`](../docs/overeni-dat.md).         
+      36 +                                                               
+      37  ## Pravidla
+      38  
+      39  - **Každá hodnota má `source_url` a `retrieved_at`** (datum sta
+          žení).
+      24 -- Zdroje: weby emitentů, SEC EDGAR, NYSE. Nescrapovat Yahoo Fin
+         -ance.                                                          
+      40 +- Zdroje: weby emitentů, SEC EDGAR, NYSE, KID/factsheety emiten
+         +tů. OpenFIGI jen pro křížovou kontrolu ISIN. Nescrapovat Yahoo 
+         +Finance; agregátory (justETF apod.) nepoužívat jako zdroj.     
+      41  - Každé číslo před commitem ručně ověřit proti zdroji.
+      42  - Chybějící údaj = `null` + poznámka. Nic se nedoplňuje odhadem
+          .
+      43 +                                                               
+      44 +## Kontrola                                                    
+      45 +                                                               
+      46 +```bash                                                        
+      47 +node scripts/check-etfs.mjs                                    
+      48 +```                                                            
+      49 +                                                               
+      50 +Ověří zdroj a datum u každého pole, poznámku u `null`, kontroln
+         +í číslici ISIN a že páry `same_index` mají opravdu stejný index
+         +.                                                              
+
+● Update(README.md)
+  ⎿  Added 18 lines, removed 1 line
+      47  4. **O kontakt žádáme až po interakci.** Ve chvíli, kdy návštěv
+          ník vidí svůj výsledek z kalkulačky, má hodnota konkrétní podob
+          u – ne v hero.
+      48  5. **Žádné personalizované doporučení fondu.** Kalkulačka počít
+          á poplatky, nedoporučuje; jinak by šlo o investiční poradenství
+           bez licence (MiFID II).
+      49  6. **Kampaň cílí jen na ČR.** Texty, měna (Kč) i právní rámec j
+          sou české.
+      50 +7. **Párování fondů: stejný emitent a stejný index, kde to jde.
+         +** SPY↔SPYL, VOO↔VUAA, IVV↔SXR8 sledují S&P 500. VT↔VWCE a VTI↔
+         +SXR4 jsou jen „nejbližší alternativa“ (jiný index) a stránka to
+         + uvádí.                                                        
+      51 +8. **U UCITS ukazujeme akumulační třídu a kotaci na Xetře (EUR)
+         +.** Xetru nabízí většina brokerů dostupných v ČR. Distribuční t
+         +řídy jsou jen v poznámce.                                      
+      52 +9. **Dvě měny.** `currency` = měna obchodování na burze, `base_
+         +currency` = měna fondu. Pro měnové riziko USD/CZK je podstatná 
+         +měna fondu – u všech 10 fondů USD.                             
+      53 +10. **AUM = aktiva celého fondu s datem ze zdroje**, ne jen dat
+         +um stažení. Velikost se mění denně; datum musí být vidět.      
+      54 +11. **ISIN US fondů dopočítán z CUSIP.** Weby emitentů v USA IS
+         +IN neuvádějí. Dopočet podle ISO 6166 ověřujeme proti OpenFIGI. 
+      55  
+      56  ## Co chybí a proč
+      57  
+      53 -TODO                                                           
+      58 +- **Dostupnost fondů v ČR podle registru ČNB.** Seznam zahranič
+         +ních fondů (JERRS) má vyhledávání za CAPTCHA a webová služba WS
+         + JERRS vyžaduje certifikát a podle ISIN nehledá. Po 15 minutách
+         + pokusů jsme to vzdali. Weby emitentů přitom uvádějí „Czech Rep
+         +ublic“ mezi zeměmi registrace (ověřeno u SPYL, SXR8, SXR4), ale
+         + do dat to zatím nedáváme.                                     
+      59 +- **Distribuční třídy UCITS fondů** (SPY5, VUSA, IUSA, VWRL) ne
+         +jsou ověřené; v datech jsou jen jako poznámka.                 
+      60 +- **Přesný UCITS ekvivalent VTI (celý US trh včetně malých fire
+         +m)** jsme nenašli. SPDR Russell 3000 UCITS se podle OpenFIGI a 
+         +SSGA zdá zrušený.                                              
+      61  
+      62  ## Zdroje dat
+      63  
+      64 +Podrobně u každé hodnoty v [`data/etfs.json`](data/etfs.json) (
+         +`source_url`, `retrieved_at`) a v checklistu [`docs/overeni-dat
+         +.md`](docs/overeni-dat.md).                                    
+      65 +                                                               
+      66  | Údaj | Zdroj | URL | Datum stažení |
+      67  | --- | --- | --- | --- |
+      68 +| SPY, SPYL | State Street Global Advisors – stránky fondů, KID
+         + (EN, CZ) | [ssga.com](https://www.ssga.com) | 2026-10-08 |    
+      69 +| IVV, SXR8, SXR4 | iShares (BlackRock) – stránky fondů, EU PRI
+         +IPs KID | [ishares.com](https://www.ishares.com) | 2026-10-08 |
+      70 +| VOO, VTI, VT | Vanguard – stránky pro poradce | [advisors.van
+         +guard.com](https://advisors.vanguard.com) | 2026-10-08 |       
+      71 +| VUAA, VWCE | Vanguard Europe – stránky fondů, PRIIPs KID, fac
+         +tsheet | [vanguard.co.uk](https://www.vanguard.co.uk), [fund-do
+         +cs.vanguard.com](https://fund-docs.vanguard.com) | 2026-10-08 |
+      72 +| Burza a TER US fondů | SEC EDGAR – summary prospectus (497K) 
+         +/ prospectus (485BPOS) | [sec.gov](https://www.sec.gov/edgar/se
+         +arch/) | 2026-10-08 |                                          
+      73 +| Kotace na NYSE Arca | NYSE – adresář kotovaných fondů | [nyse
+         +.com](https://www.nyse.com/listings_directory/etf) | 2026-10-08
+         + |                                                             
+      74 +| Přejmenování indexu VTI | Vanguard – tisková zpráva 29. 4. 20
+         +26 | [corporate.vanguard.com](https://corporate.vanguard.com/co
+         +ntent/corporatesite/us/en/corp/who-we-are/pressroom/press-relea
+         +se-vanguard-to-update-names-of-us-equity-index-funds-tracking-m
+         +orningstar-indexes-042926.html) | 2026-10-08 |                 
+      75 +| Kontrola ISIN | OpenFIGI (Bloomberg) | [openfigi.com](https:/
+         +/www.openfigi.com) | 2026-10-08 |                              
+      76  
+      77  ## Právní upozornění
+      78  
+
+● Bash(cat >> docs/ai-chyby.md <<'EOF'
+      | 2026-10-08 | V plánu dat uvedla, že VTI sleduje „CRSP US Total Market
+      Index“ (zastaralá znalost z tréninku). Od 29. 7. 2026 se…)
+  ⎿  Updated docs/ai-chyby.md (+2 -0)
+       6  | --- | --- | --- | --- |
+       7  | 2026-10-08 | Navrhl název exportu s datem 2026-10-09 (převzal
+           ho z harmonogramu, ne ze skutečného data) | Ruční kontrola pro
+          ti dnešnímu datu | Export pojmenován 2026-10-08 |
+       8  | 2026-10-08 | V plánu kroku 2 nadpis uváděl „6 US ETF“, tabulk
+          a obsahovala 5 | Odhalila AI sama při kontrole plánu (a přehléd
+          l to i člověk při revizi plánu) | Opraveno na 5 fondů |
+       9 +| 2026-10-08 | V plánu dat uvedla, že VTI sleduje „CRSP US Tota
+         +l Market Index“ (zastaralá znalost z tréninku). Od 29. 7. 2026 
+         +se index jmenuje Morningstar U.S. Total Market Index | Při stah
+         +ování dat: web Vanguardu uváděl jiný název než plán, dohledána 
+         +tisková zpráva Vanguardu | V datech název z webu + poznámka o p
+         +řejmenování |                                                  
+      10 +| 2026-10-08 | Při hledání stránky VUAA odhadla URL Vanguardu s
+         + portem 9679 – ten patří VWCE (FTSE All-World), slug v URL se i
+         +gnoruje | AI si všimla, že titulek stránky nesedí s fondem | Po
+         +rt VUAA (9694) dohledán vyhledáváním; odhadnuté URL se už nepou
+         +žívají bez kontroly titulku |                                  
+
+● Data jsou připravená a nic jsem necommitoval. Neodškrtnutý checklist platí i
+  pro změny v README a v docs/ai-chyby.md, commitnu je až s daty. Kontrolní
+  skript scripts/check-etfs.mjs i npm run build prošly.
+
+  Co je ověřené ze dvou a více zdrojů
+
+  Kritická pole (burza, ISIN, TER):
+
+  ┌─────────┬──────────────────────────┬──────────────┬─────────────────────┐
+  │         │          Burza           │     ISIN     │         TER         │
+  ├─────────┼──────────────────────────┼──────────────┼─────────────────────┤
+  │ SPY     │ web SSGA + prospekt SEC  │ web SSGA +   │ 0,0945 %: web +     │
+  │         │ + NYSE                   │ OpenFIGI     │ prospekt            │
+  ├─────────┼──────────────────────────┼──────────────┼─────────────────────┤
+  │ IVV     │ web iShares + prospekt + │ z CUSIP +    │ 0,03 %: web +       │
+  │         │  NYSE                    │ OpenFIGI     │ prospekt            │
+  ├─────────┼──────────────────────────┼──────────────┼─────────────────────┤
+  │ VOO,    │ prospekt SEC + NYSE (web │ z CUSIP +    │ 0,03 / 0,03 / 0,06  │
+  │ VTI, VT │  Vanguardu burzu         │ OpenFIGI     │ %: web + prospekt   │
+  │         │ neuvádí)                 │              │                     │
+  ├─────────┼──────────────────────────┼──────────────┼─────────────────────┤
+  │ SPYL    │ jen web SSGA             │ web + KID    │ 0,03 %: web + KID   │
+  │         │                          │              │ EN + KID CZ         │
+  ├─────────┼──────────────────────────┼──────────────┼─────────────────────┤
+  │ VUAA,   │ jen web Vanguardu        │ web + KID    │ 0,07 / 0,14 %: web  │
+  │ VWCE    │                          │              │ + KID + factsheet   │
+  ├─────────┼──────────────────────────┼──────────────┼─────────────────────┤
+  │ SXR8,   │ jen web iShares          │ web + KID    │ 0,07 / 0,03 %: web  │
+  │ SXR4    │                          │              │ + KID               │
+  └─────────┴──────────────────────────┴──────────────┴─────────────────────┘
+
+  - Burzy US fondů: v adresáři NYSE jsou všechny pod prefixem ARCX (NYSE Arca).
+    Pro kontrolu jsem stejně dohledal QQQ a ten je pod XNMS (Nasdaq), takže
+    prefix burzu opravdu rozlišuje.
+  - Burzy UCITS fondů mají jen jeden zdroj: tabulku kotací u emitenta. KID burzy
+    neuvádí a druhý zdroj jsem nehledal.
+  - ISIN u US fondů: weby emitentů ho neuvádějí. Dopočítal jsem ho z CUSIPu
+    emitenta a všech 5 sedí s OpenFIGI. U SPY je ISIN uvedený přímo na stránce
+    emitenta.
+  - Ostatní pole (název, index, distribuce, domicil, měna) mají většinou jeden
+    zdroj, web emitenta.
+
+  Co zůstalo null a proč
+
+  - AUM u VOO, VTI a VT. Stránka Vanguardu má v HTML dvě čísla k 30. 9. 2026 a z
+    HTML nejde poznat, které je „Total net assets“ (celý fond) a které „Net
+    assets for VOO“. Hádat jsem nechtěl, obě čísla jsou v poli note. V
+    checklistu je to bod pro tebe, v prohlížeči to poznáš hned.
+
+  Kde se zdroje lišily
+
+  1. Index VTI: web uvádí „Morningstar U.S. Total Market Index“, prospekt z
+     dubna 2026 „CRSP US Total Market Index“. Podle tiskové zprávy Vanguardu
+     Morningstar koupil CRSP a od 29. 7. 2026 je index přejmenovaný, strategie
+     fondu se nemění. V plánu jsem uvedl CRSP, což je zastaralá znalost z mých
+     tréninkových dat, a zapsal jsem to do chyb AI.
+  2. AUM u VUAA a VWCE: factsheet k 31. 8. 2026 (89,2 a 85,3 mld. USD) se liší
+     od webu (88,97 a 87,29 mld. USD). Rozdíl je nejspíš daný datem, jenže datum
+     se na webu doplňuje až v prohlížeči a z HTML ho nevyčtu. Do dat jsem vzal
+     factsheet, protože má datum výslovně uvedené.
+  3. Moje odhadnutá adresa stránky VUAA vedla na stránku VWCE. Všiml jsem si, že
+     titulek stránky nesedí s fondem, a i tohle je zapsané v chybách AI.
+
+  Co je potřeba rozhodnout ty (blok 2 checklistu)
+
+  - VTI ↔ iShares MSCI USA (SXR4) jako nejbližší alternativa. Přesný UCITS
+    ekvivalent celého US trhu jsem nenašel, MSCI USA pokrývá jen velké a střední
+    firmy. SPDR Russell 3000 UCITS nejspíš zanikl: OpenFIGI ho nezná a KID
+    vrací 404.
+  - Které z čísel AUM u Vanguardu je celý fond (viz výše).
+
+  Dostupnost v ČR přes ČNB
+
+  Vynechal jsem ji a zapsal do „Co chybí“ v README. Vyhledávání v JERRS je za
+  CAPTCHA a webová služba vyžaduje certifikát a podle ISIN nehledá. Jako
+  alternativa se nabízí, že SSGA a iShares na stránkách fondů uvádějí „Czech
+  Republic“ mezi zeměmi registrace a SSGA má k SPYL i KID v češtině. Do dat jsem
+  to nedal, protože jsi chtěl tento údaj vynechat. Jestli ho tam chceš, řekni.
+
+  Soubory
+
+  - data/etfs.json: 10 fondů, u každého pole je zdroj, datum a doslovný úryvek
+    ze zdroje.
+  - docs/overeni-dat.md: checklist, nahoře označený kritický blok (burza, ISIN,
+    TER).
+  - data/README.md: schéma doplněné o base_currency, index a cross_check.
+  - README.md: rozhodnutí 7–11, „Co chybí“ a tabulka zdrojů.
+
+  Až checklist odškrtneš, nastavím meta.verified_by_human: true a commitnu po
+  částech podle plánu. Teď je dobrá chvíle na /export, třeba jako
+  ai-log/2026-10-08-data-etf.txt.
+
+❯ <ide_opened_file>The user opened the file
+  /home/snnikol/work/etf-srovnani/data/etfs.json in the IDE. This may or may
+  not be related to the current task.</ide_opened_file>
+
+❯ Výsledky ruční kontroly:
+
+  VOO na stránce Vanguardu: „Total net assets $1,732.0 B“ a „Net assets for VOO
+  $1,032.3 B“ (obojí k 30. 9. 2026), CUSIP 922908363 sedí. Větší číslo = celý
+  fond, totéž platí pro VTI a VT. Doplň AUM: VOO = 1 732 017 176 748,57 USD,
+  VTI = 2 322 815 790 389,59 USD, VT = 101 182 183 355,18 USD, vše as_of
+  2026-09-30. U VOO do note uveď, že popisky byly ověřeny ručně v prohlížeči. U
+  VTI a VT uveď, že hodnota je odvozena stejnou logikou (fond ≥ třída), ručně
+  ověřené to není.
+  SPY: AUM $821,535.08 M k 7. 10. 2026, TER 0,0945 %, základní měna USD, ISIN a
+  burza – sedí.
+  VUAA: TER 0,07 %, ISIN a burza – sedí.
+  SXR8: TER v KID 0,07 % (Management fees and other administrative or operating
+  costs) – sedí.
+  Křížová kontrola druhou AI: kontrolní číslice všech 10 ISINů OK. TER VWCE
+  0,14 % potvrzen tiskovou zprávou Vanguardu (účinné 28. 7. 2026). TER SXR4
+  0,03 % potvrzen extraETF. Burza SXR4 potvrzena Deutsche Börse
+  (https://live.deutsche-boerse.com/etf/ishares-msci-usa-ucits-etf-usd-acc),
+  přidej jako cross_check.
+
+  Rozhodnutí:
+
+  VTI ↔ SXR4 ponechat jako „closest“ s poznámkou, že MSCI USA pokrývá jen velké
+  a střední firmy (~85 % trhu).
+  Přidej pole registered_in_cz (value, source_url, retrieved_at, úryvek) podle
+  seznamu zemí registrace na stránce emitenta, jinak null. V README v „Co
+  chybí“ uveď, že registr ČNB jsme nepoužili a proč.
+  Do README do „Práce s AI“ zapiš tři vrstvy kontroly (Claude dvěma zdroji,
+  nezávislá křížová kontrola druhou AI, ruční ověření člověkem v prohlížeči).
+  Uveď příklad: revidující AI považovala TER VWCE a SXR4 za chybu kvůli
+  zastaralým znalostem, ověření u emitenta potvrdilo správnost. Proto je
+  zdrojem emitent, ne agregátor.
+  V docs/overeni-dat.md odškrtni položky, které jsem ověřil (výše).
+
+  Pak nastav meta.verified_by_human: true. Vedle něj přidej do meta pole
+  verified_by_human_scope se seznamem, co člověk ověřil ručně (SPY, VOO, VUAA,
+  SXR8, viz výše); ostatní ověřila AI dvěma zdroji. Uveď také, že nové pole
+  registered_in_cz ruční kontrolou neprošlo.
+
+  Commituj po částech podle plánu a nepushuj. Na konci mi napiš seznam commitů.
+
+● Nejdřív si ověřím tři věci, které do dat půjdou se zdrojem: údaj „~85 % trhu“
+  u MSCI USA, stránku Deutsche Börse pro SXR4 a jestli Vanguard uvádí seznam
+  zemí registrace.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Patch spadl už v samotném patchovacím skriptu (interpolace ${}), takže
+  generátor zůstal beze změny. Opravím escapování a pustím ho znovu.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Bash(cd /tmp/claude-1000/-home-snnikol-work-etf-srovnani/aa371e17-355f-47d8-96
+      d4-3f5599efeb21/scratchpad && node - <<'EOF'
+      const fs=require('fs');let s=fs.readFileSy…)
+  ⎿  Updated data/etfs.json (+114 -10)
+       7        "aum": "celková aktiva fondu (všechny třídy), pokud není 
+          uvedeno jinak"
+       8      },
+       9      "fields": "Každé pole: { value, source_url, retrieved_at, n
+          ote, cross_check[] }. cross_check = nezávislé zdroje, které hod
+          notu potvrzují nebo se liší.",
+      10 -    "verified_by_human": false                                 
+      10 +    "verified_by_human": true,                                 
+      11 +    "verified_by_human_scope": [                               
+      12 +      "SPY: AUM, TER, base_currency, ISIN, burza",             
+      13 +      "VOO: AUM (popisky Total net assets / Net assets for VOO)
+         +, CUSIP → ISIN",                                               
+      14 +      "VUAA: TER, ISIN, burza",                                
+      15 +      "SXR8: TER (KID)",                                       
+      16 +      "Ostatní hodnoty ověřila AI ze dvou zdrojů (viz cross_che
+         +ck) a nezávislá křížová kontrola druhou AI (kontrolní číslice I
+         +SIN, TER VWCE a SXR4).",                                       
+      17 +      "Pole registered_in_cz ruční kontrolou neprošlo."        
+      18 +    ]                                                          
+      19    },
+      20    "funds": [
+      21      {
+     ...
+      143          "note": null,
+      144          "cross_check": []
+      145        },
+      146 +      "registered_in_cz": {                                   
+      147 +        "value": null,                                        
+      148 +        "source_url": "https://www.ssga.com/us/en/intermediary
+          +/etfs/spdr-sp-500-etf-trust-spy",                             
+      149 +        "retrieved_at": "2026-10-08",                         
+      150 +        "note": "US fond: stránka emitenta neuvádí registraci 
+          +k nabízení v EU.",                                            
+      151 +        "cross_check": []                                     
+      152 +      },                                                      
+      153        "ucits_equivalent": {
+      154          "isin": "IE000XZSV718",
+      155          "match": "same_index",
+     ...
+      244          ]
+      245        },
+      246        "aum": {
+      232 -        "value": null,                                        
+      247 +        "value": {                                            
+      248 +          "amount": 1732017176748.57,                         
+      249 +          "currency": "USD",                                  
+      250 +          "as_of": "2026-09-30"                               
+      251 +        },                                                    
+      252          "source_url": "https://advisors.vanguard.com/investmen
+           ts/products/voo/vanguard-sp-500-etf",
+      253          "retrieved_at": "2026-10-08",
+     … 183 more lines (ctrl+o to expand)
+
+● Mezitím se změnilo datum. Stránky Deutsche Börse a MSCI jsem stahoval až teď,
+  takže u nich nastavím retrieved_at na 2026-10-09.
+
+● Bash(cd /tmp/claude-1000/-home-snnikol-work-etf-srovnani/aa371e17-355f-47d8-96
+      d4-3f5599efeb21/scratchpad && node -e '
+      const fs=require("fs");let s=fs.readFileSync("g…)  ⎿  Updated data/etfs.json (+2 -2)
+      554        "ucits_equivalent": {
+      555          "isin": "IE00B52SFT06",
+      556          "match": "closest",
+      557 -        "note": "Schváleno jako nejbližší alternativa. Přesný 
+          -UCITS ekvivalent celého US trhu nebyl nalezen. MSCI USA pokrýv
+          -á jen velké a střední firmy, cca 85 % free-float tržní kapital
+          -izace USA (MSCI USA Index factsheet k 30. 9. 2026: „covers app
+          -roximately 85% of the free float-adjusted market capitalizatio
+          -n in the US“, https://www.msci.com/documents/10199/255599/msci
+          --usa-index-net.pdf); VTI zahrnuje i malé firmy. Zamítnutý kand
+          -idát: SPDR Russell 3000 US Total Market UCITS ETF (IE00BKY7WX3
+          -7) – OpenFIGI ISIN nezná, KID u SSGA vrací 404, pravděpodobně 
+          -zrušen."                                                      
+      557 +        "note": "Schváleno jako nejbližší alternativa. Přesný 
+          +UCITS ekvivalent celého US trhu nebyl nalezen. MSCI USA pokrýv
+          +á jen velké a střední firmy, cca 85 % free-float tržní kapital
+          +izace USA (MSCI USA Index factsheet k 30. 9. 2026, staženo 202
+          +6-10-09: „covers approximately 85% of the free float-adjusted 
+          +market capitalization in the US“, https://www.msci.com/documen
+          +ts/10199/255599/msci-usa-index-net.pdf); VTI zahrnuje i malé f
+          +irmy. Zamítnutý kandidát: SPDR Russell 3000 US Total Market UC
+          +ITS ETF (IE00BKY7WX37) – OpenFIGI ISIN nezná, KID u SSGA vrací
+          + 404, pravděpodobně zrušen."                                  
+      558        }
+      559      },
+      560      {
+     ...
+      1125            {
+      1126              "source_url": "https://live.deutsche-boerse.com/e
+            tf/ishares-msci-usa-ucits-etf-usd-acc",
+      1127              "value": "Xetra",
+      1128 -            "retrieved_at": "2026-10-08",                    
+      1128 +            "retrieved_at": "2026-10-09",                    
+      1129              "note": "Deutsche Börse: „ISIN: IE00B52SFT06 | WK
+            N: A0YEDU | Kürzel: SXR4“, obchodování na Xetra."
+      1130            }
+      1131          ]
+
+● Teď přegeneruju checklist. Odškrtnu přesně ty položky, které jsi ověřil, a
+  přidám sekci registered_in_cz jako neověřenou.
+
+● Bash(cd /tmp/claude-1000/-home-snnikol-work-etf-srovnani/aa371e17-355f-47d8-96
+      d4-3f5599efeb21/scratchpad && node - <<'EOF'
+      const fs=require('fs');let s=fs.readFileSy…)
+  ⎿  Updated docs/overeni-dat.md (+32 -17)
+      3  Kontrola `data/etfs.json` před commitem. Data stažena **2026-10-
+         08**.
+      4  Postup: otevři hlavní zdroj, najdi hodnotu a odškrtni ☐ → ☑. Kdy
+         ž hodnota nesedí, napiš správnou hodnotu vedle a dej vědět – opr
+         ava jde do `docs/ai-chyby.md`.
+      5  
+      6 -Data se commitují až po odškrtnutí bloků 1–3. Pak v `etfs.json` 
+        -nastavit `meta.verified_by_human: true`.                        
+      6 +**Stav (2026-10-09):** ☑ = ověřeno ručně člověkem v prohlížeči. 
+        +Ostatní hodnoty ověřila AI ze dvou zdrojů (`cross_check` v datec
+        +h) a nezávislá křížová kontrola druhou AI (kontrolní číslice vše
+        +ch 10 ISINů, TER VWCE a SXR4). `meta.verified_by_human: true` s 
+        +rozsahem v `meta.verified_by_human_scope`.                      
+      7  
+      8  Tipy:
+      9  - Vanguard US (advisors.vanguard.com) a nyse.com se vykreslují p
+         řes JavaScript – otevři je v prohlížeči.
+     ...
+      18  
+      19  | ✓ | Fond | Hodnota | Hlavní zdroj | Další zdroje |
+      20  | --- | --- | --- | --- | --- |
+      21 -| ☐ | SPY | NYSE Arca | [ssga.com](https://www.ssga.com/us/en/i
+         -ntermediary/etfs/spdr-sp-500-etf-trust-spy) | [ověření 1: sec.g
+         -ov](https://www.sec.gov/Archives/edgar/data/884394/000119312526
+         -022316/d77353d485bpos.htm), [ověření 2: nyse.com](https://www.n
+         -yse.com/quote/ARCX:SPY) |                                      
+      21 +| ☑ | SPY | NYSE Arca | [ssga.com](https://www.ssga.com/us/en/i
+         +ntermediary/etfs/spdr-sp-500-etf-trust-spy) | [ověření 1: sec.g
+         +ov](https://www.sec.gov/Archives/edgar/data/884394/000119312526
+         +022316/d77353d485bpos.htm), [ověření 2: nyse.com](https://www.n
+         +yse.com/quote/ARCX:SPY) |                                      
+      22  | ☐ | VOO | NYSE Arca | [sec.gov](https://www.sec.gov/Archives/
+          edgar/data/36405/000003640526000183/f44783d1.htm) | [ověření 1:
+           nyse.com](https://www.nyse.com/quote/ARCX:VOO) |
+      23  | ☐ | IVV | NYSE Arca | [ishares.com](https://www.ishares.com/u
+          s/products/239726/ishares-core-sp-500-etf) | [ověření 1: sec.go
+          v](https://www.sec.gov/Archives/edgar/data/1100663/000119312526
+          327930/d113852d497k.htm), [ověření 2: nyse.com](https://www.nys
+          e.com/quote/ARCX:IVV) |
+      24  | ☐ | VTI | NYSE Arca | [sec.gov](https://www.sec.gov/Archives/
+          edgar/data/36405/000003640526000197/f44849d1.htm) | [ověření 1:
+           nyse.com](https://www.nyse.com/quote/ARCX:VTI) |
+      25  | ☐ | VT | NYSE Arca | [sec.gov](https://www.sec.gov/Archives/e
+          dgar/data/857489/000119312526077566/f44201d1.htm) | [ověření 1:
+           nyse.com](https://www.nyse.com/quote/ARCX:VT) |
+      26  | ☐ | SPYL | Deutsche Börse (Xetra) | [ssga.com](https://www.ss
+          ga.com/ie/en_gb/institutional/etfs/spdr-sp-500-ucits-etf-acc-sp
+          yl-gy) | – |
+      27 -| ☐ | VUAA | Deutsche Börse (Xetra) | [vanguard.co.uk](https://
+         -www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-
+         -ucits-etf-usd-accumulating) | – |                              
+      27 +| ☑ | VUAA | Deutsche Börse (Xetra) | [vanguard.co.uk](https://
+         +www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-
+         +ucits-etf-usd-accumulating) | – |                              
+      28  | ☐ | SXR8 | Deutsche Börse (Xetra) | [ishares.com](https://www
+          .ishares.com/uk/individual/en/products/253743/ishares-sp-500-b-
+          ucits-etf-acc-fund) | – |
+      29 -| ☐ | SXR4 | Deutsche Börse (Xetra) | [ishares.com](https://www
+         -.ishares.com/uk/individual/en/products/253740/ishares-msci-usa-
+         -b-ucits-etf) | – |                                             
+      29 +| ☐ | SXR4 | Deutsche Börse (Xetra) | [ishares.com](https://www
+         +.ishares.com/uk/individual/en/products/253740/ishares-msci-usa-
+         +b-ucits-etf) | [ověření 1: live.deutsche-boerse.com](https://li
+         +ve.deutsche-boerse.com/etf/ishares-msci-usa-ucits-etf-usd-acc) 
+         +|                                                              
+      30  | ☐ | VWCE | Deutsche Börse (Xetra) | [vanguard.co.uk](https://
+          www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-al
+          l-world-ucits-etf-usd-accumulating) | – |
+      31  
+      32  ### 🔴 ISIN (`isin`)
+      33  
+      34  | ✓ | Fond | Hodnota | Hlavní zdroj | Další zdroje |
+      35  | --- | --- | --- | --- | --- |
+      36 -| ☐ | SPY | US78462F1030 | [ssga.com](https://www.ssga.com/us/e
+         -n/intermediary/etfs/spdr-sp-500-etf-trust-spy) | [ověření 1: op
+         -enfigi.com](https://www.openfigi.com/search) |                 
+      37 -| ☐ | VOO | US9229083632 | [advisors.vanguard.com](https://advi
+         -sors.vanguard.com/investments/products/voo/vanguard-sp-500-etf)
+         - | [ověření 1: openfigi.com](https://www.openfigi.com/search) |
+      36 +| ☑ | SPY | US78462F1030 | [ssga.com](https://www.ssga.com/us/e
+         +n/intermediary/etfs/spdr-sp-500-etf-trust-spy) | [ověření 1: op
+         +enfigi.com](https://www.openfigi.com/search) |                 
+      37 +| ☑ | VOO | US9229083632 | [advisors.vanguard.com](https://advi
+         +sors.vanguard.com/investments/products/voo/vanguard-sp-500-etf)
+         + | [ověření 1: openfigi.com](https://www.openfigi.com/search) |
+      38  | ☐ | IVV | US4642872000 | [ishares.com](https://www.ishares.co
+          m/us/products/239726/ishares-core-sp-500-etf) | [ověření 1: ope
+          nfigi.com](https://www.openfigi.com/search) |
+      39  | ☐ | VTI | US9229087690 | [advisors.vanguard.com](https://advi
+          sors.vanguard.com/investments/products/vti/vanguard-total-stock
+          -market-etf) | [ověření 1: openfigi.com](https://www.openfigi.c
+          om/search) |
+      40  | ☐ | VT | US9220427424 | [advisors.vanguard.com](https://advis
+          ors.vanguard.com/investments/products/vt/vanguard-total-world-s
+          tock-etf) | [ověření 1: openfigi.com](https://www.openfigi.com/
+          search) |
+      41  | ☐ | SPYL | IE000XZSV718 | [ssga.com](https://www.ssga.com/ie/
+          en_gb/institutional/etfs/spdr-sp-500-ucits-etf-acc-spyl-gy) | [
+          ověření 1: ssga.com](https://www.ssga.com/library-content/kids?
+          isin=IE000XZSV718&documentType=kid&country=ie&language=en_gb&ti
+          cker=spyl-gy) |
+      42 -| ☐ | VUAA | IE00BFMXXD54 | [vanguard.co.uk](https://www.vangua
+         -rd.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-
+         -usd-accumulating) | [ověření 1: fund-docs.vanguard.com](https:/
+         -/fund-docs.vanguard.com/ie00bfmxxd54_priipskid_en.pdf) |       
+      42 +| ☑ | VUAA | IE00BFMXXD54 | [vanguard.co.uk](https://www.vangua
+         +rd.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-
+         +usd-accumulating) | [ověření 1: fund-docs.vanguard.com](https:/
+         +/fund-docs.vanguard.com/ie00bfmxxd54_priipskid_en.pdf) |       
+      43  | ☐ | SXR8 | IE00B5BMR087 | [ishares.com](https://www.ishares.c
+          om/uk/individual/en/products/253743/ishares-sp-500-b-ucits-etf-
+          acc-fund) | [ověření 1: ishares.com](https://www.ishares.com/de
+          /privatanleger/de/literature/kiid/eu-priips-ishares-core-sp-500
+          -ucits-etf-usd-acc-ie00b5bmr087-en.pdf) |
+     … 72 more lines (ctrl+o to expand)
+
+● Teď dokumentace: schéma v data/README.md a sekce „Co chybí“ a „Práce s AI“ v
+  README.
+
+● Bash(node - <<'EOF'
+      const fs=require('fs');…)
+  ⎿  Updated README.md (+13 -3)
+      37  
+      38  ## Práce s AI
+      39  
+      40 -TODO – pokyny agentům, kontrola výstupu, kde se AI spletla. Chy
+         -by: [`docs/ai-chyby.md`](docs/ai-chyby.md), exporty konverzací:
+         - [`ai-log/`](ai-log/).                                         
+      40 +TODO – pokyny agentům. Chyby: [`docs/ai-chyby.md`](docs/ai-chyb
+         +y.md), exporty konverzací: [`ai-log/`](ai-log/).               
+      41 +                                                               
+      42 +### Kontrola dat: tři vrstvy                                   
+      43 +                                                               
+      44 +1. **Claude Code, dva zdroje.** Každá kritická hodnota (burza, 
+         +ISIN, TER) se stahuje přímo od emitenta a ověřuje proti druhému
+         + nezávislému zdroji (prospekt na SEC EDGAR, KID, factsheet, adr
+         +esář NYSE, OpenFIGI). Do dat jde doslovný úryvek ze zdroje. Co 
+         +nejde ověřit, je `null` s důvodem.                             
+      45 +2. **Nezávislá křížová kontrola druhou AI.** Jiná konverzace be
+         +z kontextu projektu přepočítala kontrolní číslice všech 10 ISIN
+         +ů a zkontrolovala TER.                                         
+      46 +3. **Ruční ověření člověkem v prohlížeči.** Kritická pole SPY, 
+         +VOO, VUAA a SXR8 (seznam v `meta.verified_by_human_scope` v [`d
+         +ata/etfs.json`](data/etfs.json), checklist [`docs/overeni-dat.m
+         +d`](docs/overeni-dat.md)).                                     
+      47 +                                                               
+      48 +**Příklad, proč je zdrojem emitent, a ne AI ani agregátor:** re
+         +vidující AI označila TER VWCE (0,14 %) a SXR4 (0,03 %) za chybu
+         +, protože vycházela ze zastaralých znalostí. Ověření u emitenta
+         + ukázalo, že hodnoty jsou správné: TER VWCE byl snížen s účinno
+         +stí od 28. 7. 2026 (tisková zpráva Vanguardu) a TER SXR4 uvádí 
+         +iShares na stránce fondu i v KID. Znalosti jazykového modelu an
+         +i agregátory nemusí být aktuální, proto platí jen web a dokumen
+         +ty emitenta.                                                   
+      49  
+      50  ## Rozhodnutí v nejasnostech
+      51  
+     ...
+      55  4. **O kontakt žádáme až po interakci.** Ve chvíli, kdy návštěv
+          ník vidí svůj výsledek z kalkulačky, má hodnota konkrétní podob
+          u – ne v hero.
+      56  5. **Žádné personalizované doporučení fondu.** Kalkulačka počít
+          á poplatky, nedoporučuje; jinak by šlo o investiční poradenství
+           bez licence (MiFID II).
+      57  6. **Kampaň cílí jen na ČR.** Texty, měna (Kč) i právní rámec j
+          sou české.
+      50 -7. **Párování fondů: stejný emitent a stejný index, kde to jde.
+         -** SPY↔SPYL, VOO↔VUAA, IVV↔SXR8 sledují S&P 500. VT↔VWCE a VTI↔
+         -SXR4 jsou jen „nejbližší alternativa“ (jiný index) a stránka to
+         - uvádí.                                                        
+      58 +7. **Párování fondů: stejný emitent a stejný index, kde to jde.
+         +** SPY↔SPYL, VOO↔VUAA, IVV↔SXR8 sledují S&P 500. VT↔VWCE a VTI↔
+         +SXR4 jsou jen „nejbližší alternativa“ (jiný index) a stránka to
+         + uvádí. U VTI↔SXR4: MSCI USA pokrývá jen velké a střední firmy,
+         + podle MSCI asi 85 % free-float kapitalizace trhu USA. Přesný U
+         +CITS ekvivalent celého trhu jsme nenašli.                      
+      59  8. **U UCITS ukazujeme akumulační třídu a kotaci na Xetře (EUR)
+          .** Xetru nabízí většina brokerů dostupných v ČR. Distribuční t
+          řídy jsou jen v poznámce.
+      60  9. **Dvě měny.** `currency` = měna obchodování na burze, `base_
+          currency` = měna fondu. Pro měnové riziko USD/CZK je podstatná 
+          měna fondu – u všech 10 fondů USD.
+      61  10. **AUM = aktiva celého fondu s datem ze zdroje**, ne jen dat
+          um stažení. Velikost se mění denně; datum musí být vidět.
+     ...
+      63  
+      64  ## Co chybí a proč
+      65  
+      58 -- **Dostupnost fondů v ČR podle registru ČNB.** Seznam zahranič
+         -ních fondů (JERRS) má vyhledávání za CAPTCHA a webová služba WS
+         - JERRS vyžaduje certifikát a podle ISIN nehledá. Po 15 minutách
+         - pokusů jsme to vzdali. Weby emitentů přitom uvádějí „Czech Rep
+         -ublic“ mezi zeměmi registrace (ověřeno u SPYL, SXR8, SXR4), ale
+         - do dat to zatím nedáváme.                                     
+      66 +- **Registr ČNB jsme nepoužili.** Seznam zahraničních investičn
+         +ích fondů (JERRS) má vyhledávání za CAPTCHA a webová služba WS 
+         +JERRS vyžaduje certifikát a podle ISIN nehledá. Po 15 minutách 
+         +pokusů jsme to vzdali. Místo toho pole `registered_in_cz` vychá
+         +zí ze seznamu zemí registrace na stránce emitenta: `true` u SPY
+         +L, SXR8 a SXR4. Vanguard (VUAA, VWCE) seznam zemí neuvádí, prot
+         +o `null`. Toto pole zatím neprošlo ruční kontrolou.            
+      67  - **Distribuční třídy UCITS fondů** (SPY5, VUSA, IUSA, VWRL) ne
+          jsou ověřené; v datech jsou jen jako poznámka.
+      68  - **Přesný UCITS ekvivalent VTI (celý US trh včetně malých fire
+          m)** jsme nenašli. SPDR Russell 3000 UCITS se podle OpenFIGI a 
+          SSGA zdá zrušený.
+      69  
+     ...
+      81  | Kotace na NYSE Arca | NYSE – adresář kotovaných fondů | [nyse
+          .com](https://www.nyse.com/listings_directory/etf) | 2026-10-08
+           |
+      82  | Přejmenování indexu VTI | Vanguard – tisková zpráva 29. 4. 20
+          26 | [corporate.vanguard.com](https://corporate.vanguard.com/co
+          ntent/corporatesite/us/en/corp/who-we-are/pressroom/press-relea
+          se-vanguard-to-update-names-of-us-equity-index-funds-tracking-m
+          orningstar-indexes-042926.html) | 2026-10-08 |
+      83  | Kontrola ISIN | OpenFIGI (Bloomberg) | [openfigi.com](https:/
+          /www.openfigi.com) | 2026-10-08 |
+      84 +| Kotace SXR4 na Xetře | Deutsche Börse | [live.deutsche-boerse
+         +.com](https://live.deutsche-boerse.com/etf/ishares-msci-usa-uci
+         +ts-etf-usd-acc) | 2026-10-09 |                                 
+      85 +| Pokrytí indexu MSCI USA | MSCI – factsheet indexu | [msci.com
+         +](https://www.msci.com/documents/10199/255599/msci-usa-index-ne
+         +t.pdf) | 2026-10-09 |                                          
+      86  
+      87  ## Právní upozornění
+      88  
+  ⎿  Updated data/README.md (+2 -1)
+      30  | `aum` | `{ amount, currency, as_of }` – aktiva celého fondu (
+          všechny třídy) k datu ze zdroje |
+      31  | `distribution` | `accumulating` / `distributing` |
+      32  | `index` | Sledovaný index |
+      33 +| `registered_in_cz` | `true`, pokud emitent na stránce fondu u
+         +vádí Českou republiku mezi zeměmi registrace; jinak `null` + dů
+         +vod |                                                          
+      34  | `ucits_equivalent` | Jen u `us`: `{ isin, match, note }`, `ma
+          tch` = `same_index` (stejný index) / `closest` (nejbližší alter
+          nativa) |
+      35  
+      35 -`meta.verified_by_human` se přepne na `true` po ručním ověření 
+         -podle [`docs/overeni-dat.md`](../docs/overeni-dat.md).         
+      36 +`meta.verified_by_human` = data prošla ručním ověřením podle [`
+         +docs/overeni-dat.md`](../docs/overeni-dat.md); co přesně člověk
+         + ověřil, je v `meta.verified_by_human_scope`.                  
+      37  
+      38  ## Pravidla
+      39  
+
+● Jednu formulaci opravím. Napsal jsem, že druhá AI byla „jiná konverzace bez
+  kontextu projektu“, ale to nevím. Víš to jen ty, takže to zobecním.
+
+● Bash(node -e '
+      const fs=require("fs");let s=fs.readFileSync("README.md","utf8");…)
+  ⎿  Updated README.md (+2 -2)
+      42  ### Kontrola dat: tři vrstvy
+      43  
+      44  1. **Claude Code, dva zdroje.** Každá kritická hodnota (burza, 
+          ISIN, TER) se stahuje přímo od emitenta a ověřuje proti druhému
+           nezávislému zdroji (prospekt na SEC EDGAR, KID, factsheet, adr
+          esář NYSE, OpenFIGI). Do dat jde doslovný úryvek ze zdroje. Co 
+          nejde ověřit, je `null` s důvodem.
+      45 -2. **Nezávislá křížová kontrola druhou AI.** Jiná konverzace be
+         -z kontextu projektu přepočítala kontrolní číslice všech 10 ISIN
+         -ů a zkontrolovala TER.                                         
+      45 +2. **Nezávislá křížová kontrola druhou AI.** Samostatná kontrol
+         +a jinou AI mimo tuto session přepočítala kontrolní číslice všec
+         +h 10 ISINů a zkontrolovala TER.                                
+      46  3. **Ruční ověření člověkem v prohlížeči.** Kritická pole SPY, 
+          VOO, VUAA a SXR8 (seznam v `meta.verified_by_human_scope` v [`d
+          ata/etfs.json`](data/etfs.json), checklist [`docs/overeni-dat.m
+          d`](docs/overeni-dat.md)).
+      47  
+      48 -**Příklad, proč je zdrojem emitent, a ne AI ani agregátor:** re
+         -vidující AI označila TER VWCE (0,14 %) a SXR4 (0,03 %) za chybu
+         -, protože vycházela ze zastaralých znalostí. Ověření u emitenta
+         - ukázalo, že hodnoty jsou správné: TER VWCE byl snížen s účinno
+         -stí od 28. 7. 2026 (tisková zpráva Vanguardu) a TER SXR4 uvádí 
+         -iShares na stránce fondu i v KID. Znalosti jazykového modelu an
+         -i agregátory nemusí být aktuální, proto platí jen web a dokumen
+         -ty emitenta.                                                   
+      48 +**Příklad, proč je zdrojem emitent, a ne AI ani agregátor:** re
+         +vidující AI označila TER VWCE (0,14 %) a SXR4 (0,03 %) za chybu
+         +, protože vycházela ze zastaralých znalostí. Ověření u emitenta
+         + ukázalo, že hodnoty jsou správné: TER VWCE 0,14 % platí od 28.
+         + 7. 2026 podle tiskové zprávy Vanguardu (dohledala křížová kont
+         +rola) a TER SXR4 uvádí iShares na stránce fondu i v KID. Znalos
+         +ti jazykového modelu ani agregátory nemusí být aktuální, proto 
+         +platí jen web a dokumenty emitenta.                            
+      49  
+      50  ## Rozhodnutí v nejasnostech
+      51  
+
+● Všechno je připravené, commituju po částech podle plánu.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Všechno je commitnuté, nic jsem nepushoval. Kontrolní skript nad finálními
+  daty prošel.
+
+  Commity (od nejstaršího)
+
+  1. 0f5989a data: schéma záznamu se zdrojem u každé hodnoty
+  2. 1b2453a data: 5 US ETF z NYSE Arca se zdroji (SPY, VOO, IVV, VTI, VT)
+  3. f98ded7 data: UCITS ekvivalenty se zdroji a kontrolní skript
+  4. 03f62e8 docs: checklist ručního ověření dat (kritická pole ověřena)
+  5. 8cc0263 docs: chyby AI při stahování dat (index VTI, odhadnutá URL)
+  6. cc63140 README: rozhodnutí o datech, co chybí, zdroje a tři vrstvy kontroly
+
+  Commit 2 obsahuje jen US fondy, takže odkazy na UCITS ekvivalenty v něm vedou
+  zatím do prázdna. Kontrolní skript proto přidávám až v commitu 3, kde je
+  soubor kompletní.
+
+  Co jsem udělal podle tvé kontroly
+
+  - AUM u VOO, VTI a VT je doplněné k 30. 9. 2026. U VOO je v poznámce, že
+    popisky jsi ověřil ručně. U VTI a VT, že hodnota je odvozená stejnou logikou
+    a ručně ověřená není.
+  - Údaj „~85 % trhu“ u MSCI USA jsem si ověřil ve factsheetu MSCI k 30. 9.
+    2026: „covers approximately 85% of the free float-adjusted market
+    capitalization in the US“. Odkaz je v poznámce k páru VTI ↔ SXR4.
+  - Stránku Deutsche Börse pro SXR4 jsem stáhl sám. Potvrzuje SXR4 a
+    IE00B52SFT06 na Xetře a je přidaná jako cross_check s datem stažení
+    2026-10-09.
+  - registered_in_cz:
+    - true u SPYL, SXR8 a SXR4, s úryvkem ze seznamu zemí registrace na stránce
+      emitenta.
+    - null u VUAA a VWCE: Vanguard seznam zemí neuvádí a KID mluví jen obecně o
+      „other EEA Member States“.
+    - null u všech US fondů.
+  - TER SXR4 z extraETF jsem jako zdroj nepřidal: je to agregátor. V README ho
+    uvádím jen jako ilustraci, proč platí emitent.
+  - meta.verified_by_human: true a vedle něj verified_by_human_scope: co jsi
+    ověřil ručně, co ověřila AI ze dvou zdrojů a že registered_in_cz ruční
+    kontrolou neprošlo.
+
+  Na co se podívat
+
+  - Index VTI (Morningstar vs. CRSP) zůstal v checklistu neodškrtnutý, protože
+    jsi k němu nic nenapsal. V datech je název z webu Vanguardu a poznámka o
+    přejmenování. Jestli s tím souhlasíš, stačí to odškrtnout.
+  - V README v sekci „Práce s AI“ jsem druhou AI popsal jako „samostatnou
+    kontrolu jinou AI mimo tuto session“. Jak přesně probíhala, nevím, tak to
+    případně uprav. Tvrzení o tiskové zprávě Vanguardu k VWCE (účinné
+    od 28. 7. 2026) vychází z tvé zprávy, sám jsem ji nedohledával.
+
+  Před pushem je dobrá chvíle na /export, třeba jako
+  ai-log/2026-10-09-data-etf.txt.
+
+❯ Index VTI: souhlasím s názvem z webu Vanguardu a poznámkou o přejmenování,
+  odškrtni to v checklistu.
+  Druhou AI v README popiš takto: „Claude v chatu na claude.ai (mimo Claude
+  Code) s webovým vyhledáváním. Přepočítal kontrolní číslice všech ISINů
+  vlastním skriptem a dohledal TER VWCE a SXR4 u nezávislých zdrojů. Neměl
+  přístup k této session, jen k výslednému etfs.json.“
+  Zdroj tiskové zprávy k VWCE: https://www.ch.vanguard/en/private-investor/insi
+  ghts/we-are-lowering-fees-on-one-of-our-most-popular-etfs. Ověř ho sám
+  (WebFetch) a přidej jako cross_check k TER VWCE.
+
+  Commitni to jako jeden malý commit a nepushuj.
+
+● Fetch(https://www.ch.vanguard/en/private-investor/insights/we-are-lowering-fee
+       s-on-one-of-our-most-popular-etfs)
+  ⎿  Received 167.4KB (200 OK)
+
+● WebFetch shrnuje přes menší model, proto si klíčovou větu ověřím ještě v
+  surovém HTML.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Text sedí doslovně. Teď provedu úpravy v datech, checklistu a README:
+
+● Bash(cd /tmp/claude-1000/-home-snnikol-work-etf-srovnani/aa371e17-355f-47d8-96
+      d4-3f5599efeb21/scratchpad && node - <<'EOF'
+      const fs=require('fs');…)
+  ⎿  Updated README.md (+2 -2)
+      42  ### Kontrola dat: tři vrstvy
+      43  
+      44  1. **Claude Code, dva zdroje.** Každá kritická hodnota (burza, 
+          ISIN, TER) se stahuje přímo od emitenta a ověřuje proti druhému
+           nezávislému zdroji (prospekt na SEC EDGAR, KID, factsheet, adr
+          esář NYSE, OpenFIGI). Do dat jde doslovný úryvek ze zdroje. Co 
+          nejde ověřit, je `null` s důvodem.
+      45 -2. **Nezávislá křížová kontrola druhou AI.** Samostatná kontrol
+         -a jinou AI mimo tuto session přepočítala kontrolní číslice všec
+         -h 10 ISINů a zkontrolovala TER.                                
+      45 +2. **Nezávislá křížová kontrola druhou AI.** Claude v chatu na 
+         +claude.ai (mimo Claude Code) s webovým vyhledáváním. Přepočítal
+         + kontrolní číslice všech ISINů vlastním skriptem a dohledal TER
+         + VWCE a SXR4 u nezávislých zdrojů. Neměl přístup k této session
+         +, jen k výslednému `etfs.json`.                                
+      46  3. **Ruční ověření člověkem v prohlížeči.** Kritická pole SPY, 
+          VOO, VUAA a SXR8 (seznam v `meta.verified_by_human_scope` v [`d
+          ata/etfs.json`](data/etfs.json), checklist [`docs/overeni-dat.m
+          d`](docs/overeni-dat.md)).
+      47  
+      48 -**Příklad, proč je zdrojem emitent, a ne AI ani agregátor:** re
+         -vidující AI označila TER VWCE (0,14 %) a SXR4 (0,03 %) za chybu
+         -, protože vycházela ze zastaralých znalostí. Ověření u emitenta
+         - ukázalo, že hodnoty jsou správné: TER VWCE 0,14 % platí od 28.
+         - 7. 2026 podle tiskové zprávy Vanguardu (dohledala křížová kont
+         -rola) a TER SXR4 uvádí iShares na stránce fondu i v KID. Znalos
+         -ti jazykového modelu ani agregátory nemusí být aktuální, proto 
+         -platí jen web a dokumenty emitenta.                            
+      48 +**Příklad, proč je zdrojem emitent, a ne AI ani agregátor:** re
+         +vidující AI označila TER VWCE (0,14 %) a SXR4 (0,03 %) za chybu
+         +, protože vycházela ze zastaralých znalostí. Ověření u emitenta
+         + ukázalo, že hodnoty jsou správné: TER VWCE klesl z 0,19 % na 0
+         +,14 % s účinností od 28. 7. 2026 ([Vanguard, 2. 8. 2026](https:
+         +//www.ch.vanguard/en/private-investor/insights/we-are-lowering-
+         +fees-on-one-of-our-most-popular-etfs); dohledala křížová kontro
+         +la, ověřeno i v Claude Code) a TER SXR4 uvádí iShares na stránc
+         +e fondu i v KID. Znalosti jazykového modelu ani agregátory nemu
+         +sí být aktuální, proto platí jen web a dokumenty emitenta.     
+      49  
+      50  ## Rozhodnutí v nejasnostech
+      51  
+  ⎿  Updated data/etfs.json (+6 -0)
+      1296              "value": 0.14,
+      1297              "retrieved_at": "2026-10-08",
+      1298              "note": "Factsheet 31. 8. 2026."
+      1299 +          },                                                 
+      1300 +          {                                                  
+      1301 +            "source_url": "https://www.ch.vanguard/en/private
+           +-investor/insights/we-are-lowering-fees-on-one-of-our-most-po
+           +pular-etfs",                                                 
+      1302 +            "value": 0.14,                                   
+      1303 +            "retrieved_at": "2026-10-09",                    
+      1304 +            "note": "Vanguard 2. 8. 2026: „The ongoing charge
+           + for the Vanguard FTSE All-World UCITS ETF will fall from 0.1
+           +9% to 0.14%. The change is expected to take effect on 28 July
+           + 2026“."                                                     
+      1305            }
+      1306          ]
+      1307        },
+  ⎿  Updated docs/overeni-dat.md (+2 -2)
+      57  | ☑ | VUAA | 0,07 % | [vanguard.co.uk](https://www.vanguard.co.
+          uk/professional/product/etf/equity/9694/sp-500-ucits-etf-usd-ac
+          cumulating) | [ověření 1: fund-docs.vanguard.com](https://fund-
+          docs.vanguard.com/ie00bfmxxd54_priipskid_en.pdf), [ověření 2: f
+          und-docs.vanguard.com](https://fund-docs.vanguard.com/SandP_500
+          _UCITS_ETF_USD_Accumulating_9694_EU_INT_EN.pdf) |
+      58  | ☑ | SXR8 | 0,07 % | [ishares.com](https://www.ishares.com/uk/
+          individual/en/products/253743/ishares-sp-500-b-ucits-etf-acc-fu
+          nd) | [ověření 1: ishares.com](https://www.ishares.com/de/priva
+          tanleger/de/literature/kiid/eu-priips-ishares-core-sp-500-ucits
+          -etf-usd-acc-ie00b5bmr087-en.pdf) |
+      59  | ☐ | SXR4 | 0,03 % | [ishares.com](https://www.ishares.com/uk/
+          individual/en/products/253740/ishares-msci-usa-b-ucits-etf) | [
+          ověření 1: ishares.com](https://www.ishares.com/de/privatanlege
+          r/de/literature/kiid/eu-priips-ishares-msci-usa-ucits-etf-usd-a
+          cc-ie00b52sft06-en.pdf) |
+      60 -| ☐ | VWCE | 0,14 % | [vanguard.co.uk](https://www.vanguard.co.
+         -uk/professional/product/etf/equity/9679/ftse-all-world-ucits-et
+         -f-usd-accumulating) | [ověření 1: fund-docs.vanguard.com](https
+         -://fund-docs.vanguard.com/ie00bk5bqt80_priipskid_en.pdf), [ověř
+         -ení 2: fund-docs.vanguard.com](https://fund-docs.vanguard.com/F
+         -TSE_All-World_UCITS_ETF_USD_Accumulating_9679_EU_INT_EN.pdf) | 
+      60 +| ☐ | VWCE | 0,14 % | [vanguard.co.uk](https://www.vanguard.co.
+         +uk/professional/product/etf/equity/9679/ftse-all-world-ucits-et
+         +f-usd-accumulating) | [ověření 1: fund-docs.vanguard.com](https
+         +://fund-docs.vanguard.com/ie00bk5bqt80_priipskid_en.pdf), [ověř
+         +ení 2: fund-docs.vanguard.com](https://fund-docs.vanguard.com/F
+         +TSE_All-World_UCITS_ETF_USD_Accumulating_9679_EU_INT_EN.pdf), [
+         +ověření 3: ch.vanguard](https://www.ch.vanguard/en/private-inve
+         +stor/insights/we-are-lowering-fees-on-one-of-our-most-popular-e
+         +tfs) |                                                         
+      61  
+      62  ## 2. Rozhodnutí, která potřebuju od tebe
+      63  
+      64  - ☑ **VTI ↔ iShares MSCI USA (SXR4)** jako „nejbližší alternati
+          va“ – schváleno. MSCI USA pokrývá jen velké a střední firmy (~8
+          5 % trhu podle MSCI).
+      65  - ☑ **AUM u VOO, VTI, VT** – u VOO ověřeno ručně („Total net as
+          sets $1,732.0 B“ = celý fond). VTI a VT odvozeny stejnou logiko
+          u, ručně neověřeny.
+      66 -- ☐ **Index VTI** – web uvádí Morningstar U.S. Total Market Ind
+         -ex, prospekt (duben 2026) CRSP. Bereme název z webu a uvádíme p
+         -řejmenování – souhlasíš?                                       
+      66 +- ☑ **Index VTI** – web uvádí Morningstar U.S. Total Market Ind
+         +ex, prospekt (duben 2026) CRSP. Schváleno: název z webu Vanguar
+         +du + poznámka o přejmenování.                                  
+      67  
+      68  ## 3. AUM (velikost fondu)
+      69  
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Všechno je v jednom commitu 32af358, nic jsem nepushoval.
+
+  - Tisková zpráva Vanguardu k VWCE: obsah jsem ověřil dvakrát, přes WebFetch i
+    v surovém HTML stránky. Doslovně v ní stojí: „The ongoing charge for the
+    Vanguard FTSE All-World UCITS ETF will fall from 0.19% to 0.14%. The change
+    is expected to take effect on 28 July 2026.“ Článek je z 2. 8. 2026.
+    - V data/etfs.json je přidaný jako třetí cross_check k TER VWCE, s datem
+      stažení 2026-10-09.
+    - Odkaz se díky tomu objevil i v checklistu.
+  - Index VTI je v docs/overeni-dat.md odškrtnutý jako schválený: název z webu
+    Vanguardu a poznámka o přejmenování.
+  - README, sekce „Práce s AI“:
+    - Druhá AI je popsaná tvým zněním.
+    - Příklad s VWCE teď uvádí pokles z 0,19 % na 0,14 % s odkazem na tiskovou
+      zprávu a s poznámkou, že ji dohledala křížová kontrola a ověřil jsem ji i
+      já.
+
+  Kontrolní skript nad daty prošel.
