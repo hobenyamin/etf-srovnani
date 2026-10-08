@@ -1,0 +1,406 @@
+
+❯ <ide_opened_file>The user opened the file
+  /home/snnikol/work/etf-srovnani/CLAUDE.md in the IDE. This may or may not be
+  related to the current task.</ide_opened_file>
+
+❯ Přečti CLAUDE.md. Přepni se do plan mode a navrhni plán prvního kroku (kostra
+  Next.js projektu, README kostra, složky ai-log, docs, ads, data). Nic
+  nespouštěj, dokud plán neschválím.
+
+● Entered plan mode
+  Claude is now exploring and designing an implementation approach.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Updated plan
+  ⎿  /plan to preview
+
+● Plán je hotový. Předkládám ho ke schválení.
+  ⎿  Error: The user doesn't want to proceed with this tool use. The tool use
+     was rejected (eg. if it was a file edit, the new_string was NOT written to
+     the file). The user provided the following reason for the rejection:  Plán
+     schvaluji se dvěma úpravami: 1) Repo už existuje, je veřejné a má nastavený
+     origin. Po mé kontrole commitů pushni, žádné nové repo nevytvářej. 2) Do
+     docs/ai-chyby.md zapisuj jen chyby, které se skutečně stanou a já je
+     odhalím. Nic nepředvyplňuj. Jinak beze změny.
+
+● Updated plan
+  ⎿  /plan to preview
+
+● Updated plan
+  ⎿  /plan to preview
+
+● User approved Claude's plan
+  ⎿  Plan saved to: ~/.claude/plans/shiny-growing-bachman.md · /plan to edit
+     Plán kroku 1 – kostra projektu (9. 10.)
+
+     Kontext
+
+     Next.js projekt už existuje (commit 2e4e2f9: Next 16.4.0, React 19.3,
+     Tailwind 4 přes @tailwindcss/turbopack, cacheComponents: true, App Router,
+     alias @/*). Je ale v podobě z create-next-app: boilerplate stránka, Geist
+     font, lang="en", anglický README. Chybí složky ze struktury v CLAUDE.md
+     (ai-log/, docs/, ads/, data/, components/, lib/).
+
+     Cíl kroku: z šablony udělat čistou, česky nastavenou kostru se všemi
+     složkami a README kostrou, aby další kroky (data → komponenty → …) měly kam
+     padat. Žádný design, žádné texty stránky, žádná data ETF – to jsou další
+     kroky.
+
+     Co se udělá
+
+     1. Úklid Next.js šablony
+
+     - app/page.tsx – nahradit boilerplate minimálním placeholderem (jeden
+       <main> s nadpisem „ETF z NYSE – srovnání pro českého investora“ a
+       poznámkou, že stránka je ve výstavbě). Žádné next/image loga.
+     - app/layout.tsx – lang="cs", metadata česky (title/description), Geist
+       zatím ponechat (vlastní font se volí v kroku designu); typ
+       LayoutProps<"/"> zachovat (je to globální helper Next 16).
+     - app/globals.css – odstranit font-family: Arial… přebíjející --font-sans,
+       dark-mode blok zatím ponechat. Paleta až v kroku designu.
+     - Smazat nepoužívané public/{file,globe,next,vercel,window}.svg.
+     - next.config.ts – neměnit (ověřeno, že cacheComponents a
+       partialPrefetching jsou výchozí z šablony; před případnou změnou číst
+       node_modules/next/dist/docs/).
+
+     2. Složky ze struktury repa
+
+     Každá s README.md (krátký účel složky česky), aby šla do gitu a byla
+     samopopisná:
+     - components/ – UI komponenty (zatím prázdné, jen README)
+     - lib/ – analytika, supabase, výpočty kalkulačky
+     - data/ – README s popisem schématu etfs.json (pole ticker, name, issuer,
+       isin, exchange, domicile, currency, ter, aum, distribution,
+       ucits_equivalent; každá hodnota se source_url a retrieved_at; chybějící =
+       null + poznámka). Samotný etfs.json nevytvářet – data až 10. 10. s
+       ručním ověřením.
+     - ads/ – README s osnovou pro varianty A (úspora) a B (zvědavost): formáty
+       1:1 / 4:5 / 9:16, primární text, nadpis, CTA, cílení (jen ČR). Podsložky
+       ads/a-uspora/, ads/b-zvedavost/ s .gitkeep.
+     - ai-log/ – README: co sem patří (/export po každé větší session), konvence
+       názvu YYYY-MM-DD-tema.md.
+     - docs/ai-chyby.md – jen hlavička tabulky (datum | co AI udělala špatně |
+       jak se to zjistilo | oprava), bez předvyplněných záznamů. Zapisují se
+       pouze chyby, které se skutečně stanou a které uživatel odhalí.
+
+     3. README kostra (česky, nahradit šablonu)
+
+     Nadpisy dle seznamu v CLAUDE.md, pod každým TODO + jedna věta, co tam bude:
+     1. O projektu (1 odstavec, odkaz na nasazenou URL – TODO)
+     2. Cílová skupina
+     3. Výměna hodnoty: co návštěvník dostane a kdy žádáme o kontakt
+     4. Struktura stránky a zdůvodnění pořadí sekcí
+     5. Očekávaná konverze (benchmark + zdroj – TODO, nevymýšlet)
+     6. Hypotézy pro A/B test (3, seřazené dle dopadu)
+     7. Měření (funnel eventů page_view → … → lead_confirmed)
+     8. Reklamy (odkaz na ads/)
+     9. Práce s AI (pokyny, kontrola výstupu, chyby → docs/ai-chyby.md, exporty
+        → ai-log/)
+     10. Rozhodnutí v nejasnostech – rovnou předvyplnit 6 klíčových rozhodnutí z
+         CLAUDE.md (NYSE↔UCITS, jen NYSE kotace/QQQ, formulář e-mail+souhlas,
+         kontakt až po interakci, žádné doporučení, jen ČR) s jednovětým „proč“
+     11. Co chybí a proč
+     12. Zdroje dat (tabulka zdroj | URL | datum stažení – prázdná)
+     13. Právní upozornění (není právní rada, nutná kontrola před spuštěním;
+         rizika Google Ads ověření / Meta omezení cílení)
+     14. Spuštění lokálně (npm install, npm run dev, npm run build)
+
+     4. Commity (malé, česky, každý s Co-Authored-By řádkem)
+
+     1. Úklid šablony Next.js: čeština, placeholder stránka, odstranění
+        ukázkových SVG
+     2. Přidána struktura složek (components, lib, data, ads, ai-log, docs)
+     3. README: kostra sekcí podle zadání a klíčová rozhodnutí
+
+     Repo už existuje (veřejné, origin nastavený) – žádné nové se nevytváří. Po
+     commitech se zastavím; git push na origin až po tvé kontrole commitů.
+
+     Mimo rozsah tohoto kroku
+
+     Data ETF, design/paleta/font, komponenty, Playwright, Supabase, PostHog,
+     Vercel.
+
+     Ověření
+
+     - npm run lint a npm run build projdou bez chyb.
+     - npm run dev → localhost:3000 na šířce 375 px zobrazí placeholder, <html
+       lang="cs">.
+     - git log --oneline ukáže 3 nové malé commity; git status čistý.
+     - Připomenutí: po session /export do ai-log/.
+
+● Plán je schválený. Začínám krokem 1, úklidem šablony.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● No python here, so I'll make the edits with the Edit tool.
+
+● Update(app/layout.tsx)
+  ⎿  Added 3 lines, removed 2 lines
+      13  });
+      14  
+      15  export const metadata: Metadata = {
+      16 -  title: "Create Next App",                                    
+      17 -  description: "Generated by create next app",                 
+      16 +  title: "ETF z NYSE – srovnání pro českého investora",        
+      17 +  description:                                                 
+      18 +    "Porovnání ETF z NYSE s evropskými UCITS alternativami a ka
+         +lkulačka dopadu poplatků v Kč.",                               
+      19  };
+      20  
+      21  export default function RootLayout({ children }: LayoutProps<"/
+          ">) {
+
+● Update(app/layout.tsx)
+  ⎿  Added 1 line, removed 1 line
+      21  export default function RootLayout({ children }: LayoutProps<"/
+          ">) {
+      22    return (
+      23      <html
+      24 -      lang="en"                                                
+      24 +      lang="cs"                                                
+      25        className={`${geistSans.variable} ${geistMono.variable} h
+          -full antialiased`}
+      26      >
+      27        <body className="min-h-full flex flex-col">{children}</bo
+          dy>
+
+● Update(app/globals.css)
+  ⎿  Removed 1 line
+      22  body {
+      23    background: var(--background);
+      24    color: var(--foreground);
+      25 -  font-family: Arial, Helvetica, sans-serif;                   
+      25  }
+
+● Edits are in. Running lint and build before the first commit.
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● First commit is in. Now the folder structure.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Folder structure is committed. Next: the README skeleton.
+
+● Write(README.md)
+  ⎿  Added 59 lines, removed 23 lines
+       1 -This is a [Next.js](https://nextjs.org) project bootstrapped wi
+         -th [`create-next-app`](https://nextjs.org/docs/app/api-referenc
+         -e/cli/create-next-app).                                        
+       1 +# ETF z NYSE – srovnání pro českého investora                  
+       2  
+       3 -## Getting Started                                             
+       3 +Konverzní landing page (lead magnet) pro českého drobného inves
+         +tora, který přichází z reklamy na mobilu. Porovnává ETF obchodo
+         +vaná na NYSE s evropskými UCITS alternativami, které si v ČR sk
+         +utečně koupí, a ukazuje dopad poplatků v Kč.                   
+       4  
+       5 -First, run the development server:                             
+       5 +Praktický úkol do výběrového řízení Clientelo Czech s.r.o. Hodn
+         +oticí otázka: *Mohli bychom na tuto stránku zítra spustit place
+         +nou reklamu?*                                                  
+       6  
+       7 -```bash                                                        
+       8 -npm run dev                                                    
+       9 -# or                                                           
+      10 -yarn dev                                                       
+      11 -# or                                                           
+      12 -pnpm dev                                                       
+      13 -# or                                                           
+      14 -bun dev                                                        
+      15 -```                                                            
+       7 +- Nasazená stránka: TODO                                       
+       8 +- Reklamy: [`ads/`](ads/)                                      
+       9  
+      17 -Open [http://localhost:3000](http://localhost:3000) with your b
+         -rowser to see the result.                                      
+      10 +## Cílová skupina                                              
+      11  
+      19 -You can start editing the page by modifying `app/page.tsx`. The
+         - page auto-updates as you edit the file.                       
+      12 +TODO – kdo přichází, z jaké reklamy, s jakou bolestí.          
+      13  
+      21 -This project uses [`next/font`](https://nextjs.org/docs/app/bui
+         -lding-your-application/optimizing/fonts) to automatically optim
+         -ize and load [Geist](https://vercel.com/font), a new font famil
+         -y for Vercel.                                                  
+      14 +## Výměna hodnoty                                              
+      15  
+      23 -## Learn More                                                  
+      16 +TODO – co návštěvník dostane zdarma, co za e-mail, co hned po o
+         +deslání a v kterém okamžiku o kontakt žádáme.                  
+      17  
+      25 -To learn more about Next.js, take a look at the following resou
+         -rces:                                                          
+      18 +## Struktura stránky a pořadí sekcí                            
+      19  
+      27 -- [Next.js Documentation](https://nextjs.org/docs) - learn abou
+         -t Next.js features and API.                                    
+      28 -- [Learn Next.js](https://nextjs.org/learn) - an interactive Ne
+         -xt.js tutorial.                                                
+      20 +TODO – sekce v pořadí a proč právě toto pořadí.                
+      21  
+      30 -You can check out [the Next.js GitHub repository](https://githu
+         -b.com/vercel/next.js) - your feedback and contributions are wel
+         -come!                                                          
+      22 +## Očekávaná konverze                                          
+      23  
+      32 -## Deploy on Vercel                                            
+      24 +TODO – odhad konverze s odůvodněním a zdrojem benchmarku.      
+      25  
+      34 -The easiest way to deploy your Next.js app is to use the [Verce
+         -l Platform](https://vercel.com/new?utm_medium=default-template&
+         -filter=next.js&utm_source=create-next-app&utm_campaign=create-n
+         -ext-app-readme) from the creators of Next.js.                  
+      26 +## Hypotézy pro A/B test                                       
+      27  
+      36 -Check out our [Next.js deployment documentation](https://nextjs
+         -.org/docs/app/building-your-application/deploying) for more det
+         -ails.                                                          
+      28 +TODO – tři hypotézy seřazené podle očekávaného dopadu.         
+      29 +                                                               
+      30 +## Měření                                                      
+      31 +                                                               
+      32 +TODO – funnel `page_view → hero_cta_click → calc_start → calc_r
+         +esult → compare_view → form_view → form_submit → lead_confirmed
+         +`, UTM a `ad_variant`, režim bez cookies.                      
+      33 +                                                               
+      34 +## Reklamy                                                     
+      35 +                                                               
+      36 +TODO – varianty A (úspora) a B (zvědavost), napojení hero na `u
+         +tm_content`. Podklady v [`ads/`](ads/).                        
+      37 +                                                               
+      38 +## Práce s AI                                                  
+      39 +                                                               
+      40 +TODO – pokyny agentům, kontrola výstupu, kde se AI spletla. Chy
+         +by: [`docs/ai-chyby.md`](docs/ai-chyby.md), exporty konverzací:
+         + [`ai-log/`](ai-log/).                                         
+      41 +                                                               
+      42 +## Rozhodnutí v nejasnostech                                   
+      43 +                                                               
+      44 +1. **Porovnáváme NYSE ETF s UCITS ekvivalentem.** Fondy domicil
+         +ované v USA (VOO, SPY, VTI…) si drobný investor v EU běžně neko
+         +upí, protože k nim chybí KID podle nařízení PRIIPs. Stránka pro
+         +to vždy ukazuje dostupnou evropskou alternativu a nikdy nevyzýv
+         +á ke koupi US fondu.                                           
+      45 +2. **Jen fondy skutečně kotované na NYSE.** Zadání mluví o NYSE
+         +; QQQ je na Nasdaqu, a proto ho vynecháváme nebo výjimku zdůvod
+         +níme. Kotaci ověřujeme u emitenta.                             
+      46 +3. **Formulář = e-mail + souhlas.** Každé další pole snižuje ko
+         +nverzi; kvalifikační otázka přichází až po odeslání a je nepovi
+         +nná.                                                           
+      47 +4. **O kontakt žádáme až po interakci.** Ve chvíli, kdy návštěv
+         +ník vidí svůj výsledek z kalkulačky, má hodnota konkrétní podob
+         +u – ne v hero.                                                 
+      48 +5. **Žádné personalizované doporučení fondu.** Kalkulačka počít
+         +á poplatky, nedoporučuje; jinak by šlo o investiční poradenství
+         + bez licence (MiFID II).                                       
+      49 +6. **Kampaň cílí jen na ČR.** Texty, měna (Kč) i právní rámec j
+         +sou české.                                                     
+      50 +                                                               
+      51 +## Co chybí a proč                                             
+      52 +                                                               
+      53 +TODO                                                           
+      54 +                                                               
+      55 +## Zdroje dat                                                  
+      56 +                                                               
+      57 +| Údaj | Zdroj | URL | Datum stažení |                         
+      58 +| --- | --- | --- | --- |                                      
+      59 +                                                               
+      60 +## Právní upozornění                                           
+      61 +                                                               
+      62 +Stránka je vzdělávací srovnání s daty, ne investiční doporučení
+         + ani nabídka produktu. Tento projekt není právní rada; **před o
+         +strým spuštěním je nutná právní kontrola** (PRIIPs, MAR/ZPKT, M
+         +iFID II, GDPR, zákony 40/1995, 634/1992, 480/2004 a 127/2005). 
+      63 +                                                               
+      64 +Rizika pro „spuštění zítra“ na straně reklamních platforem: Goo
+         +gle Ads od roku 2026 vyžaduje v EU/EHP ověření finančních inzer
+         +entů (pro nefinanční informační web formulář pro nefinanční inz
+         +erenty) a Meta omezuje možnosti cílení u finančních reklam.    
+      65 +                                                               
+      66 +## Spuštění lokálně                                            
+      67 +                                                               
+      68 +```bash                                                        
+      69 +npm install                                                    
+      70 +npm run dev     # http://localhost:3000                        
+      71 +npm run build                                                  
+      72 +```                                                            
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Checking that the prerendered HTML has the Czech lang and the new title:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● The project skeleton is done in 3 local commits. Lint and build pass. Nothing
+  is pushed: I'm waiting for you to check the commits before I run git push
+  origin master.
+
+  22d9cd8 README: kostra sekcí podle zadání a klíčová rozhodnutí
+  0ddbc13 Přidána struktura složek (components, lib, data, ads, ai-log, docs)
+  7887164 Úklid šablony Next.js: čeština, placeholder stránka, odstranění
+  ukázkových SVG
+
+  What changed:
+  - Template cleanup: app/page.tsx is now a simple placeholder. app/layout.tsx
+    has lang="cs" and a Czech title and description. I removed the Arial
+    override from app/globals.css and deleted the template SVGs.
+  - Folders: components/, lib/, data/, ads/ (with a-uspora/ and b-zvedavost/)
+    and ai-log/ each have a short README. data/README.md describes the etfs.json
+    fields and sourcing rules; the data file itself doesn't exist yet.
+    docs/ai-chyby.md contains only the table header, no entries.
+  - README.md: every section required by the brief is there with a TODO. The 6
+    key decisions from CLAUDE.md are written out, plus the legal notice and the
+    Google Ads/Meta risks.
+
+  Checks: the built page has <html lang="cs"> and the correct title. I didn't
+  check it by eye at 375 px. The page is a single heading for now, so I'll do
+  the mobile check once there are real components.
+
+  Before you finish the session, please export it with /export into ai-log/, for
+  example as 2026-10-09-kostra-projektu.md.
+
+❯ <ide_opened_file>The user opened the file
+  /home/snnikol/work/etf-srovnani/README.md in the IDE. This may or may not be
+  related to the current task.</ide_opened_file>
+❯ Kontrola OK. Do docs/ai-chyby.md přidej záznam: 2026-10-08 | Navrhl název
+  exportu s datem 2026-10-09 (převzal ho z harmonogramu, ne ze skutečného data)
+  | Ruční kontrola proti dnešnímu datu | Export pojmenován 2026-10-08. Pokud
+  README nekončí uzavíracím ```, doplň ho. Commitni a pak pushni na origin
+  master.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● README already ends with a closing ```, so it needs no change. Committing and
+  pushing:
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● The docs/ai-chyby.md entry is committed (docs: první záznam chyby AI (datum v
+  názvu exportu)), but the push failed because GitHub refused the SSH login:
+
+  ssh_askpass: exec(/usr/bin/ssh-askpass): No such file or directory
+  git@github.com: Permission denied (publickey).
+
+  So master is 4 commits ahead of origin/master, and nothing has reached GitHub
+  yet.
+
+  The error suggests your SSH key has a passphrase and isn't loaded into an
+  ssh-agent. My shell can't type a passphrase for you. To fix it, run this in
+  your own terminal:
+
+  eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519   # or the path to your
+  key
+  ssh -T git@github.com                                  # should greet you as
+  hobenyamin
+  git push origin master
+
+  You can also run ssh-add and then tell me to push again. I haven't changed the
+  remote or switched to HTTPS.
+
+  The README already ended with a closing ```, so I left it alone.
+
+  The export file isn't in ai-log/ yet. Once you've exported the session as
+  2026-10-08-…, I can commit it together with the push.
