@@ -688,6 +688,657 @@
         "match": "closest",
         "note": "Stejný emitent, ale jiný index: FTSE All-World (velké a střední firmy) vs. FTSE Global All Cap (i malé firmy). Distribuční třída: VWRL (IE00B3RBWM25) – neověřováno."
       }
+    },
+    {
+      "id": "SPYL",
+      "kind": "ucits",
+      "ticker": {
+        "value": "SPYL",
+        "source_url": "https://www.ssga.com/ie/en_gb/institutional/etfs/spdr-sp-500-ucits-etf-acc-spyl-gy",
+        "retrieved_at": "2026-10-08",
+        "note": "Ticker na Deutsche Börse (Xetra), primární kotace.",
+        "cross_check": []
+      },
+      "name": {
+        "value": "State Street SPDR S&P 500 UCITS ETF (Acc)",
+        "source_url": "https://www.ssga.com/ie/en_gb/institutional/etfs/spdr-sp-500-ucits-etf-acc-spyl-gy",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "issuer": {
+        "value": "State Street Global Advisors (SPDR)",
+        "source_url": "https://www.ssga.com/ie/en_gb/institutional/etfs/spdr-sp-500-ucits-etf-acc-spyl-gy",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "isin": {
+        "value": "IE000XZSV718",
+        "source_url": "https://www.ssga.com/ie/en_gb/institutional/etfs/spdr-sp-500-ucits-etf-acc-spyl-gy",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": [
+          {
+            "source_url": "https://www.ssga.com/library-content/kids?isin=IE000XZSV718&documentType=kid&country=ie&language=en_gb&ticker=spyl-gy",
+            "value": "IE000XZSV718",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "exchange": {
+        "value": "Deutsche Börse (Xetra)",
+        "source_url": "https://www.ssga.com/ie/en_gb/institutional/etfs/spdr-sp-500-ucits-etf-acc-spyl-gy",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Deutsche Börse (Primary) EUR 01 Nov 2023 SPYL“. Jediný zdroj (KID burzy neuvádí).",
+        "cross_check": []
+      },
+      "domicile": {
+        "value": "Irsko",
+        "source_url": "https://www.ssga.com/ie/en_gb/institutional/etfs/spdr-sp-500-ucits-etf-acc-spyl-gy",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": [
+          {
+            "source_url": "https://www.ssga.com/library-content/kids?isin=IE000XZSV718&documentType=kid&country=ie&language=en_gb&ticker=spyl-gy",
+            "value": "Irsko",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "currency": {
+        "value": "EUR",
+        "source_url": "https://www.ssga.com/ie/en_gb/institutional/etfs/spdr-sp-500-ucits-etf-acc-spyl-gy",
+        "retrieved_at": "2026-10-08",
+        "note": "Měna obchodování na Xetře.",
+        "cross_check": []
+      },
+      "base_currency": {
+        "value": "USD",
+        "source_url": "https://www.ssga.com/ie/en_gb/institutional/etfs/spdr-sp-500-ucits-etf-acc-spyl-gy",
+        "retrieved_at": "2026-10-08",
+        "note": "Share Class Currency USD.",
+        "cross_check": []
+      },
+      "ter": {
+        "value": 0.03,
+        "source_url": "https://www.ssga.com/ie/en_gb/institutional/etfs/spdr-sp-500-ucits-etf-acc-spyl-gy",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „TER 0.03%“.",
+        "cross_check": [
+          {
+            "source_url": "https://www.ssga.com/library-content/kids?isin=IE000XZSV718&documentType=kid&country=ie&language=en_gb&ticker=spyl-gy",
+            "value": 0.03,
+            "retrieved_at": "2026-10-08",
+            "note": "KID 19. 2. 2026: „Management fees and other administrative or operating costs 0.03%“."
+          },
+          {
+            "source_url": "https://www.ssga.com/library-content/kids?isin=IE000XZSV718&documentType=kid&country=cz&language=cs&ticker=spyl-gy",
+            "value": 0.03,
+            "retrieved_at": "2026-10-08",
+            "note": "Český KID: „Poplatky za vedení a jiné správní nebo provozní náklady 0,03 %“."
+          }
+        ]
+      },
+      "aum": {
+        "value": {
+          "amount": 44951900000,
+          "currency": "USD",
+          "as_of": "2026-10-07"
+        },
+        "source_url": "https://www.ssga.com/ie/en_gb/institutional/etfs/spdr-sp-500-ucits-etf-acc-spyl-gy",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Total Fund Assets USD $44,951.90 M as of 07 Oct 2026“ (celý fond, všechny třídy).",
+        "cross_check": []
+      },
+      "distribution": {
+        "value": "accumulating",
+        "source_url": "https://www.ssga.com/ie/en_gb/institutional/etfs/spdr-sp-500-ucits-etf-acc-spyl-gy",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Income Treatment Accumulation“.",
+        "cross_check": []
+      },
+      "index": {
+        "value": "S&P 500",
+        "source_url": "https://www.ssga.com/ie/en_gb/institutional/etfs/spdr-sp-500-ucits-etf-acc-spyl-gy",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "registered_in_cz": {
+        "value": true,
+        "source_url": "https://www.ssga.com/ie/en_gb/institutional/etfs/spdr-sp-500-ucits-etf-acc-spyl-gy",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Countries of Registration Austria, Czech Republic, Denmark, …“. Emitent má i KID v češtině.",
+        "cross_check": [
+          {
+            "source_url": "https://www.ssga.com/library-content/kids?isin=IE000XZSV718&documentType=kid&country=cz&language=cs&ticker=spyl-gy",
+            "value": true,
+            "retrieved_at": "2026-10-08",
+            "note": "Český KID existuje."
+          }
+        ]
+      },
+      "ucits_equivalent": null
+    },
+    {
+      "id": "VUAA",
+      "kind": "ucits",
+      "ticker": {
+        "value": "VUAA",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": "Ticker na Deutsche Börse (EUR). Na LSE se tatáž třída obchoduje jako VUAG (GBP).",
+        "cross_check": []
+      },
+      "name": {
+        "value": "Vanguard S&P 500 UCITS ETF (USD) Accumulating",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "issuer": {
+        "value": "Vanguard",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "isin": {
+        "value": "IE00BFMXXD54",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": [
+          {
+            "source_url": "https://fund-docs.vanguard.com/ie00bfmxxd54_priipskid_en.pdf",
+            "value": "IE00BFMXXD54",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "exchange": {
+        "value": "Deutsche Börse (Xetra)",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „EUR - Deutsche Boerse … Exchange ticker: VUAA“. Jediný zdroj.",
+        "cross_check": []
+      },
+      "domicile": {
+        "value": "Irsko",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": [
+          {
+            "source_url": "https://fund-docs.vanguard.com/ie00bfmxxd54_priipskid_en.pdf",
+            "value": "Irsko",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "currency": {
+        "value": "EUR",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": "Měna obchodování na Deutsche Börse.",
+        "cross_check": []
+      },
+      "base_currency": {
+        "value": "USD",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Base currency: USD“.",
+        "cross_check": []
+      },
+      "ter": {
+        "value": 0.07,
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „OCF/TER 0.07%“.",
+        "cross_check": [
+          {
+            "source_url": "https://fund-docs.vanguard.com/ie00bfmxxd54_priipskid_en.pdf",
+            "value": 0.07,
+            "retrieved_at": "2026-10-08",
+            "note": "KID 29. 9. 2026."
+          },
+          {
+            "source_url": "https://fund-docs.vanguard.com/SandP_500_UCITS_ETF_USD_Accumulating_9694_EU_INT_EN.pdf",
+            "value": 0.07,
+            "retrieved_at": "2026-10-08",
+            "note": "Factsheet 31. 8. 2026: „Ongoing Charges Figure 0.07%“."
+          }
+        ]
+      },
+      "aum": {
+        "value": {
+          "amount": 89226000000,
+          "currency": "USD",
+          "as_of": "2026-08-31"
+        },
+        "source_url": "https://fund-docs.vanguard.com/SandP_500_UCITS_ETF_USD_Accumulating_9694_EU_INT_EN.pdf",
+        "retrieved_at": "2026-10-08",
+        "note": "Factsheet: „Total assets (million) $89,226 … as at 31 August 2026“ (celý fond). Stránka uvádí „Total Assets US$88.97 B“, datum ale nejde z HTML přečíst.",
+        "cross_check": [
+          {
+            "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-usd-accumulating",
+            "value": "US$88.97 B (datum neznámé)",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "distribution": {
+        "value": "accumulating",
+        "source_url": "https://fund-docs.vanguard.com/ie00bfmxxd54_priipskid_en.pdf",
+        "retrieved_at": "2026-10-08",
+        "note": "KID: „Income from the ETF Shares will be reinvested“.",
+        "cross_check": []
+      },
+      "index": {
+        "value": "S&P 500",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka uvádí variantu „S&P 500 Net Total Return“ – stejný index, výnos po srážkové dani z dividend.",
+        "cross_check": []
+      },
+      "registered_in_cz": {
+        "value": null,
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka emitenta seznam zemí registrace neuvádí; KID jen obecně: „registered for sale in other EEA Member States“.",
+        "cross_check": []
+      },
+      "ucits_equivalent": null
+    },
+    {
+      "id": "SXR8",
+      "kind": "ucits",
+      "ticker": {
+        "value": "SXR8",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253743/ishares-sp-500-b-ucits-etf-acc-fund",
+        "retrieved_at": "2026-10-08",
+        "note": "Ticker na Xetře. Na LSE (USD) se fond obchoduje jako CSPX.",
+        "cross_check": []
+      },
+      "name": {
+        "value": "iShares Core S&P 500 UCITS ETF (Acc)",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253743/ishares-sp-500-b-ucits-etf-acc-fund",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "issuer": {
+        "value": "iShares (BlackRock)",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253743/ishares-sp-500-b-ucits-etf-acc-fund",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "isin": {
+        "value": "IE00B5BMR087",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253743/ishares-sp-500-b-ucits-etf-acc-fund",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": [
+          {
+            "source_url": "https://www.ishares.com/de/privatanleger/de/literature/kiid/eu-priips-ishares-core-sp-500-ucits-etf-usd-acc-ie00b5bmr087-en.pdf",
+            "value": "IE00B5BMR087",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "exchange": {
+        "value": "Deutsche Börse (Xetra)",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253743/ishares-sp-500-b-ucits-etf-acc-fund",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Deutsche Boerse Xetra SXR8 EUR“. Jediný zdroj.",
+        "cross_check": []
+      },
+      "domicile": {
+        "value": "Irsko",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253743/ishares-sp-500-b-ucits-etf-acc-fund",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": [
+          {
+            "source_url": "https://www.ishares.com/de/privatanleger/de/literature/kiid/eu-priips-ishares-core-sp-500-ucits-etf-usd-acc-ie00b5bmr087-en.pdf",
+            "value": "Irsko",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "currency": {
+        "value": "EUR",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253743/ishares-sp-500-b-ucits-etf-acc-fund",
+        "retrieved_at": "2026-10-08",
+        "note": "Měna obchodování na Xetře.",
+        "cross_check": []
+      },
+      "base_currency": {
+        "value": "USD",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253743/ishares-sp-500-b-ucits-etf-acc-fund",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Base Currency USD“.",
+        "cross_check": []
+      },
+      "ter": {
+        "value": 0.07,
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253743/ishares-sp-500-b-ucits-etf-acc-fund",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Total Expense Ratio 0.07%“.",
+        "cross_check": [
+          {
+            "source_url": "https://www.ishares.com/de/privatanleger/de/literature/kiid/eu-priips-ishares-core-sp-500-ucits-etf-usd-acc-ie00b5bmr087-en.pdf",
+            "value": 0.07,
+            "retrieved_at": "2026-10-08",
+            "note": "EU PRIIPs KID 3. 9. 2026."
+          }
+        ]
+      },
+      "aum": {
+        "value": {
+          "amount": 161211883532,
+          "currency": "USD",
+          "as_of": "2026-10-07"
+        },
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253743/ishares-sp-500-b-ucits-etf-acc-fund",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Net Assets of Fund as of 07/Oct/2026 USD 161,211,883,532“.",
+        "cross_check": []
+      },
+      "distribution": {
+        "value": "accumulating",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253743/ishares-sp-500-b-ucits-etf-acc-fund",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Use of Income Accumulating“.",
+        "cross_check": []
+      },
+      "index": {
+        "value": "S&P 500",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253743/ishares-sp-500-b-ucits-etf-acc-fund",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "registered_in_cz": {
+        "value": true,
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253743/ishares-sp-500-b-ucits-etf-acc-fund",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Registered Locations Austria Chile Czech Republic Denmark …“.",
+        "cross_check": []
+      },
+      "ucits_equivalent": null
+    },
+    {
+      "id": "SXR4",
+      "kind": "ucits",
+      "ticker": {
+        "value": "SXR4",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253740/ishares-msci-usa-b-ucits-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Ticker na Xetře. Na LSE (USD) se fond obchoduje jako CSUS.",
+        "cross_check": []
+      },
+      "name": {
+        "value": "iShares MSCI USA UCITS ETF (Acc)",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253740/ishares-msci-usa-b-ucits-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "issuer": {
+        "value": "iShares (BlackRock)",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253740/ishares-msci-usa-b-ucits-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "isin": {
+        "value": "IE00B52SFT06",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253740/ishares-msci-usa-b-ucits-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": [
+          {
+            "source_url": "https://www.ishares.com/de/privatanleger/de/literature/kiid/eu-priips-ishares-msci-usa-ucits-etf-usd-acc-ie00b52sft06-en.pdf",
+            "value": "IE00B52SFT06",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "exchange": {
+        "value": "Deutsche Börse (Xetra)",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253740/ishares-msci-usa-b-ucits-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Deutsche Boerse Xetra SXR4 EUR“.",
+        "cross_check": [
+          {
+            "source_url": "https://live.deutsche-boerse.com/etf/ishares-msci-usa-ucits-etf-usd-acc",
+            "value": "Xetra",
+            "retrieved_at": "2026-10-09",
+            "note": "Deutsche Börse: „ISIN: IE00B52SFT06 | WKN: A0YEDU | Kürzel: SXR4“, obchodování na Xetra."
+          }
+        ]
+      },
+      "domicile": {
+        "value": "Irsko",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253740/ishares-msci-usa-b-ucits-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": [
+          {
+            "source_url": "https://www.ishares.com/de/privatanleger/de/literature/kiid/eu-priips-ishares-msci-usa-ucits-etf-usd-acc-ie00b52sft06-en.pdf",
+            "value": "Irsko",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "currency": {
+        "value": "EUR",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253740/ishares-msci-usa-b-ucits-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Měna obchodování na Xetře.",
+        "cross_check": []
+      },
+      "base_currency": {
+        "value": "USD",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253740/ishares-msci-usa-b-ucits-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Base Currency USD“.",
+        "cross_check": []
+      },
+      "ter": {
+        "value": 0.03,
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253740/ishares-msci-usa-b-ucits-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Total Expense Ratio 0.03%“.",
+        "cross_check": [
+          {
+            "source_url": "https://www.ishares.com/de/privatanleger/de/literature/kiid/eu-priips-ishares-msci-usa-ucits-etf-usd-acc-ie00b52sft06-en.pdf",
+            "value": 0.03,
+            "retrieved_at": "2026-10-08",
+            "note": "EU PRIIPs KID 10. 9. 2026."
+          }
+        ]
+      },
+      "aum": {
+        "value": {
+          "amount": 5243738933,
+          "currency": "USD",
+          "as_of": "2026-10-07"
+        },
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253740/ishares-msci-usa-b-ucits-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Net Assets of Fund as of 07/Oct/2026 USD 5,243,738,933“.",
+        "cross_check": []
+      },
+      "distribution": {
+        "value": "accumulating",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253740/ishares-msci-usa-b-ucits-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Use of Income Accumulating“.",
+        "cross_check": []
+      },
+      "index": {
+        "value": "MSCI USA",
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253740/ishares-msci-usa-b-ucits-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Velké a střední firmy; 515 titulů k 7. 10. 2026.",
+        "cross_check": []
+      },
+      "registered_in_cz": {
+        "value": true,
+        "source_url": "https://www.ishares.com/uk/individual/en/products/253740/ishares-msci-usa-b-ucits-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Registered Locations Austria Czech Republic Denmark …“.",
+        "cross_check": []
+      },
+      "ucits_equivalent": null
+    },
+    {
+      "id": "VWCE",
+      "kind": "ucits",
+      "ticker": {
+        "value": "VWCE",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": "Ticker na Deutsche Börse (EUR).",
+        "cross_check": []
+      },
+      "name": {
+        "value": "Vanguard FTSE All-World UCITS ETF (USD) Accumulating",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "issuer": {
+        "value": "Vanguard",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "isin": {
+        "value": "IE00BK5BQT80",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": [
+          {
+            "source_url": "https://fund-docs.vanguard.com/ie00bk5bqt80_priipskid_en.pdf",
+            "value": "IE00BK5BQT80",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "exchange": {
+        "value": "Deutsche Börse (Xetra)",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „EUR - Deutsche Boerse … Exchange ticker: VWCE“. Jediný zdroj.",
+        "cross_check": []
+      },
+      "domicile": {
+        "value": "Irsko",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": [
+          {
+            "source_url": "https://fund-docs.vanguard.com/ie00bk5bqt80_priipskid_en.pdf",
+            "value": "Irsko",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "currency": {
+        "value": "EUR",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": "Měna obchodování na Deutsche Börse.",
+        "cross_check": []
+      },
+      "base_currency": {
+        "value": "USD",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Base currency: USD“.",
+        "cross_check": []
+      },
+      "ter": {
+        "value": 0.14,
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „OCF/TER 0.14%“.",
+        "cross_check": [
+          {
+            "source_url": "https://fund-docs.vanguard.com/ie00bk5bqt80_priipskid_en.pdf",
+            "value": 0.14,
+            "retrieved_at": "2026-10-08",
+            "note": "KID 29. 9. 2026."
+          },
+          {
+            "source_url": "https://fund-docs.vanguard.com/FTSE_All-World_UCITS_ETF_USD_Accumulating_9679_EU_INT_EN.pdf",
+            "value": 0.14,
+            "retrieved_at": "2026-10-08",
+            "note": "Factsheet 31. 8. 2026."
+          }
+        ]
+      },
+      "aum": {
+        "value": {
+          "amount": 85317000000,
+          "currency": "USD",
+          "as_of": "2026-08-31"
+        },
+        "source_url": "https://fund-docs.vanguard.com/FTSE_All-World_UCITS_ETF_USD_Accumulating_9679_EU_INT_EN.pdf",
+        "retrieved_at": "2026-10-08",
+        "note": "Factsheet: „Total assets (million) $85,317 … as at 31 August 2026“. Stránka uvádí „Total Assets US$87.29 B“ bez čitelného data.",
+        "cross_check": [
+          {
+            "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating",
+            "value": "US$87.29 B (datum neznámé)",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "distribution": {
+        "value": "accumulating",
+        "source_url": "https://fund-docs.vanguard.com/ie00bk5bqt80_priipskid_en.pdf",
+        "retrieved_at": "2026-10-08",
+        "note": "KID: „Income from the ETF Shares will be reinvested“.",
+        "cross_check": []
+      },
+      "index": {
+        "value": "FTSE All-World Index",
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "registered_in_cz": {
+        "value": null,
+        "source_url": "https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka emitenta seznam zemí registrace neuvádí; KID jen obecně: „registered for sale in other EEA Member States“.",
+        "cross_check": []
+      },
+      "ucits_equivalent": null
     }
   ]
 }
