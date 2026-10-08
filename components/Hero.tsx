@@ -10,7 +10,7 @@ const cta =
 
 export function Hero({ variant }: { variant: AdVariant }) {
   return (
-    <header className="px-4 pt-6 pb-10">
+    <header id="hero" className="px-4 pt-6 pb-10">
       <p className="text-[13px] tracking-wide text-muted uppercase">
         Srovnání ETF z NYSE · pro investory v ČR
       </p>
