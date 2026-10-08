@@ -26,6 +26,8 @@ body {
 .num {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
+  /* nezlomitelná mezera v monospace je široká jako číslice – zúžit oddělovač tisíců */
+  word-spacing: -0.3em;
 }
 
 /* Perforovaný okraj účtenky (zoubky nahoře a dole) */
