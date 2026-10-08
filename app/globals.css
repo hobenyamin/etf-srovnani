@@ -1,25 +1,48 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Směr „Výpis z účtu“: papír, inkoust, jediný akcent pro částky poplatků.
+   Kontrast na papíře: ink 15,5:1, muted 6,0:1, loss 5,3:1, keep 5,5:1.
+   rule (#C9C2B3) má 1,5:1 – jen linky a oddělovače, nikdy text. */
+@theme {
+  --color-paper: #f3efe6;
+  --color-card: #fbf9f4;
+  --color-ink: #16181d;
+  --color-muted: #5e5a52;
+  --color-rule: #c9c2b3;
+  --color-loss: #b03a0a;
+  --color-keep: #2f6b4f;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-plex-sans);
+  --font-mono: var(--font-plex-mono);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+/* Čísla vždy v tabulkových číslicích, aby se řádky účtenky nerozskakovaly */
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Perforovaný okraj účtenky (zoubky nahoře a dole) */
+.receipt {
+  --tooth: 8px;
+  mask:
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / calc(2 * var(--tooth)) 51% repeat-x,
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / calc(2 * var(--tooth)) 51% repeat-x;
+  padding-block: calc(var(--tooth) + 1rem);
+}
+
+.dotted {
+  border-bottom: 1px dotted var(--color-rule);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
