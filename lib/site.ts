@@ -14,10 +14,21 @@ export const OPERATOR: {
   address: null,
 };
 
-/** Znění souhlasů – ukládá se k leadu spolu s časem (krok 4). Doručení obsahu ≠ obchodní sdělení. */
+const DELIVERY =
+  "E-mail použijeme k zaslání srovnání, o které žádáte (čl. 6 odst. 1 písm. b GDPR – vyřízení vaší žádosti).";
+
+/**
+ * Znění u formuláře. Ukládá se k leadu přesně tak, jak ho návštěvník viděl:
+ * `notice` vždy, `marketing` jen se zaškrtnutým souhlasem (spolu s časem). Doručení obsahu ≠ obchodní sdělení.
+ */
 export const CONSENT = {
-  delivery:
-    "E-mail použijeme k zaslání srovnání, o které žádáte (čl. 6 odst. 1 písm. b GDPR – vyřízení vaší žádosti).",
+  delivery: DELIVERY,
   marketing:
     "Chci občas dostávat e-mailem novinky ke srovnání ETF. Souhlas můžu kdykoli odvolat odkazem v každém e-mailu.",
+  notice: `Správce: ${OPERATOR.name} (${OPERATOR.email}). ${DELIVERY} Novinky posíláme jen se souhlasem výše (čl. 6 odst. 1 písm. a GDPR).`,
+} as const;
+
+/** Doba uložení (zobrazuje se v zásadách, mazání zajišťuje pg_cron v supabase/migrations). */
+export const RETENTION = {
+  unconfirmedDays: 30,
 } as const;
