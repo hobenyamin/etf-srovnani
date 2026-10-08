@@ -1,0 +1,693 @@
+{
+  "meta": {
+    "description": "NYSE ETF a jejich UCITS ekvivalenty. Vzdělávací srovnání, ne investiční doporučení.",
+    "retrieved_at": "2026-10-08",
+    "units": {
+      "ter": "procenta ročně (0.03 = 0,03 %)",
+      "aum": "celková aktiva fondu (všechny třídy), pokud není uvedeno jinak"
+    },
+    "fields": "Každé pole: { value, source_url, retrieved_at, note, cross_check[] }. cross_check = nezávislé zdroje, které hodnotu potvrzují nebo se liší.",
+    "verified_by_human": true,
+    "verified_by_human_scope": [
+      "SPY: AUM, TER, base_currency, ISIN, burza",
+      "VOO: AUM (popisky Total net assets / Net assets for VOO), CUSIP → ISIN",
+      "VUAA: TER, ISIN, burza",
+      "SXR8: TER (KID)",
+      "Ostatní hodnoty ověřila AI ze dvou zdrojů (viz cross_check) a nezávislá křížová kontrola druhou AI (kontrolní číslice ISIN, TER VWCE a SXR4).",
+      "Pole registered_in_cz ruční kontrolou neprošlo."
+    ]
+  },
+  "funds": [
+    {
+      "id": "SPY",
+      "kind": "us",
+      "ticker": {
+        "value": "SPY",
+        "source_url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "name": {
+        "value": "State Street SPDR S&P 500 ETF Trust",
+        "source_url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "issuer": {
+        "value": "State Street Global Advisors (SPDR)",
+        "source_url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy",
+        "retrieved_at": "2026-10-08",
+        "note": "Formálně unit investment trust; trustee State Street Global Advisors Trust Company.",
+        "cross_check": []
+      },
+      "isin": {
+        "value": "US78462F1030",
+        "source_url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy",
+        "retrieved_at": "2026-10-08",
+        "note": "Doslovně na stránce: „ISIN US78462F1030“.",
+        "cross_check": [
+          {
+            "source_url": "https://www.openfigi.com/search",
+            "value": "US78462F1030 → SPY",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "exchange": {
+        "value": "NYSE Arca",
+        "source_url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Exchange NYSE ARCA“.",
+        "cross_check": [
+          {
+            "source_url": "https://www.sec.gov/Archives/edgar/data/884394/000119312526022316/d77353d485bpos.htm",
+            "value": "NYSE Arca",
+            "retrieved_at": "2026-10-08",
+            "note": "Prospekt 26. 1. 2026: „Principal U.S. Listing Exchange … NYSE Arca, Inc. under the symbol \"SPY\"“."
+          },
+          {
+            "source_url": "https://www.nyse.com/quote/ARCX:SPY",
+            "value": "ARCX (NYSE Arca)",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "domicile": {
+        "value": "USA",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/884394/000119312526022316/d77353d485bpos.htm",
+        "retrieved_at": "2026-10-08",
+        "note": "Unit investment trust registrovaný u SEC.",
+        "cross_check": []
+      },
+      "currency": {
+        "value": "USD",
+        "source_url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Trading Currency USD“.",
+        "cross_check": []
+      },
+      "base_currency": {
+        "value": "USD",
+        "source_url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Base Currency USD“.",
+        "cross_check": []
+      },
+      "ter": {
+        "value": 0.0945,
+        "source_url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy",
+        "retrieved_at": "2026-10-08",
+        "note": "Gross expense ratio v %. Stránka: „Gross Expense Ratio 0.0945%“.",
+        "cross_check": [
+          {
+            "source_url": "https://www.sec.gov/Archives/edgar/data/884394/000119312526022316/d77353d485bpos.htm",
+            "value": 0.0945,
+            "retrieved_at": "2026-10-08",
+            "note": "Prospekt, fee table: „Total: 0.0945%“."
+          }
+        ]
+      },
+      "aum": {
+        "value": {
+          "amount": 821535080000,
+          "currency": "USD",
+          "as_of": "2026-10-07"
+        },
+        "source_url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Assets Under Management $821,535.08 M as of Oct 07 2026“.",
+        "cross_check": []
+      },
+      "distribution": {
+        "value": "distributing",
+        "source_url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy",
+        "retrieved_at": "2026-10-08",
+        "note": "Čtvrtletně. Stránka: „Distribution Frequency Quarterly“.",
+        "cross_check": [
+          {
+            "source_url": "https://www.sec.gov/Archives/edgar/data/884394/000119312526022316/d77353d485bpos.htm",
+            "value": "quarterly",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "index": {
+        "value": "S&P 500",
+        "source_url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "registered_in_cz": {
+        "value": null,
+        "source_url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-sp-500-etf-trust-spy",
+        "retrieved_at": "2026-10-08",
+        "note": "US fond: stránka emitenta neuvádí registraci k nabízení v EU.",
+        "cross_check": []
+      },
+      "ucits_equivalent": {
+        "isin": "IE000XZSV718",
+        "match": "same_index",
+        "note": "Stejný emitent, stejný index. Distribuční třída téhož fondu: SPY5 (IE00B6YX5C33) – neověřováno."
+      }
+    },
+    {
+      "id": "VOO",
+      "kind": "us",
+      "ticker": {
+        "value": "VOO",
+        "source_url": "https://advisors.vanguard.com/investments/products/voo/vanguard-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "name": {
+        "value": "Vanguard S&P 500 ETF",
+        "source_url": "https://advisors.vanguard.com/investments/products/voo/vanguard-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "issuer": {
+        "value": "Vanguard",
+        "source_url": "https://advisors.vanguard.com/investments/products/voo/vanguard-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "isin": {
+        "value": "US9229083632",
+        "source_url": "https://advisors.vanguard.com/investments/products/voo/vanguard-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "ISIN není na stránce emitenta; dopočten z CUSIP 922908363 uvedeného na advisors.vanguard.com (ISO 6166: US + CUSIP + kontrolní číslice). Shoda ověřena přes OpenFIGI API.",
+        "cross_check": [
+          {
+            "source_url": "https://www.openfigi.com/search",
+            "value": "US9229083632 → VOO",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "exchange": {
+        "value": "NYSE Arca",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/36405/000003640526000183/f44783d1.htm",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka Vanguardu burzu neuvádí. Summary prospectus 28. 4. 2026: „listed on NYSE Arca“.",
+        "cross_check": [
+          {
+            "source_url": "https://www.nyse.com/quote/ARCX:VOO",
+            "value": "ARCX (NYSE Arca)",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "domicile": {
+        "value": "USA",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/36405/000003640526000183/f44783d1.htm",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "currency": {
+        "value": "USD",
+        "source_url": "https://www.nyse.com/quote/ARCX:VOO",
+        "retrieved_at": "2026-10-08",
+        "note": "Kotace na NYSE Arca je v USD.",
+        "cross_check": []
+      },
+      "base_currency": {
+        "value": "USD",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/36405/000003640526000183/f44783d1.htm",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "ter": {
+        "value": 0.03,
+        "source_url": "https://advisors.vanguard.com/investments/products/voo/vanguard-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Expense ratio v %, platné od 2026-04-28 (pole adjustedExpenseRatio).",
+        "cross_check": [
+          {
+            "source_url": "https://www.sec.gov/Archives/edgar/data/36405/000003640526000183/f44783d1.htm",
+            "value": 0.03,
+            "retrieved_at": "2026-10-08",
+            "note": "„Total Annual Fund Operating Expenses 0.03%“."
+          }
+        ]
+      },
+      "aum": {
+        "value": {
+          "amount": 1732017176748.57,
+          "currency": "USD",
+          "as_of": "2026-09-30"
+        },
+        "source_url": "https://advisors.vanguard.com/investments/products/voo/vanguard-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Celý fond (všechny třídy). Popisky ověřeny ručně v prohlížeči: „Total net assets $1,732.0 B“ vs. „Net assets for VOO $1,032.3 B“, obojí k 30. 9. 2026.",
+        "cross_check": []
+      },
+      "distribution": {
+        "value": "distributing",
+        "source_url": "https://advisors.vanguard.com/investments/products/voo/vanguard-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Čtvrtletně. Stránka: „Distribution schedule: Quarterly“.",
+        "cross_check": []
+      },
+      "index": {
+        "value": "S&P 500",
+        "source_url": "https://advisors.vanguard.com/investments/products/voo/vanguard-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "registered_in_cz": {
+        "value": null,
+        "source_url": "https://advisors.vanguard.com/investments/products/voo/vanguard-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "US fond: stránka emitenta neuvádí registraci k nabízení v EU.",
+        "cross_check": []
+      },
+      "ucits_equivalent": {
+        "isin": "IE00BFMXXD54",
+        "match": "same_index",
+        "note": "Stejný emitent, stejný index. Distribuční třída: VUSA (IE00B3XXRP09) – neověřováno."
+      }
+    },
+    {
+      "id": "IVV",
+      "kind": "us",
+      "ticker": {
+        "value": "IVV",
+        "source_url": "https://www.ishares.com/us/products/239726/ishares-core-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "name": {
+        "value": "iShares Core S&P 500 ETF",
+        "source_url": "https://www.ishares.com/us/products/239726/ishares-core-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "issuer": {
+        "value": "iShares (BlackRock)",
+        "source_url": "https://www.ishares.com/us/products/239726/ishares-core-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "isin": {
+        "value": "US4642872000",
+        "source_url": "https://www.ishares.com/us/products/239726/ishares-core-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "ISIN není na stránce emitenta; dopočten z CUSIP 464287200 uvedeného na ishares.com (ISO 6166: US + CUSIP + kontrolní číslice). Shoda ověřena přes OpenFIGI API.",
+        "cross_check": [
+          {
+            "source_url": "https://www.openfigi.com/search",
+            "value": "US4642872000 → IVV",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "exchange": {
+        "value": "NYSE Arca",
+        "source_url": "https://www.ishares.com/us/products/239726/ishares-core-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Exchange NYSE Arca“.",
+        "cross_check": [
+          {
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1100663/000119312526327930/d113852d497k.htm",
+            "value": "NYSE Arca",
+            "retrieved_at": "2026-10-08",
+            "note": "Summary prospectus 31. 7. 2026: „IVV | NYSE Arca“."
+          },
+          {
+            "source_url": "https://www.nyse.com/quote/ARCX:IVV",
+            "value": "ARCX (NYSE Arca)",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "domicile": {
+        "value": "USA",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/1100663/000119312526327930/d113852d497k.htm",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "currency": {
+        "value": "USD",
+        "source_url": "https://www.nyse.com/quote/ARCX:IVV",
+        "retrieved_at": "2026-10-08",
+        "note": "Kotace na NYSE Arca je v USD.",
+        "cross_check": []
+      },
+      "base_currency": {
+        "value": "USD",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/1100663/000119312526327930/d113852d497k.htm",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "ter": {
+        "value": 0.03,
+        "source_url": "https://www.ishares.com/us/products/239726/ishares-core-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Expense Ratio 0.03%“.",
+        "cross_check": [
+          {
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1100663/000119312526327930/d113852d497k.htm",
+            "value": 0.03,
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "aum": {
+        "value": {
+          "amount": 897204689814,
+          "currency": "USD",
+          "as_of": "2026-10-07"
+        },
+        "source_url": "https://www.ishares.com/us/products/239726/ishares-core-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka: „Net Assets of Fund $897,204,689,814 as of Oct 07, 2026“.",
+        "cross_check": []
+      },
+      "distribution": {
+        "value": "distributing",
+        "source_url": "https://www.ishares.com/us/products/239726/ishares-core-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Čtvrtletně. Stránka: „Distribution Frequency Quarterly“.",
+        "cross_check": []
+      },
+      "index": {
+        "value": "S&P 500",
+        "source_url": "https://www.ishares.com/us/products/239726/ishares-core-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "registered_in_cz": {
+        "value": null,
+        "source_url": "https://www.ishares.com/us/products/239726/ishares-core-sp-500-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "US fond: stránka emitenta neuvádí registraci k nabízení v EU.",
+        "cross_check": []
+      },
+      "ucits_equivalent": {
+        "isin": "IE00B5BMR087",
+        "match": "same_index",
+        "note": "Stejný emitent, stejný index. Distribuční varianta IUSA (IE0031442068) – neověřováno."
+      }
+    },
+    {
+      "id": "VTI",
+      "kind": "us",
+      "ticker": {
+        "value": "VTI",
+        "source_url": "https://advisors.vanguard.com/investments/products/vti/vanguard-total-stock-market-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "name": {
+        "value": "Vanguard Morningstar Total Stock Market ETF",
+        "source_url": "https://advisors.vanguard.com/investments/products/vti/vanguard-total-stock-market-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Nový název od 29. 7. 2026 (dříve „Vanguard Total Stock Market ETF“).",
+        "cross_check": [
+          {
+            "source_url": "https://corporate.vanguard.com/content/corporatesite/us/en/corp/who-we-are/pressroom/press-release-vanguard-to-update-names-of-us-equity-index-funds-tracking-morningstar-indexes-042926.html",
+            "value": "přejmenování CRSP → Morningstar",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "issuer": {
+        "value": "Vanguard",
+        "source_url": "https://advisors.vanguard.com/investments/products/vti/vanguard-total-stock-market-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "isin": {
+        "value": "US9229087690",
+        "source_url": "https://advisors.vanguard.com/investments/products/vti/vanguard-total-stock-market-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "ISIN není na stránce emitenta; dopočten z CUSIP 922908769 uvedeného na advisors.vanguard.com (ISO 6166: US + CUSIP + kontrolní číslice). Shoda ověřena přes OpenFIGI API.",
+        "cross_check": [
+          {
+            "source_url": "https://www.openfigi.com/search",
+            "value": "US9229087690 → VTI",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "exchange": {
+        "value": "NYSE Arca",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/36405/000003640526000197/f44849d1.htm",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka Vanguardu burzu neuvádí. Summary prospectus 28. 4. 2026: „listed on NYSE Arca“.",
+        "cross_check": [
+          {
+            "source_url": "https://www.nyse.com/quote/ARCX:VTI",
+            "value": "ARCX (NYSE Arca)",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "domicile": {
+        "value": "USA",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/36405/000003640526000197/f44849d1.htm",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "currency": {
+        "value": "USD",
+        "source_url": "https://www.nyse.com/quote/ARCX:VTI",
+        "retrieved_at": "2026-10-08",
+        "note": "Kotace na NYSE Arca je v USD.",
+        "cross_check": []
+      },
+      "base_currency": {
+        "value": "USD",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/36405/000003640526000197/f44849d1.htm",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "ter": {
+        "value": 0.03,
+        "source_url": "https://advisors.vanguard.com/investments/products/vti/vanguard-total-stock-market-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Expense ratio v %, platné od 2026-04-28.",
+        "cross_check": [
+          {
+            "source_url": "https://www.sec.gov/Archives/edgar/data/36405/000003640526000197/f44849d1.htm",
+            "value": 0.03,
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "aum": {
+        "value": {
+          "amount": 2322815790389.59,
+          "currency": "USD",
+          "as_of": "2026-09-30"
+        },
+        "source_url": "https://advisors.vanguard.com/investments/products/vti/vanguard-total-stock-market-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Celý fond (všechny třídy). Odvozeno stejnou logikou jako u VOO (fond ≥ třída ETF; druhé číslo 689 218 535 933,04 USD); ručně v prohlížeči neověřeno.",
+        "cross_check": []
+      },
+      "distribution": {
+        "value": "distributing",
+        "source_url": "https://advisors.vanguard.com/investments/products/vti/vanguard-total-stock-market-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Čtvrtletně. Stránka: „Distribution schedule: Quarterly“.",
+        "cross_check": []
+      },
+      "index": {
+        "value": "Morningstar U.S. Total Market Index",
+        "source_url": "https://advisors.vanguard.com/investments/products/vti/vanguard-total-stock-market-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "ZDROJE SE LIŠÍ: prospekt z 28. 4. 2026 uvádí „CRSP US Total Market Index“. Vanguard 29. 4. 2026 oznámil přejmenování indexů po převzetí CRSP Morningstarem (účinné 29. 7. 2026); cíl a strategie fondu se nemění.",
+        "cross_check": [
+          {
+            "source_url": "https://www.sec.gov/Archives/edgar/data/36405/000003640526000197/f44849d1.htm",
+            "value": "CRSP US Total Market Index",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          },
+          {
+            "source_url": "https://corporate.vanguard.com/content/corporatesite/us/en/corp/who-we-are/pressroom/press-release-vanguard-to-update-names-of-us-equity-index-funds-tracking-morningstar-indexes-042926.html",
+            "value": "přejmenování na Morningstar",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "registered_in_cz": {
+        "value": null,
+        "source_url": "https://advisors.vanguard.com/investments/products/vti/vanguard-total-stock-market-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "US fond: stránka emitenta neuvádí registraci k nabízení v EU.",
+        "cross_check": []
+      },
+      "ucits_equivalent": {
+        "isin": "IE00B52SFT06",
+        "match": "closest",
+        "note": "Schváleno jako nejbližší alternativa. Přesný UCITS ekvivalent celého US trhu nebyl nalezen. MSCI USA pokrývá jen velké a střední firmy, cca 85 % free-float tržní kapitalizace USA (MSCI USA Index factsheet k 30. 9. 2026, staženo 2026-10-09: „covers approximately 85% of the free float-adjusted market capitalization in the US“, https://www.msci.com/documents/10199/255599/msci-usa-index-net.pdf); VTI zahrnuje i malé firmy. Zamítnutý kandidát: SPDR Russell 3000 US Total Market UCITS ETF (IE00BKY7WX37) – OpenFIGI ISIN nezná, KID u SSGA vrací 404, pravděpodobně zrušen."
+      }
+    },
+    {
+      "id": "VT",
+      "kind": "us",
+      "ticker": {
+        "value": "VT",
+        "source_url": "https://advisors.vanguard.com/investments/products/vt/vanguard-total-world-stock-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "name": {
+        "value": "Vanguard Total World Stock ETF",
+        "source_url": "https://advisors.vanguard.com/investments/products/vt/vanguard-total-world-stock-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "issuer": {
+        "value": "Vanguard",
+        "source_url": "https://advisors.vanguard.com/investments/products/vt/vanguard-total-world-stock-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "isin": {
+        "value": "US9220427424",
+        "source_url": "https://advisors.vanguard.com/investments/products/vt/vanguard-total-world-stock-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "ISIN není na stránce emitenta; dopočten z CUSIP 922042742 uvedeného na advisors.vanguard.com (ISO 6166: US + CUSIP + kontrolní číslice). Shoda ověřena přes OpenFIGI API.",
+        "cross_check": [
+          {
+            "source_url": "https://www.openfigi.com/search",
+            "value": "US9220427424 → VT",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "exchange": {
+        "value": "NYSE Arca",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/857489/000119312526077566/f44201d1.htm",
+        "retrieved_at": "2026-10-08",
+        "note": "Stránka Vanguardu burzu neuvádí. Summary prospectus 27. 2. 2026: „listed on NYSE Arca“.",
+        "cross_check": [
+          {
+            "source_url": "https://www.nyse.com/quote/ARCX:VT",
+            "value": "ARCX (NYSE Arca)",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "domicile": {
+        "value": "USA",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/857489/000119312526077566/f44201d1.htm",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "currency": {
+        "value": "USD",
+        "source_url": "https://www.nyse.com/quote/ARCX:VT",
+        "retrieved_at": "2026-10-08",
+        "note": "Kotace na NYSE Arca je v USD.",
+        "cross_check": []
+      },
+      "base_currency": {
+        "value": "USD",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/857489/000119312526077566/f44201d1.htm",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": []
+      },
+      "ter": {
+        "value": 0.06,
+        "source_url": "https://advisors.vanguard.com/investments/products/vt/vanguard-total-world-stock-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Expense ratio v %, platné od 2026-02-27.",
+        "cross_check": [
+          {
+            "source_url": "https://www.sec.gov/Archives/edgar/data/857489/000119312526077566/f44201d1.htm",
+            "value": 0.06,
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "aum": {
+        "value": {
+          "amount": 101182183355.18,
+          "currency": "USD",
+          "as_of": "2026-09-30"
+        },
+        "source_url": "https://advisors.vanguard.com/investments/products/vt/vanguard-total-world-stock-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Celý fond (všechny třídy). Odvozeno stejnou logikou jako u VOO (fond ≥ třída ETF; druhé číslo 81 751 569 707,04 USD); ručně v prohlížeči neověřeno.",
+        "cross_check": []
+      },
+      "distribution": {
+        "value": "distributing",
+        "source_url": "https://advisors.vanguard.com/investments/products/vt/vanguard-total-world-stock-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "Čtvrtletně. Stránka: „Distribution schedule: Quarterly“.",
+        "cross_check": []
+      },
+      "index": {
+        "value": "FTSE Global All Cap Index",
+        "source_url": "https://advisors.vanguard.com/investments/products/vt/vanguard-total-world-stock-etf",
+        "retrieved_at": "2026-10-08",
+        "note": null,
+        "cross_check": [
+          {
+            "source_url": "https://www.sec.gov/Archives/edgar/data/857489/000119312526077566/f44201d1.htm",
+            "value": "FTSE Global All Cap Index",
+            "retrieved_at": "2026-10-08",
+            "note": null
+          }
+        ]
+      },
+      "registered_in_cz": {
+        "value": null,
+        "source_url": "https://advisors.vanguard.com/investments/products/vt/vanguard-total-world-stock-etf",
+        "retrieved_at": "2026-10-08",
+        "note": "US fond: stránka emitenta neuvádí registraci k nabízení v EU.",
+        "cross_check": []
+      },
+      "ucits_equivalent": {
+        "isin": "IE00BK5BQT80",
+        "match": "closest",
+        "note": "Stejný emitent, ale jiný index: FTSE All-World (velké a střední firmy) vs. FTSE Global All Cap (i malé firmy). Distribuční třída: VWRL (IE00B3RBWM25) – neověřováno."
+      }
+    }
+  ]
+}
