@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { CONSENT, OPERATOR } from "@/lib/site";
+import { CONSENT, OPERATOR, RETENTION } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Zásady ochrany osobních údajů",
@@ -31,11 +31,40 @@ export default function Zasady() {
       <ul className="mt-1 list-disc space-y-1 pl-5">
         <li>E-mail: {CONSENT.delivery}</li>
         <li>Novinky e-mailem jen se souhlasem (čl. 6 odst. 1 písm. a GDPR), odvolatelným v&nbsp;každém e-mailu.</li>
-        <li>Ukládáme čas a znění udělených souhlasů.</li>
+        <li>Ukládáme čas a znění udělených souhlasů a informace, kterou jste u formuláře viděli.</li>
+        <li>
+          K e-mailu ukládáme i to, z jaké reklamy jste přišli (UTM parametry), zadání kalkulačky a typ prohlížeče.
+          IP adresu neukládáme.
+        </li>
+        <li>Data jsou uložena v EU (Supabase, Frankfurt).</li>
       </ul>
 
-      <h2 className="mt-8 font-display text-xl font-semibold">Doba uložení, příjemci, vaše práva</h2>
+      <h2 className="mt-8 font-display text-xl font-semibold">Doba uložení</h2>
+      <ul className="mt-1 list-disc space-y-1 pl-5">
+        <li>
+          Nepotvrzenou adresu (bez kliknutí na potvrzovací odkaz v e-mailu) automaticky mažeme po{" "}
+          {RETENTION.unconfirmedDays} dnech.
+        </li>
+        <li>Potvrzenou adresu do odvolání souhlasu nebo žádosti o výmaz, nejdéle [doplní provozovatel].</li>
+      </ul>
+
+      <h2 className="mt-8 font-display text-xl font-semibold">Příjemci</h2>
       <p className="mt-1">[doplnit]</p>
+
+      <h2 className="mt-8 font-display text-xl font-semibold">Vaše práva</h2>
+      <p className="mt-1">
+        Máte právo na přístup ke svým údajům, jejich opravu a výmaz, právo odvolat souhlas a vznést námitku. Stačí
+        napsat na{" "}
+        <a href={`mailto:${OPERATOR.email}`} className="underline">
+          {OPERATOR.email}
+        </a>{" "}
+        z adresy, které se žádost týká. Odpovíme nejpozději do 1 měsíce. Stížnost můžete podat u Úřadu pro ochranu
+        osobních údajů (
+        <a href="https://uoou.gov.cz" className="underline">
+          uoou.gov.cz
+        </a>
+        ).
+      </p>
 
       <h2 id="cookies" className="mt-8 font-display text-xl font-semibold">
         Cookies
