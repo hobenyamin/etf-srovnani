@@ -42,10 +42,10 @@ TODO – pokyny agentům. Chyby: [`docs/ai-chyby.md`](docs/ai-chyby.md), exporty
 ### Kontrola dat: tři vrstvy
 
 1. **Claude Code, dva zdroje.** Každá kritická hodnota (burza, ISIN, TER) se stahuje přímo od emitenta a ověřuje proti druhému nezávislému zdroji (prospekt na SEC EDGAR, KID, factsheet, adresář NYSE, OpenFIGI). Do dat jde doslovný úryvek ze zdroje. Co nejde ověřit, je `null` s důvodem.
-2. **Nezávislá křížová kontrola druhou AI.** Samostatná kontrola jinou AI mimo tuto session přepočítala kontrolní číslice všech 10 ISINů a zkontrolovala TER.
+2. **Nezávislá křížová kontrola druhou AI.** Claude v chatu na claude.ai (mimo Claude Code) s webovým vyhledáváním. Přepočítal kontrolní číslice všech ISINů vlastním skriptem a dohledal TER VWCE a SXR4 u nezávislých zdrojů. Neměl přístup k této session, jen k výslednému `etfs.json`.
 3. **Ruční ověření člověkem v prohlížeči.** Kritická pole SPY, VOO, VUAA a SXR8 (seznam v `meta.verified_by_human_scope` v [`data/etfs.json`](data/etfs.json), checklist [`docs/overeni-dat.md`](docs/overeni-dat.md)).
 
-**Příklad, proč je zdrojem emitent, a ne AI ani agregátor:** revidující AI označila TER VWCE (0,14 %) a SXR4 (0,03 %) za chybu, protože vycházela ze zastaralých znalostí. Ověření u emitenta ukázalo, že hodnoty jsou správné: TER VWCE 0,14 % platí od 28. 7. 2026 podle tiskové zprávy Vanguardu (dohledala křížová kontrola) a TER SXR4 uvádí iShares na stránce fondu i v KID. Znalosti jazykového modelu ani agregátory nemusí být aktuální, proto platí jen web a dokumenty emitenta.
+**Příklad, proč je zdrojem emitent, a ne AI ani agregátor:** revidující AI označila TER VWCE (0,14 %) a SXR4 (0,03 %) za chybu, protože vycházela ze zastaralých znalostí. Ověření u emitenta ukázalo, že hodnoty jsou správné: TER VWCE klesl z 0,19 % na 0,14 % s účinností od 28. 7. 2026 ([Vanguard, 2. 8. 2026](https://www.ch.vanguard/en/private-investor/insights/we-are-lowering-fees-on-one-of-our-most-popular-etfs); dohledala křížová kontrola, ověřeno i v Claude Code) a TER SXR4 uvádí iShares na stránce fondu i v KID. Znalosti jazykového modelu ani agregátory nemusí být aktuální, proto platí jen web a dokumenty emitenta.
 
 ## Rozhodnutí v nejasnostech
 

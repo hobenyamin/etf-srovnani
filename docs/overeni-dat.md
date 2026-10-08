@@ -57,13 +57,13 @@ Na těchto třech polích stojí celé srovnání a kalkulačka poplatků.
 | ☑ | VUAA | 0,07 % | [vanguard.co.uk](https://www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-usd-accumulating) | [ověření 1: fund-docs.vanguard.com](https://fund-docs.vanguard.com/ie00bfmxxd54_priipskid_en.pdf), [ověření 2: fund-docs.vanguard.com](https://fund-docs.vanguard.com/SandP_500_UCITS_ETF_USD_Accumulating_9694_EU_INT_EN.pdf) |
 | ☑ | SXR8 | 0,07 % | [ishares.com](https://www.ishares.com/uk/individual/en/products/253743/ishares-sp-500-b-ucits-etf-acc-fund) | [ověření 1: ishares.com](https://www.ishares.com/de/privatanleger/de/literature/kiid/eu-priips-ishares-core-sp-500-ucits-etf-usd-acc-ie00b5bmr087-en.pdf) |
 | ☐ | SXR4 | 0,03 % | [ishares.com](https://www.ishares.com/uk/individual/en/products/253740/ishares-msci-usa-b-ucits-etf) | [ověření 1: ishares.com](https://www.ishares.com/de/privatanleger/de/literature/kiid/eu-priips-ishares-msci-usa-ucits-etf-usd-acc-ie00b52sft06-en.pdf) |
-| ☐ | VWCE | 0,14 % | [vanguard.co.uk](https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating) | [ověření 1: fund-docs.vanguard.com](https://fund-docs.vanguard.com/ie00bk5bqt80_priipskid_en.pdf), [ověření 2: fund-docs.vanguard.com](https://fund-docs.vanguard.com/FTSE_All-World_UCITS_ETF_USD_Accumulating_9679_EU_INT_EN.pdf) |
+| ☐ | VWCE | 0,14 % | [vanguard.co.uk](https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating) | [ověření 1: fund-docs.vanguard.com](https://fund-docs.vanguard.com/ie00bk5bqt80_priipskid_en.pdf), [ověření 2: fund-docs.vanguard.com](https://fund-docs.vanguard.com/FTSE_All-World_UCITS_ETF_USD_Accumulating_9679_EU_INT_EN.pdf), [ověření 3: ch.vanguard](https://www.ch.vanguard/en/private-investor/insights/we-are-lowering-fees-on-one-of-our-most-popular-etfs) |
 
 ## 2. Rozhodnutí, která potřebuju od tebe
 
 - ☑ **VTI ↔ iShares MSCI USA (SXR4)** jako „nejbližší alternativa“ – schváleno. MSCI USA pokrývá jen velké a střední firmy (~85 % trhu podle MSCI).
 - ☑ **AUM u VOO, VTI, VT** – u VOO ověřeno ručně („Total net assets $1,732.0 B“ = celý fond). VTI a VT odvozeny stejnou logikou, ručně neověřeny.
-- ☐ **Index VTI** – web uvádí Morningstar U.S. Total Market Index, prospekt (duben 2026) CRSP. Bereme název z webu a uvádíme přejmenování – souhlasíš?
+- ☑ **Index VTI** – web uvádí Morningstar U.S. Total Market Index, prospekt (duben 2026) CRSP. Schváleno: název z webu Vanguardu + poznámka o přejmenování.
 
 ## 3. AUM (velikost fondu)
 
