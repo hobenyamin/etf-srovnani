@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { CONSENT, OPERATOR, orTodo } from "@/lib/site";
+import { CONSENT, OPERATOR } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Zásady ochrany osobních údajů",
@@ -21,8 +21,10 @@ export default function Zasady() {
 
       <h2 className="mt-8 font-display text-xl font-semibold">Správce</h2>
       <p className="mt-1">
-        {orTodo(OPERATOR.name, "název")}, IČO {orTodo(OPERATOR.ico, "IČO")}, {orTodo(OPERATOR.address, "sídlo")},{" "}
-        {orTodo(OPERATOR.email, "kontaktní e-mail")}.
+        {[OPERATOR.name, OPERATOR.ico && `IČO ${OPERATOR.ico}`, OPERATOR.address, OPERATOR.email]
+          .filter(Boolean)
+          .join(", ")}
+        . {OPERATOR.about}
       </p>
 
       <h2 className="mt-8 font-display text-xl font-semibold">Jaké údaje a proč</h2>

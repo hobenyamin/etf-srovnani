@@ -4,7 +4,7 @@ import Link from "next/link";
 import { type FormEvent, type ReactNode, useId, useRef, useState } from "react";
 import { ThankYou } from "@/components/ThankYou";
 import { TrackView } from "@/components/TrackView";
-import { CONSENT, OPERATOR, orTodo } from "@/lib/site";
+import { CONSENT, OPERATOR } from "@/lib/site";
 import { trackOnce } from "@/lib/track";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -96,7 +96,7 @@ export function LeadForm({ fullComparison }: { fullComparison: ReactNode }) {
             </button>
 
             <p id={ids.gdpr} className="mt-4 text-[13px] leading-5 text-muted">
-              Správce: {orTodo(OPERATOR.name, "provozovatele")}. {CONSENT.delivery} Novinky posíláme jen se
+              Správce: {OPERATOR.name} ({OPERATOR.email}). {CONSENT.delivery} Novinky posíláme jen se
               souhlasem výše (čl. 6 odst. 1 písm. a&nbsp;GDPR). Podrobnosti v{" "}
               <Link href="/zasady" className="underline">
                 zásadách ochrany osobních údajů

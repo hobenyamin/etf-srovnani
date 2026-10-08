@@ -1,7 +1,7 @@
 import { DATA_RETRIEVED_AT } from "@/lib/etfs";
 import { ESMA } from "@/lib/fee-rows";
 import { formatDate } from "@/lib/format";
-import { OPERATOR, orTodo } from "@/lib/site";
+import { OPERATOR } from "@/lib/site";
 
 export function Trust() {
   return (
@@ -22,7 +22,13 @@ export function Trust() {
       </p>
 
       <h3 className="mt-6 font-semibold">Provozovatel</h3>
-      <p className="mt-1">{orTodo(OPERATOR.name, "kdo za stránkou stojí a proč ji provozuje")}</p>
+      <p className="mt-1">
+        {OPERATOR.about} Autor: {OPERATOR.name},{" "}
+        <a href={`mailto:${OPERATOR.email}`} className="underline">
+          {OPERATOR.email}
+        </a>
+        .
+      </p>
 
       <div role="note" aria-labelledby="riziko-h" className="mt-8 border-2 border-ink p-4">
         <h3 id="riziko-h" className="font-semibold">

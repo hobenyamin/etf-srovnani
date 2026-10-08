@@ -1,19 +1,18 @@
-// Údaje o provozovateli. Nevymýšlíme je: dokud je nedoplní člověk, stránka ukazuje viditelné „[doplnit …]“.
+// Údaje o provozovateli (zadal člověk). Ukázkový projekt nemá IČO ani sídlo – před ostrým spuštěním
+// je nutné doplnit skutečného provozovatele (viz README, „Co chybí“). Prázdné údaje se nezobrazují.
 export const OPERATOR: {
-  name: string | null;
+  about: string;
+  name: string;
+  email: string;
   ico: string | null;
   address: string | null;
-  email: string | null;
 } = {
-  name: null,
+  about: "Ukázkový projekt do výběrového řízení.",
+  name: "Nikolas Hošek",
+  email: "hosek@weborio.cz",
   ico: null,
   address: null,
-  email: null,
 };
-
-export function orTodo(value: string | null, what: string): string {
-  return value ?? `[doplnit ${what}]`;
-}
 
 /** Znění souhlasů – ukládá se k leadu spolu s časem (krok 4). Doručení obsahu ≠ obchodní sdělení. */
 export const CONSENT = {

@@ -73,7 +73,8 @@ TODO – pokyny agentům. Chyby: [`docs/ai-chyby.md`](docs/ai-chyby.md), exporty
 - **Distribuční třídy UCITS fondů** (SPY5, VUSA, IUSA, VWRL) nejsou ověřené; v datech jsou jen jako poznámka.
 - **Přesný UCITS ekvivalent VTI (celý US trh včetně malých firem)** jsme nenašli. SPDR Russell 3000 UCITS se podle OpenFIGI a SSGA zdá zrušený.
 - **Průměrné náklady fondů přímo v ČR.** ESMA má přílohu po zemích (Annexes PDF); hodnotu za ČR jsme zatím nedohledali. Tisk uvádí průměr kolem 2 % (e15), ale jde o sekundární zdroj bez metodiky, proto ho nepoužíváme.
-- **Údaje provozovatele, zásady ochrany údajů a daňový tahák** (krok 3 je jen UI). Na stránce jsou viditelně označené jako „[doplnit]“ nebo „připravujeme“.
+- **Údaje skutečného provozovatele.** Stránka je ukázkový projekt do výběrového řízení a jako autor je uveden Nikolas Hošek (hosek@weborio.cz). **Před ostrým spuštěním je nutné doplnit údaje skutečného provozovatele**: název, IČO, sídlo a kontakt v patičce i u formuláře (správce osobních údajů). Vyžaduje to zákon a reklamní platformy.
+- **Plné znění zásad ochrany osobních údajů** (`/zasady` je kostra).
 
 ## Zdroje dat
 
