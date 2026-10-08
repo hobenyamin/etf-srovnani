@@ -1,0 +1,3425 @@
+
+❯ /clear
+
+❯ <ide_opened_file>The user opened the file
+  /home/snnikol/work/etf-srovnani/ai-log/2026-10-09-data-etf.txt in the IDE.
+  This may or may not be related to the current task.</ide_opened_file>
+
+❯ Přečti CLAUDE.md, data/README.md a data/etfs.json. Commituj, nepushuj.
+
+  Krok 3: hero, kalkulačka poplatků, porovnání fondů a formulář (zatím jen UI,
+  bez backendu, ten je v kroku 4). V plan mode navrhni:
+
+  Vizuální směr. Stránka nesmí vypadat jako výchozí výstup AI (žádné fialové
+  gradienty, generické karty a emoji). Navrhni 2 odlišné směry pro českého
+  investora 25–45 let na mobilu (font, paleta, typografická hierarchie, jeden
+  výrazný vizuální prvek) a doporuč jeden. Pokud máš k dispozici skill na
+  frontend design, použij ho.
+  Matematiku kalkulačky. Vstupy (jednorázový vklad, měsíční částka, horizont),
+  vzorec, předpoklad výnosu a jak ho na stránce uvedeme, aby to nebyl příslib
+  výnosu. Výstup v Kč. Kalkulačka počítá náklady, nedoporučuje fond.
+  Ověření slibu reklamy A. Reklama tvrdí „na poplatcích můžete za 20 let
+  ztratit desítky tisíc Kč“. Spočítej, jestli to z našich dat platí. Rozdíly
+  TER mezi ETF jsou malé, takže tvrzení nejspíš potřebuje srovnání s dražší
+  alternativou (např. aktivní podílový fond u české banky). Taková hodnota musí
+  mít doložený zdroj. Pokud ho nenajdeš, navrhni úpravu textu reklamy podle
+  toho, co data skutečně ukazují.
+  Komponenty a pořadí sekcí podle CLAUDE.md, včetně toho, kde přesně se objeví
+  žádost o e-mail (až po výsledku kalkulačky).
+  Testy: unit testy pro výpočet kalkulačky a Playwright test na šířce 375 px.
+
+  Nic neimplementuj, dokud plán neschválím. Čísla ani zdroje si nevymýšlej.
+
+  Read 1 file, listed 1 directory, ran 3 shell commands (ctrl+o to expand)
+
+● Web Search("ESMA market report costs and performance EU retail investment
+            products 2026 ongoing costs active equity UCITS ETF")
+  ⎿  Did 1 search in 6s
+
+● Web Search("ČNB nákladovost podílových fondů průměrná TER akciové fondy
+            Česko")
+  ⎿  Did 1 search in 7s
+
+● Fetch(https://www.esma.europa.eu/sites/default/files/2026-03/ESMA50-1949966494
+       -4065_Market_Report_-_Costs_and_Performance_of_EU_Retail_Investment_Produ
+       cts.pdf)
+  ⎿  Received 1MB (200 OK)
+
+● Fetch(https://www.esma.europa.eu/press-news/esma-news/new-investment-funds-dri
+       ve-reduction-costs-investors)
+  ⎿  Received 61.9KB (200 OK)
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Lokálně chybí nástroje na čtení PDF, tak zprávu ESMA čtu přímo po stránkách.
+  Hledám v ní čísla k nákladům aktivních fondů a ETF a údaje za ČR.
+
+  Read 1 file (ctrl+o to expand)
+
+● Fetch(https://cms.law/en/int/regulatory-news/esma-costs-and-performance-of-eu-
+       retail-investment-products-2025)
+  ⎿  Received 16.6KB (200 OK)
+
+● Fetch(https://www.esma.europa.eu/press-news/esma-news/average-cost-retail-inve
+       stment-products-declines-significant-differences)
+  ⎿  Received 65.3KB (200 OK)
+
+  Ran 4 shell commands (ctrl+o to expand)
+
+● Stále hledám v textu zprávy ESMA přesná procenta nákladů (aktivní fondy vs.
+  ETF). Grafy jsou ale obrázky, takže beru jen čísla, která jsou přímo v textu.
+
+  Ran 4 shell commands (ctrl+o to expand)
+
+● Mám vše potřebné, sepisuji plán.
+
+● Updated plan
+  ⎿  /plan to preview
+  ⎿  Error: The user doesn't want to proceed with this tool use. The tool use
+     was rejected (eg. if it was a file edit, the new_string was NOT written to
+     the file). The user provided the following reason for the rejection:  Plán
+     schvaluji s úpravami:
+
+     Nekonzistence: 86 500 Kč je rozdíl 0,2 % vs 1,2 %, ale náklad 1,2 % proti
+     TER 0 je podle vzorce ~105 200 Kč. Přidej do účtenky řádek „Průměrný ETF v
+     EU 0,2 % (ESMA)“ a řádek „Rozdíl“. Hero číslo musí být přesně tento rozdíl,
+     počítaný z calc() se stejnými vstupy, jaké zobrazí kalkulačka.
+     Hero a reklama A počítají s výnosem 0 % („i bez jakéhokoli výnosu: 44 200
+     Kč za 20 let při 2 000 Kč měsíčně“). Kalkulačka může mít výchozí 5 %. Uprav
+     text reklamy A a disclaimer podle toho a zamkni 44 246 Kč regresním
+     testem.
+     Hero B: místo „co koupit místo něj“ napiš „jaké alternativy jsou v ČR
+     dostupné“. Žádné výzvy ke koupi.
+     Hero A: bez slova „až“.
+     Šedou
+     #C9C2B3 používej jen na linky, nikdy na text (kontrast 1,54 : 1).
+     Jinak beze změny.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Rozdíl 0,2 % vs. 1,2 % při výnosu 0 % vychází na 44 245,54 Kč, tedy 44 246 Kč.
+  Zapracovávám úpravy do plánu.
+
+● Updated plan
+  ⎿  /plan to preview
+
+● Updated plan
+  ⎿  /plan to preview
+
+● Updated plan
+  ⎿  /plan to preview
+
+● Updated plan  ⎿  /plan to preview
+
+● Updated plan
+  ⎿  /plan to preview
+
+● Updated plan
+  ⎿  /plan to preview
+
+● Updated plan
+  ⎿  /plan to preview
+
+● Updated plan
+  ⎿  /plan to preview
+
+● User approved Claude's plan
+  ⎿  Plan saved to:
+     ~/.claude/plans/pasted-content-id-547a-p-e-ti-claude-md-nested-liskov.md ·
+     /plan to edit
+     Krok 3 – hero, kalkulačka, porovnání, formulář (jen UI)
+
+     Kontext
+
+     Data (10 fondů, 5 párů NYSE ↔ UCITS) jsou ověřená v data/etfs.json. Stránka
+     je zatím placeholder (app/page.tsx, font Geist ze šablony). Teď postavíme
+     celou viditelnou cestu hero → kalkulačka → porovnání → formulář → děkovací
+     stav. Bez backendu: odeslání formuláře zatím jen přepne UI, eventy jdou do
+     zástupné funkce track(). Supabase, e-maily a PostHog jsou krok 4.
+
+     Skill na frontend design v této session není (artifact-design je jen pro
+     claude.ai Artifacts), proto vizuální směr navrhuji sám podle níže uvedených
+     pravidel.
+
+     ---
+
+     1. Vizuální směr
+
+     Směr A – „Výpis z účtu“ (doporučuji)
+
+     - Myšlenka: poplatky jsou peníze, které tiše odcházejí z účtu. Stránka
+       vypadá jako pečlivě vysázený finanční výpis nebo účtenka, ne jako SaaS
+       landing page.
+     - Font: Fraunces (titulky, optical size, česká diakritika přes latin-ext) +
+       IBM Plex Sans (text) + IBM Plex Mono (všechna čísla, tabular-nums). Vše
+       přes next/font/google (Geist odstraníme). Podporu latin-ext ověřím při
+       buildu – next/font při chybějící sadě skončí chybou.
+     - Paleta (tokeny v globals.css přes @theme): papír #F3EFE6, inkoust
+       #16181D, šedá linka #C9C2B3 (jen linky a oddělovače, nikdy text –
+       kontrast 1,54 : 1; sekundární text bude tmavší šedá s kontrastem ≥ 4,5 :
+       1, ověřím výpočtem), jediný akcent = „ztráta“ #C2410C (oranžovočervená,
+       jen pro částky poplatků), tlumená zelená #2F6B4F pro „levnější varianta“.
+       Žádné gradienty a stíny, jen tenké linky (1 px) a tečkované oddělovače.
+     - Typografická hierarchie (375 px): H1 Fraunces 34/38 px; klíčové číslo
+       Plex Mono 44 px v akcentu; H2 Fraunces 24 px; text Plex Sans 16/24 px;
+       poznámky a zdroje Plex Sans 13 px. Kontrast textu min. 4,5 : 1 (ověřím v
+       Lighthouse/axe).
+     - Výrazný prvek: „účtenka poplatků“. Výsledek kalkulačky je úzký sloupec s
+       perforovaným okrajem (CSS mask se zoubky). Řádky v Plex Mono (příklad 2
+       000 Kč, 20 let, 5 %): „Vklady celkem … 480 000 Kč“, náklady fondů z
+       našich dat (0,03 / 0,07 / 0,14 %), „Průměrný ETF v EU 0,2 % (ESMA) … −18
+       700 Kč“, „Průměrný aktivní fond v EU 1,2 % (ESMA) … −105 200 Kč“, dole
+       tučně „Rozdíl 0,2 % vs. 1,2 % … 86 500 Kč“. Pod tím vodorovné pruhy ve
+       stejném měřítku. Účtenka se na mobil hodí přirozeně (úzká a svislá) a
+       nese hlavní sdělení stránky.
+
+     Směr B – „Odletová tabule NYSE → Xetra“
+
+     - Tmavě modrozelené pozadí, Space Grotesk + JetBrains Mono, akcent
+       limetková. Výrazný prvek: split-flap tabule, která „přepíná“ VOO → VUAA.
+     - Proč ne: působí jako trading aplikace nebo krypto reklama. To jde proti
+       vzdělávacímu a důvěryhodnému tónu, u finančních reklam to zvyšuje riziko
+       zamítnutí a tmavé pozadí se hůř čte venku na slunci. Animace navíc
+       zatěžují LCP i přístupnost (prefers-reduced-motion).
+
+     Doporučení: A.
+
+     ---
+
+     2. Matematika kalkulačky (lib/calc.ts, čistá funkce)
+
+     Vstupy: jednorázový vklad P (0–2 000 000 Kč, výchozí 0), měsíční částka m
+     (0–50 000 Kč, výchozí 2 000), horizont n (5–30 let, výchozí 20), modelový
+     roční výnos před poplatky r (přepínač 0 / 3 / 5 / 7 %, výchozí 5 %).
+
+     Vzorec (měsíčně, vklad na začátku měsíce, poplatek strháván průběžně z
+     majetku, jak TER funguje):
+     r_m = (1 + r)^(1/12) − 1
+     f_m = (1 − TER)^(1/12)            // měsíční faktor po odečtení nákladů
+     B_0 = P
+     B_k = (B_{k−1} + m) · (1 + r_m) · f_m,   k = 1 … 12n
+     náklad(TER) = B_{12n}(TER = 0) − B_{12n}(TER)
+     Náklad tak zahrnuje zaplacené poplatky i výnos, o který kvůli nim přijdete.
+     Na stránce to bude napsané přesně tímto způsobem.
+     Výstup: { deposits, fvGross, rows: [{ label, ter, fv, cost }], esmaGap },
+     kde esmaGap = cost(1,2 %) − cost(0,2 %). Zobrazení se zaokrouhluje na
+     stovky Kč (žádná falešná přesnost), funkce vrací nezaokrouhlené hodnoty.
+
+     Řádky výsledku (nic nedoporučují, jen ukazují náklad podle TER):
+     - TER skupiny z našich dat: 0,03 % (VOO/IVV/SPYL/SXR4), 0,07 % (VUAA,
+       SXR8), 0,14 % (VWCE). Fondy jsou u řádku vypsané a TER se načítá z
+       etfs.json, nic se nepřepisuje ručně.
+     - Referenční řádky: „průměrný ETF v EU – 0,2 % (ESMA)“ a „průměrný aktivní
+       akciový fond v EU – 1,2 % (ESMA)“, viz bod 3.
+     - Řádek „Rozdíl“ = esmaGap (0,2 % vs. 1,2 %). Právě toto číslo ukazuje
+       hero.
+
+     Jak uvést předpoklad výnosu, aby nešlo o příslib: přímo u přepínače:
+     „Modelový výnos – zvolený příklad, ne odhad ani slib. Výnos může být i
+     záporný.“ Pod účtenkou souhrn předpokladů: výpočet v Kč bez měnového rizika
+     USD/CZK; nezahrnuje poplatky brokera, směnu měn, spread ani daně; TER k
+     datu ze zdroje (odkaz). Volba 0 % ukáže, že tvrzení platí i bez jakéhokoli
+     výnosu. Výchozí hodnota 5 % je kulaté modelové číslo bez benchmarku –
+     zapíšu ji do README „Rozhodnutí“ jako vědomou volbu.
+
+     Kurz CZK/USD nepotřebujeme: všechno počítáme v Kč a TER je procento.
+
+     ---
+
+     3. Ověření slibu reklamy A
+
+     Z našich dat samotných tvrzení neplatí. 20 let, 2 000 Kč/měs., modelový
+     výnos 5 %:
+
+     ┌────────────────────────────────────────────┬──────────────────┐
+     │                  Srovnání                  │ Rozdíl za 20 let │
+     ├────────────────────────────────────────────┼──────────────────┤
+     │ TER 0,03 % vs. 0,07 % (VOO-třída vs. VUAA) │ ~3 800 Kč        │
+     ├────────────────────────────────────────────┼──────────────────┤
+     │ 0,03 % vs. 0,14 % (vs. VWCE)               │ ~10 300 Kč       │
+     └────────────────────────────────────────────┴──────────────────┘
+
+     Mezi ETF jsou rozdíly v jednotkách tisíc Kč, „desítky tisíc“ by byla
+     nepravda.
+
+     Se srovnáním proti aktivnímu fondu tvrzení platí, a to i bez výnosu. Zdroj:
+     ESMA, Costs and Performance of EU Retail Investment Products 2025
+     (ESMA50-1949966494-4065, zveřejněno 3. 3. 2026, data za rok 2024, horizont
+     1 rok), doslovně: „active equity ETFs have higher ongoing costs (0.3%) than
+     passive equity ETFs (0.2%) but remain far below active equity funds
+     excluding ETFs (1.2%)“. URL: https://www.esma.europa.eu/sites/default/files
+     /2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and_Performance_of_EU
+     _Retail_Investment_Products.pdf (staženo 2026-10-09; text vytažen z PDF,
+     číslo stránky doplním při ručním ověření).
+
+     Obě čísla pochází od ESMA (0,2 % pasivní ETF vs. 1,2 % aktivní fond), takže
+     srovnání je konzistentní. 20 let:
+
+     ┌──────────┬───────────┬────────┬─────────┬─────────┐
+     │ Měsíčně  │ výnos 0 % │  3 %   │   5 %   │   7 %   │
+     ├──────────┼───────────┼────────┼─────────┼─────────┤
+     │ 1 000 Kč │ 22 100    │ 33 000 │ 43 200  │ 56 800  │
+     ├──────────┼───────────┼────────┼─────────┼─────────┤
+     │ 2 000 Kč │ 44 200    │ 66 000 │ 86 500  │ 113 500 │
+     ├──────────┼───────────┼────────┼─────────┼─────────┤
+     │ 3 000 Kč │ 66 400    │ 99 000 │ 129 700 │ 170 300 │
+     └──────────┴───────────┴────────┴─────────┴─────────┘
+
+     → I od 1 000 Kč měsíčně a s nulovým výnosem jde o desítky tisíc Kč.
+
+     Hero A a reklama A počítají s výnosem 0 %, takže tvrzení nestojí na žádném
+     předpokladu výnosu. Kalkulačka má výchozí modelový výnos 5 %.
+
+     Navrhovaná úprava textu reklamy A (sloveso „ztratit“ je nepřesné, poplatek
+     se platí):
+
+     ▎ „Rozdíl v poplatcích fondů dělá za 20 let desítky tisíc Kč, i bez
+     ▎ jakéhokoli výnosu. Spočítejte si to.“
+
+     Disclaimer v reklamě: „Průměrné průběžné náklady ETF (0,2 %) vs. aktivních
+     akciových fondů v EU (1,2 %) podle ESMA (2026, data 2024), 2 000 Kč měsíčně
+     po dobu 20 let, výnos 0 %: rozdíl 44 200 Kč. Modelový výpočet, ne
+     doporučení.“
+
+     Hero A (bez slova „až“): „I bez jakéhokoli výnosu: 44 200 Kč za 20 let při
+     2 000 Kč měsíčně.“ Číslo = calc({P:0, m:2000, n:20, r:0}).esmaGap,
+     zaokrouhlené na stovky. Nic není napsané natvrdo. Vstupy hera jsou u čísla
+     vypsané. Když návštěvník nastaví v kalkulačce 2 000 Kč / 20 let / 0 %,
+     řádek „Rozdíl“ ukáže přesně stejné číslo (hlídá to E2E test).
+
+     Nepoužijeme: srovnání s konkrétním fondem české banky (porovnávací reklama,
+     riziko sporu, a pro „průměr“ by nestačil jeden KID) ani čísla z tisku (e15
+     uvádí průměr ~2,1 % v ČR, jde ale o sekundární zdroj bez metodiky). ESMA
+     má i přílohu po zemích (Annexes PDF). CZ hodnotu z ní můžu dohledat později
+     jako zpřesnění, není podmínkou.
+
+     Do data/ přidám data/benchmarks.json se stejným schématem (value,
+     source_url, retrieved_at, note s doslovnou citací) a do README tabulku
+     zdrojů. Ručně ověřit: číslo 1,2 % a 0,2 % v PDF ESMA (checklist v
+     docs/overeni-dat.md).
+
+     ---
+
+     4. Komponenty a pořadí sekcí
+
+     app/page.tsx (server, statický) → sekce v pořadí z CLAUDE.md:
+
+     1. components/Hero.tsx – varianta a (úspora): „Kolik vás za 20 let stojí
+        poplatky fondu?“ + živé číslo „44 200 Kč“ (výnos 0 %, viz bod 3, bez
+        slova „až“) s mikropoznámkou o vstupech a zdroji ESMA + CTA „Spočítat
+        pro mě“ (scroll na #kalkulacka, hero_cta_click). Varianta b (zvědavost):
+        „Proč si v Česku nekoupíte VOO? A jaké alternativy jsou v ČR dostupné“
+        + CTA „Ukázat srovnání“. Žádné výzvy ke koupi, žádný e-mail v hero.
+        - Výběr varianty: proxy.ts přepíše /?utm_content=b… na staticky
+          předrenderovanou /v/b (generateStaticParams), takže obě varianty jsou
+          statické a hero při načtení nebliká (detaily podle
+          node_modules/next/dist/docs/01-app/01-getting-started/16-proxy.md).
+          Výchozí je a.
+     2. components/Calculator.tsx (client) – 3 pole (<label> +
+        inputmode="numeric", formát s mezerami), přepínač výnosu, výsledek
+        FeeReceipt.tsx (účtenka + pruhy FeeBars.tsx). Eventy: calc_start (první
+        změna vstupu), calc_result (první výpočet po interakci, debounce). Pod
+        výsledkem jako první místo žádosti o e-mail: pruh „Chcete kompletní
+        srovnání všech 5 dvojic NYSE ↔ UCITS a daňový tahák? → Poslat“ s odkazem
+        na #formular. Pruh se zobrazí až po calc_result.
+     3. components/Comparison.tsx – 3 dvojice se stejným indexem S&P 500
+        (SPY↔SPYL, VOO↔VUAA, IVV↔SXR8). Na mobilu karta na dvojici, žádná široká
+        tabulka: „Na NYSE: VOO · TER 0,03 % · USD · distribuční“ → „V ČR
+        dostupné: VUAA · 0,07 % · akumulační · Xetra (EUR) · měna fondu USD“. U
+        každé hodnoty malý odkaz „zdroj“ (source_url, retrieved_at). Pod tím
+        věta, proč US fond v ČR běžně nekoupíte (chybí KID, nařízení PRIIPs
+        1286/2014 – odkaz na EUR-Lex). VTI↔SXR4 a VT↔VWCE jako zamčené řádky („v
+        plné verzi“) → kotva na formulář. Event compare_view
+        (IntersectionObserver, 50 %).
+     4. components/LeadForm.tsx (client) – nabídka: co přesně dostanu („tabulka
+        5 dvojic: TER, měna, akumulace, burza, registrace v ČR + daňový tahák
+        W-8BEN a časový test – zobrazí se hned“). Pole: e-mail (povinné) + jeden
+        nepředvyplněný nepovinný checkbox na obchodní sdělení (480/2004).
+        Doručení obsahu = plnění žádosti, newsletter = souhlas, obojí v textu
+        rozlišené. Pod tlačítkem GDPR věta: správce, účel, právní základ, odkaz
+        na /zasady. Validace na klientu, chybové hlášky přes aria-describedby.
+        Eventy form_view, form_submit.
+        - Po odeslání (ThankYou.tsx): formulář se nahradí plným srovnáním všech
+          5 dvojic hned na stránce (data z etfs.json). Daňový tahák bude
+          obsahově v kroku textů (5), zatím sekce „Daňový tahák“ s krátkou
+          obecnou informací, dokud nebude text schválený. Pod tím jedna
+          nepovinná otázka („Máte už účet u brokera? ano / ne / zvažuji“).
+          Odeslání se v kroku 3 jen zaloguje.
+     5. components/Trust.tsx – kdo za stránkou stojí (zatím zástupný text pro
+        provozovatele, doplní člověk), odkud jsou data (emitenti, SEC, ESMA,
+        datum), rizikové upozornění (hodnota může klesat, měnové riziko USD/CZK,
+        data k 8. 10. 2026, nejde o doporučení).
+     6. components/Footer.tsx – provozovatel/IČO/sídlo/kontakt jako viditelně
+        označené TODO (nevymýšlím je), odkaz na zásady a „Nastavení cookies“
+        (zatím bez funkce, krok 4).
+
+     Podpora: lib/etfs.ts (typy a výběr dvojic z JSON), lib/format.ts
+     (Intl.NumberFormat('cs-CZ'), zaokrouhlení na stovky), lib/track.ts
+     (zástupná track(event, props) s typovaným seznamem eventů z CLAUDE.md,
+     zatím console.debug a window.dataLayer; napojí se v kroku 4),
+     app/zasady/page.tsx (kostra). Sticky spodní lišta na mobilu jen s CTA na
+     kalkulačku, nikdy s formulářem.
+
+     ---
+
+     5. Testy
+
+     - Unit (Vitest, nová devDependency vitest, skript npm test) –
+       lib/calc.test.ts:
+       - TER 0 → náklad 0; r 0 a TER 0 → fv = P + 12·n·m.
+       - Jednorázový vklad má přesný uzavřený tvar: P·(1+r)^n·(1−TER)^n (měsíční
+         faktory se skládají přesně) – test na 1e-6.
+       - Monotonie: vyšší TER / delší horizont / vyšší vklad → vyšší náklad.
+       - Regrese (čísla tvrzení reklamy a hera jsou zamčená testem): esmaGap při
+         2 000 Kč, 20 let, 0 % → 44 246 Kč (Math.round, přesně 44 245,54); 2
+         000 Kč, 20 let, 5 % → 86 478 Kč; náklad 1,2 % proti TER 0 při 5 % → 105
+         202 Kč.
+       - Okrajové a neplatné vstupy (záporné, NaN, prázdné) se ořežou na
+         povolené rozsahy.
+     - E2E (Playwright, @playwright/test, Chromium, viewport 375×812, isMobile,
+       hasTouch) – e2e/landing.spec.ts:
+       a. Hero: H1 a CTA viditelné bez scrollování, v hero není pole e-mailu.
+       b. CTA odscrolluje ke kalkulačce; změna měsíční částky → v účtence se
+          objeví částka v Kč a pruh s nabídkou plné verze.
+       c. Porovnání: 3 dvojice, u každé odkaz na zdroj; zamčené řádky vedou na
+          #formular.
+       d. Formulář: neplatný e-mail → chybová hláška; checkbox není zaškrtnutý;
+          platný e-mail → děkovací stav s 5 dvojicemi.
+       e. /?utm_content=b → H1 varianty B; varianta A neobsahuje slovo „až“.
+          5b. Kalkulačka nastavená na 2 000 Kč / 20 let / 0 % → řádek „Rozdíl“
+          se textově shoduje s číslem v hero.
+       f. Na 375 px žádný vodorovný scroll (scrollWidth ≤ 375); pole mají
+          přístupné jméno (getByLabel); formulář jde ovládat z klávesnice.
+       g. Eventy: test odchytí window.dataLayer a ověří pořadí page_view →
+          hero_cta_click → calc_start → calc_result → compare_view → form_view →
+          form_submit.
+
+     ---
+
+     Postup a commity (česky, malé, bez push)
+
+     1. data: benchmark nákladů ESMA (aktivní fondy vs. ETF) se zdrojem +
+        checklist
+     2. vzhled: fonty Fraunces/IBM Plex, paleta a tokeny
+     3. kalkulačka: výpočet nákladů poplatků + unit testy (Vitest)
+     4. UI: hero s variantami A/B podle utm_content
+     5. UI: kalkulačka s účtenkou poplatků
+     6. UI: porovnání 3 dvojic se zdroji
+     7. UI: formulář e-mail + souhlas a děkovací stav
+     8. UI: důvěra, rizikové upozornění, patička
+     9. testy: Playwright na 375 px
+     10. docs: úprava textu reklamy A, rozhodnutí (výnos 5 %, ESMA benchmark) do
+         README + docs/ai-chyby.md, pokud se něco opraví
+
+     Po kroku připomenu /export do ai-log/.
+
+     Ověření před „hotovo“
+
+     - node scripts/check-etfs.mjs, npm test, npm run lint, npm run build
+       projdou.
+     - npx playwright test projde (375 px).
+     - Ruční kontrola v npm run dev v DevTools 375 px (iPhone SE) + jedna
+       kontrola klávesnicí; screenshot účtenky.
+     - Ručně ověřit čísla ESMA 0,2 % / 1,2 % v PDF (člověk).
+
+● Plán je schválený, začínám. Krok 1: benchmark ESMA do dat.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Bash(cat > data/benchmarks.json <<'EOF'
+      {…)
+  ⎿  Created data/benchmarks.json (+32 -0)
+       1 +{                                                              
+       2 +  "meta": {                                                    
+       3 +    "description": "Referenční průměrné průběžné náklady fondů 
+         +v EU pro kalkulačku poplatků. Nejde o konkrétní fondy.",       
+       4 +    "retrieved_at": "2026-10-09",                              
+       5 +    "units": { "ter": "procenta ročně (1.2 = 1,2 %)" },        
+       6 +    "verified_by_human": false                                 
+       7 +  },                                                           
+       8 +  "benchmarks": [                                              
+       9 +    {                                                          
+      10 +      "id": "esma_passive_equity_etf",                         
+      11 +      "label": "Průměrný akciový ETF v EU",                    
+      12 +      "ter": {                                                 
+      13 +        "value": 0.2,                                          
+      14 +        "source_url": "https://www.esma.europa.eu/sites/default
+         +/files/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and
+         +_Performance_of_EU_Retail_Investment_Products.pdf",            
+      15 +        "retrieved_at": "2026-10-09",                          
+      16 +        "note": "ESMA Market Report „Costs and Performance of E
+         +U Retail Investment Products 2025“ (ESMA50-1949966494-4065, zve
+         +řejněno 3. 3. 2026), data za rok 2024, investiční horizont 1 ro
+         +k, s. 21: „In the sample of equity funds, active equity ETFs ha
+         +ve higher ongoing costs (0.3%) than passive equity ETFs (0.2%) 
+         +but remain far below active equity funds excluding ETFs (1.2%).
+         +“",                                                            
+      17 +        "cross_check": []                                      
+      18 +      }                                                        
+      19 +    },                                                         
+      20 +    {                                                          
+      21 +      "id": "esma_active_equity_fund",                         
+      22 +      "label": "Průměrný aktivní akciový fond v EU",           
+      23 +      "ter": {                                                 
+      24 +        "value": 1.2,                                          
+      25 +        "source_url": "https://www.esma.europa.eu/sites/default
+         +/files/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and
+         +_Performance_of_EU_Retail_Investment_Products.pdf",            
+      26 +        "retrieved_at": "2026-10-09",                          
+      27 +        "note": "Tentýž úryvek, s. 21: „… active equity funds e
+         +xcluding ETFs (1.2%)“. Jen průběžné náklady; jednorázové (vstup
+         +ní) poplatky ESMA vykazuje zvlášť a kalkulačka je nezapočítává.
+         +",                                                             
+      28 +        "cross_check": []                                      
+      29 +      }                                                        
+      30 +    }                                                          
+      31 +  ]                                                            
+      32 +}                                                              
+
+● Bash(sed -i 's/s\. 21: „In the sample/s. 21 (číslo strany odečteno ze zápatí v
+      extrahovaném textu, ověřit ručně): „In the sample/' data/benchmarks.json
+      && sed -n 40,…)
+  ⎿  Updated data/benchmarks.json (+1 -1)
+      13          "value": 0.2,
+      14          "source_url": "https://www.esma.europa.eu/sites/default
+          /files/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and
+          _Performance_of_EU_Retail_Investment_Products.pdf",
+      15          "retrieved_at": "2026-10-09",
+      16 -        "note": "ESMA Market Report „Costs and Performance of E
+         -U Retail Investment Products 2025“ (ESMA50-1949966494-4065, zve
+         -řejněno 3. 3. 2026), data za rok 2024, investiční horizont 1 ro
+         -k, s. 21: „In the sample of equity funds, active equity ETFs ha
+         -ve higher ongoing costs (0.3%) than passive equity ETFs (0.2%) 
+         -but remain far below active equity funds excluding ETFs (1.2%).
+         -“",                                                            
+      16 +        "note": "ESMA Market Report „Costs and Performance of E
+         +U Retail Investment Products 2025“ (ESMA50-1949966494-4065, zve
+         +řejněno 3. 3. 2026), data za rok 2024, investiční horizont 1 ro
+         +k, s. 21 (číslo strany odečteno ze zápatí v extrahovaném textu,
+         + ověřit ručně): „In the sample of equity funds, active equity E
+         +TFs have higher ongoing costs (0.3%) than passive equity ETFs (
+         +0.2%) but remain far below active equity funds excluding ETFs (
+         +1.2%).“",                                                      
+      17          "cross_check": []
+      18        }
+      19      },
+
+● Update(scripts/check-etfs.mjs)
+  ⎿  Added 9 lines, removed 1 line
+      49    }
+      50  }
+      51  
+      52 -console.log(`Fondů: ${data.funds.length}, null hodnot: ${nulls.
+         -length}${nulls.length ? ` (${nulls.join(', ')})` : ''}`);      
+      52 +// Referenční náklady (ESMA) pro kalkulačku: stejné pravidlo – 
+         +zdroj a datum u každé hodnoty                                  
+      53 +const bench = JSON.parse(readFileSync(new URL('../data/benchmar
+         +ks.json', import.meta.url), 'utf8'));                          
+      54 +for (const b of bench.benchmarks) {                            
+      55 +  if (!b.ter?.source_url?.startsWith('https://')) errors.push(`
+         +${b.id}.ter: chybí source_url`);                               
+      56 +  if (!DATE.test(b.ter?.retrieved_at ?? '')) errors.push(`${b.i
+         +d}.ter: chybí retrieved_at`);                                  
+      57 +  if (typeof b.ter?.value !== 'number') errors.push(`${b.id}.te
+         +r: chybí hodnota`);                                            
+      58 +}                                                              
+      59 +                                                               
+      60 +console.log(`Fondů: ${data.funds.length}, benchmarků: ${bench.b
+         +enchmarks.length}, null hodnot: ${nulls.length}${nulls.length ?
+         + ` (${nulls.join(', ')})` : ''}`);                             
+      61  if (errors.length) {
+      62    console.error(errors.map((e) => `CHYBA ${e}`).join('\n'));
+      63    process.exit(1);
+
+● Doplním do checklistu sekci k benchmarku ESMA a záznam do data/README.md.
+
+● Bash(sed -i '1s/^/\/\/ Kontrola data\/benchmarks.json probíhá ve stejném
+      skriptu.\n/' scripts/check-etfs.mjs && cat >> docs/overeni-dat.md
+      <<'EOF'…)
+  ⎿  Updated data/README.md (+4 -0)
+      49  ```
+      50  
+      51  Ověří zdroj a datum u každého pole, poznámku u `null`, kontroln
+          í číslici ISIN a že páry `same_index` mají opravdu stejný index
+          .
+      52 +                                                               
+      53 +## Referenční náklady (`benchmarks.json`)                      
+      54 +                                                               
+      55 +Průměrné průběžné náklady akciových fondů v EU podle ESMA (pasi
+         +vní ETF 0,2 %, aktivní fondy bez ETF 1,2 %; data za 2024). Kalk
+         +ulačka je ukazuje jako referenční řádky, nejde o konkrétní fond
+         +y. Stejné schéma `{ value, source_url, retrieved_at, note }`, d
+         +oslovná citace v `note`. Kontroluje je tentýž skript.          
+  ⎿  Updated docs/overeni-dat.md (+9 -0)
+      218  | ☐ | SXR8 | iShares (BlackRock) | [ishares.com](https://www.i
+           shares.com/uk/individual/en/products/253743/ishares-sp-500-b-u
+           cits-etf-acc-fund) | – |
+      219  | ☐ | SXR4 | iShares (BlackRock) | [ishares.com](https://www.i
+           shares.com/uk/individual/en/products/253740/ishares-msci-usa-b
+           -ucits-etf) | – |
+      220  | ☐ | VWCE | Vanguard | [vanguard.co.uk](https://www.vanguard.
+           co.uk/professional/product/etf/equity/9679/ftse-all-world-ucit
+           s-etf-usd-accumulating) | – |
+      221 +                                                              
+      222 +## 3. Referenční náklady ESMA (`data/benchmarks.json`)        
+      223 +                                                              
+      224 +Pro kalkulačku poplatků a tvrzení reklamy A. Staženo **2026-10
+          +-09**. Otevři PDF, vyhledej „passive equity ETFs (0.2%)“ a zko
+          +ntroluj i číslo strany.                                       
+      225 +                                                              
+      226 +| ✓ | Hodnota | Zdroj | Co ověřit |                           
+      227 +| --- | --- | --- | --- |                                     
+      228 +| ☐ | Průměrný pasivní akciový ETF v EU: 0,2 % | [ESMA, Costs 
+          +and Performance of EU Retail Investment Products 2025](https:/
+          +/www.esma.europa.eu/sites/default/files/2026-03/ESMA50-1949966
+          +494-4065_Market_Report_-_Costs_and_Performance_of_EU_Retail_In
+          +vestment_Products.pdf) | Úryvek „active equity ETFs have highe
+          +r ongoing costs (0.3%) than passive equity ETFs (0.2%)…“, stra
+          +na 21? |                                                      
+      229 +| ☐ | Průměrný aktivní akciový fond v EU (bez ETF): 1,2 % | ta
+          +mtéž | „… far below active equity funds excluding ETFs (1.2%)“
+          +, data za rok 2024, horizont 1 rok |                          
+  ⎿  Updated scripts/check-etfs.mjs (+1 -0)
+      1 +// Kontrola data/benchmarks.json probíhá ve stejném skriptu.    
+      2  // Kontrola data/etfs.json: zdroj a datum u každého pole, ISIN, 
+         vazby na UCITS ekvivalenty.
+      3  // Spuštění: node scripts/check-etfs.mjs
+      4  import { readFileSync } from 'node:fs';
+
+● Bash(sed -i '1d; 1s/.*/\/\/ Kontrola data\/etfs.json a data\/benchmarks.json:
+      zdroj a datum u každého pole, ISIN, vazby na UCITS ekvivalenty./'
+      scripts/check-etfs.mj…)
+  ⎿  Updated scripts/check-etfs.mjs (+0 -1)
+      1 -// Kontrola data/benchmarks.json probíhá ve stejném skriptu.    
+      1  // Kontrola data/etfs.json: zdroj a datum u každého pole, ISIN, 
+         vazby na UCITS ekvivalenty.
+      2  // Spuštění: node scripts/check-etfs.mjs
+      3  import { readFileSync } from 'node:fs';
+
+● Bash(sed -i '1s/.*/\/\/ Kontrola data\/etfs.json a data\/benchmarks.json:
+      zdroj a datum u každého pole, ISIN, vazby na UCITS ekvivalenty./'
+      scripts/check-etfs.mjs &&…)
+  ⎿  Updated scripts/check-etfs.mjs (+1 -1)
+      1 -// Kontrola data/etfs.json: zdroj a datum u každého pole, ISIN, 
+        -vazby na UCITS ekvivalenty.                                     
+      1 +// Kontrola data/etfs.json a data/benchmarks.json: zdroj a datum
+        + u každého pole, ISIN, vazby na UCITS ekvivalenty.              
+      2  // Spuštění: node scripts/check-etfs.mjs
+      3  import { readFileSync } from 'node:fs';
+      4  
+
+● Krok 2: fonty a paleta. Nejdřív si v dokumentaci Next 16 přečtu, jak se
+  načítají fonty.
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● Na textu je akcent #C2410C na hraně (4,51 : 1), proto pro text použiji #B03A0A
+  (5,30 : 1). Sekundární text bude #5E5A52 (5,98 : 1). Zapisuji tokeny a fonty.
+
+● Write(app/globals.css)
+  ⎿  Added 39 lines, removed 16 lines
+       1  @import "tailwindcss";
+       2  
+       3 -:root {                                                        
+       4 -  --background: #ffffff;                                       
+       5 -  --foreground: #171717;                                       
+       3 +/* Směr „Výpis z účtu“: papír, inkoust, jediný akcent pro částk
+         +y poplatků.                                                    
+       4 +   Kontrast na papíře: ink 15,5:1, muted 6,0:1, loss 5,3:1, kee
+         +p 5,5:1.                                                       
+       5 +   rule (#C9C2B3) má 1,5:1 – jen linky a oddělovače, nikdy text
+         +. */                                                           
+       6 +@theme {                                                       
+       7 +  --color-paper: #f3efe6;                                      
+       8 +  --color-card: #fbf9f4;                                       
+       9 +  --color-ink: #16181d;                                        
+      10 +  --color-muted: #5e5a52;                                      
+      11 +  --color-rule: #c9c2b3;                                       
+      12 +  --color-loss: #b03a0a;                                       
+      13 +  --color-keep: #2f6b4f;                                       
+      14 +                                                               
+      15 +  --font-display: var(--font-fraunces);                        
+      16 +  --font-sans: var(--font-plex-sans);                          
+      17 +  --font-mono: var(--font-plex-mono);                          
+      18  }
+      19  
+       8 -@theme inline {                                                
+       9 -  --color-background: var(--background);                       
+      10 -  --color-foreground: var(--foreground);                       
+      11 -  --font-sans: var(--font-geist-sans);                         
+      12 -  --font-mono: var(--font-geist-mono);                         
+      20 +body {                                                         
+      21 +  background: var(--color-paper);                              
+      22 +  color: var(--color-ink);                                     
+      23  }
+      24  
+      15 -@media (prefers-color-scheme: dark) {                          
+      16 -  :root {                                                      
+      17 -    --background: #0a0a0a;                                     
+      18 -    --foreground: #ededed;                                     
+      19 -  }                                                            
+      25 +/* Čísla vždy v tabulkových číslicích, aby se řádky účtenky ner
+         +ozskakovaly */                                                 
+      26 +.num {                                                         
+      27 +  font-family: var(--font-mono);                               
+      28 +  font-variant-numeric: tabular-nums;                          
+      29  }
+      30  
+      22 -body {                                                         
+      23 -  background: var(--background);                               
+      24 -  color: var(--foreground);                                    
+      31 +/* Perforovaný okraj účtenky (zoubky nahoře a dole) */         
+      32 +.receipt {                                                     
+      33 +  --tooth: 8px;                                                
+      34 +  mask:                                                        
+      35 +    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89de
+         +g, #0000 90deg) bottom / calc(2 * var(--tooth)) 51% repeat-x,  
+      36 +    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, 
+         +#0000 90deg) top / calc(2 * var(--tooth)) 51% repeat-x;        
+      37 +  padding-block: calc(var(--tooth) + 1rem);                    
+      38  }
+      39 +                                                               
+      40 +.dotted {                                                      
+      41 +  border-bottom: 1px dotted var(--color-rule);                 
+      42 +}                                                              
+      43 +                                                               
+      44 +@media (prefers-reduced-motion: no-preference) {               
+      45 +  html {                                                       
+      46 +    scroll-behavior: smooth;                                   
+      47 +  }                                                            
+      48 +}                                                              
+
+● Write(app/layout.tsx)
+  ⎿  Added 16 lines, removed 9 lines
+       1  import type { Metadata } from "next";
+       2 -import { Geist, Geist_Mono } from "next/font/google";          
+       2 +import { Fraunces, IBM_Plex_Mono, IBM_Plex_Sans } from "next/fo
+         +nt/google";                                                    
+       3  import "./globals.css";
+       4  
+       5 -const geistSans = Geist({                                      
+       6 -  variable: "--font-geist-sans",                               
+       7 -  subsets: ["latin"],                                          
+       5 +const fraunces = Fraunces({                                    
+       6 +  variable: "--font-fraunces",                                 
+       7 +  subsets: ["latin", "latin-ext"],                             
+       8 +  axes: ["opsz"],                                              
+       9  });
+      10  
+      10 -const geistMono = Geist_Mono({                                 
+      11 -  variable: "--font-geist-mono",                               
+      12 -  subsets: ["latin"],                                          
+      11 +const plexSans = IBM_Plex_Sans({                               
+      12 +  variable: "--font-plex-sans",                                
+      13 +  subsets: ["latin", "latin-ext"],                             
+      14  });
+      15  
+      16 +const plexMono = IBM_Plex_Mono({                               
+      17 +  variable: "--font-plex-mono",                                
+      18 +  subsets: ["latin", "latin-ext"],                             
+      19 +  weight: ["400", "600"],                                      
+      20 +});                                                            
+      21 +                                                               
+      22  export const metadata: Metadata = {
+      23    title: "ETF z NYSE – srovnání pro českého investora",
+      24    description:
+     ...
+      29    return (
+      30      <html
+      31        lang="cs"
+      25 -      className={`${geistSans.variable} ${geistMono.variable} h
+         --full antialiased`}                                            
+      32 +      className={`${fraunces.variable} ${plexSans.variable} ${p
+         +lexMono.variable} h-full antialiased`}                         
+      33      >
+      27 -      <body className="min-h-full flex flex-col">{children}</bo
+         -dy>                                                            
+      34 +      <body className="min-h-full flex flex-col font-sans">{chi
+         +ldren}</body>                                                  
+      35      </html>
+      36    );
+      37  }
+
+● Bash(sed -i 's/className="text-2xl font-semibold
+      tracking-tight"/className="font-display text-[34px] leading-[38px]"/;
+      s/text-base opacity-70/text-base text-muted/'…)
+  ⎿  Updated app/page.tsx (+2 -2)
+       1  export default function Home() {
+       2    return (
+       3      <main className="mx-auto flex w-full max-w-xl flex-1 flex-c
+          ol justify-center px-5 py-16">
+       4 -      <h1 className="text-2xl font-semibold tracking-tight">   
+       4 +      <h1 className="font-display text-[34px] leading-[38px]"> 
+       5          ETF z NYSE – srovnání pro českého investora
+       6        </h1>
+       7 -      <p className="mt-3 text-base opacity-70">Stránka je ve vý
+         -stavbě.</p>                                                    
+       7 +      <p className="mt-3 text-base text-muted">Stránka je ve vý
+         +stavbě.</p>                                                    
+       8      </main>
+       9    );
+      10  }
+  ⎿  (timeout 5m)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Krok 3: výpočet kalkulačky a unit testy. Instaluji Vitest.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Vitest 5 vyžaduje @types/node ≥ 22. Lokální Node je v24, proto zvednu
+  @types/node na ^24, ať odpovídá běhovému prostředí.
+
+● Bash(npm install -D @types/node@^24 vitest @playwright/test 2>&1 | tail -3 &&
+      grep -A12 devDependencies package.json)  ⎿  Updated package.json (+4 -2)
+      14      "react-dom": "19.3.0"
+      15    },
+      16    "devDependencies": {
+      17 +    "@playwright/test": "^1.64.0",                             
+      18      "@tailwindcss/turbopack": "^4",
+      18 -    "@types/node": "^20",                                      
+      19 +    "@types/node": "^24.19.1",                                 
+      20      "@types/react": "^19",
+      21      "@types/react-dom": "^19",
+      22      "eslint": "^9",
+      23      "eslint-config-next": "16.4.0",
+      24      "tailwindcss": "^4",
+      24 -    "typescript": "^5"                                         
+      25 +    "typescript": "^5",                                        
+      26 +    "vitest": "^5.0.3"                                         
+      27    }
+      28  }
+  ⎿  … 1 more file changed
+  ⎿  (timeout 5m)
+
+● Vitest a Playwright jsou nainstalované. Píšu výpočet: čistou matematiku v
+  lib/calc.ts a sestavení řádků z dat v lib/fees.ts.
+
+● Write(lib/calc.ts)
+  ⎿  Wrote 73 lines to lib/calc.ts
+       1 // Výpočet nákladů poplatků fondu. Čistá matematika bez dat a be
+         z doporučení.
+       3 // Měsíční krok: vklad na začátku měsíce, zhodnocení, pak odečet
+          průběžných nákladů
+       4 // (TER se strhává průběžně z majetku fondu):
+       6 //   f_m = (1 − TER)^(1/12)
+       7 //   B_0 = P,  B_k = (B_{k−1} + m) · (1 + r_m) · f_m
+       8 // Náklad = B(TER = 0) − B(TER): zaplacené poplatky i výnos, o k
+       9
+      10 export type CalcInput = {
+     … +73 lines (ctrl+o to expand)
+
+● Write(lib/fees.ts)
+  ⎿  Wrote 101 lines to lib/fees.ts
+       1 // Řádky účtenky poplatků: TER z data/etfs.json (UCITS fondy dos
+         tupné v ČR) a referenční průměry ESMA.
+       2 // Řádky jen ukazují náklad podle TER – nic nedoporučují.
+       4 import { ucitsFunds } from "@/lib/etfs";
+       5 import { type CalcInput, feeCost, futureValue, totalDeposits } f
+         rom "@/lib/calc";
+       6
+       8   id: string;
+       9   label: string;
+      10   /** Tickery fondů s tímto TER, prázdné u referenčních řádků */
+     … +99 lines (ctrl+o to expand)
+
+● Write(lib/etfs.ts)
+  ⎿  Wrote 54 lines to lib/etfs.ts
+      1 // Typovaný přístup k data/etfs.json. Data se nikde v UI nepřepis
+        ují ručně.
+      2 import data from "@/data/etfs.json";
+      3
+      4 export type Sourced<T> = {
+      5   value: T;
+      6   source_url: string;
+      7   retrieved_at: string;
+      8   note: string | null;
+      9 };
+     … +50 lines (ctrl+o to expand)
+
+● Write(lib/calc.test.ts)
+  ⎿  Wrote 78 lines to lib/calc.test.ts
+       1 import { describe, expect, it } from "vitest";
+         Deposits } from "./calc";
+       3 import { computeFees, ESMA, FEE_ROWS, HERO_INPUT } from "./fees"
+       4
+       5 const base: CalcInput = { initial: 0, monthly: 2000, years: 20,
+       6
+       7 describe("futureValue", () => {
+       9     const input = { initial: 50_000, monthly: 3000, years: 15, a
+         nnualReturn: 0 };
+          * 15, 6);
+     … +89 lines (ctrl+o to expand)
+
+● Bash(cat > vitest.config.ts <<'EOF'
+      import { fileURLToPath } from "node:url";…)
+  ⎿  Updated package.json (+4 -1)
+       6      "dev": "next dev",
+       7      "build": "next build",
+       8      "start": "next start",
+       9 -    "lint": "eslint"                                           
+       9 +    "lint": "eslint",                                          
+      10 +    "test": "vitest run",                                      
+      11 +    "e2e": "playwright test",                                  
+      12 +    "check-data": "node scripts/check-etfs.mjs"                
+      13    },
+      14    "dependencies": {
+      15      "next": "16.4.0",
+  ⎿  Created vitest.config.ts (+7 -0)
+      1 +import { fileURLToPath } from "node:url";                       
+      2 +import { defineConfig } from "vitest/config";                   
+      3 +                                                                
+      4 +export default defineConfig({                                   
+      5 +  resolve: { alias: { "@": fileURLToPath(new URL("./", import.me
+        +ta.url)) } },                                                   
+      6 +  test: { include: ["lib/**/*.test.ts"] },                      
+      7 +});                                                             
+
+● Všech 10 testů prošlo. Přejmenuji konfiguraci na .mts, aby zmizelo varování
+  Vite.
+
+● Bash(git mv -f vitest.config.ts vitest.config.mts 2>/dev/null || mv
+      vitest.config.ts vitest.config.mts; npm test 2>&1 | grep -E 'warn|Tests' ;
+      npx tsc --noEmit 2>&1…)
+  ⎿  Created vitest.config.mts (+7 -0)
+      1 +import { fileURLToPath } from "node:url";                       
+      2 +import { defineConfig } from "vitest/config";                   
+      3 +                                                                
+      4 +export default defineConfig({                                   
+      5 +  resolve: { alias: { "@": fileURLToPath(new URL("./", import.me
+        +ta.url)) } },                                                   
+      6 +  test: { include: ["lib/**/*.test.ts"] },                      
+      7 +});                                                             
+  ⎿  Deleted vitest.config.ts (+0 -7)
+      1 -import { fileURLToPath } from "node:url";                       
+      2 -import { defineConfig } from "vitest/config";                   
+      3 -                                                                
+      4 -export default defineConfig({                                   
+      5 -  resolve: { alias: { "@": fileURLToPath(new URL("./", import.me
+        -ta.url)) } },                                                   
+      6 -  test: { include: ["lib/**/*.test.ts"] },                      
+      7 -});                                                             
+  ⎿  (timeout 2m)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Krok 4: hero s variantami A/B. Nejdřív si přečtu dokumentaci k proxy v Next
+  16.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Write(lib/fees.ts)
+  ⎿  Added 16 lines, removed 76 lines
+       1 -// Řádky účtenky poplatků: TER z data/etfs.json (UCITS fondy do
+         -stupné v ČR) a referenční průměry ESMA.                        
+       2 -// Řádky jen ukazují náklad podle TER – nic nedoporučují.      
+       3 -import benchmarks from "@/data/benchmarks.json";               
+       4 -import { ucitsFunds } from "@/lib/etfs";                       
+       1 +// Výpočet řádků účtenky poplatků. Bez importu dat, aby šel do 
+         +klientského bundlu                                             
+       2 +// (řádky sestaví server v lib/fee-rows.ts). Řádky jen ukazují 
+         +náklad podle TER – nic nedoporučují.                           
+       3  import { type CalcInput, feeCost, futureValue, totalDeposits } 
+          from "@/lib/calc";
+       4  
+       5 +export const ESMA_ETF_ID = "esma_passive_equity_etf";          
+       6 +export const ESMA_ACTIVE_ID = "esma_active_equity_fund";       
+       7 +                                                               
+       8  export type FeeRow = {
+       9    id: string;
+      10    label: string;
+      11    /** Tickery fondů s tímto TER, prázdné u referenčních řádků *
+          /
+      12    tickers: string[];
+      13 +  /** TER v % ročně (0.07 = 0,07 %) */                         
+      14    ter: number;
+      15    kind: "fund" | "benchmark";
+      16    sourceUrl: string;
+     ...
+       18  };
+       19  
+       20  export type FeeResult = {
+       19 -  input: CalcInput;                                           
+       21    deposits: number;
+       21 -  /** Hodnota bez jakýchkoli nákladů */                       
+       22 +  /** Modelová hodnota bez jakýchkoli nákladů */              
+       23    grossValue: number;
+       23 -  rows: (FeeRow & { cost: number; value: number })[];         
+       24 -  /** Rozdíl nákladů: průměrný aktivní fond (ESMA) − průměrný 
+          -ETF (ESMA). Číslo z hero. */                                  
+       24 +  rows: (FeeRow & { cost: number })[];                        
+       25 +  /** Náklad průměrného aktivního fondu − náklad průměrného ET
+          +F (oba ESMA). Číslo z hero. */                                
+       26    esmaGap: number;
+       27  };
+       28  
+       28 -const ESMA_ETF = benchmarks.benchmarks.find((b) => b.id === "e
+          -sma_passive_equity_etf")!;                                    
+       29 -const ESMA_ACTIVE = benchmarks.benchmarks.find((b) => b.id ===
+          - "esma_active_equity_fund")!;                                 
+       29 +/** Vstupy čísla v hero varianty A: 2 000 Kč měsíčně, 20 let, 
+          +výnos 0 %. */                                                 
+       30 +export const HERO_INPUT: CalcInput = { initial: 0, monthly: 20
+          +00, years: 20, annualReturn: 0 };                             
+       31  
+       31 -export const ESMA = {                                         
+       32 -  etfTer: ESMA_ETF.ter.value,                                 
+       33 -  activeTer: ESMA_ACTIVE.ter.value,                           
+       34 -  sourceUrl: ESMA_ACTIVE.ter.source_url,                      
+       35 -  retrievedAt: ESMA_ACTIVE.ter.retrieved_at,                  
+       36 -};                                                            
+       37 -                                                              
+       38 -function fundRows(): FeeRow[] {                               
+       39 -  const byTer = new Map<number, FeeRow>();                    
+       40 -  for (const fund of ucitsFunds()) {                          
+       41 -    const ter = fund.ter.value;                               
+       42 -    const row = byTer.get(ter);                               
+       43 -    if (row) {                                                
+       44 -      row.tickers.push(fund.ticker.value);                    
+       45 -      continue;                                               
+       46 -    }                                                         
+       47 -    byTer.set(ter, {                                          
+       48 -      id: `ter-${ter}`,                                       
+       49 -      label: "",                                              
+       50 -      tickers: [fund.ticker.value],                           
+       51 -      ter,                                                    
+       52 -      kind: "fund",                                           
+       53 -      sourceUrl: fund.ter.source_url,                         
+       54 -      retrievedAt: fund.ter.retrieved_at,                     
+       55 -    });                                                       
+       56 -  }                                                           
+       57 -  return [...byTer.values()]                                  
+       58 -    .sort((a, b) => a.ter - b.ter)                            
+       59 -    .map((row) => ({ ...row, label: row.tickers.join(", ") }))
+          -;                                                             
+       60 -}                                                             
+       61 -                                                              
+       62 -export const FEE_ROWS: FeeRow[] = [                           
+       63 -  ...fundRows(),                                              
+       64 -  {                                                           
+       65 -    id: ESMA_ETF.id,                                          
+       66 -    label: "Průměrný ETF v EU (ESMA)",                        
+       67 -    tickers: [],                                              
+       68 -    ter: ESMA.etfTer,                                         
+       69 -    kind: "benchmark",                                        
+       70 -    sourceUrl: ESMA_ETF.ter.source_url,                       
+       71 -    retrievedAt: ESMA_ETF.ter.retrieved_at,                   
+       72 -  },                                                          
+       73 -  {                                                           
+       74 -    id: ESMA_ACTIVE.id,                                       
+       75 -    label: "Průměrný aktivní akciový fond v EU (ESMA)",       
+       76 -    tickers: [],                                              
+       77 -    ter: ESMA.activeTer,                                      
+       78 -    kind: "benchmark",                                        
+       79 -    sourceUrl: ESMA_ACTIVE.ter.source_url,                    
+       80 -    retrievedAt: ESMA_ACTIVE.ter.retrieved_at,                
+       81 -  },                                                          
+       82 -];                                                            
+       83 -                                                              
+       84 -export function computeFees(input: CalcInput): FeeResult {    
+       85 -  const grossValue = futureValue(input, 0);                   
+       86 -  const rows = FEE_ROWS.map((row) => ({                       
+       87 -    ...row,                                                   
+       88 -    cost: feeCost(input, row.ter),                            
+       89 -    value: futureValue(input, row.ter),                       
+       90 -  }));                                                        
+       32 +export function computeFees(input: CalcInput, feeRows: FeeRow[
+          +]): FeeResult {                                               
+       33 +  const rows = feeRows.map((row) => ({ ...row, cost: feeCost(i
+          +nput, row.ter) }));                                           
+       34 +  const cost = (id: string) => rows.find((r) => r.id === id)?.
+          +cost ?? NaN;                                                  
+       35    return {
+       92 -    input,                                                    
+       36      deposits: totalDeposits(input),
+       94 -    grossValue,                                               
+       37 +    grossValue: futureValue(input, 0),                        
+       38      rows,
+       96 -    esmaGap: feeCost(input, ESMA.activeTer) - feeCost(input, E
+          -SMA.etfTer),                                                  
+       39 +    esmaGap: cost(ESMA_ACTIVE_ID) - cost(ESMA_ETF_ID),        
+       40    };
+       41  }
+       99 -                                                              
+      100 -/** Vstupy čísla v hero varianty A: 2 000 Kč měsíčně, 20 let, 
+          -výnos 0 %. */                                                 
+      101 -export const HERO_INPUT: CalcInput = { initial: 0, monthly: 20
+          -00, years: 20, annualReturn: 0 };                             
+
+● Write(lib/fee-rows.ts)
+  ⎿  Wrote 60 lines to lib/fee-rows.ts
+       1 // Řádky účtenky z dat: TER UCITS fondů dostupných v ČR (data/et
+       2 // (data/benchmarks.json). Jen pro server – klient dostane hotov
+         é řádky jako props.
+       4 import { ucitsFunds } from "@/lib/etfs";
+       5 import { ESMA_ACTIVE_ID, ESMA_ETF_ID, type FeeRow } from "@/lib/
+       6
+       7 const esmaEtf = benchmarks.benchmarks.find((b) => b.id === ESMA_
+       8 const esmaActive = benchmarks.benchmarks.find((b) => b.id === ES
+         MA_ACTIVE_ID)!;
+      10 export const ESMA = {
+     … +55 lines (ctrl+o to expand)
+
+● Bash(cd /home/snnikol/work/etf-srovnani && node - <<'EOF'
+      const fs=require('fs');let t=fs.readFileSync('lib/calc.test.ts','utf8');…)
+  ⎿  Updated lib/calc.test.ts (+4 -3)
+      1  import { describe, expect, it } from "vitest";
+      2  import { type CalcInput, clampInput, feeCost, futureValue, total
+         Deposits } from "./calc";
+      3 -import { computeFees, ESMA, FEE_ROWS, HERO_INPUT } from "./fees"
+        -;                                                               
+      3 +import { ESMA, FEE_ROWS } from "./fee-rows";                    
+      4 +import { computeFees, HERO_INPUT } from "./fees";               
+      5  
+      6  const base: CalcInput = { initial: 0, monthly: 2000, years: 20, 
+         annualReturn: 5 };
+      7  
+     ...
+      56    });
+      57  
+      58    it("hero: 2 000 Kč, 20 let, výnos 0 % → 44 246 Kč", () => {
+      58 -    expect(Math.round(computeFees(HERO_INPUT).esmaGap)).toBe(44
+         -_246);                                                         
+      59 +    expect(Math.round(computeFees(HERO_INPUT, FEE_ROWS).esmaGap
+         +)).toBe(44_246);                                               
+      60    });
+      61  
+      62    it("kalkulačka: 2 000 Kč, 20 let, 5 % → rozdíl 86 478 Kč, nák
+          lad 1,2 % = 105 202 Kč", () => {
+      62 -    const result = computeFees(base);                          
+      63 +    const result = computeFees(base, FEE_ROWS);                
+      64      expect(Math.round(result.esmaGap)).toBe(86_478);
+      65      expect(Math.round(result.rows.find((r) => r.ter === 1.2)!.c
+          ost)).toBe(105_202);
+      66    });
+
+● Testy procházejí i po rozdělení. Teď podpůrné moduly: formátování, měření a
+  údaje o provozovateli.
+
+● Write(lib/format.ts)
+  ⎿  Wrote 36 lines to lib/format.ts
+      1 // České formátování čísel a dat. Částky v Kč zaokrouhlujeme na s
+        tovky – víc přesnosti model nemá.
+      2
+        igits: 0 });
+      4 const percent = new Intl.NumberFormat("cs-CZ", { maximumFractionD
+        igits: 4 });
+      5
+      7 export function formatKc(amount: number): string {
+      8   return `${integer.format(Math.round(amount / 100) * 100)} Kč`;
+      9 }
+     … +32 lines (ctrl+o to expand)
+
+● Write(lib/track.ts)
+  ⎿  Wrote 59 lines to lib/track.ts
+       1 // Měření cesty návštěvníka. Krok 3: jen zástupná vrstva – event
+         y jdou do window.dataLayer
+       2 // (a v dev do konzole). Napojení na PostHog a režim bez cookies
+       3
+       4 export const FUNNEL_EVENTS = [
+       5   "page_view",
+       6   "hero_cta_click",
+       8   "calc_result",
+       9   "compare_view",
+      10   "form_view",
+     … +57 lines (ctrl+o to expand)
+
+● Write(lib/site.ts)
+  ⎿  Wrote 24 lines to lib/site.ts
+       1 // Údaje o provozovateli. Nevymýšlíme je: dokud je nedoplní člov
+         ěk, stránka ukazuje viditelné „[doplnit …]“.
+       2 export const OPERATOR: {
+       3   name: string | null;
+       4   ico: string | null;
+       6   email: string | null;
+       7 } = {
+       8   name: null,
+       9   ico: null,
+      10   address: null,
+     … +18 lines (ctrl+o to expand)
+
+● Bash(mkdir -p app/v/\[variant\] && cat > components/PageView.tsx <<'EOF'
+      "use client";…)
+  ⎿  Updated app/page.tsx (+4 -8)
+       1 +import { Landing } from "@/components/Landing";                
+       2 +                                                               
+       3 +// Výchozí varianta A (úspora). Varianta B přes proxy.ts podle 
+         +utm_content.                                                   
+       4  export default function Home() {
+       2 -  return (                                                     
+       3 -    <main className="mx-auto flex w-full max-w-xl flex-1 flex-c
+         -ol justify-center px-5 py-16">                                 
+       4 -      <h1 className="font-display text-[34px] leading-[38px]"> 
+       5 -        ETF z NYSE – srovnání pro českého investora            
+       6 -      </h1>                                                    
+       7 -      <p className="mt-3 text-base text-muted">Stránka je ve vý
+         -stavbě.</p>                                                    
+       8 -    </main>                                                    
+       9 -  );                                                           
+       5 +  return <Landing variant="a" />;                              
+       6  }
+  ⎿  Created app/v/[variant]/page.tsx (+20 -0)
+       1 +import type { Metadata } from "next";                          
+       2 +import { notFound } from "next/navigation";                    
+       3 +import { Landing } from "@/components/Landing";                
+       4 +                                                               
+       5 +// Varianta hero podle reklamy. Sem přepisuje proxy.ts (`/?utm_
+         +content=b…` → `/v/b`),                                         
+       6 +// v adresním řádku zůstává `/` s UTM parametry. Obě varianty j
+         +sou statické.                                                  
+       7 +export function generateStaticParams() {                       
+       8 +  return [{ variant: "b" }];                                   
+       9 +}                                                              
+      10 +                                                               
+      11 +export const metadata: Metadata = {                            
+      12 +  robots: { index: false },                                    
+      13 +  alternates: { canonical: "/" },                              
+      14 +};                                                             
+      15 +                                                               
+      16 +export default async function VariantPage({ params }: PageProps
+         +<"/v/[variant]">) {                                            
+      17 +  const { variant } = await params;                            
+      18 +  if (variant !== "b") notFound();                             
+      19 +  return <Landing variant="b" />;                              
+      20 +}                                                              
+  ⎿  Created components/Hero.tsx (+85 -0)
+       1 +import { TrackedLink } from "@/components/TrackedLink";        
+       2 +import { FEE_ROWS, ESMA } from "@/lib/fee-rows";               
+       3 +import { computeFees, HERO_INPUT } from "@/lib/fees";          
+       4 +import { fundPairs } from "@/lib/etfs";                        
+       5 +import { formatDate, formatInteger, formatKc, formatPercent } f
+         +rom "@/lib/format";                                            
+       6 +import type { AdVariant } from "@/lib/track";                  
+       7 +                                                               
+       8 +const cta =                                                    
+       9 +  "mt-7 flex h-14 w-full items-center justify-center rounded-sm
+         + bg-ink px-6 text-base font-semibold text-paper outline-offset-
+         +4 focus-visible:outline-2 focus-visible:outline-ink";          
+      10 +                                                               
+      11 +export function Hero({ variant }: { variant: AdVariant }) {    
+      12 +  return (                                                     
+      13 +    <header className="px-4 pt-6 pb-10">                       
+      14 +      <p className="text-[13px] tracking-wide text-muted upperc
+         +ase">                                                          
+      15 +        Srovnání ETF z NYSE · pro investory v ČR               
+      16 +      </p>                                                     
+      17 +      {variant === "b" ? <HeroB /> : <HeroA />}                
+      18 +    </header>                                                  
+      19 +  );                                                           
+      20 +}                                                              
+      21 +                                                               
+      22 +// A – úspora: číslo počítané živě z calc() se vstupy hero (výn
+         +os 0 %), nic natvrdo                                           
+      23 +function HeroA() {                                             
+      24 +  const gap = computeFees(HERO_INPUT, FEE_ROWS).esmaGap;       
+      25 +  return (                                                     
+      26 +    <>                                                         
+      27 +      <h1 className="mt-4 font-display text-[34px] leading-[38p
+         +x] font-semibold">                                             
+      28 +        Kolik vás za 20&nbsp;let stojí poplatky fondu?         
+      29 +      </h1>                                                    
+      30 +      <p className="mt-6 text-[15px] leading-6">I bez jakéhokol
+         +i výnosu:</p>                                                  
+      31 +      <p className="num text-[44px] leading-[52px] font-semibol
+         +d text-loss" data-testid="hero-gap">                           
+      32 +        {formatKc(gap)}                                        
+      33 +      </p>                                                     
+      34 +      <p className="mt-1 text-[15px] leading-6">               
+      35 +        za {HERO_INPUT.years}&nbsp;let při {formatInteger(HERO_
+         +INPUT.monthly)}&nbsp;Kč měsíčně.                               
+      36 +      </p>                                                     
+      37 +      <p className="mt-4 border-l-2 border-rule pl-3 text-[13px
+         +] leading-5 text-muted">                                       
+      38 +        Rozdíl nákladů mezi průměrným ETF ({formatPercent(ESMA.
+         +etfTer)} ročně) a průměrným aktivním                           
+      39 +        akciovým fondem v&nbsp;EU ({formatPercent(ESMA.activeTe
+         +r)}). Zdroj:{" "}                                              
+      40 +        <a className="underline" href={ESMA.sourceUrl}>        
+     … 45 more lines (ctrl+o to expand)
+  ⎿  Created components/Landing.tsx (+12 -0)
+       1 +import { Hero } from "@/components/Hero";                      
+       2 +import { PageView } from "@/components/PageView";              
+       3 +import type { AdVariant } from "@/lib/track";                  
+       4 +                                                               
+       5 +export function Landing({ variant }: { variant: AdVariant }) { 
+       6 +  return (                                                     
+       7 +    <main className="mx-auto w-full max-w-xl flex-1">          
+       8 +      <PageView variant={variant} />                           
+       9 +      <Hero variant={variant} />                               
+      10 +    </main>                                                    
+      11 +  );                                                           
+      12 +}                                                              
+  ⎿  Created components/PageView.tsx (+13 -0)
+       1 +"use client";                                                  
+       2 +                                                               
+       3 +import { useEffect } from "react";                             
+       4 +import { type AdVariant, setAdVariant, trackOnce } from "@/lib/
+         +track";                                                        
+       5 +                                                               
+       6 +/** Nastaví variantu reklamy pro všechny eventy a odešle page_v
+         +iew. */                                                        
+       7 +export function PageView({ variant }: { variant: AdVariant }) {
+       8 +  useEffect(() => {                                            
+       9 +    setAdVariant(variant);                                     
+      10 +    trackOnce("page_view");                                    
+      11 +  }, [variant]);                                               
+      12 +  return null;                                                 
+      13 +}                                                              
+  ⎿  … 2 more files changed
+  ⎿  (timeout 5m)
+
+● Build prošel a /v/b je statická. Ověřím obě varianty přes produkční server.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Neznámá varianta vrací stránku 404 s noindex. Commituji hero.
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● Krok 5: kalkulačka s účtenkou poplatků.
+
+● Write(components/Calculator.tsx)
+  ⎿  Wrote 199 lines to components/Calculator.tsx
+       1 "use client";
+       2
+       3 import { useEffect, useId, useMemo, useRef, useState } from "rea
+       4 import { FeeReceipt } from "@/components/FeeReceipt";
+       5 import { clampInput, DEFAULT_INPUT, LIMITS, RETURN_OPTIONS } fro
+         m "@/lib/calc";
+       6 import { computeFees, type FeeRow } from "@/lib/fees";
+       8 import { track, trackOnce } from "@/lib/track";
+       9
+      10 const MONTHLY_PRESETS = [1000, 2000, 5000];
+     … +217 lines (ctrl+o to expand)
+● Opravím dvě věci: opuštění pole bez změny nesmí odeslat calc_start a form_view
+  bude měřit až formulář sám, ne klik na nabídku.
+
+● Bash(node - <<'EOF'
+      const fs=require('fs');const p='components/Calculator.tsx';let
+      t=fs.readFileSync(p,'utf8');…)
+  ⎿  Updated components/Calculator.tsx (+21 -4)
+       5  import { clampInput, DEFAULT_INPUT, LIMITS, RETURN_OPTIONS } fr
+          om "@/lib/calc";
+       6  import { computeFees, type FeeRow } from "@/lib/fees";
+       7  import { formatInteger, parseAmount } from "@/lib/format";
+       8 -import { track, trackOnce } from "@/lib/track";                
+       8 +import { trackOnce } from "@/lib/track";                       
+       9  
+      10  const MONTHLY_PRESETS = [1000, 2000, 5000];
+      11  
+     ...
+      66            <AmountInput
+      67              id={ids.monthly}
+      68              value={monthlyText}
+      69 +            max={LIMITS.monthly.max}                           
+      70              onChange={(v) => {
+      71                touch();
+      72                setMonthlyText(v);
+      73              }}
+      74 +            onCommit={setMonthlyText}                          
+      75            />
+      76            <div className="mt-2 flex gap-2" role="group" aria-la
+          bel="Rychlá volba měsíční částky">
+      77              {MONTHLY_PRESETS.map((amount) => (
+     ...
+       98            <AmountInput
+       99              id={ids.initial}
+      100              value={initialText}
+      101 +            max={LIMITS.initial.max}                          
+      102              onChange={(v) => {
+      103                touch();
+      104                setInitialText(v);
+      105              }}
+      106 +            onCommit={setInitialText}                         
+      107            />
+      108          </div>
+      109  
+     ...
+      167            href="#formular"
+      168            data-testid="lead-offer"
+      169            className="mt-6 block rounded-sm border-2 border-ink
+            bg-card p-4 outline-offset-4 focus-visible:outline-2"
+      166 -          onClick={() => track("form_view", { from: "calc_offe
+          -r" })}                                                        
+      170          >
+      171            <span className="block font-semibold">
+      172              Chcete kompletní srovnání všech 5&nbsp;dvojic fond
+           ů NYSE ↔ UCITS a&nbsp;daňový tahák?
+     ...
+      178    );
+     … 32 more lines (ctrl+o to expand)
+
+● Teď účtenka poplatků.
+
+● Write(components/FeeReceipt.tsx)
+  ⎿  Wrote 95 lines to components/FeeReceipt.tsx
+       1 import type { FeeResult } from "@/lib/fees";
+       2 import { formatDate, formatKc, formatPercent } from "@/lib/forma
+         t";
+       4 /** Výsledek kalkulačky jako účtenka: vklady, náklady podle TER
+         (s pruhy ve stejném měřítku), rozdíl ESMA. */
+       5 export function FeeReceipt({
+       6   result,
+       8   annualReturn,
+       9 }: {
+      10   result: FeeResult;
+     … +110 lines (ctrl+o to expand)
+
+● Bash(cat > components/StickyCta.tsx <<'EOF'
+      "use client";…)
+  ⎿  Updated components/Hero.tsx (+1 -1)
+      10  
+      11  export function Hero({ variant }: { variant: AdVariant }) {
+      12    return (
+      13 -    <header className="px-4 pt-6 pb-10">                       
+      13 +    <header id="hero" className="px-4 pt-6 pb-10">             
+      14        <p className="text-[13px] tracking-wide text-muted upperc
+          ase">
+      15          Srovnání ETF z NYSE · pro investory v ČR
+      16        </p>
+  ⎿  Updated components/Landing.tsx (+5 -0)
+      1 +import { Calculator } from "@/components/Calculator";           
+      2  import { Hero } from "@/components/Hero";
+      3  import { PageView } from "@/components/PageView";
+      4 +import { StickyCta } from "@/components/StickyCta";             
+      5 +import { FEE_ROWS } from "@/lib/fee-rows";                      
+      6  import type { AdVariant } from "@/lib/track";
+      7  
+      8  export function Landing({ variant }: { variant: AdVariant }) {
+     ...
+      10      <main className="mx-auto w-full max-w-xl flex-1">
+      11        <PageView variant={variant} />
+      12        <Hero variant={variant} />
+      13 +      <Calculator rows={FEE_ROWS} />                           
+      14 +      <StickyCta />                                            
+      15      </main>
+      16    );
+      17  }
+  ⎿  Created components/StickyCta.tsx (+39 -0)
+       1 +"use client";                                                  
+       2 +                                                               
+       3 +import { useEffect, useState } from "react";                   
+       4 +import { track } from "@/lib/track";                           
+       5 +                                                               
+       6 +/** Spodní lišta na mobilu: jen odkaz na kalkulačku, nikdy form
+         +ulář. Zobrazí se po odscrollování                              
+       7 + *  z hero a zmizí natrvalo, jakmile návštěvník kalkulačku uvid
+         +í. */                                                          
+       8 +export function StickyCta() {                                  
+       9 +  const [heroOut, setHeroOut] = useState(false);               
+      10 +  const [calcSeen, setCalcSeen] = useState(false);             
+      11 +                                                               
+      12 +  useEffect(() => {                                            
+      13 +    const hero = document.getElementById("hero");              
+      14 +    const calc = document.getElementById("kalkulacka");        
+      15 +    if (!hero || !calc) return;                                
+      16 +    const observer = new IntersectionObserver((entries) => {   
+      17 +      for (const entry of entries) {                           
+      18 +        if (entry.target === hero) setHeroOut(!entry.isIntersec
+         +ting);                                                         
+      19 +        if (entry.target === calc && entry.isIntersecting) setC
+         +alcSeen(true);                                                 
+      20 +      }                                                        
+      21 +    });                                                        
+      22 +    observer.observe(hero);                                    
+      23 +    observer.observe(calc);                                    
+      24 +    return () => observer.disconnect();                        
+      25 +  }, []);                                                      
+      26 +                                                               
+      27 +  if (!heroOut || calcSeen) return null;                       
+      28 +  return (                                                     
+      29 +    <div className="fixed inset-x-0 bottom-0 z-10 border-t bord
+         +er-rule bg-paper/95 px-4 py-3 backdrop-blur-sm">               
+      30 +      <a                                                       
+      31 +        href="#kalkulacka"                                     
+      32 +        onClick={() => track("hero_cta_click", { cta: "sticky" 
+         +})}                                                            
+      33 +        className="mx-auto flex h-12 max-w-xl items-center just
+         +ify-center rounded-sm bg-ink font-semibold text-paper"         
+      34 +      >                                                        
+      35 +        Spočítat své poplatky                                  
+      36 +      </a>                                                     
+      37 +    </div>                                                     
+      38 +  );                                                           
+      39 +}                                                              
+  ⎿  (timeout 5m)
+
+● Lint hlásí zápis do ref během renderu. Ref nepotřebuji: efekt se při změně
+  vstupu spouští znovu, takže hodnoty v closure jsou vždy aktuální.
+
+● Bash(node - <<'EOF'
+      const fs=require('fs');const p='components/Calculator.tsx';let
+      t=fs.readFileSync(p,'utf8');…)
+  ⎿  Updated components/Calculator.tsx (+3 -5)
+      1  "use client";
+      2  
+      3 -import { useEffect, useId, useMemo, useRef, useState } from "rea
+        -ct";                                                            
+      3 +import { useEffect, useId, useMemo, useState } from "react";    
+      4  import { FeeReceipt } from "@/components/FeeReceipt";
+      5  import { clampInput, DEFAULT_INPUT, LIMITS, RETURN_OPTIONS } fro
+         m "@/lib/calc";
+      6  import { computeFees, type FeeRow } from "@/lib/fees";
+     ...
+      35    }
+      36  
+      37    // calc_result: první ustálený výsledek po interakci (návštěv
+          ník přestal měnit vstupy)
+      38 -  const latest = useRef({ input, gap: result.esmaGap });       
+      39 -  latest.current = { input, gap: result.esmaGap };             
+      38 +  const gap = result.esmaGap;                                  
+      39    useEffect(() => {
+      40      if (!interacted) return;
+      41      const timer = setTimeout(() => {
+      43 -      const { input, gap } = latest.current;                   
+      42        trackOnce("calc_result", { calc_input: input, calc_result
+          : { esma_gap: Math.round(gap) } });
+      43        setResultShown(true);
+      44      }, 800);
+      45      return () => clearTimeout(timer);
+      48 -  }, [interacted, input]);                                     
+      46 +  }, [interacted, input, gap]);                                
+      47  
+      48    const ids = { monthly: useId(), initial: useId(), years: useI
+          d(), ret: useId() };
+      49  
+  ⎿  (timeout 5m)
+
+● Build i lint jsou čisté. Výsledek chci vidět na vlastní oči, proto stáhnu
+  Chromium pro Playwright a udělám screenshot na 375 px.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● V WSL chybí systémové knihovny pro Chromium (libglib-2.0). Zkusím, jestli jdou
+  nainstalovat bez hesla.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Heslo pro sudo nemám. Pro vizuální kontrolu zkusím mezitím Chrome z Windows v
+  headless režimu: localhost se z Windows přeposílá do WSL.
+
+  Read 1 file, ran 1 shell command (ctrl+o to expand)
+
+● Na snímku chybí CSS i kalkulačka. Nejspíš běží starý server z kroku hero
+  (pkill předtím nedoběhl) a servíruje zastaralý build. Restartuji ho.
+
+  Read 2 files, ran 1 shell command (ctrl+o to expand)
+
+● Obsah vypadá useknutý vpravo. Podezírám minimální šířku okna Chrome na Windows
+  (kolem 500 px), ne chybu layoutu. Ověřím to snímkem širokým 560 px.
+
+  Read 1 file, ran 1 shell command (ctrl+o to expand)
+
+● Při 560 px je layout v pořádku, takže u 375 px šlo o minimální šířku okna
+  Chrome. Skutečnou kontrolu na 375 px udělá Playwright. Commituji kalkulačku.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Krok 6: porovnání tří dvojic se zdroji.
+
+● Bash(cat > components/TrackView.tsx <<'EOF'
+      "use client";…)
+  ⎿  Created components/Comparison.tsx (+50 -0)
+       1 +import { PairCard } from "@/components/PairCard";              
+       2 +import { TrackView } from "@/components/TrackView";            
+       3 +import { lockedPairs, previewPairs } from "@/lib/etfs";        
+       4 +                                                               
+       5 +const PRIIPS_URL = "https://eur-lex.europa.eu/eli/reg/2014/1286
+         +/oj";                                                          
+       6 +                                                               
+       7 +export function Comparison() {                                 
+       8 +  const [first, ...rest] = previewPairs();                     
+       9 +  return (                                                     
+      10 +    <section id="srovnani" aria-labelledby="srovnani-h" classNa
+         +me="scroll-mt-4 border-t border-rule px-4 py-10">              
+      11 +      <h2 id="srovnani-h" className="font-display text-2xl lead
+         +ing-8 font-semibold">                                          
+      12 +        Fondy z&nbsp;NYSE a&nbsp;jejich evropské varianty      
+      13 +      </h2>                                                    
+      14 +      <p className="mt-3 text-[15px] leading-6">               
+      15 +        Fondy domicilované v&nbsp;USA nemají sdělení klíčových 
+         +informací (KID), které pro prodej drobným investorům           
+      16 +        v&nbsp;EU vyžaduje{" "}                                
+      17 +        <a className="underline" href={PRIIPS_URL}>            
+      18 +          nařízení PRIIPs                                      
+      19 +        </a>                                                   
+      20 +        . Brokeři je proto drobným investorům v&nbsp;Česku běžn
+         +ě nenabízejí. Stejný index sledují fondy UCITS                 
+      21 +        z&nbsp;Irska. Srovnání je informativní, nejde o&nbsp;do
+         +poručení.                                                      
+      22 +      </p>                                                     
+      23 +                                                               
+      24 +      <div className="mt-8 space-y-8">                         
+      25 +        <TrackView event="compare_view">                       
+      26 +          <PairCard pair={first} />                            
+      27 +        </TrackView>                                           
+      28 +        {rest.map((pair) => (                                  
+      29 +          <PairCard key={pair.us.id} pair={pair} />            
+      30 +        ))}                                                    
+      31 +      </div>                                                   
+      32 +                                                               
+      33 +      <div className="mt-8 border-2 border-dashed border-ink p-
+         +4" data-testid="locked">                                       
+      34 +        <p className="font-semibold">                          
+      35 +          V&nbsp;plné verzi navíc:{" "}                        
+      36 +          {lockedPairs()                                       
+      37 +            .map((p) => `${p.us.ticker.value} → ${p.ucits.ticke
+         +r.value}`)                                                     
+      38 +            .join(", ")}                                       
+      39 +        </p>                                                   
+      40 +        <p className="mt-1 text-[15px] leading-6 text-muted">  
+     … 10 more lines (ctrl+o to expand)
+  ⎿  Updated components/Landing.tsx (+2 -0)
+      1  import { Calculator } from "@/components/Calculator";
+      2 +import { Comparison } from "@/components/Comparison";           
+      3  import { Hero } from "@/components/Hero";
+      4  import { PageView } from "@/components/PageView";
+      5  import { StickyCta } from "@/components/StickyCta";
+     ...
+      12        <PageView variant={variant} />
+      13        <Hero variant={variant} />
+      14        <Calculator rows={FEE_ROWS} />
+      15 +      <Comparison />                                           
+      16        <StickyCta />
+      17      </main>
+      18    );
+  ⎿  Created components/PairCard.tsx (+127 -0)
+        1 +import type { Fund, FundPair, Sourced } from "@/lib/etfs";    
+        2 +import { formatBillions, formatDate, formatPercent } from "@/l
+          +ib/format";                                                   
+        3 +                                                              
+        4 +const DISTRIBUTION = { accumulating: "akumulační", distributin
+          +g: "distribuční" } as const;                                  
+        5 +                                                              
+        6 +type Cell = { text: string; field: Sourced<unknown> | null }; 
+        7 +type Row = { label: string; us: Cell; ucits: Cell };          
+        8 +                                                              
+        9 +const cell = (field: Sourced<unknown>, text: string): Cell => 
+          +({ text, field });                                            
+       10 +                                                              
+       11 +function registration(fund: Fund): Cell {                     
+       12 +  const v = fund.registered_in_cz.value;                      
+       13 +  return cell(fund.registered_in_cz, v === true ? "ano (podle 
+          +emitenta)" : "emitent neuvádí");                              
+       14 +}                                                             
+       15 +                                                              
+       16 +function rows(pair: FundPair, full: boolean): Row[] {         
+       17 +  const { us, ucits } = pair;                                 
+       18 +  const base: Row[] = [                                       
+       19 +    { label: "Burza", us: cell(us.exchange, us.exchange.value)
+          +, ucits: cell(ucits.exchange, ucits.exchange.value) },        
+       20 +    { label: "Domicil", us: cell(us.domicile, us.domicile.valu
+          +e), ucits: cell(ucits.domicile, `${ucits.domicile.value} (UCIT
+          +S)`) },                                                       
+       21 +    { label: "TER ročně", us: cell(us.ter, formatPercent(us.te
+          +r.value)), ucits: cell(ucits.ter, formatPercent(ucits.ter.valu
+          +e)) },                                                        
+       22 +    {                                                         
+       23 +      label: "Dividendy",                                     
+       24 +      us: cell(us.distribution, DISTRIBUTION[us.distribution.v
+          +alue]),                                                       
+       25 +      ucits: cell(ucits.distribution, DISTRIBUTION[ucits.distr
+          +ibution.value]),                                              
+       26 +    },                                                        
+       27 +    {                                                         
+       28 +      label: "Měna",                                          
+       29 +      us: cell(us.currency, us.currency.value),               
+       30 +      ucits: cell(ucits.currency, `${ucits.currency.value}, fo
+          +nd v ${ucits.base_currency.value}`),                          
+       31 +    },                                                        
+       32 +  ];                                                          
+       33 +  if (!full) return base;                                     
+       34 +  return [                                                    
+       35 +    ...base,                                                  
+       36 +    {                                                         
+       37 +      label: "Velikost fondu",                                
+       38 +      us: cell(us.aum, `${formatBillions(us.aum.value.amount, 
+          +us.aum.value.currency)} k ${formatDate(us.aum.value.as_of)}`),
+       39 +      ucits: cell(                                            
+       40 +        ucits.aum,                                            
+     … 87 more lines (ctrl+o to expand)
+  ⎿  Created components/TrackView.tsx (+25 -0)
+       1 +"use client";                                                  
+       2 +                                                               
+       3 +import { type ReactNode, useEffect, useRef } from "react";     
+       4 +import { type TrackEvent, trackOnce } from "@/lib/track";      
+       5 +                                                               
+       6 +/** Odešle event (jednou), když je obsah z poloviny vidět. */  
+       7 +export function TrackView({ event, children }: { event: TrackEv
+         +ent; children: ReactNode }) {                                  
+       8 +  const ref = useRef<HTMLDivElement>(null);                    
+       9 +  useEffect(() => {                                            
+      10 +    const el = ref.current;                                    
+      11 +    if (!el) return;                                           
+      12 +    const observer = new IntersectionObserver(                 
+      13 +      ([entry]) => {                                           
+      14 +        if (entry.isIntersecting) {                            
+      15 +          trackOnce(event);                                    
+      16 +          observer.disconnect();                               
+      17 +        }                                                      
+      18 +      },                                                       
+      19 +      { threshold: 0.5 },                                      
+      20 +    );                                                         
+      21 +    observer.observe(el);                                      
+      22 +    return () => observer.disconnect();                        
+      23 +  }, [event]);                                                 
+      24 +  return <div ref={ref}>{children}</div>;                      
+      25 +}                                                              
+  ⎿  (timeout 2m)
+
+  Read 1 file, ran 1 shell command (ctrl+o to expand)
+
+● Porovnání vypadá dobře, čísla v účtence odpovídají ověřeným hodnotám (rozdíl
+  86 500 Kč, aktivní fond 105 200 Kč). Commituji.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Krok 7: formulář a děkovací stav.
+
+● Bash(cat > components/LeadForm.tsx <<'EOF'
+      "use client";…)
+  ⎿  Created components/FullComparison.tsx (+13 -0)
+       1 +import { PairCard } from "@/components/PairCard";              
+       2 +import { fundPairs } from "@/lib/etfs";                        
+       3 +                                                               
+       4 +/** Všech 5 dvojic se všemi poli – obsah za e-mail. */         
+       5 +export function FullComparison() {                             
+       6 +  return (                                                     
+       7 +    <>                                                         
+       8 +      {fundPairs().map((pair) => (                             
+       9 +        <PairCard key={pair.us.id} pair={pair} full />         
+      10 +      ))}                                                      
+      11 +    </>                                                        
+      12 +  );                                                           
+      13 +}                                                              
+  ⎿  Updated components/Landing.tsx (+3 -0)
+      1  import { Calculator } from "@/components/Calculator";
+      2  import { Comparison } from "@/components/Comparison";
+      3 +import { FullComparison } from "@/components/FullComparison";   
+      4  import { Hero } from "@/components/Hero";
+      5 +import { LeadForm } from "@/components/LeadForm";               
+      6  import { PageView } from "@/components/PageView";
+      7  import { StickyCta } from "@/components/StickyCta";
+      8  import { FEE_ROWS } from "@/lib/fee-rows";
+     ...
+      15        <Hero variant={variant} />
+      16        <Calculator rows={FEE_ROWS} />
+      17        <Comparison />
+      18 +      <LeadForm fullComparison={<FullComparison />} />         
+      19        <StickyCta />
+      20      </main>
+      21    );
+  ⎿  Created components/LeadForm.tsx (+110 -0)
+        1 +"use client";                                                 
+        2 +                                                              
+        3 +import { type FormEvent, type ReactNode, useId, useRef, useSta
+          +te } from "react";                                            
+        4 +import { ThankYou } from "@/components/ThankYou";             
+        5 +import { TrackView } from "@/components/TrackView";           
+        6 +import { CONSENT, OPERATOR, orTodo } from "@/lib/site";       
+        7 +import { trackOnce } from "@/lib/track";                      
+        8 +                                                              
+        9 +const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;                
+       10 +                                                              
+       11 +/** E-mail + nepovinný souhlas s novinkami. Po odeslání se hne
+          +d zobrazí slíbený obsah (krok 3: bez backendu). */            
+       12 +export function LeadForm({ fullComparison }: { fullComparison:
+          + ReactNode }) {                                               
+       13 +  const [email, setEmail] = useState("");                     
+       14 +  const [marketing, setMarketing] = useState(false);          
+       15 +  const [error, setError] = useState<string | null>(null);    
+       16 +  const [submitted, setSubmitted] = useState(false);          
+       17 +  const emailRef = useRef<HTMLInputElement>(null);            
+       18 +  const ids = { email: useId(), error: useId(), consent: useId
+          +(), gdpr: useId() };                                          
+       19 +                                                              
+       20 +  function onSubmit(e: FormEvent) {                           
+       21 +    e.preventDefault();                                       
+       22 +    const value = email.trim();                               
+       23 +    if (!EMAIL.test(value)) {                                 
+       24 +      setError(value ? "Zkontrolujte prosím e-mail, něco v něm
+          + chybí." : "Vyplňte prosím e-mail.");                         
+       25 +      emailRef.current?.focus();                              
+       26 +      return;                                                 
+       27 +    }                                                         
+       28 +    setError(null);                                           
+       29 +    // Krok 4: uložení leadu (Supabase), consent_text + consen
+          +t_at, double opt-in                                           
+       30 +    trackOnce("form_submit", { marketing_consent: marketing })
+          +;                                                             
+       31 +    setSubmitted(true);                                       
+       32 +  }                                                           
+       33 +                                                              
+       34 +  return (                                                    
+       35 +    <section id="formular" aria-labelledby="formular-h" classN
+          +ame="scroll-mt-4 border-t border-rule px-4 py-10">            
+       36 +      {submitted ? (                                          
+       37 +        <ThankYou>{fullComparison}</ThankYou>                 
+       38 +      ) : (                                                   
+       39 +        <TrackView event="form_view">                         
+       40 +          <h2 id="formular-h" className="font-display text-2xl
+          + leading-8 font-semibold">                                    
+     … 70 more lines (ctrl+o to expand)
+  ⎿  Created components/ThankYou.tsx (+71 -0)
+       1 +"use client";                                                  
+       2 +                                                               
+       3 +import { type ReactNode, useEffect, useId, useRef, useState } f
+         +rom "react";                                                   
+       4 +import { track } from "@/lib/track";                           
+       5 +                                                               
+       6 +const BROKER_ANSWERS = ["Ano", "Ne", "Zvažuji"] as const;      
+       7 +                                                               
+       8 +/** Děkovací stav: slíbený obsah hned na stránce, ne „čekejte n
+         +a e-mail“. Jedna nepovinná otázka. */                          
+       9 +export function ThankYou({ children }: { children: ReactNode })
+         + {                                                             
+      10 +  const heading = useRef<HTMLHeadingElement>(null);            
+      11 +  const [answer, setAnswer] = useState<string | null>(null);   
+      12 +  const questionId = useId();                                  
+      13 +                                                               
+      14 +  useEffect(() => {                                            
+      15 +    heading.current?.focus();                                  
+      16 +    heading.current?.scrollIntoView({ block: "start" });       
+      17 +  }, []);                                                      
+      18 +                                                               
+      19 +  return (                                                     
+      20 +    <div data-testid="thank-you">                              
+      21 +      <h2 ref={heading} tabIndex={-1} id="formular-h" className
+         +="font-display text-2xl leading-8 font-semibold outline-none"> 
+      22 +        Hotovo. Tady je plné srovnání.                         
+      23 +      </h2>                                                    
+      24 +      <p className="mt-2 text-[15px] leading-6 text-muted">    
+      25 +        Kopii vám pošleme e-mailem. Potvrďte prosím adresu odka
+         +zem, který vám přijde.                                         
+      26 +      </p>                                                     
+      27 +                                                               
+      28 +      <div className="mt-8 space-y-8">{children}</div>         
+      29 +                                                               
+      30 +      <section aria-labelledby="dane-h" className="mt-10 border
+         +-t-2 border-ink pt-3">                                         
+      31 +        <h3 id="dane-h" className="font-display text-xl font-se
+         +mibold">                                                       
+      32 +          Daňový tahák                                         
+      33 +        </h3>                                                  
+      34 +        {/* Krok 5 (texty): obsah W-8BEN a časového testu se zd
+         +roji, po kontrole. */}                                         
+      35 +        <p className="mt-2 text-[15px] leading-6">             
+      36 +          Tahák k&nbsp;formuláři W-8BEN a&nbsp;časovému testu p
+         +rávě prochází kontrolou. Pošleme vám ho e-mailem, jakmile      
+      37 +          bude hotový.                                         
+      38 +        </p>                                                   
+      39 +      </section>                                               
+      40 +                                                               
+     … 31 more lines (ctrl+o to expand)
+  ⎿  (timeout 2m)
+
+● Formulář prošel typovou kontrolou i lintem. Commituji ho a pokračuji sekcí
+  důvěry, patičkou a stránkou zásad.
+
+● Bash(git add components/ && git commit -q -m "UI: formulář e-mail + souhlas a
+      děkovací stav…)
+  ⎿  Created app/zasady/page.tsx (+43 -0)
+       1 +import type { Metadata } from "next";                          
+       2 +import { CONSENT, OPERATOR, orTodo } from "@/lib/site";        
+       3 +                                                               
+       4 +export const metadata: Metadata = {                            
+       5 +  title: "Zásady ochrany osobních údajů",                      
+       6 +  robots: { index: false },                                    
+       7 +};                                                             
+       8 +                                                               
+       9 +// Kostra. Plné znění doplní provozovatel a projde právní kontr
+         +olou před spuštěním.                                           
+      10 +export default function Zasady() {                             
+      11 +  return (                                                     
+      12 +    <main className="mx-auto w-full max-w-xl px-4 py-10 text-[1
+         +5px] leading-6">                                               
+      13 +      <a href="/" className="text-[13px] underline">           
+      14 +        ← Zpět na srovnání                                     
+      15 +      </a>                                                     
+      16 +      <h1 className="mt-4 font-display text-[34px] leading-[38p
+         +x] font-semibold">Zásady ochrany osobních údajů</h1>           
+      17 +      <p className="mt-4 border-2 border-loss p-3 font-semibold
+         + text-loss">                                                   
+      18 +        Koncept – plné znění doplní provozovatel a před spuštěn
+         +ím projde právní kontrolou.                                    
+      19 +      </p>                                                     
+      20 +                                                               
+      21 +      <h2 className="mt-8 font-display text-xl font-semibold">S
+         +právce</h2>                                                    
+      22 +      <p className="mt-1">                                     
+      23 +        {orTodo(OPERATOR.name, "název")}, IČO {orTodo(OPERATOR.
+         +ico, "IČO")}, {orTodo(OPERATOR.address, "sídlo")},{" "}        
+      24 +        {orTodo(OPERATOR.email, "kontaktní e-mail")}.          
+      25 +      </p>                                                     
+      26 +                                                               
+      27 +      <h2 className="mt-8 font-display text-xl font-semibold">J
+         +aké údaje a proč</h2>                                          
+      28 +      <ul className="mt-1 list-disc space-y-1 pl-5">           
+      29 +        <li>E-mail: {CONSENT.delivery}</li>                    
+      30 +        <li>Novinky e-mailem jen se souhlasem (čl. 6 odst. 1 pí
+         +sm. a GDPR), odvolatelným v&nbsp;každém e-mailu.</li>          
+      31 +        <li>Ukládáme čas a znění udělených souhlasů.</li>      
+      32 +      </ul>                                                    
+      33 +                                                               
+      34 +      <h2 className="mt-8 font-display text-xl font-semibold">D
+         +oba uložení, příjemci, vaše práva</h2>                         
+      35 +      <p className="mt-1">[doplnit]</p>                        
+      36 +                                                               
+      37 +      <h2 id="cookies" className="mt-8 font-display text-xl fon
+         +t-semibold">                                                   
+      38 +        Cookies                                                
+      39 +      </h2>                                                    
+      40 +      <p className="mt-1">[doplnit – analytika a reklamní pixel
+         +y jen po aktivním souhlasu]</p>                                
+     … 3 more lines (ctrl+o to expand)
+  ⎿  Created components/Footer.tsx (+21 -0)
+       1 +import { OPERATOR, orTodo } from "@/lib/site";                 
+       2 +                                                               
+       3 +export function Footer() {                                     
+       4 +  return (                                                     
+       5 +    <footer className="mx-auto w-full max-w-xl border-t-2 borde
+         +r-ink px-4 pt-6 pb-24 text-[13px] leading-5 text-muted">       
+       6 +      <p className="font-semibold text-ink">{orTodo(OPERATOR.na
+         +me, "název provozovatele")}</p>                                
+       7 +      <p>IČO: {orTodo(OPERATOR.ico, "IČO")}</p>                
+       8 +      <p>Sídlo: {orTodo(OPERATOR.address, "sídlo")}</p>        
+       9 +      <p>Kontakt: {OPERATOR.email ? <a href={`mailto:${OPERATOR
+         +.email}`}>{OPERATOR.email}</a> : orTodo(null, "e-mail")}</p>   
+      10 +      <nav aria-label="Právní informace" className="mt-4 flex f
+         +lex-wrap gap-x-5 gap-y-2">                                     
+      11 +        <a href="/zasady" className="underline">               
+      12 +          Zásady ochrany osobních údajů                        
+      13 +        </a>                                                   
+      14 +        {/* Krok 4: tlačítko otevře lištu nastavení cookies */}
+      15 +        <a href="/zasady#cookies" className="underline">       
+      16 +          Nastavení cookies                                    
+      17 +        </a>                                                   
+      18 +      </nav>                                                   
+      19 +    </footer>                                                  
+      20 +  );                                                           
+      21 +}                                                              
+  ⎿  Updated components/Landing.tsx (+6 -0)
+       1  import { Calculator } from "@/components/Calculator";
+       2  import { Comparison } from "@/components/Comparison";
+       3 +import { Footer } from "@/components/Footer";                  
+       4  import { FullComparison } from "@/components/FullComparison";
+       5  import { Hero } from "@/components/Hero";
+       6  import { LeadForm } from "@/components/LeadForm";
+       7  import { PageView } from "@/components/PageView";
+       8  import { StickyCta } from "@/components/StickyCta";
+       9 +import { Trust } from "@/components/Trust";                    
+      10  import { FEE_ROWS } from "@/lib/fee-rows";
+      11  import type { AdVariant } from "@/lib/track";
+      12  
+      13  export function Landing({ variant }: { variant: AdVariant }) {
+      14    return (
+      15 +    <>                                                         
+      16      <main className="mx-auto w-full max-w-xl flex-1">
+      17        <PageView variant={variant} />
+      18        <Hero variant={variant} />
+      19        <Calculator rows={FEE_ROWS} />
+      20        <Comparison />
+      21        <LeadForm fullComparison={<FullComparison />} />
+      22 +      <Trust />                                                
+      23        <StickyCta />
+      24      </main>
+      25 +    <Footer />                                                 
+      26 +    </>                                                        
+      27    );
+      28  }
+  ⎿  Created components/Trust.tsx (+41 -0)
+       1 +import { DATA_RETRIEVED_AT } from "@/lib/etfs";                
+       2 +import { ESMA } from "@/lib/fee-rows";                         
+       3 +import { formatDate } from "@/lib/format";                     
+       4 +import { OPERATOR, orTodo } from "@/lib/site";                 
+       5 +                                                               
+       6 +export function Trust() {                                      
+       7 +  return (                                                     
+       8 +    <section aria-labelledby="duvera-h" className="border-t bor
+         +der-rule px-4 py-10 text-[15px] leading-6">                    
+       9 +      <h2 id="duvera-h" className="font-display text-2xl leadin
+         +g-8 font-semibold">                                            
+      10 +        Odkud data jsou a&nbsp;kdo za stránkou stojí           
+      11 +      </h2>                                                    
+      12 +                                                               
+      13 +      <h3 className="mt-6 font-semibold">Data</h3>             
+      14 +      <p className="mt-1">                                     
+      15 +        Údaje o&nbsp;fondech pochází přímo od emitentů (Vanguar
+         +d, iShares, State Street SPDR), z&nbsp;prospektů na SEC        
+      16 +        EDGAR, z&nbsp;KID a&nbsp;z&nbsp;adresáře NYSE, staženo 
+         +{formatDate(DATA_RETRIEVED_AT)}. Průměrné náklady fondů        
+      17 +        v&nbsp;EU z&nbsp;                                      
+      18 +        <a href={ESMA.sourceUrl} className="underline">        
+      19 +          tržní zprávy ESMA                                    
+      20 +        </a>{" "}                                              
+      21 +        (data za rok 2024). U&nbsp;každé hodnoty ve srovnání je
+         + odkaz na zdroj.                                               
+      22 +      </p>                                                     
+      23 +                                                               
+      24 +      <h3 className="mt-6 font-semibold">Provozovatel</h3>     
+      25 +      <p className="mt-1">{orTodo(OPERATOR.name, "kdo za stránk
+         +ou stojí a proč ji provozuje")}</p>                            
+      26 +                                                               
+      27 +      <div role="note" aria-labelledby="riziko-h" className="mt
+         +-8 border-2 border-ink p-4">                                   
+      28 +        <h3 id="riziko-h" className="font-semibold">           
+      29 +          Upozornění na rizika                                 
+      30 +        </h3>                                                  
+      31 +        <ul className="mt-2 list-disc space-y-1 pl-5">         
+      32 +          <li>Hodnota investice může klesat i&nbsp;stoupat, můž
+         +ete přijít o&nbsp;část vložených peněz.</li>                   
+      33 +          <li>Fondy investují v&nbsp;USD. Změna kurzu USD/CZK m
+         +ůže výnos v&nbsp;korunách snížit i&nbsp;zvýšit.</li>           
+      34 +          <li>Minulé ani modelové výnosy nezaručují výnosy budo
+         +ucí.</li>                                                      
+      35 +          <li>Údaje platí k&nbsp;datu uvedenému u&nbsp;zdroje a
+         +&nbsp;mohou se změnit.</li>                                    
+      36 +          <li>Stránka je vzdělávací srovnání s&nbsp;daty, ne in
+         +vestiční doporučení ani nabídka produktu.</li>                 
+      37 +        </ul>                                                  
+      38 +      </div>                                                   
+      39 +    </section>                                                 
+      40 +  );                                                           
+     … 1 more lines (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs=require('fs');const p='components/Landing.tsx';let
+      t=fs.readFileSync(p,'utf8');…)
+  ⎿  Updated components/Landing.tsx (+10 -10)
+      13  export function Landing({ variant }: { variant: AdVariant }) {
+      14    return (
+      15      <>
+      16 -    <main className="mx-auto w-full max-w-xl flex-1">          
+      17 -      <PageView variant={variant} />                           
+      18 -      <Hero variant={variant} />                               
+      19 -      <Calculator rows={FEE_ROWS} />                           
+      20 -      <Comparison />                                           
+      21 -      <LeadForm fullComparison={<FullComparison />} />         
+      22 -      <Trust />                                                
+      23 -      <StickyCta />                                            
+      24 -    </main>                                                    
+      25 -    <Footer />                                                 
+      16 +      <main className="mx-auto w-full max-w-xl flex-1">        
+      17 +        <PageView variant={variant} />                         
+      18 +        <Hero variant={variant} />                             
+      19 +        <Calculator rows={FEE_ROWS} />                         
+      20 +        <Comparison />                                         
+      21 +        <LeadForm fullComparison={<FullComparison />} />       
+      22 +        <Trust />                                              
+      23 +        <StickyCta />                                          
+      24 +      </main>                                                  
+      25 +      <Footer />                                               
+      26      </>
+      27    );
+      28  }
+  ⎿  (timeout 5m)
+
+● Lint chce next/link pro interní odkazy. Opravím to všude, kde se odkazuje na /
+  nebo /zasady.
+
+● Bash(node - <<'EOF'
+      const fs=require('fs');…)
+  ⎿  Updated app/zasady/page.tsx (+3 -2)
+      1 +import Link from "next/link";                                   
+      2  import type { Metadata } from "next";
+      3  import { CONSENT, OPERATOR, orTodo } from "@/lib/site";
+      4  
+     ...
+      11  export default function Zasady() {
+      12    return (
+      13      <main className="mx-auto w-full max-w-xl px-4 py-10 text-[1
+          5px] leading-6">
+      13 -      <a href="/" className="text-[13px] underline">           
+      14 +      <Link href="/" className="text-[13px] underline">        
+      15          ← Zpět na srovnání
+      15 -      </a>                                                     
+      16 +      </Link>                                                  
+      17        <h1 className="mt-4 font-display text-[34px] leading-[38p
+          x] font-semibold">Zásady ochrany osobních údajů</h1>
+      18        <p className="mt-4 border-2 border-loss p-3 font-semibold
+           text-loss">
+      19          Koncept – plné znění doplní provozovatel a před spuštěn
+          ím projde právní kontrolou.
+  ⎿  Updated components/Footer.tsx (+5 -4)
+      1 +import Link from "next/link";                                   
+      2  import { OPERATOR, orTodo } from "@/lib/site";
+      3  
+      4  export function Footer() {
+     ...
+       9        <p>Sídlo: {orTodo(OPERATOR.address, "sídlo")}</p>
+      10        <p>Kontakt: {OPERATOR.email ? <a href={`mailto:${OPERATOR
+          .email}`}>{OPERATOR.email}</a> : orTodo(null, "e-mail")}</p>
+      11        <nav aria-label="Právní informace" className="mt-4 flex f
+          lex-wrap gap-x-5 gap-y-2">
+      11 -        <a href="/zasady" className="underline">               
+      12 +        <Link href="/zasady" className="underline">            
+      13            Zásady ochrany osobních údajů
+      13 -        </a>                                                   
+      14 +        </Link>                                                
+      15          {/* Krok 4: tlačítko otevře lištu nastavení cookies */}
+      15 -        <a href="/zasady#cookies" className="underline">       
+      16 +        <Link href="/zasady#cookies" className="underline">    
+      17            Nastavení cookies
+      17 -        </a>                                                   
+      18 +        </Link>                                                
+      19        </nav>
+      20      </footer>
+      21    );
+  ⎿  Updated components/LeadForm.tsx (+3 -2)
+      1  "use client";
+      2  
+      3 +import Link from "next/link";                                   
+      4  import { type FormEvent, type ReactNode, useId, useRef, useState
+          } from "react";
+      5  import { ThankYou } from "@/components/ThankYou";
+      6  import { TrackView } from "@/components/TrackView";
+     ...
+       98              <p id={ids.gdpr} className="mt-4 text-[13px] leadi
+           ng-5 text-muted">
+       99                Správce: {orTodo(OPERATOR.name, "provozovatele")
+           }. {CONSENT.delivery} Novinky posíláme jen se
+      100                souhlasem výše (čl. 6 odst. 1 písm. a&nbsp;GDPR)
+           . Podrobnosti v{" "}
+      100 -              <a href="/zasady" className="underline">        
+      101 +              <Link href="/zasady" className="underline">     
+      102                  zásadách ochrany osobních údajů
+      102 -              </a>                                            
+      103 +              </Link>                                         
+      104                .
+      105              </p>
+      106            </form>
+  ⎿  (timeout 2m)
+  Read 1 file, ran 1 shell command (ctrl+o to expand)
+
+● Snímky z okna se k formuláři neposunou, zbytek ověří Playwright. Commituji
+  sekci důvěry a patičku.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Commit je hotový. Playwright zatím nemá potřebné systémové knihovny. Zkusím je
+  získat bez sudo: stáhnout .deb balíčky přes apt-get download a rozbalit je do
+  lokální složky.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Tři balíčky vrací 404, protože místní index apt je zastaralý a bez sudo ho
+  neaktualizuji. Aktuální názvy souborů dohledám přímo v repozitáři Debianu.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Playwright teď běží s lokálně rozbalenými knihovnami. Na 375 px je scrollWidth
+  přesně 375, tedy bez vodorovného scrollu, a v konzoli nejsou chyby. Prohlédnu
+  si snímky.
+
+  Read 2 files (ctrl+o to expand)
+
+● Na skutečných 375 px se vše vejde a CTA v hero je nad ohybem. Mezery mezi
+  číslicemi v Plex Mono jsou ale moc široké, tak je přes word-spacing zúžím. Pak
+  napíšu Playwright testy.
+
+● Bash(node - <<'EOF'
+      const fs=require('fs');const p='app/globals.css';let
+      t=fs.readFileSync(p,'utf8');…)
+  ⎿  Updated .gitignore (+2 -0)
+      39  # typescript
+      40  *.tsbuildinfo
+      41  next-env.d.ts
+      42 +/test-results/                                                 
+      43 +/playwright-report/                                            
+  ⎿  Updated app/globals.css (+2 -0)
+      26  .num {
+      27    font-family: var(--font-mono);
+      28    font-variant-numeric: tabular-nums;
+      29 +  /* nezlomitelná mezera v monospace je široká jako číslice – z
+         +úžit oddělovač tisíců */                                       
+      30 +  word-spacing: -0.3em;                                        
+      31  }
+      32  
+      33  /* Perforovaný okraj účtenky (zoubky nahoře a dole) */
+  ⎿  Created e2e/landing.spec.ts (+126 -0)
+        1 +import { expect, type Page, test } from "@playwright/test";   
+        2 +                                                              
+        3 +const events = (page: Page) =>                                
+        4 +  page.evaluate(() => (window.dataLayer ?? []).map((e) => e.ev
+          +ent as string));                                              
+        5 +                                                              
+        6 +test("hero A: slib, číslo a CTA nad ohybem, bez e-mailu", asyn
+          +c ({ page }) => {                                             
+        7 +  await page.goto("/?utm_source=meta&utm_content=a-uspora");  
+        8 +  const h1 = page.getByRole("heading", { level: 1 });         
+        9 +  await expect(h1).toHaveText(/Kolik vás za 20\s+let stojí pop
+          +latky fondu\?/);                                              
+       10 +  await expect(h1).toBeInViewport();                          
+       11 +  await expect(page.getByTestId("hero-gap")).toHaveText("44 20
+          +0 Kč");                                                       
+       12 +  await expect(page.getByRole("link", { name: "Spočítat pro mě
+          +" })).toBeInViewport();                                       
+       13 +  await expect(page.locator("#hero")).not.toContainText(/\baž\
+          +b/);                                                          
+       14 +  await expect(page.locator("#hero input")).toHaveCount(0);   
+       15 +});                                                           
+       16 +                                                              
+       17 +test("hero B podle utm_content", async ({ page }) => {        
+       18 +  await page.goto("/?utm_content=b-zvedavost");               
+       19 +  await expect(page.getByRole("heading", { level: 1 })).toHave
+          +Text(/Proč si v\s+Česku nekoupíte VOO\?/);                    
+       20 +  await expect(page.getByText(/jaké alternativy jsou v\s+ČR do
+          +stupné/)).toBeVisible();                                      
+       21 +  await expect(page.getByRole("link", { name: "Ukázat srovnání
+          +" })).toBeInViewport();                                       
+       22 +  expect(new URL(page.url()).pathname).toBe("/");             
+       23 +});                                                           
+       24 +                                                              
+       25 +test("kalkulačka: CTA, změna vstupu, účtenka v Kč a nabídka pl
+          +né verze", async ({ page }) => {                              
+       26 +  await page.goto("/");                                       
+       27 +  await page.getByRole("link", { name: "Spočítat pro mě" }).cl
+          +ick();                                                        
+       28 +  await expect(page.locator("#kalkulacka")).toBeInViewport(); 
+       29 +  await expect(page.getByTestId("lead-offer")).toHaveCount(0);
+       30 +                                                              
+       31 +  const monthly = page.getByLabel("Měsíčně investuji");       
+       32 +  await monthly.fill("3000");                                 
+       33 +  await expect(page.getByTestId("receipt")).toContainText("720
+          + 000 Kč");                                                    
+       34 +  await expect(page.getByTestId("calc-gap")).toHaveText(/^\d[\
+          +d ]* Kč$/);                                                   
+       35 +  await expect(page.getByTestId("lead-offer")).toBeVisible(); 
+       36 +  await expect(page.getByTestId("lead-offer")).toHaveAttribute
+          +("href", "#formular");                                        
+       37 +});                                                           
+       38 +                                                              
+       39 +test("kalkulačka při 2 000 Kč / 20 let / 0 % ukáže stejný rozd
+          +íl jako hero", async ({ page }) => {                          
+       40 +  await page.goto("/");                                       
+     … 86 more lines (ctrl+o to expand)
+  ⎿  Created playwright.config.ts (+23 -0)
+       1 +import { defineConfig } from "@playwright/test";               
+       2 +                                                               
+       3 +// Mobile first: všechny testy na šířce 375 px (iPhone SE / min
+         +i) proti produkčnímu buildu.                                   
+       4 +export default defineConfig({                                  
+       5 +  testDir: "e2e",                                              
+       6 +  fullyParallel: true,                                         
+       7 +  reporter: "list",                                            
+       8 +  use: {                                                       
+       9 +    baseURL: "http://localhost:3100",                          
+      10 +    viewport: { width: 375, height: 812 },                     
+      11 +    isMobile: true,                                            
+      12 +    hasTouch: true,                                            
+      13 +    deviceScaleFactor: 2,                                      
+      14 +    locale: "cs-CZ",                                           
+      15 +  },                                                           
+      16 +  projects: [{ name: "mobile-375", use: { browserName: "chromiu
+         +m" } }],                                                       
+      17 +  webServer: {                                                 
+      18 +    command: "npm run build && npx next start -p 3100",        
+      19 +    url: "http://localhost:3100",                              
+      20 +    reuseExistingServer: !process.env.CI,                      
+      21 +    timeout: 180_000,                                          
+      22 +  },                                                           
+      23 +});                                                            
+  ⎿  (timeout 10m)
+
+● Bash(sed -i 's/page.getByLabel("E-mail")/page.getByRole("textbox", { name:
+      "E-mail" })/g' e2e/landing.spec.ts &&
+      S=/tmp/claude-1000/-home-snnikol-work-etf-srovnani/5…)
+  ⎿  Updated e2e/landing.spec.ts (+5 -5)
+      64  
+      65    await page.getByRole("button", { name: "Zobrazit plné srovnán
+          í" }).click();
+      66    await expect(page.getByRole("alert")).toHaveText(/Vyplňte pro
+          sím e-mail/);
+      67 -  await page.getByLabel("E-mail").fill("jan@seznam");          
+      67 +  await page.getByRole("textbox", { name: "E-mail" }).fill("jan
+         +@seznam");                                                     
+      68    await page.getByRole("button", { name: "Zobrazit plné srovnán
+          í" }).click();
+      69    await expect(page.getByRole("alert")).toHaveText(/Zkontrolujt
+          e/);
+      70 -  await expect(page.getByLabel("E-mail")).toHaveAttribute("aria
+         --invalid", "true");                                            
+      70 +  await expect(page.getByRole("textbox", { name: "E-mail" })).t
+         +oHaveAttribute("aria-invalid", "true");                        
+      71  
+      72 -  await page.getByLabel("E-mail").fill("jan@seznam.cz");       
+      72 +  await page.getByRole("textbox", { name: "E-mail" }).fill("jan
+         +@seznam.cz");                                                  
+      73    await page.getByRole("button", { name: "Zobrazit plné srovnán
+          í" }).click();
+      74    const thanks = page.getByTestId("thank-you");
+      75    await expect(thanks).toBeVisible();
+     ...
+      79  
+      80  test("formulář jde odeslat jen klávesnicí", async ({ page }) =>
+           {
+      81    await page.goto("/#formular");
+      82 -  await page.getByLabel("E-mail").focus();                     
+      82 +  await page.getByRole("textbox", { name: "E-mail" }).focus(); 
+      83    await page.keyboard.type("eva@example.cz");
+      84    await page.keyboard.press("Tab");
+      85    await expect(page.getByRole("checkbox")).toBeFocused();
+     ...
+      113    await expect.poll(() => events(page)).toContain("compare_vie
+           w");
+      114    await page.getByTestId("lead-offer").click();
+      115    await expect.poll(() => events(page)).toContain("form_view")
+           ;
+      116 -  await page.getByLabel("E-mail").fill("petr@example.cz");    
+      116 +  await page.getByRole("textbox", { name: "E-mail" }).fill("pe
+          +tr@example.cz");                                              
+      117    await page.getByRole("button", { name: "Zobrazit plné srovná
+           ní" }).click();
+      118    await expect(page.getByTestId("thank-you")).toBeVisible();
+      119  
+  ⎿  (timeout 10m)
+
+● Bash(node - <<'EOF'
+      const fs=require('fs');const p='e2e/landing.spec.ts';let
+      t=fs.readFileSync(p,'utf8');…)
+  ⎿  Updated e2e/landing.spec.ts (+6 -3)
+      20    await expect(page.getByText(/jaké alternativy jsou v\s+ČR dos
+          tupné/)).toBeVisible();
+      21    await expect(page.getByRole("link", { name: "Ukázat srovnání"
+           })).toBeInViewport();
+      22    expect(new URL(page.url()).pathname).toBe("/");
+      23 +  await expect.poll(() => page.evaluate(() => window.dataLayer?
+         +.[0]?.ad_variant)).toBe("b");                                  
+      24  });
+      25  
+      26  test("kalkulačka: CTA, změna vstupu, účtenka v Kč a nabídka pln
+          é verze", async ({ page }) => {
+     ...
+      103    }
+      104  });
+      105  
+      106 +// Varianta A: CTA vede na kalkulačku, takže pořadí odpovídá f
+          +unnelu z CLAUDE.md.                                           
+      107 +// (U varianty B vede CTA na srovnání a compare_view přijde př
+          +ed kalkulačkou – to je v pořádku.)                            
+      108  test("měření: celá cesta v pořadí funnelu s ad_variant a UTM",
+            async ({ page }) => {
+      106 -  await page.goto("/?utm_source=meta&utm_campaign=etf&utm_cont
+          -ent=b-zvedavost");                                            
+      109 +  await page.goto("/?utm_source=meta&utm_campaign=etf&utm_cont
+          +ent=a-uspora");                                               
+      110    await expect.poll(() => events(page)).toContain("page_view")
+           ;
+      108 -  await page.getByRole("link", { name: "Ukázat srovnání" }).cl
+          -ick();                                                        
+      111 +  await page.getByRole("link", { name: "Spočítat pro mě" }).cl
+          +ick();                                                        
+      112    await page.locator("#kalkulacka").scrollIntoViewIfNeeded();
+      113    await page.getByLabel("Měsíčně investuji").fill("5000");
+      114    await expect(page.getByTestId("lead-offer")).toBeVisible();
+     ...
+      124    expect((await events(page)).filter((e) => funnel.includes(e)
+           )).toEqual(funnel);
+      125    const layer = await page.evaluate(() => window.dataLayer!);
+      126    for (const entry of layer) {
+      124 -    expect(entry).toMatchObject({ ad_variant: "b", utm_source:
+          - "meta", utm_content: "b-zvedavost" });                       
+      127 +    expect(entry).toMatchObject({ ad_variant: "a", utm_source:
+          + "meta", utm_content: "a-uspora" });                          
+      128    }
+      129  });
+  ⎿  (timeout 10m)
+
+● Funnel test prochází. Poslední selhání je opět selektor: role alert má i
+  oznamovač navigace Next.js. Omezím ho na sekci formuláře.
+
+● Bash(sed -i
+      's/page.getByRole("alert")/page.locator("#formular").getByRole("alert")/g'
+      e2e/landing.spec.ts &&
+      S=/tmp/claude-1000/-home-snnikol-work-etf-srovnani/54a6…)
+  ⎿  Updated e2e/landing.spec.ts (+2 -2)
+      64    await expect(consent).not.toBeChecked();
+      65  
+      66    await page.getByRole("button", { name: "Zobrazit plné srovnán
+          í" }).click();
+      67 -  await expect(page.getByRole("alert")).toHaveText(/Vyplňte pro
+         -sím e-mail/);                                                  
+      67 +  await expect(page.locator("#formular").getByRole("alert")).to
+         +HaveText(/Vyplňte prosím e-mail/);                             
+      68    await page.getByRole("textbox", { name: "E-mail" }).fill("jan
+          @seznam");
+      69    await page.getByRole("button", { name: "Zobrazit plné srovnán
+          í" }).click();
+      70 -  await expect(page.getByRole("alert")).toHaveText(/Zkontrolujt
+         -e/);                                                           
+      70 +  await expect(page.locator("#formular").getByRole("alert")).to
+         +HaveText(/Zkontrolujte/);                                      
+      71    await expect(page.getByRole("textbox", { name: "E-mail" })).t
+          oHaveAttribute("aria-invalid", "true");
+      72  
+      73    await page.getByRole("textbox", { name: "E-mail" }).fill("jan
+          @seznam.cz");
+  ⎿  (timeout 10m)
+
+● Třetí běh skončil jen 8 z 9, jeden test je tedy nestabilní. Zjistím, který.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Ve 45 opakováních ani v pěti samostatných bězích se selhání nezopakovalo.
+  Výsledek toho jednoho běhu (8 z 9) jsem nezachytil, zmíním ho ve shrnutí.
+  Commituji testy.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Krok 10: dokumentace, tedy README, ads/ a docs/ai-chyby.md. Nejdřív si přečtu,
+  co je v ads/README.md.
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs=require('fs');…)
+  ⎿  Updated CLAUDE.md (+2 -2)
+      79  
+      80  ## Dvě verze reklamy
+      81  
+      82 -- **A – úspora:** „Na poplatcích ETF můžete za 20 let ztratit d
+         -esítky tisíc Kč. Spočítejte si to.“                            
+      83 -- **B – zvědavost:** „Proč si v Česku nekoupíte VOO? A který fo
+         -nd místo něj.“                                                 
+      82 +- **A – úspora:** „Rozdíl v poplatcích fondů dělá za 20 let des
+         +ítky tisíc Kč, i bez jakéhokoli výnosu. Spočítejte si to.“ (ově
+         +ření a disclaimer v `ads/README.md`)                           
+      83 +- **B – zvědavost:** „Proč si v Česku nekoupíte VOO? A jaké alt
+         +ernativy jsou v ČR dostupné.“                                  
+      84  - Ke každé: vizuál 1:1 / 4:5 (feed) a 9:16 (stories), primární 
+          text, nadpis, CTA, návrh cílení. Hero stránky musí odpovídat sl
+          ibu reklamy (případně varianta hero podle `utm_content`).
+      85  
+      86  ## Technologie
+  ⎿  Updated ads/README.md (+16 -3)
+       4  
+       5  | Složka | Varianta | Slib |
+       6  | --- | --- | --- |
+       7 -| `a-uspora/` | A – úspora | Na poplatcích ETF můžete za 20 let
+         - ztratit desítky tisíc Kč. Spočítejte si to. |                 
+       8 -| `b-zvedavost/` | B – zvědavost | Proč si v Česku nekoupíte VO
+         -O? A který fond místo něj. |                                   
+       7 +| `a-uspora/` | A – úspora | Rozdíl v poplatcích fondů dělá za 
+         +20 let desítky tisíc Kč, i bez jakéhokoli výnosu. Spočítejte si
+         + to. |                                                         
+       8 +| `b-zvedavost/` | B – zvědavost | Proč si v Česku nekoupíte VO
+         +O? A jaké alternativy jsou v ČR dostupné. |                    
+       9  
+      10  ## Obsah každé varianty
+      11  
+      12  - vizuál 1:1 nebo 4:5 (feed) a 9:16 (stories),
+      13  - primární text, nadpis, CTA,
+      14  - návrh cílení (ČR, 25–45 let, s ohledem na omezení finančních 
+          reklam na Meta a Google),
+      15 -- `utm_content` hodnota, podle které stránka ukáže odpovídající
+         - hero.                                                         
+      15 +- `utm_content` hodnota, podle které stránka ukáže odpovídající
+         + hero: začíná `a-` (např. `a-uspora-feed`) nebo `b-` (`b-zvedav
+         +ost-stories`). Hodnota začínající `b` → hero B, cokoli jiného →
+         + hero A (`proxy.ts`).                                          
+      16 +                                                               
+      17 +## Ověření slibu A (2026-10-09)                                
+      18 +                                                               
+      19 +Původní text „Na poplatcích ETF můžete za 20 let ztratit desítk
+         +y tisíc Kč“ z našich dat neplatí: mezi ETF v datech (TER 0,03–0
+         +,14 %) dělá rozdíl za 20 let při 2 000 Kč měsíčně a modelovém v
+         +ýnosu 5 % jen asi 3 800–10 300 Kč. Platí až při srovnání průměr
+         +ného ETF s průměrným aktivním akciovým fondem v EU, a to i bez 
+         +výnosu:                                                        
+      20 +                                                               
+      21 +- ESMA, *Costs and Performance of EU Retail Investment Products
+         + 2025* (3. 3. 2026, data 2024): pasivní akciové ETF 0,2 %, akti
+         +vní akciové fondy bez ETF 1,2 % průběžných nákladů ročně (`data
+         +/benchmarks.json`).                                            
+      22 +- 2 000 Kč měsíčně, 20 let, výnos 0 %: rozdíl **44 246 Kč** (za
+         +mčeno unit testem `lib/calc.test.ts`, v reklamě a hero zaokrouh
+         +leno na 44 200 Kč).                                            
+      23 +                                                               
+      24 +Proto nový text (sloveso „ztratit“ je nepřesné – poplatek se pl
+         +atí) a povinný disclaimer v reklamě:                           
+      25 +                                                               
+      26 +> Průměrné průběžné náklady ETF (0,2 %) vs. aktivních akciových
+         + fondů v EU (1,2 %) podle ESMA (2026, data 2024), 2 000 Kč měsí
+         +čně po dobu 20 let, výnos 0 %: rozdíl 44 200 Kč. Modelový výpoč
+         +et, ne doporučení.                                             
+      27 +                                                               
+      28 +Hero B: „A jaké alternativy jsou v ČR dostupné“ místo „který fo
+         +nd místo něj“ – bez výzvy ke koupi.                            
+
+● Teď README (rozhodnutí, zdroje, spuštění testů) a docs/ai-chyby.md.
+
+● Bash(node - <<'EOF'
+      const fs=require('fs');let r=fs.readFileSync('README.md','utf8');…)
+  ⎿  Updated README.md (+17 -1)
+      60  9. **Dvě měny.** `currency` = měna obchodování na burze, `base_
+          currency` = měna fondu. Pro měnové riziko USD/CZK je podstatná 
+          měna fondu – u všech 10 fondů USD.
+      61  10. **AUM = aktiva celého fondu s datem ze zdroje**, ne jen dat
+          um stažení. Velikost se mění denně; datum musí být vidět.
+      62  11. **ISIN US fondů dopočítán z CUSIP.** Weby emitentů v USA IS
+          IN neuvádějí. Dopočet podle ISO 6166 ověřujeme proti OpenFIGI.
+      63 +12. **Slib reklamy A stojí na průměrech ESMA, ne na našich ETF.
+         +** Mezi ETF v datech (TER 0,03–0,14 %) je rozdíl za 20 let jen 
+         +v jednotkách tisíc Kč, „desítky tisíc“ by byla nepravda. Platí 
+         +až srovnání průměrného ETF (0,2 %) s průměrným aktivním akciový
+         +m fondem v EU (1,2 %) podle ESMA. Obě čísla jsou ze stejného zd
+         +roje a metodiky. Konkrétní fond české banky nepoužíváme: šlo by
+         + o porovnávací reklamu a jeden KID neukazuje průměr. Podrobně v
+         + [`ads/README.md`](ads/README.md).                             
+      64 +13. **Hero A a reklama A počítají s výnosem 0 %.** Tvrzení tak 
+         +nestojí na žádném předpokladu výnosu: 2 000 Kč měsíčně, 20 let 
+         +→ 44 200 Kč. Číslo v hero se počítá živě stejnou funkcí jako ka
+         +lkulačka. Při 2 000 Kč / 20 let / 0 % ukáže kalkulačka v řádku 
+         +„Rozdíl“ totéž číslo (hlídá unit i E2E test).                  
+      65 +14. **Kalkulačka má výchozí modelový výnos 5 % – vědomá volba b
+         +ez benchmarku.** Kulaté číslo pro ilustraci, ne odhad. Přepínač
+         + 0/3/5/7 % a text „zvolený příklad, ne odhad ani slib; výnos mů
+         +že být i záporný“ přímo u volby. Náklad = poplatky + výnos, o k
+         +terý kvůli nim investor přijde (měsíční model, TER strháván prů
+         +běžně).                                                        
+      66 +15. **V účtence jen UCITS fondy (dostupné v ČR) seskupené podle
+         + TER, plus dva průměry ESMA.** US fondy v kalkulačce nejsou – s
+         +tránka je nenabízí. Žádný řádek není označen jako „nejlepší“.  
+      67 +16. **Varianta hero podle `utm_content`:** hodnota začínající `
+         +b` → hero B, jinak A. `proxy.ts` přepisuje na staticky předrend
+         +erovanou `/v/b` (noindex, canonical `/`), takže hero při načten
+         +í nebliká a URL s UTM zůstává.                                 
+      68 +17. **Formulář: e-mail + jeden nepovinný nepředvyplněný souhlas
+         + s novinkami.** Doručení srovnání je vyřízení žádosti (čl. 6 od
+         +st. 1 písm. b GDPR), novinky jen se souhlasem (480/2004) – oba 
+         +texty jsou na stránce oddělené. Údaje provozovatele zatím vidit
+         +elně „[doplnit]“ – nevymýšlíme je.                             
+      69  
+      70  ## Co chybí a proč
+      71  
+      72  - **Registr ČNB jsme nepoužili.** Seznam zahraničních investičn
+          ích fondů (JERRS) má vyhledávání za CAPTCHA a webová služba WS 
+          JERRS vyžaduje certifikát a podle ISIN nehledá. Po 15 minutách 
+          pokusů jsme to vzdali. Místo toho pole `registered_in_cz` vychá
+          zí ze seznamu zemí registrace na stránce emitenta: `true` u SPY
+          L, SXR8 a SXR4. Vanguard (VUAA, VWCE) seznam zemí neuvádí, prot
+          o `null`. Toto pole zatím neprošlo ruční kontrolou.
+      73  - **Distribuční třídy UCITS fondů** (SPY5, VUSA, IUSA, VWRL) ne
+          jsou ověřené; v datech jsou jen jako poznámka.
+      74  - **Přesný UCITS ekvivalent VTI (celý US trh včetně malých fire
+          m)** jsme nenašli. SPDR Russell 3000 UCITS se podle OpenFIGI a 
+          SSGA zdá zrušený.
+      75 +- **Průměrné náklady fondů přímo v ČR.** ESMA má přílohu po zem
+         +ích (Annexes PDF); hodnotu za ČR jsme zatím nedohledali. Tisk u
+         +vádí průměr kolem 2 % (e15), ale jde o sekundární zdroj bez met
+         +odiky, proto ho nepoužíváme.                                   
+      76 +- **Údaje provozovatele, zásady ochrany údajů a daňový tahák** 
+         +(krok 3 je jen UI). Na stránce jsou viditelně označené jako „[d
+         +oplnit]“ nebo „připravujeme“.                                  
+      77  
+      78  ## Zdroje dat
+      79  
+     ...
+      91  | Kontrola ISIN | OpenFIGI (Bloomberg) | [openfigi.com](https:/
+          /www.openfigi.com) | 2026-10-08 |
+      92  | Kotace SXR4 na Xetře | Deutsche Börse | [live.deutsche-boerse
+          .com](https://live.deutsche-boerse.com/etf/ishares-msci-usa-uci
+          ts-etf-usd-acc) | 2026-10-09 |
+      93  | Pokrytí indexu MSCI USA | MSCI – factsheet indexu | [msci.com
+          ](https://www.msci.com/documents/10199/255599/msci-usa-index-ne
+          t.pdf) | 2026-10-09 |
+      94 +| Průměrné náklady ETF a aktivních fondů v EU | ESMA – Costs an
+         +d Performance of EU Retail Investment Products 2025 (data 2024)
+         + | [esma.europa.eu](https://www.esma.europa.eu/sites/default/fi
+         +les/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and_Pe
+         +rformance_of_EU_Retail_Investment_Products.pdf) | 2026-10-09 | 
+      95 +| KID jako podmínka prodeje drobným investorům | Nařízení (EU) 
+         +č. 1286/2014 (PRIIPs) | [eur-lex.europa.eu](https://eur-lex.eur
+         +opa.eu/eli/reg/2014/1286/oj) | – |                             
+      96  
+      97  ## Právní upozornění
+      98  
+     ...
+      104  
+      105  ```bash
+      106  npm install
+       97 -npm run dev     # http://localhost:3000                       
+      107 +npm run dev          # http://localhost:3000                  
+      108  npm run build
+      109 +npm test             # unit testy výpočtu (Vitest)            
+      110 +npm run check-data   # kontrola zdrojů v data/                
+      111 +npx playwright install --with-deps chromium   # jednou        
+      112 +npm run e2e          # Playwright, mobil 375 px               
+      113  ```
+      114 +                                                              
+     … 1 more lines (ctrl+o to expand)
+  ⎿  Updated docs/ai-chyby.md (+4 -0)
+       8  | 2026-10-08 | V plánu kroku 2 nadpis uváděl „6 US ETF“, tabulk
+          a obsahovala 5 | Odhalila AI sama při kontrole plánu (a přehléd
+          l to i člověk při revizi plánu) | Opraveno na 5 fondů |
+       9  | 2026-10-08 | V plánu dat uvedla, že VTI sleduje „CRSP US Tota
+          l Market Index“ (zastaralá znalost z tréninku). Od 29. 7. 2026 
+          se index jmenuje Morningstar U.S. Total Market Index | Při stah
+          ování dat: web Vanguardu uváděl jiný název než plán, dohledána 
+          tisková zpráva Vanguardu | V datech název z webu + poznámka o p
+          řejmenování |
+      10  | 2026-10-08 | Při hledání stránky VUAA odhadla URL Vanguardu s
+           portem 9679 – ten patří VWCE (FTSE All-World), slug v URL se i
+          gnoruje | AI si všimla, že titulek stránky nesedí s fondem | Po
+          rt VUAA (9694) dohledán vyhledáváním; odhadnuté URL se už nepou
+          žívají bez kontroly titulku |
+      11 +| 2026-10-09 | V plánu kroku 3 účtenka ukazovala náklad aktivní
+         +ho fondu „−86 500 Kč“. To je ale rozdíl 0,2 % vs. 1,2 %, náklad
+         + 1,2 % proti TER 0 vychází podle vlastního vzorce na 105 200 Kč
+         +. Hero mělo ukazovat stejné číslo jako účtenka bez řádku, ze kt
+         +erého by šlo dopočítat | Člověk při revizi plánu | Do účtenky p
+         +řidány řádky „Průměrný ETF v EU 0,2 %“ a „Rozdíl“, hero = přesn
+         +ě `esmaGap` z `computeFees()`; všechna tři čísla zamčena unit t
+         +esty |                                                         
+      12 +| 2026-10-09 | Plán hero A stavěl číslo na modelovém výnosu 5 %
+         + a použil „až 86 500 Kč“ („až“ = nejvyšší možná hodnota, zavádě
+         +jící). Hero B „co koupit místo něj“ zní jako výzva ke koupi | Č
+         +lověk při revizi plánu | Hero a reklama A s výnosem 0 % (44 200
+         + Kč), bez „až“; hero B „jaké alternativy jsou v ČR dostupné“; E
+         +2E test hlídá, že hero A neobsahuje „až“ |                     
+      13 +| 2026-10-09 | V paletě navrhla šedou #C9C2B3 bez omezení použi
+         +tí – na textu by měla kontrast 1,54 : 1 | Člověk při revizi plá
+         +nu | Šedá jen na linky; pro text tmavší #5E5A52 (6,0 : 1), akce
+         +nt na textu ztmaven na #B03A0A (5,3 : 1) – kontrast spočítán sk
+         +riptem |                                                       
+      14 +| 2026-10-09 | První verze E2E testů selhala na vlastních selek
+         +torech: `getByLabel("E-mail")` chytal i checkbox „…dostávat e-m
+         +ailem…“, `getByRole("alert")` i oznamovač navigace Next.js. Tes
+         +t pořadí funnelu běžel na variantě B, jejíž CTA vede na srovnán
+         +í, takže compare_view logicky přišel před kalkulačkou | Běh tes
+         +tů | Přesnější selektory (role textbox, alert jen v #formular),
+         + funnel test na variantě A + zvláštní ověření ad_variant u B | 
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Na závěr si prohlédnu děkovací stav na 375 px, ten zatím nikdo neviděl.
+
+  Read 2 files, ran 1 shell command (ctrl+o to expand)
+
+● Krok 3 je hotový v 10 commitech, nic jsem nepushoval. Unit testy (10/10),
+  kontrola dat, lint, typy a build procházejí. Playwright test na 375 px (9
+  testů) prošel opakovaně, jednou ale skončil 8 z 9 (podrobnosti níže).
+
+  Co vzniklo
+  - Vzhled: směr „Výpis z účtu“. Fonty Fraunces + IBM Plex, papírová paleta s
+    jedním akcentem pro částky poplatků. Výsledek kalkulačky vypadá jako účtenka
+    s perforovaným okrajem. Kontrast textu jsem spočítal, šedá #C9C2B3 je jen
+    na linkách.
+  - Hero A: „I bez jakéhokoli výnosu: 44 200 Kč za 20 let při 2 000 Kč měsíčně“.
+    Číslo se počítá stejnou funkcí jako kalkulačka. Unit test hlídá přesnou
+    hodnotu 44 246 Kč a E2E test kontroluje, že kalkulačka při 2 000 Kč / 20 let
+    / 0 % ukáže totéž číslo.
+  - Hero B: „…A jaké alternativy jsou v ČR dostupné“. Která varianta se zobrazí,
+    rozhoduje utm_content: hodnota začínající b dá hero B, cokoli jiného hero
+    A. Obě varianty jsou statické, takže hero při načtení nebliká.
+  - Kalkulačka: výchozí výnos 5 %. V účtence jsou UCITS fondy seskupené podle
+    TER, dva průměry ESMA a řádek „Rozdíl“. Odkaz na formulář se objeví až po
+    výsledku.
+  - Porovnání: tři dvojice se stejným indexem S&P 500, u každé hodnoty je číslo
+    zdroje s odkazem a datem stažení. VTI a VT jsou zamčené pro plnou verzi.
+  - Formulář: e-mail a jeden nepovinný, nezaškrtnutý souhlas s novinkami. Po
+    odeslání se hned zobrazí plné srovnání všech pěti dvojic a jedna nepovinná
+    otázka.
+  - Důvěra a patička: rizikové upozornění, odkud jsou data, patička a kostra
+    stránky zásad.
+  - Dokumentace: nový text reklamy A s disclaimerem je v ads/README.md.
+    Rozhodnutí 12–17 a zdroje jsou v README.md. Do docs/ai-chyby.md přibyly 4
+    chyby AI. Texty reklam jsem sjednotil i v CLAUDE.md, protože tam byla
+    původní znění.
+
+  Musíš udělat ty
+  1. Ověřit čísla ESMA v PDF: 0,2 % a 1,2 %, včetně čísla strany (asi s. 21).
+     Checklist je v docs/overeni-dat.md. Text jsem z PDF vytahoval vlastním
+     skriptem, takže to zatím není ověřené.
+  2. Doplnit údaje provozovatele. Na stránce zatím viditelně stojí „[doplnit]“,
+     nic jsem si nevymýšlel.
+  3. Spustit sudo npx playwright install-deps chromium. Ve WSL chybí systémové
+     knihovny pro Chromium. Testy jsem pouštěl s knihovnami rozbalenými do
+     dočasné složky, bez toho kroku ti npm run e2e nepoběží.
+
+  Otevřené body
+  - Daňový tahák zatím neexistuje. Formulář ho slibuje, ale děkovací obrazovka
+    říká „připravujeme“. Bez zdrojů jsem ho psát nechtěl, patří do kroku 5
+    (texty).
+  - V plném srovnání jsou vidět interní poznámky z dat. Například „neověřováno“
+    nebo dlouhá poznámka k VTI s URL. Před spuštěním je potřeba je přepsat do
+    čtivé podoby.
+  - Jeden běh Playwrightu skončil 8 z 9. Ve 45 dalších opakováních se to
+    nezopakovalo a výstup toho běhu jsem nezachytil, takže nevím, který test
+    selhal. Podezřelý zůstává.
+  - Úplné CSS kontroly nejsou hotové. Ruční kontrolu jsem dělal jen přes
+    screenshoty. Lighthouse a test na skutečném telefonu patří do kroku 15. 10.
+  - Odchylky od plánu: pruhy v účtence jsem nedal do samostatné FeeBars.tsx, ale
+    přímo do účtenky. Do Playwright commitu se dostala i drobná úprava mezer v
+    číslech.
+
+  Nezapomeň na /export do ai-log/.
+
+❯ Ruční ověření ESMA: citace „active equity ETFs have higher ongoing costs
+  (0.3%) than passive equity ETFs (0.2%) but remain far below active equity
+  funds excluding ETFs (1.2%)“ je v PDF na straně 21 a sedí. Doplň číslo strany
+  do data/benchmarks.json a odškrtni položku v docs/overeni-dat.md.
+  Provozovatel: „Ukázkový projekt do výběrového řízení. Autor: Nikolas Hošek,
+  hosek@weborio.cz“. V README do „Co chybí“ uveď, že před ostrým spuštěním je
+  nutné doplnit údaje skutečného provozovatele.
+  Interní poznámky z dat („neověřováno“, URL, poznámka k VTI) se v plném
+  srovnání nesmí zobrazovat. Přidej krátké veřejné poznámky (public_note) a
+  zobrazuj jen ty.
+  Daňový tahák: dokud neexistuje, odstraň ho ze slibu ve formuláři i na
+  děkovací obrazovce.
+  Text reklamy A změň všude (CLAUDE.md, ads/README.md) na: „Při 2 000 Kč
+  měsíčně je rozdíl v poplatcích fondů za 20 let přes 40 000 Kč – i bez
+  jakéhokoli výnosu. Spočítejte si to.“ Původní text tvrdil „dělá desítky tisíc
+  Kč“ bez podmínky, což při 500 Kč měsíčně neplatí. Zapiš do docs/ai-chyby.md
+  (odhalila lidská revize).
+  Založ docs/backlog-texty-design.md pro ladění textů a designu na konci
+  projektu. První položky: (a) nadpis hero A říká „kolik vás stojí poplatky“,
+  ale číslo je rozdíl aktivní fond vs ETF, takže nadpis musí mluvit o rozdílu;
+  (b) fonty a celkový vizuál dořeší designer na konci; (c) texty projít s
+  ohledem na srozumitelnost pro laika.
+
+  Hero ani design teď neměň. Každý bod jako malý commit, nepushuj.
+
+● Začínám bodem 1: číslo strany ESMA a checklist.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs=require('fs');…)
+  ⎿  Updated data/benchmarks.json (+5 -2)
+       3      "description": "Referenční průměrné průběžné náklady fondů 
+          v EU pro kalkulačku poplatků. Nejde o konkrétní fondy.",
+       4      "retrieved_at": "2026-10-09",
+       5      "units": { "ter": "procenta ročně (1.2 = 1,2 %)" },
+       6 -    "verified_by_human": false                                 
+       6 +    "verified_by_human": true,                                 
+       7 +    "verified_by_human_scope": [                               
+       8 +      "Citace s hodnotami 0,2 % a 1,2 % ověřena ručně v PDF ESM
+         +A na s. 21 (2026-10-09)."                                      
+       9 +    ]                                                          
+      10    },
+      11    "benchmarks": [
+      12      {
+     ...
+      16          "value": 0.2,
+      17          "source_url": "https://www.esma.europa.eu/sites/default
+          /files/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and
+          _Performance_of_EU_Retail_Investment_Products.pdf",
+      18          "retrieved_at": "2026-10-09",
+      16 -        "note": "ESMA Market Report „Costs and Performance of E
+         -U Retail Investment Products 2025“ (ESMA50-1949966494-4065, zve
+         -řejněno 3. 3. 2026), data za rok 2024, investiční horizont 1 ro
+         -k, s. 21 (číslo strany odečteno ze zápatí v extrahovaném textu,
+         - ověřit ručně): „In the sample of equity funds, active equity E
+         -TFs have higher ongoing costs (0.3%) than passive equity ETFs (
+         -0.2%) but remain far below active equity funds excluding ETFs (
+         -1.2%).“",                                                      
+      19 +        "note": "ESMA Market Report „Costs and Performance of E
+         +U Retail Investment Products 2025“ (ESMA50-1949966494-4065, zve
+         +řejněno 3. 3. 2026), data za rok 2024, investiční horizont 1 ro
+         +k, s. 21: „In the sample of equity funds, active equity ETFs ha
+         +ve higher ongoing costs (0.3%) than passive equity ETFs (0.2%) 
+         +but remain far below active equity funds excluding ETFs (1.2%).
+         +“",                                                            
+      20          "cross_check": []
+      21        }
+      22      },
+  ⎿  Updated docs/overeni-dat.md (+3 -3)
+      221  
+      222  ## 3. Referenční náklady ESMA (`data/benchmarks.json`)
+      223  
+      224 -Pro kalkulačku poplatků a tvrzení reklamy A. Staženo **2026-10
+          --09**. Otevři PDF, vyhledej „passive equity ETFs (0.2%)“ a zko
+          -ntroluj i číslo strany.                                       
+      224 +Pro kalkulačku poplatků a tvrzení reklamy A. Staženo **2026-10
+          +-09**. Ověřeno ručně v PDF 2026-10-09: citace na straně 21 sed
+          +í.                                                            
+      225  
+      226  | ✓ | Hodnota | Zdroj | Co ověřit |
+      227  | --- | --- | --- | --- |
+      228 -| ☐ | Průměrný pasivní akciový ETF v EU: 0,2 % | [ESMA, Costs 
+          -and Performance of EU Retail Investment Products 2025](https:/
+          -/www.esma.europa.eu/sites/default/files/2026-03/ESMA50-1949966
+          -494-4065_Market_Report_-_Costs_and_Performance_of_EU_Retail_In
+          -vestment_Products.pdf) | Úryvek „active equity ETFs have highe
+          -r ongoing costs (0.3%) than passive equity ETFs (0.2%)…“, stra
+          -na 21? |                                                      
+      229 -| ☐ | Průměrný aktivní akciový fond v EU (bez ETF): 1,2 % | ta
+          -mtéž | „… far below active equity funds excluding ETFs (1.2%)“
+          -, data za rok 2024, horizont 1 rok |                          
+      228 +| ☑ | Průměrný pasivní akciový ETF v EU: 0,2 % | [ESMA, Costs 
+          +and Performance of EU Retail Investment Products 2025](https:/
+          +/www.esma.europa.eu/sites/default/files/2026-03/ESMA50-1949966
+          +494-4065_Market_Report_-_Costs_and_Performance_of_EU_Retail_In
+          +vestment_Products.pdf) | Úryvek „active equity ETFs have highe
+          +r ongoing costs (0.3%) than passive equity ETFs (0.2%)…“, stra
+          +na 21 |                                                       
+      229 +| ☑ | Průměrný aktivní akciový fond v EU (bez ETF): 1,2 % | ta
+          +mtéž | „… far below active equity funds excluding ETFs (1.2%)“
+          +, data za rok 2024, horizont 1 rok |                          
+
+  Searched for 1 pattern (ctrl+o to expand)
+● Bash(node - <<'EOF'
+      const fs=require('fs');…)
+  ⎿  Updated README.md (+2 -1)
+      73  - **Distribuční třídy UCITS fondů** (SPY5, VUSA, IUSA, VWRL) ne
+          jsou ověřené; v datech jsou jen jako poznámka.
+      74  - **Přesný UCITS ekvivalent VTI (celý US trh včetně malých fire
+          m)** jsme nenašli. SPDR Russell 3000 UCITS se podle OpenFIGI a 
+          SSGA zdá zrušený.
+      75  - **Průměrné náklady fondů přímo v ČR.** ESMA má přílohu po zem
+          ích (Annexes PDF); hodnotu za ČR jsme zatím nedohledali. Tisk u
+          vádí průměr kolem 2 % (e15), ale jde o sekundární zdroj bez met
+          odiky, proto ho nepoužíváme.
+      76 -- **Údaje provozovatele, zásady ochrany údajů a daňový tahák** 
+         -(krok 3 je jen UI). Na stránce jsou viditelně označené jako „[d
+         -oplnit]“ nebo „připravujeme“.                                  
+      76 +- **Údaje skutečného provozovatele.** Stránka je ukázkový proje
+         +kt do výběrového řízení a jako autor je uveden Nikolas Hošek (h
+         +osek@weborio.cz). **Před ostrým spuštěním je nutné doplnit údaj
+         +e skutečného provozovatele**: název, IČO, sídlo a kontakt v pat
+         +ičce i u formuláře (správce osobních údajů). Vyžaduje to zákon 
+         +a reklamní platformy.                                          
+      77 +- **Plné znění zásad ochrany osobních údajů** (`/zasady` je kos
+         +tra) a **daňový tahák** (zatím ho nesllibujeme, viz backlog).  
+      78  
+      79  ## Zdroje dat
+      80  
+  ⎿  Updated app/zasady/page.tsx (+5 -3)
+      1  import Link from "next/link";
+      2  import type { Metadata } from "next";
+      3 -import { CONSENT, OPERATOR, orTodo } from "@/lib/site";         
+      3 +import { CONSENT, OPERATOR } from "@/lib/site";                 
+      4  
+      5  export const metadata: Metadata = {
+      6    title: "Zásady ochrany osobních údajů",
+     ...
+      21  
+      22        <h2 className="mt-8 font-display text-xl font-semibold">S
+          právce</h2>
+      23        <p className="mt-1">
+      24 -        {orTodo(OPERATOR.name, "název")}, IČO {orTodo(OPERATOR.
+         -ico, "IČO")}, {orTodo(OPERATOR.address, "sídlo")},{" "}        
+      25 -        {orTodo(OPERATOR.email, "kontaktní e-mail")}.          
+      24 +        {[OPERATOR.name, OPERATOR.ico && `IČO ${OPERATOR.ico}`,
+         + OPERATOR.address, OPERATOR.email]                             
+      25 +          .filter(Boolean)                                     
+      26 +          .join(", ")}                                         
+      27 +        . {OPERATOR.about}                                     
+      28        </p>
+      29  
+      30        <h2 className="mt-8 font-display text-xl font-semibold">J
+          aké údaje a proč</h2>
+  ⎿  Updated components/Footer.tsx (+11 -5)
+       1  import Link from "next/link";
+       2 -import { OPERATOR, orTodo } from "@/lib/site";                 
+       2 +import { OPERATOR } from "@/lib/site";                         
+       3  
+       4  export function Footer() {
+       5    return (
+       6      <footer className="mx-auto w-full max-w-xl border-t-2 borde
+          r-ink px-4 pt-6 pb-24 text-[13px] leading-5 text-muted">
+       7 -      <p className="font-semibold text-ink">{orTodo(OPERATOR.na
+         -me, "název provozovatele")}</p>                                
+       8 -      <p>IČO: {orTodo(OPERATOR.ico, "IČO")}</p>                
+       9 -      <p>Sídlo: {orTodo(OPERATOR.address, "sídlo")}</p>        
+      10 -      <p>Kontakt: {OPERATOR.email ? <a href={`mailto:${OPERATOR
+         -.email}`}>{OPERATOR.email}</a> : orTodo(null, "e-mail")}</p>   
+       7 +      <p className="font-semibold text-ink">{OPERATOR.about}</p
+         +>                                                              
+       8 +      <p>Autor: {OPERATOR.name}</p>                            
+       9 +      {OPERATOR.ico && <p>IČO: {OPERATOR.ico}</p>}             
+      10 +      {OPERATOR.address && <p>Sídlo: {OPERATOR.address}</p>}   
+      11 +      <p>                                                      
+      12 +        Kontakt:{" "}                                          
+      13 +        <a href={`mailto:${OPERATOR.email}`} className="underli
+         +ne">                                                           
+      14 +          {OPERATOR.email}                                     
+      15 +        </a>                                                   
+      16 +      </p>                                                     
+      17        <nav aria-label="Právní informace" className="mt-4 flex f
+          lex-wrap gap-x-5 gap-y-2">
+      18          <Link href="/zasady" className="underline">
+      19            Zásady ochrany osobních údajů
+  ⎿  Updated components/LeadForm.tsx (+2 -2)
+       4  import { type FormEvent, type ReactNode, useId, useRef, useStat
+          e } from "react";
+       5  import { ThankYou } from "@/components/ThankYou";
+       6  import { TrackView } from "@/components/TrackView";
+       7 -import { CONSENT, OPERATOR, orTodo } from "@/lib/site";        
+       7 +import { CONSENT, OPERATOR } from "@/lib/site";                
+       8  import { trackOnce } from "@/lib/track";
+       9  
+      10  const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+     ...
+       96              </button>
+       97  
+       98              <p id={ids.gdpr} className="mt-4 text-[13px] leadi
+           ng-5 text-muted">
+       99 -              Správce: {orTodo(OPERATOR.name, "provozovatele")
+          -}. {CONSENT.delivery} Novinky posíláme jen se                 
+       99 +              Správce: {OPERATOR.name} ({OPERATOR.email}). {CO
+          +NSENT.delivery} Novinky posíláme jen se                       
+      100                souhlasem výše (čl. 6 odst. 1 písm. a&nbsp;GDPR)
+           . Podrobnosti v{" "}
+      101                <Link href="/zasady" className="underline">
+      102                  zásadách ochrany osobních údajů
+  ⎿  Updated components/Trust.tsx (+8 -2)
+      1  import { DATA_RETRIEVED_AT } from "@/lib/etfs";
+      2  import { ESMA } from "@/lib/fee-rows";
+      3  import { formatDate } from "@/lib/format";
+      4 -import { OPERATOR, orTodo } from "@/lib/site";                  
+      4 +import { OPERATOR } from "@/lib/site";                          
+      5  
+      6  export function Trust() {
+      7    return (
+     ...
+      22        </p>
+      23  
+      24        <h3 className="mt-6 font-semibold">Provozovatel</h3>
+      25 -      <p className="mt-1">{orTodo(OPERATOR.name, "kdo za stránk
+         -ou stojí a proč ji provozuje")}</p>                            
+      25 +      <p className="mt-1">                                     
+      26 +        {OPERATOR.about} Autor: {OPERATOR.name},{" "}          
+      27 +        <a href={`mailto:${OPERATOR.email}`} className="underli
+         +ne">                                                           
+      28 +          {OPERATOR.email}                                     
+      29 +        </a>                                                   
+      30 +        .                                                      
+      31 +      </p>                                                     
+      32  
+      33        <div role="note" aria-labelledby="riziko-h" className="mt
+          -8 border-2 border-ink p-4">
+      34          <h3 id="riziko-h" className="font-semibold">
+  ⎿  … 1 more file changed
+  ⎿  (timeout 2m)
+
+● V README mi utekl překlep („nesllibujeme“) a věta o taháku patří až do bodu 4.
+  Upravím to a commitnu.
+
+● Bash(sed -i 's/- \*\*Plné znění zásad ochrany osobních údajů\*\* (`\/zasady`
+      je kostra) a \*\*daňový tahák\*\* (zatím ho nesllibujeme, viz backlog)\./-
+      **Plné znění…)
+  ⎿  Updated README.md (+1 -1)
+      74  - **Přesný UCITS ekvivalent VTI (celý US trh včetně malých fire
+          m)** jsme nenašli. SPDR Russell 3000 UCITS se podle OpenFIGI a 
+          SSGA zdá zrušený.
+      75  - **Průměrné náklady fondů přímo v ČR.** ESMA má přílohu po zem
+          ích (Annexes PDF); hodnotu za ČR jsme zatím nedohledali. Tisk u
+          vádí průměr kolem 2 % (e15), ale jde o sekundární zdroj bez met
+          odiky, proto ho nepoužíváme.
+      76  - **Údaje skutečného provozovatele.** Stránka je ukázkový proje
+          kt do výběrového řízení a jako autor je uveden Nikolas Hošek (h
+          osek@weborio.cz). **Před ostrým spuštěním je nutné doplnit údaj
+          e skutečného provozovatele**: název, IČO, sídlo a kontakt v pat
+          ičce i u formuláře (správce osobních údajů). Vyžaduje to zákon 
+          a reklamní platformy.
+      77 -- **Plné znění zásad ochrany osobních údajů** (`/zasady` je kos
+         -tra) a **daňový tahák** (zatím ho nesllibujeme, viz backlog).  
+      77 +- **Plné znění zásad ochrany osobních údajů** (`/zasady` je kos
+         +tra).                                                          
+      78  
+      79  ## Zdroje dat
+      80  
+
+● Bod 3: veřejné poznámky. Interní note se zobrazuje jen v PairCard (u dvojic).
+  Přidám public_note do ucits_equivalent, kontrolní skript ho bude vyžadovat a
+  karta bude ukazovat jen ji.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs=require('fs');…)
+  ⎿  Updated components/PairCard.tsx (+1 -1)
+      110            ))}
+      111          </tbody>
+      112        </table>
+      113 -      {(full || !same) && <p className="mt-2 text-[13px] leadi
+          -ng-5 text-muted">{pair.us.ucits_equivalent!.note}</p>}        
+      113 +      {(full || !same) && <p className="mt-2 text-[13px] leadi
+          +ng-5 text-muted">{pair.us.ucits_equivalent!.public_note}</p>} 
+      114        <ol className="mt-2 space-y-0.5 text-[12px] leading-4 te
+           xt-muted">
+      115          {sources.map((s, i) => (
+      116            <li key={s.url} id={`src-${id}-${i + 1}`}>
+  ⎿  Updated data/README.md (+1 -1)
+      31  | `distribution` | `accumulating` / `distributing` |
+      32  | `index` | Sledovaný index |
+      33  | `registered_in_cz` | `true`, pokud emitent na stránce fondu u
+          vádí Českou republiku mezi zeměmi registrace; jinak `null` + dů
+          vod |
+      34 -| `ucits_equivalent` | Jen u `us`: `{ isin, match, note }`, `ma
+         -tch` = `same_index` (stejný index) / `closest` (nejbližší alter
+         -nativa) |                                                      
+      34 +| `ucits_equivalent` | Jen u `us`: `{ isin, match, note, public
+         +_note }`, `match` = `same_index` (stejný index) / `closest` (ne
+         +jbližší alternativa). `note` je interní poznámka (zdroje, co ne
+         +ní ověřeno), **na stránce se zobrazuje jen `public_note`** – kr
+         +átká věta pro laika bez URL a interních poznámek |             
+      35  
+      36  `meta.verified_by_human` = data prošla ručním ověřením podle [`
+          docs/overeni-dat.md`](../docs/overeni-dat.md); co přesně člověk
+           ověřil, je v `meta.verified_by_human_scope`.
+      37  
+  ⎿  Updated data/etfs.json (+10 -5)
+      153        "ucits_equivalent": {
+      154          "isin": "IE000XZSV718",
+      155          "match": "same_index",
+      156 -        "note": "Stejný emitent, stejný index. Distribuční tří
+          -da téhož fondu: SPY5 (IE00B6YX5C33) – neověřováno."           
+      156 +        "note": "Stejný emitent, stejný index. Distribuční tří
+          +da téhož fondu: SPY5 (IE00B6YX5C33) – neověřováno.",          
+      157 +        "public_note": "Stejný emitent (State Street SPDR) a s
+          +tejný index S&P 500."                                         
+      158        }
+      159      },
+      160      {
+     ...
+      279        "ucits_equivalent": {
+      280          "isin": "IE00BFMXXD54",
+      281          "match": "same_index",
+      281 -        "note": "Stejný emitent, stejný index. Distribuční tří
+          -da: VUSA (IE00B3XXRP09) – neověřováno."                       
+      282 +        "note": "Stejný emitent, stejný index. Distribuční tří
+          +da: VUSA (IE00B3XXRP09) – neověřováno.",                      
+      283 +        "public_note": "Stejný emitent (Vanguard) a stejný ind
+          +ex S&P 500."                                                  
+      284        }
+      285      },
+      286      {
+     ...
+      411        "ucits_equivalent": {
+      412          "isin": "IE00B5BMR087",
+      413          "match": "same_index",
+      412 -        "note": "Stejný emitent, stejný index. Distribuční var
+          -ianta IUSA (IE0031442068) – neověřováno."                     
+      414 +        "note": "Stejný emitent, stejný index. Distribuční var
+          +ianta IUSA (IE0031442068) – neověřováno.",                    
+      415 +        "public_note": "Stejný emitent (iShares) a stejný inde
+          +x S&P 500."                                                   
+      416        }
+      417      },
+      418      {
+     ...
+      557        "ucits_equivalent": {
+      558          "isin": "IE00B52SFT06",
+      559          "match": "closest",
+      557 -        "note": "Schváleno jako nejbližší alternativa. Přesný 
+          -UCITS ekvivalent celého US trhu nebyl nalezen. MSCI USA pokrýv
+          -á jen velké a střední firmy, cca 85 % free-float tržní kapital
+          -izace USA (MSCI USA Index factsheet k 30. 9. 2026, staženo 202
+          -6-10-09: „covers approximately 85% of the free float-adjusted 
+          -market capitalization in the US“, https://www.msci.com/documen
+          -ts/10199/255599/msci-usa-index-net.pdf); VTI zahrnuje i malé f
+          -irmy. Zamítnutý kandidát: SPDR Russell 3000 US Total Market UC
+          -ITS ETF (IE00BKY7WX37) – OpenFIGI ISIN nezná, KID u SSGA vrací
+          - 404, pravděpodobně zrušen."                                  
+      560 +        "note": "Schváleno jako nejbližší alternativa. Přesný 
+          +UCITS ekvivalent celého US trhu nebyl nalezen. MSCI USA pokrýv
+          +á jen velké a střední firmy, cca 85 % free-float tržní kapital
+          +izace USA (MSCI USA Index factsheet k 30. 9. 2026, staženo 202
+          +6-10-09: „covers approximately 85% of the free float-adjusted 
+          +market capitalization in the US“, https://www.msci.com/documen
+          +ts/10199/255599/msci-usa-index-net.pdf); VTI zahrnuje i malé f
+          +irmy. Zamítnutý kandidát: SPDR Russell 3000 US Total Market UC
+          +ITS ETF (IE00BKY7WX37) – OpenFIGI ISIN nezná, KID u SSGA vrací
+          + 404, pravděpodobně zrušen.",                                 
+      561 +        "public_note": "Není přesná náhrada. VTI sleduje celý 
+          +americký trh včetně malých firem. SXR4 sleduje index MSCI USA,
+          + tedy jen velké a střední firmy – podle MSCI asi 85 % hodnoty 
+          +amerického trhu."                                             
+      562        }
+      563      },
+      564      {
+     ...
+      690        "ucits_equivalent": {
+      691          "isin": "IE00BK5BQT80",
+      692          "match": "closest",
+      689 -        "note": "Stejný emitent, ale jiný index: FTSE All-Worl
+          -d (velké a střední firmy) vs. FTSE Global All Cap (i malé firm
+          -y). Distribuční třída: VWRL (IE00B3RBWM25) – neověřováno."    
+     … 5 more lines (ctrl+o to expand)
+  ⎿  Updated lib/etfs.ts (+8 -1)
+      24    distribution: Sourced<"accumulating" | "distributing">;
+      25    index: Sourced<string>;
+      26    registered_in_cz: Sourced<boolean | null>;
+      27 -  ucits_equivalent: { isin: string; match: "same_index" | "clos
+         -est"; note: string } | null;                                   
+      27 +  ucits_equivalent: {                                          
+      28 +    isin: string;                                              
+      29 +    match: "same_index" | "closest";                           
+      30 +    /** Interní poznámka – nezobrazovat */                     
+      31 +    note: string;                                              
+      32 +    /** Krátká poznámka pro návštěvníka */                     
+      33 +    public_note: string;                                       
+      34 +  } | null;                                                    
+      35  };
+      36  
+      37  export type FundPair = { us: Fund; ucits: Fund };
+  ⎿  Updated scripts/check-etfs.mjs (+1 -0)
+      46      if (!target || target.kind !== 'ucits') errors.push(`${fund
+          .id}: ucits_equivalent ${eq?.isin} není UCITS fond v datech`);
+      47      else if (eq.match === 'same_index' && target.index.value !=
+          = fund.index.value) errors.push(`${fund.id}: same_index, ale ${
+          fund.index.value} ≠ ${target.index.value}`);
+      48      else if (!['same_index', 'closest'].includes(eq.match)) err
+          ors.push(`${fund.id}: neznámý match ${eq.match}`);
+      49 +    if (!eq?.public_note) errors.push(`${fund.id}: ucits_equiva
+         +lent bez public_note`);                                        
+      50    }
+      51  }
+      52  
+  ⎿  (timeout 2m)
+
+● Formát etfs.json zůstal zachovaný, diff má jen nová pole. Do E2E testu přidám
+  pojistku, že se interní poznámky nezobrazí, a testy spustím.
+
+● Bash(node - <<'EOF'
+      const fs=require('fs');const p='e2e/landing.spec.ts';let
+      t=fs.readFileSync(p,'utf8');…)
+  ⎿  Updated e2e/landing.spec.ts (+4 -0)
+      76    await expect(thanks).toBeVisible();
+      77    await expect(thanks.getByTestId("pair")).toHaveCount(5);
+      78    await expect(thanks).toContainText("ISIN");
+      79 +  // jen public_note – žádné interní poznámky z dat            
+      80 +  await expect(thanks).not.toContainText("neověřováno");       
+      81 +  await expect(thanks).not.toContainText("Zamítnutý kandidát");
+      82 +  await expect(thanks.locator("p")).not.toContainText(["https:/
+         +/"]);                                                          
+      83  });
+      84  
+      85  test("formulář jde odeslat jen klávesnicí", async ({ page }) =>
+           {
+  ⎿  (timeout 10m)
+
+● Prošlo, jenže not.toContainText([…]) s polem by mohlo projít naprázdno.
+  Nahradím ho jednoznačnou kontrolou textu odstavců.
+
+● Bash(node - <<'EOF'
+      const fs=require('fs');const p='e2e/landing.spec.ts';let
+      t=fs.readFileSync(p,'utf8');…)
+  ⎿  Updated e2e/landing.spec.ts (+2 -1)
+      79    // jen public_note – žádné interní poznámky z dat
+      80    await expect(thanks).not.toContainText("neověřováno");
+      81    await expect(thanks).not.toContainText("Zamítnutý kandidát");
+      82 -  await expect(thanks.locator("p")).not.toContainText(["https:/
+         -/"]);                                                          
+      82 +  const paragraphs = await thanks.locator("p").allTextContents(
+         +);                                                             
+      83 +  expect(paragraphs.join(" ")).not.toContain("https://");      
+      84  });
+      85  
+      86  test("formulář jde odeslat jen klávesnicí", async ({ page }) =>
+           {
+  ⎿  (timeout 10m)
+
+● Bod 4: daňový tahák. Slibuje ho formulář, děkovací obrazovka a také nabídka
+  pod kalkulačkou. Odstraním ho ze všech tří míst.
+
+  Searched for 1 pattern, ran 1 shell command (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs=require('fs');const
+      w=(p,f)=>fs.writeFileSync(p,f(fs.readFileSync(p,'utf8')));…)
+  ⎿  Updated README.md (+1 -0)
+      75  - **Průměrné náklady fondů přímo v ČR.** ESMA má přílohu po zem
+          ích (Annexes PDF); hodnotu za ČR jsme zatím nedohledali. Tisk u
+          vádí průměr kolem 2 % (e15), ale jde o sekundární zdroj bez met
+          odiky, proto ho nepoužíváme.
+      76  - **Údaje skutečného provozovatele.** Stránka je ukázkový proje
+          kt do výběrového řízení a jako autor je uveden Nikolas Hošek (h
+          osek@weborio.cz). **Před ostrým spuštěním je nutné doplnit údaj
+          e skutečného provozovatele**: název, IČO, sídlo a kontakt v pat
+          ičce i u formuláře (správce osobních údajů). Vyžaduje to zákon 
+          a reklamní platformy.
+      77  - **Plné znění zásad ochrany osobních údajů** (`/zasady` je kos
+          tra).
+      78 +- **Daňový tahák (W-8BEN, časový test).** Zatím neexistuje, pro
+         +to ho stránka neslibuje – ani ve formuláři, ani na děkovací obr
+         +azovce. Vrátí se, až bude text se zdroji hotový a zkontrolovaný
+         +.                                                              
+      79  
+      80  ## Zdroje dat
+      81  
+  ⎿  Updated components/Calculator.tsx (+1 -1)
+      167            className="mt-6 block rounded-sm border-2 border-ink
+            bg-card p-4 outline-offset-4 focus-visible:outline-2"
+      168          >
+      169            <span className="block font-semibold">
+      170 -            Chcete kompletní srovnání všech 5&nbsp;dvojic fond
+          -ů NYSE ↔ UCITS a&nbsp;daňový tahák?                           
+      170 +            Chcete kompletní srovnání všech 5&nbsp;dvojic fond
+          +ů NYSE ↔ UCITS?                                               
+      171            </span>
+      172            <span className="mt-1 block text-[15px] text-muted">
+           Zobrazí se hned po zadání e-mailu →</span>
+      173          </a>
+  ⎿  Updated components/LeadForm.tsx (+0 -1)
+      46                VOO, SPY, IVV, VTI a&nbsp;VT vedle UCITS fondů, k
+          teré jsou v&nbsp;ČR dostupné
+      47              </li>
+      48              <li className="dotted pb-2">TER, měna, akumulace, b
+          urza, velikost fondu, registrace v&nbsp;ČR, ISIN</li>
+      49 -            <li className="dotted pb-2">Daňový tahák: W-8BEN a&
+         -nbsp;časový test (obecná informace)</li>                       
+      49            </ul>
+      50            <p className="mt-3 text-[15px] font-semibold">Zobrazí
+           se hned po odeslání, kopii pošleme e-mailem.</p>
+      51  
+  ⎿  Updated components/ThankYou.tsx (+0 -10)
+      27  
+      28        <div className="mt-8 space-y-8">{children}</div>
+      29  
+      30 -      <section aria-labelledby="dane-h" className="mt-10 border
+         --t-2 border-ink pt-3">                                         
+      31 -        <h3 id="dane-h" className="font-display text-xl font-se
+         -mibold">                                                       
+      32 -          Daňový tahák                                         
+      33 -        </h3>                                                  
+      34 -        {/* Krok 5 (texty): obsah W-8BEN a časového testu se zd
+         -roji, po kontrole. */}                                         
+      35 -        <p className="mt-2 text-[15px] leading-6">             
+      36 -          Tahák k&nbsp;formuláři W-8BEN a&nbsp;časovému testu p
+         -rávě prochází kontrolou. Pošleme vám ho e-mailem, jakmile      
+      37 -          bude hotový.                                         
+      38 -        </p>                                                   
+      39 -      </section>                                               
+      30  
+      31        <fieldset className="mt-10 rounded-sm bg-card p-4" aria-d
+          escribedby={questionId}>
+      32          <legend className="float-left font-semibold">Máte už úč
+          et u&nbsp;brokera?</legend>
+  ⎿  (timeout 2m)
+
+● Bash(node - <<'EOF'
+      const fs=require('fs');const p='e2e/landing.spec.ts';let
+      t=fs.readFileSync(p,'utf8');…)
+  ⎿  Updated e2e/landing.spec.ts (+3 -0)
+      62    await page.goto("/#formular");
+      63    const consent = page.getByRole("checkbox");
+      64    await expect(consent).not.toBeChecked();
+      65 +  // neslibujeme, co zatím neexistuje                          
+      66 +  await expect(page.locator("#formular")).not.toContainText(/ta
+         +hák/i);                                                        
+      67  
+      68    await page.getByRole("button", { name: "Zobrazit plné srovnán
+          í" }).click();
+      69    await expect(page.locator("#formular").getByRole("alert")).to
+          HaveText(/Vyplňte prosím e-mail/);
+     ...
+      79    await expect(thanks.getByTestId("pair")).toHaveCount(5);
+      80    await expect(thanks).toContainText("ISIN");
+      81    // jen public_note – žádné interní poznámky z dat
+      82 +  await expect(thanks).not.toContainText(/tahák/i);            
+      83    await expect(thanks).not.toContainText("neověřováno");
+      84    await expect(thanks).not.toContainText("Zamítnutý kandidát");
+      85    const paragraphs = await thanks.locator("p").allTextContents(
+          );
+  ⎿  (timeout 10m)
+
+● Bod 5: text reklamy A. Najdu všechna místa se starým zněním.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Nové tvrzení „přes 40 000 Kč“ platí: při 2 000 Kč měsíčně a výnosu 0 % je
+  rozdíl 44 246 Kč. Přepočítám i tvé protipříklady, ať je mám v záznamu.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs=require('fs');const
+      w=(p,f)=>fs.writeFileSync(p,f(fs.readFileSync(p,'utf8')));…)
+  ⎿  Updated CLAUDE.md (+1 -1)
+      79  
+      80  ## Dvě verze reklamy
+      81  
+      82 -- **A – úspora:** „Rozdíl v poplatcích fondů dělá za 20 let des
+         -ítky tisíc Kč, i bez jakéhokoli výnosu. Spočítejte si to.“ (ově
+         -ření a disclaimer v `ads/README.md`)                           
+      82 +- **A – úspora:** „Při 2 000 Kč měsíčně je rozdíl v poplatcích 
+         +fondů za 20 let přes 40 000 Kč – i bez jakéhokoli výnosu. Spočí
+         +tejte si to.“ (ověření a disclaimer v `ads/README.md`)         
+      83  - **B – zvědavost:** „Proč si v Česku nekoupíte VOO? A jaké alt
+          ernativy jsou v ČR dostupné.“
+      84  - Ke každé: vizuál 1:1 / 4:5 (feed) a 9:16 (stories), primární 
+          text, nadpis, CTA, návrh cílení. Hero stránky musí odpovídat sl
+          ibu reklamy (případně varianta hero podle `utm_content`).
+      85  
+  ⎿  Updated README.md (+2 -2)
+      60  9. **Dvě měny.** `currency` = měna obchodování na burze, `base_
+          currency` = měna fondu. Pro měnové riziko USD/CZK je podstatná 
+          měna fondu – u všech 10 fondů USD.
+      61  10. **AUM = aktiva celého fondu s datem ze zdroje**, ne jen dat
+          um stažení. Velikost se mění denně; datum musí být vidět.
+      62  11. **ISIN US fondů dopočítán z CUSIP.** Weby emitentů v USA IS
+          IN neuvádějí. Dopočet podle ISO 6166 ověřujeme proti OpenFIGI.
+      63 -12. **Slib reklamy A stojí na průměrech ESMA, ne na našich ETF.
+         -** Mezi ETF v datech (TER 0,03–0,14 %) je rozdíl za 20 let jen 
+         -v jednotkách tisíc Kč, „desítky tisíc“ by byla nepravda. Platí 
+         -až srovnání průměrného ETF (0,2 %) s průměrným aktivním akciový
+         -m fondem v EU (1,2 %) podle ESMA. Obě čísla jsou ze stejného zd
+         -roje a metodiky. Konkrétní fond české banky nepoužíváme: šlo by
+         - o porovnávací reklamu a jeden KID neukazuje průměr. Podrobně v
+         - [`ads/README.md`](ads/README.md).                             
+      64 -13. **Hero A a reklama A počítají s výnosem 0 %.** Tvrzení tak 
+         -nestojí na žádném předpokladu výnosu: 2 000 Kč měsíčně, 20 let 
+         -→ 44 200 Kč. Číslo v hero se počítá živě stejnou funkcí jako ka
+         -lkulačka. Při 2 000 Kč / 20 let / 0 % ukáže kalkulačka v řádku 
+         -„Rozdíl“ totéž číslo (hlídá unit i E2E test).                  
+      63 +12. **Slib reklamy A stojí na průměrech ESMA, ne na našich ETF.
+         +** Mezi ETF v datech (TER 0,03–0,14 %) je rozdíl za 20 let jen 
+         +v jednotkách tisíc Kč, „desítky tisíc Kč“ by byla nepravda. Pla
+         +tí až srovnání průměrného ETF (0,2 %) s průměrným aktivním akci
+         +ovým fondem v EU (1,2 %) podle ESMA. Obě čísla jsou ze stejného
+         + zdroje a metodiky. Konkrétní fond české banky nepoužíváme: šlo
+         + by o porovnávací reklamu a jeden KID neukazuje průměr. Podrobn
+         +ě v [`ads/README.md`](ads/README.md).                          
+      64 +13. **Hero A a reklama A počítají s výnosem 0 %.** Tvrzení tak 
+         +nestojí na žádném předpokladu výnosu: 2 000 Kč měsíčně, 20 let 
+         +→ 44 200 Kč. Text reklamy proto uvádí podmínku: „Při 2 000 Kč m
+         +ěsíčně je rozdíl … přes 40 000 Kč“ – při 500 Kč měsíčně je to j
+         +en 11 061 Kč. Číslo v hero se počítá živě stejnou funkcí jako k
+         +alkulačka. Při 2 000 Kč / 20 let / 0 % ukáže kalkulačka v řádku
+         + „Rozdíl“ totéž číslo (hlídá unit i E2E test).                 
+      65  14. **Kalkulačka má výchozí modelový výnos 5 % – vědomá volba b
+          ez benchmarku.** Kulaté číslo pro ilustraci, ne odhad. Přepínač
+           0/3/5/7 % a text „zvolený příklad, ne odhad ani slib; výnos mů
+          že být i záporný“ přímo u volby. Náklad = poplatky + výnos, o k
+          terý kvůli nim investor přijde (měsíční model, TER strháván prů
+          běžně).
+      66  15. **V účtence jen UCITS fondy (dostupné v ČR) seskupené podle
+           TER, plus dva průměry ESMA.** US fondy v kalkulačce nejsou – s
+          tránka je nenabízí. Žádný řádek není označen jako „nejlepší“.
+      67  16. **Varianta hero podle `utm_content`:** hodnota začínající `
+          b` → hero B, jinak A. `proxy.ts` přepisuje na staticky předrend
+          erovanou `/v/b` (noindex, canonical `/`), takže hero při načten
+          í nebliká a URL s UTM zůstává.
+  ⎿  Updated ads/README.md (+16 -2)
+       4  
+       5  | Složka | Varianta | Slib |
+       6  | --- | --- | --- |
+       7 -| `a-uspora/` | A – úspora | Rozdíl v poplatcích fondů dělá za 
+         -20 let desítky tisíc Kč, i bez jakéhokoli výnosu. Spočítejte si
+         - to. |                                                         
+       7 +| `a-uspora/` | A – úspora | Při 2 000 Kč měsíčně je rozdíl v p
+         +oplatcích fondů za 20 let přes 40 000 Kč – i bez jakéhokoli výn
+         +osu. Spočítejte si to. |                                       
+       8  | `b-zvedavost/` | B – zvědavost | Proč si v Česku nekoupíte VO
+          O? A jaké alternativy jsou v ČR dostupné. |
+       9  
+      10  ## Obsah každé varianty
+     ...
+      21  - ESMA, *Costs and Performance of EU Retail Investment Products
+           2025* (3. 3. 2026, data 2024): pasivní akciové ETF 0,2 %, akti
+          vní akciové fondy bez ETF 1,2 % průběžných nákladů ročně (`data
+          /benchmarks.json`).
+      22  - 2 000 Kč měsíčně, 20 let, výnos 0 %: rozdíl **44 246 Kč** (za
+          mčeno unit testem `lib/calc.test.ts`, v reklamě a hero zaokrouh
+          leno na 44 200 Kč).
+      23  
+      24 -Proto nový text (sloveso „ztratit“ je nepřesné – poplatek se pl
+         -atí) a povinný disclaimer v reklamě:                           
+      24 +Proto nový text (sloveso „ztratit“ je nepřesné – poplatek se pl
+         +atí):                                                          
+      25 +                                                               
+      26 +> Při 2 000 Kč měsíčně je rozdíl v poplatcích fondů za 20 let p
+         +řes 40 000 Kč – i bez jakéhokoli výnosu. Spočítejte si to.     
+      27 +                                                               
+      28 +Podmínka „při 2 000 Kč měsíčně“ je v textu nutná. Rozdíl roste 
+         +s částkou, bez ní by tvrzení neplatilo pro každého (výnos 0 %, 
+         +20 let):                                                       
+      29 +                                                               
+      30 +| Měsíčně | Rozdíl ESMA 0,2 % vs. 1,2 % |                      
+      31 +| --- | --- |                                                  
+      32 +| 500 Kč | 11 061 Kč |                                         
+      33 +| 1 000 Kč | 22 123 Kč |                                       
+      34 +| 2 000 Kč | 44 246 Kč |                                       
+      35 +                                                               
+      36 +Historie: (1) „Na poplatcích ETF můžete za 20 let ztratit desít
+         +ky tisíc Kč“ – mezi ETF neplatí; (2) „Rozdíl v poplatcích fondů
+         + dělá za 20 let desítky tisíc Kč, i bez jakéhokoli výnosu“ – be
+         +z podmínky výše vkladu, při 500 Kč měsíčně neplatí (odhalila li
+         +dská revize); (3) aktuální text.                               
+      37 +                                                               
+      38 +Povinný disclaimer v reklamě:                                  
+      39  
+      40  > Průměrné průběžné náklady ETF (0,2 %) vs. aktivních akciových
+           fondů v EU (1,2 %) podle ESMA (2026, data 2024), 2 000 Kč měsí
+          čně po dobu 20 let, výnos 0 %: rozdíl 44 200 Kč. Modelový výpoč
+          et, ne doporučení.
+      41  
+  ⎿  Updated docs/ai-chyby.md (+1 -0)
+      12  | 2026-10-09 | Plán hero A stavěl číslo na modelovém výnosu 5 %
+           a použil „až 86 500 Kč“ („až“ = nejvyšší možná hodnota, zavádě
+          jící). Hero B „co koupit místo něj“ zní jako výzva ke koupi | Č
+          lověk při revizi plánu | Hero a reklama A s výnosem 0 % (44 200
+           Kč), bez „až“; hero B „jaké alternativy jsou v ČR dostupné“; E
+          2E test hlídá, že hero A neobsahuje „až“ |
+      13  | 2026-10-09 | V paletě navrhla šedou #C9C2B3 bez omezení použi
+          tí – na textu by měla kontrast 1,54 : 1 | Člověk při revizi plá
+          nu | Šedá jen na linky; pro text tmavší #5E5A52 (6,0 : 1), akce
+          nt na textu ztmaven na #B03A0A (5,3 : 1) – kontrast spočítán sk
+          riptem |
+      14  | 2026-10-09 | První verze E2E testů selhala na vlastních selek
+          torech: `getByLabel("E-mail")` chytal i checkbox „…dostávat e-m
+          ailem…“, `getByRole("alert")` i oznamovač navigace Next.js. Tes
+          t pořadí funnelu běžel na variantě B, jejíž CTA vede na srovnán
+          í, takže compare_view logicky přišel před kalkulačkou | Běh tes
+          tů | Přesnější selektory (role textbox, alert jen v #formular),
+           funnel test na variantě A + zvláštní ověření ad_variant u B |
+      15 +| 2026-10-09 | Navrhla text reklamy A „Rozdíl v poplatcích fond
+         +ů dělá za 20 let desítky tisíc Kč, i bez jakéhokoli výnosu“ – t
+         +vrzení bez podmínky výše vkladu. Při 500 Kč měsíčně je rozdíl j
+         +en 11 061 Kč, takže pro část publika neplatí | Lidská revize | 
+         +Text s podmínkou: „Při 2 000 Kč měsíčně je rozdíl v poplatcích 
+         +fondů za 20 let přes 40 000 Kč – i bez jakéhokoli výnosu.“ (44 
+         +246 Kč, zamčeno unit testem); tabulka 500/1 000/2 000 Kč v `ads
+         +/README.md` |                                                  
+
+● Bod 6: backlog pro texty a design.
+
+● Write(docs/backlog-texty-design.md)
+  ⎿  Wrote 9 lines to docs/backlog-texty-design.md
+      1 # Backlog: texty a design
+      3 Úpravy textů a vizuálu, které řešíme až na konci projektu (14.–15
+        . 10.). Funkce, data a právní mantinely mají přednost. Položku po
+      4
+      6 | --- | --- | --- | --- |
+      7 | ☐ | **Nadpis hero A musí mluvit o rozdílu.** Teď zní „Kolik vás
+        je rozdíl nákladů průměrného aktivního fondu a průměrného ETF (ES
+        MA), ne celkové poplatky. | Nadpis a číslo si odporují. Návštěvní
+        ondu. | Revize 2026-10-09 |
+        Výpis z účtu“ (Fraunces
+     … +13 lines (ctrl+o to expand)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Všech šest bodů je hotových, každý jako samostatný commit, nic jsem
+  nepushoval. Hero ani design jsem neměnil. Unit testy, kontrola dat, lint, typy
+  i Playwright (9/9) procházejí.
+
+  1. ESMA, strana 21: číslo strany je v data/benchmarks.json a hodnoty jsou
+     vedené jako ověřené člověkem. Obě položky v checklistu jsou odškrtnuté.
+  2. Provozovatel: patička, sekce důvěry, správce u formuláře i /zasady teď
+     uvádí „Ukázkový projekt do výběrového řízení“, autora a e-mail. V README v
+     „Co chybí“ je, že před ostrým spuštěním je nutné doplnit údaje skutečného
+     provozovatele.
+     - Jedno rozhodnutí jsem udělal sám: IČO a sídlo ukázkový projekt nemá, tak
+       se tyto řádky v patičce nezobrazují. Dřív tam stálo „[doplnit]“.
+  3. Veřejné poznámky: každá dvojice v data/etfs.json má krátkou public_note a
+     stránka ukazuje jen ji. Kontrolní skript ji vyžaduje a E2E test hlídá, že
+     se v plném srovnání neobjeví „neověřováno“, zamítnutý kandidát ani URL.
+  4. Daňový tahák zmizel z formuláře, z děkovací obrazovky i z nabídky pod
+     kalkulačkou, kde byl slíbený také. E2E test to hlídá a README ho uvádí v
+     „Co chybí“.
+  5. Text reklamy A je změněný v CLAUDE.md, ads/README.md a README. Tvrzení
+     platí: při 2 000 Kč měsíčně vychází 44 246 Kč. V ads/README.md je přepočet
+     pro 500, 1 000 a 2 000 Kč (11 061 / 22 123 / 44 246 Kč) a historie textu.
+     Chyba je zapsaná v docs/ai-chyby.md jako odhalená lidskou revizí.
+  6. Backlog docs/backlog-texty-design.md má tvé tři položky.
+
+  V CLAUDE.md v sekci „Výměna hodnoty“ zůstal daňový tahák jako plán obsahu za
+  e-mail. Nechal jsem ho tam, protože jde o záměr, ne o slib na stránce. Pokud
+  ho chceš odložit i v plánu, upravím to.
+
+  Nezapomeň na /export do ai-log/.
