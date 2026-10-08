@@ -1,6 +1,8 @@
 import { Calculator } from "@/components/Calculator";
 import { Comparison } from "@/components/Comparison";
+import { FullComparison } from "@/components/FullComparison";
 import { Hero } from "@/components/Hero";
+import { LeadForm } from "@/components/LeadForm";
 import { PageView } from "@/components/PageView";
 import { StickyCta } from "@/components/StickyCta";
 import { FEE_ROWS } from "@/lib/fee-rows";
@@ -13,6 +15,7 @@ export function Landing({ variant }: { variant: AdVariant }) {
       <Hero variant={variant} />
       <Calculator rows={FEE_ROWS} />
       <Comparison />
+      <LeadForm fullComparison={<FullComparison />} />
       <StickyCta />
     </main>
   );
