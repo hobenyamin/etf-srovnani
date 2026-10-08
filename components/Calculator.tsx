@@ -167,7 +167,7 @@ export function Calculator({ rows }: { rows: FeeRow[] }) {
           className="mt-6 block rounded-sm border-2 border-ink bg-card p-4 outline-offset-4 focus-visible:outline-2"
         >
           <span className="block font-semibold">
-            Chcete kompletní srovnání všech 5&nbsp;dvojic fondů NYSE ↔ UCITS a&nbsp;daňový tahák?
+            Chcete kompletní srovnání všech 5&nbsp;dvojic fondů NYSE ↔ UCITS?
           </span>
           <span className="mt-1 block text-[15px] text-muted">Zobrazí se hned po zadání e-mailu →</span>
         </a>

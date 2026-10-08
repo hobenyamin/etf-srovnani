@@ -46,7 +46,6 @@ export function LeadForm({ fullComparison }: { fullComparison: ReactNode }) {
               VOO, SPY, IVV, VTI a&nbsp;VT vedle UCITS fondů, které jsou v&nbsp;ČR dostupné
             </li>
             <li className="dotted pb-2">TER, měna, akumulace, burza, velikost fondu, registrace v&nbsp;ČR, ISIN</li>
-            <li className="dotted pb-2">Daňový tahák: W-8BEN a&nbsp;časový test (obecná informace)</li>
           </ul>
           <p className="mt-3 text-[15px] font-semibold">Zobrazí se hned po odeslání, kopii pošleme e-mailem.</p>
 

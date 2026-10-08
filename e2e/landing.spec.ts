@@ -62,6 +62,8 @@ test("formulář: validace, nepředvyplněný souhlas, děkovací stav s 5 dvoji
   await page.goto("/#formular");
   const consent = page.getByRole("checkbox");
   await expect(consent).not.toBeChecked();
+  // neslibujeme, co zatím neexistuje
+  await expect(page.locator("#formular")).not.toContainText(/tahák/i);
 
   await page.getByRole("button", { name: "Zobrazit plné srovnání" }).click();
   await expect(page.locator("#formular").getByRole("alert")).toHaveText(/Vyplňte prosím e-mail/);
@@ -77,6 +79,7 @@ test("formulář: validace, nepředvyplněný souhlas, děkovací stav s 5 dvoji
   await expect(thanks.getByTestId("pair")).toHaveCount(5);
   await expect(thanks).toContainText("ISIN");
   // jen public_note – žádné interní poznámky z dat
+  await expect(thanks).not.toContainText(/tahák/i);
   await expect(thanks).not.toContainText("neověřováno");
   await expect(thanks).not.toContainText("Zamítnutý kandidát");
   const paragraphs = await thanks.locator("p").allTextContents();

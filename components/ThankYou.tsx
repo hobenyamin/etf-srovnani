@@ -27,16 +27,6 @@ export function ThankYou({ children }: { children: ReactNode }) {
 
       <div className="mt-8 space-y-8">{children}</div>
 
-      <section aria-labelledby="dane-h" className="mt-10 border-t-2 border-ink pt-3">
-        <h3 id="dane-h" className="font-display text-xl font-semibold">
-          Daňový tahák
-        </h3>
-        {/* Krok 5 (texty): obsah W-8BEN a časového testu se zdroji, po kontrole. */}
-        <p className="mt-2 text-[15px] leading-6">
-          Tahák k&nbsp;formuláři W-8BEN a&nbsp;časovému testu právě prochází kontrolou. Pošleme vám ho e-mailem, jakmile
-          bude hotový.
-        </p>
-      </section>
 
       <fieldset className="mt-10 rounded-sm bg-card p-4" aria-describedby={questionId}>
         <legend className="float-left font-semibold">Máte už účet u&nbsp;brokera?</legend>

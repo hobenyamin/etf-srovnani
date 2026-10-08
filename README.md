@@ -75,6 +75,7 @@ TODO – pokyny agentům. Chyby: [`docs/ai-chyby.md`](docs/ai-chyby.md), exporty
 - **Průměrné náklady fondů přímo v ČR.** ESMA má přílohu po zemích (Annexes PDF); hodnotu za ČR jsme zatím nedohledali. Tisk uvádí průměr kolem 2 % (e15), ale jde o sekundární zdroj bez metodiky, proto ho nepoužíváme.
 - **Údaje skutečného provozovatele.** Stránka je ukázkový projekt do výběrového řízení a jako autor je uveden Nikolas Hošek (hosek@weborio.cz). **Před ostrým spuštěním je nutné doplnit údaje skutečného provozovatele**: název, IČO, sídlo a kontakt v patičce i u formuláře (správce osobních údajů). Vyžaduje to zákon a reklamní platformy.
 - **Plné znění zásad ochrany osobních údajů** (`/zasady` je kostra).
+- **Daňový tahák (W-8BEN, časový test).** Zatím neexistuje, proto ho stránka neslibuje – ani ve formuláři, ani na děkovací obrazovce. Vrátí se, až bude text se zdroji hotový a zkontrolovaný.
 
 ## Zdroje dat
 
