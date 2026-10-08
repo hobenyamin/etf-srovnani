@@ -60,12 +60,20 @@ TODO – pokyny agentům. Chyby: [`docs/ai-chyby.md`](docs/ai-chyby.md), exporty
 9. **Dvě měny.** `currency` = měna obchodování na burze, `base_currency` = měna fondu. Pro měnové riziko USD/CZK je podstatná měna fondu – u všech 10 fondů USD.
 10. **AUM = aktiva celého fondu s datem ze zdroje**, ne jen datum stažení. Velikost se mění denně; datum musí být vidět.
 11. **ISIN US fondů dopočítán z CUSIP.** Weby emitentů v USA ISIN neuvádějí. Dopočet podle ISO 6166 ověřujeme proti OpenFIGI.
+12. **Slib reklamy A stojí na průměrech ESMA, ne na našich ETF.** Mezi ETF v datech (TER 0,03–0,14 %) je rozdíl za 20 let jen v jednotkách tisíc Kč, „desítky tisíc“ by byla nepravda. Platí až srovnání průměrného ETF (0,2 %) s průměrným aktivním akciovým fondem v EU (1,2 %) podle ESMA. Obě čísla jsou ze stejného zdroje a metodiky. Konkrétní fond české banky nepoužíváme: šlo by o porovnávací reklamu a jeden KID neukazuje průměr. Podrobně v [`ads/README.md`](ads/README.md).
+13. **Hero A a reklama A počítají s výnosem 0 %.** Tvrzení tak nestojí na žádném předpokladu výnosu: 2 000 Kč měsíčně, 20 let → 44 200 Kč. Číslo v hero se počítá živě stejnou funkcí jako kalkulačka. Při 2 000 Kč / 20 let / 0 % ukáže kalkulačka v řádku „Rozdíl“ totéž číslo (hlídá unit i E2E test).
+14. **Kalkulačka má výchozí modelový výnos 5 % – vědomá volba bez benchmarku.** Kulaté číslo pro ilustraci, ne odhad. Přepínač 0/3/5/7 % a text „zvolený příklad, ne odhad ani slib; výnos může být i záporný“ přímo u volby. Náklad = poplatky + výnos, o který kvůli nim investor přijde (měsíční model, TER strháván průběžně).
+15. **V účtence jen UCITS fondy (dostupné v ČR) seskupené podle TER, plus dva průměry ESMA.** US fondy v kalkulačce nejsou – stránka je nenabízí. Žádný řádek není označen jako „nejlepší“.
+16. **Varianta hero podle `utm_content`:** hodnota začínající `b` → hero B, jinak A. `proxy.ts` přepisuje na staticky předrenderovanou `/v/b` (noindex, canonical `/`), takže hero při načtení nebliká a URL s UTM zůstává.
+17. **Formulář: e-mail + jeden nepovinný nepředvyplněný souhlas s novinkami.** Doručení srovnání je vyřízení žádosti (čl. 6 odst. 1 písm. b GDPR), novinky jen se souhlasem (480/2004) – oba texty jsou na stránce oddělené. Údaje provozovatele zatím viditelně „[doplnit]“ – nevymýšlíme je.
 
 ## Co chybí a proč
 
 - **Registr ČNB jsme nepoužili.** Seznam zahraničních investičních fondů (JERRS) má vyhledávání za CAPTCHA a webová služba WS JERRS vyžaduje certifikát a podle ISIN nehledá. Po 15 minutách pokusů jsme to vzdali. Místo toho pole `registered_in_cz` vychází ze seznamu zemí registrace na stránce emitenta: `true` u SPYL, SXR8 a SXR4. Vanguard (VUAA, VWCE) seznam zemí neuvádí, proto `null`. Toto pole zatím neprošlo ruční kontrolou.
 - **Distribuční třídy UCITS fondů** (SPY5, VUSA, IUSA, VWRL) nejsou ověřené; v datech jsou jen jako poznámka.
 - **Přesný UCITS ekvivalent VTI (celý US trh včetně malých firem)** jsme nenašli. SPDR Russell 3000 UCITS se podle OpenFIGI a SSGA zdá zrušený.
+- **Průměrné náklady fondů přímo v ČR.** ESMA má přílohu po zemích (Annexes PDF); hodnotu za ČR jsme zatím nedohledali. Tisk uvádí průměr kolem 2 % (e15), ale jde o sekundární zdroj bez metodiky, proto ho nepoužíváme.
+- **Údaje provozovatele, zásady ochrany údajů a daňový tahák** (krok 3 je jen UI). Na stránce jsou viditelně označené jako „[doplnit]“ nebo „připravujeme“.
 
 ## Zdroje dat
 
@@ -83,6 +91,8 @@ Podrobně u každé hodnoty v [`data/etfs.json`](data/etfs.json) (`source_url`, 
 | Kontrola ISIN | OpenFIGI (Bloomberg) | [openfigi.com](https://www.openfigi.com) | 2026-10-08 |
 | Kotace SXR4 na Xetře | Deutsche Börse | [live.deutsche-boerse.com](https://live.deutsche-boerse.com/etf/ishares-msci-usa-ucits-etf-usd-acc) | 2026-10-09 |
 | Pokrytí indexu MSCI USA | MSCI – factsheet indexu | [msci.com](https://www.msci.com/documents/10199/255599/msci-usa-index-net.pdf) | 2026-10-09 |
+| Průměrné náklady ETF a aktivních fondů v EU | ESMA – Costs and Performance of EU Retail Investment Products 2025 (data 2024) | [esma.europa.eu](https://www.esma.europa.eu/sites/default/files/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and_Performance_of_EU_Retail_Investment_Products.pdf) | 2026-10-09 |
+| KID jako podmínka prodeje drobným investorům | Nařízení (EU) č. 1286/2014 (PRIIPs) | [eur-lex.europa.eu](https://eur-lex.europa.eu/eli/reg/2014/1286/oj) | – |
 
 ## Právní upozornění
 
@@ -94,6 +104,12 @@ Rizika pro „spuštění zítra“ na straně reklamních platforem: Google Ads
 
 ```bash
 npm install
-npm run dev     # http://localhost:3000
+npm run dev          # http://localhost:3000
 npm run build
+npm test             # unit testy výpočtu (Vitest)
+npm run check-data   # kontrola zdrojů v data/
+npx playwright install --with-deps chromium   # jednou
+npm run e2e          # Playwright, mobil 375 px
 ```
+
+Variantu hero B zobrazíte přes `/?utm_content=b-zvedavost`.

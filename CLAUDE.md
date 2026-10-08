@@ -79,8 +79,8 @@ Každé rozhodnutí poměřuj tím – technicky, obsahově i právně.
 
 ## Dvě verze reklamy
 
-- **A – úspora:** „Na poplatcích ETF můžete za 20 let ztratit desítky tisíc Kč. Spočítejte si to.“
-- **B – zvědavost:** „Proč si v Česku nekoupíte VOO? A který fond místo něj.“
+- **A – úspora:** „Rozdíl v poplatcích fondů dělá za 20 let desítky tisíc Kč, i bez jakéhokoli výnosu. Spočítejte si to.“ (ověření a disclaimer v `ads/README.md`)
+- **B – zvědavost:** „Proč si v Česku nekoupíte VOO? A jaké alternativy jsou v ČR dostupné.“
 - Ke každé: vizuál 1:1 / 4:5 (feed) a 9:16 (stories), primární text, nadpis, CTA, návrh cílení. Hero stránky musí odpovídat slibu reklamy (případně varianta hero podle `utm_content`).
 
 ## Technologie
