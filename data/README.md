@@ -31,7 +31,7 @@ Každé pole kromě `id`, `kind` a `ucits_equivalent` má tvar:
 | `distribution` | `accumulating` / `distributing` |
 | `index` | Sledovaný index |
 | `registered_in_cz` | `true`, pokud emitent na stránce fondu uvádí Českou republiku mezi zeměmi registrace; jinak `null` + důvod |
-| `ucits_equivalent` | Jen u `us`: `{ isin, match, note }`, `match` = `same_index` (stejný index) / `closest` (nejbližší alternativa) |
+| `ucits_equivalent` | Jen u `us`: `{ isin, match, note, public_note }`, `match` = `same_index` (stejný index) / `closest` (nejbližší alternativa). `note` je interní poznámka (zdroje, co není ověřeno), **na stránce se zobrazuje jen `public_note`** – krátká věta pro laika bez URL a interních poznámek |
 
 `meta.verified_by_human` = data prošla ručním ověřením podle [`docs/overeni-dat.md`](../docs/overeni-dat.md); co přesně člověk ověřil, je v `meta.verified_by_human_scope`.
 

@@ -110,7 +110,7 @@ export function PairCard({ pair, full = false }: { pair: FundPair; full?: boolea
           ))}
         </tbody>
       </table>
-      {(full || !same) && <p className="mt-2 text-[13px] leading-5 text-muted">{pair.us.ucits_equivalent!.note}</p>}
+      {(full || !same) && <p className="mt-2 text-[13px] leading-5 text-muted">{pair.us.ucits_equivalent!.public_note}</p>}
       <ol className="mt-2 space-y-0.5 text-[12px] leading-4 text-muted">
         {sources.map((s, i) => (
           <li key={s.url} id={`src-${id}-${i + 1}`}>

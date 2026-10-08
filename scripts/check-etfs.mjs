@@ -46,6 +46,7 @@ for (const fund of data.funds) {
     if (!target || target.kind !== 'ucits') errors.push(`${fund.id}: ucits_equivalent ${eq?.isin} není UCITS fond v datech`);
     else if (eq.match === 'same_index' && target.index.value !== fund.index.value) errors.push(`${fund.id}: same_index, ale ${fund.index.value} ≠ ${target.index.value}`);
     else if (!['same_index', 'closest'].includes(eq.match)) errors.push(`${fund.id}: neznámý match ${eq.match}`);
+    if (!eq?.public_note) errors.push(`${fund.id}: ucits_equivalent bez public_note`);
   }
 }
 

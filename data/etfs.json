@@ -153,7 +153,8 @@
       "ucits_equivalent": {
         "isin": "IE000XZSV718",
         "match": "same_index",
-        "note": "Stejný emitent, stejný index. Distribuční třída téhož fondu: SPY5 (IE00B6YX5C33) – neověřováno."
+        "note": "Stejný emitent, stejný index. Distribuční třída téhož fondu: SPY5 (IE00B6YX5C33) – neověřováno.",
+        "public_note": "Stejný emitent (State Street SPDR) a stejný index S&P 500."
       }
     },
     {
@@ -278,7 +279,8 @@
       "ucits_equivalent": {
         "isin": "IE00BFMXXD54",
         "match": "same_index",
-        "note": "Stejný emitent, stejný index. Distribuční třída: VUSA (IE00B3XXRP09) – neověřováno."
+        "note": "Stejný emitent, stejný index. Distribuční třída: VUSA (IE00B3XXRP09) – neověřováno.",
+        "public_note": "Stejný emitent (Vanguard) a stejný index S&P 500."
       }
     },
     {
@@ -409,7 +411,8 @@
       "ucits_equivalent": {
         "isin": "IE00B5BMR087",
         "match": "same_index",
-        "note": "Stejný emitent, stejný index. Distribuční varianta IUSA (IE0031442068) – neověřováno."
+        "note": "Stejný emitent, stejný index. Distribuční varianta IUSA (IE0031442068) – neověřováno.",
+        "public_note": "Stejný emitent (iShares) a stejný index S&P 500."
       }
     },
     {
@@ -554,7 +557,8 @@
       "ucits_equivalent": {
         "isin": "IE00B52SFT06",
         "match": "closest",
-        "note": "Schváleno jako nejbližší alternativa. Přesný UCITS ekvivalent celého US trhu nebyl nalezen. MSCI USA pokrývá jen velké a střední firmy, cca 85 % free-float tržní kapitalizace USA (MSCI USA Index factsheet k 30. 9. 2026, staženo 2026-10-09: „covers approximately 85% of the free float-adjusted market capitalization in the US“, https://www.msci.com/documents/10199/255599/msci-usa-index-net.pdf); VTI zahrnuje i malé firmy. Zamítnutý kandidát: SPDR Russell 3000 US Total Market UCITS ETF (IE00BKY7WX37) – OpenFIGI ISIN nezná, KID u SSGA vrací 404, pravděpodobně zrušen."
+        "note": "Schváleno jako nejbližší alternativa. Přesný UCITS ekvivalent celého US trhu nebyl nalezen. MSCI USA pokrývá jen velké a střední firmy, cca 85 % free-float tržní kapitalizace USA (MSCI USA Index factsheet k 30. 9. 2026, staženo 2026-10-09: „covers approximately 85% of the free float-adjusted market capitalization in the US“, https://www.msci.com/documents/10199/255599/msci-usa-index-net.pdf); VTI zahrnuje i malé firmy. Zamítnutý kandidát: SPDR Russell 3000 US Total Market UCITS ETF (IE00BKY7WX37) – OpenFIGI ISIN nezná, KID u SSGA vrací 404, pravděpodobně zrušen.",
+        "public_note": "Není přesná náhrada. VTI sleduje celý americký trh včetně malých firem. SXR4 sleduje index MSCI USA, tedy jen velké a střední firmy – podle MSCI asi 85 % hodnoty amerického trhu."
       }
     },
     {
@@ -686,7 +690,8 @@
       "ucits_equivalent": {
         "isin": "IE00BK5BQT80",
         "match": "closest",
-        "note": "Stejný emitent, ale jiný index: FTSE All-World (velké a střední firmy) vs. FTSE Global All Cap (i malé firmy). Distribuční třída: VWRL (IE00B3RBWM25) – neověřováno."
+        "note": "Stejný emitent, ale jiný index: FTSE All-World (velké a střední firmy) vs. FTSE Global All Cap (i malé firmy). Distribuční třída: VWRL (IE00B3RBWM25) – neověřováno.",
+        "public_note": "Není přesná náhrada. VT sleduje index FTSE Global All Cap včetně malých firem, VWCE index FTSE All-World jen s velkými a středními firmami. Stejný emitent (Vanguard)."
       }
     },
     {

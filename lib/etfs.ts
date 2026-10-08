@@ -24,7 +24,14 @@ export type Fund = {
   distribution: Sourced<"accumulating" | "distributing">;
   index: Sourced<string>;
   registered_in_cz: Sourced<boolean | null>;
-  ucits_equivalent: { isin: string; match: "same_index" | "closest"; note: string } | null;
+  ucits_equivalent: {
+    isin: string;
+    match: "same_index" | "closest";
+    /** Interní poznámka – nezobrazovat */
+    note: string;
+    /** Krátká poznámka pro návštěvníka */
+    public_note: string;
+  } | null;
 };
 
 export type FundPair = { us: Fund; ucits: Fund };

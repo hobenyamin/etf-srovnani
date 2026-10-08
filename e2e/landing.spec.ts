@@ -76,6 +76,11 @@ test("formulář: validace, nepředvyplněný souhlas, děkovací stav s 5 dvoji
   await expect(thanks).toBeVisible();
   await expect(thanks.getByTestId("pair")).toHaveCount(5);
   await expect(thanks).toContainText("ISIN");
+  // jen public_note – žádné interní poznámky z dat
+  await expect(thanks).not.toContainText("neověřováno");
+  await expect(thanks).not.toContainText("Zamítnutý kandidát");
+  const paragraphs = await thanks.locator("p").allTextContents();
+  expect(paragraphs.join(" ")).not.toContain("https://");
 });
 
 test("formulář jde odeslat jen klávesnicí", async ({ page }) => {
