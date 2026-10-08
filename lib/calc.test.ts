@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { type CalcInput, clampInput, feeCost, futureValue, totalDeposits } from "./calc";
-import { computeFees, ESMA, FEE_ROWS, HERO_INPUT } from "./fees";
+import { ESMA, FEE_ROWS } from "./fee-rows";
+import { computeFees, HERO_INPUT } from "./fees";
 
 const base: CalcInput = { initial: 0, monthly: 2000, years: 20, annualReturn: 5 };
 
@@ -55,11 +56,11 @@ describe("tvrzení reklamy A (ESMA 0,2 % vs. 1,2 %)", () => {
   });
 
   it("hero: 2 000 Kč, 20 let, výnos 0 % → 44 246 Kč", () => {
-    expect(Math.round(computeFees(HERO_INPUT).esmaGap)).toBe(44_246);
+    expect(Math.round(computeFees(HERO_INPUT, FEE_ROWS).esmaGap)).toBe(44_246);
   });
 
   it("kalkulačka: 2 000 Kč, 20 let, 5 % → rozdíl 86 478 Kč, náklad 1,2 % = 105 202 Kč", () => {
-    const result = computeFees(base);
+    const result = computeFees(base, FEE_ROWS);
     expect(Math.round(result.esmaGap)).toBe(86_478);
     expect(Math.round(result.rows.find((r) => r.ter === 1.2)!.cost)).toBe(105_202);
   });
