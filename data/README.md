@@ -49,3 +49,7 @@ node scripts/check-etfs.mjs
 ```
 
 Ověří zdroj a datum u každého pole, poznámku u `null`, kontrolní číslici ISIN a že páry `same_index` mají opravdu stejný index.
+
+## Referenční náklady (`benchmarks.json`)
+
+Průměrné průběžné náklady akciových fondů v EU podle ESMA (pasivní ETF 0,2 %, aktivní fondy bez ETF 1,2 %; data za 2024). Kalkulačka je ukazuje jako referenční řádky, nejde o konkrétní fondy. Stejné schéma `{ value, source_url, retrieved_at, note }`, doslovná citace v `note`. Kontroluje je tentýž skript.

@@ -1,4 +1,4 @@
-// Kontrola data/etfs.json: zdroj a datum u každého pole, ISIN, vazby na UCITS ekvivalenty.
+// Kontrola data/etfs.json a data/benchmarks.json: zdroj a datum u každého pole, ISIN, vazby na UCITS ekvivalenty.
 // Spuštění: node scripts/check-etfs.mjs
 import { readFileSync } from 'node:fs';
 
@@ -49,7 +49,15 @@ for (const fund of data.funds) {
   }
 }
 
-console.log(`Fondů: ${data.funds.length}, null hodnot: ${nulls.length}${nulls.length ? ` (${nulls.join(', ')})` : ''}`);
+// Referenční náklady (ESMA) pro kalkulačku: stejné pravidlo – zdroj a datum u každé hodnoty
+const bench = JSON.parse(readFileSync(new URL('../data/benchmarks.json', import.meta.url), 'utf8'));
+for (const b of bench.benchmarks) {
+  if (!b.ter?.source_url?.startsWith('https://')) errors.push(`${b.id}.ter: chybí source_url`);
+  if (!DATE.test(b.ter?.retrieved_at ?? '')) errors.push(`${b.id}.ter: chybí retrieved_at`);
+  if (typeof b.ter?.value !== 'number') errors.push(`${b.id}.ter: chybí hodnota`);
+}
+
+console.log(`Fondů: ${data.funds.length}, benchmarků: ${bench.benchmarks.length}, null hodnot: ${nulls.length}${nulls.length ? ` (${nulls.join(', ')})` : ''}`);
 if (errors.length) {
   console.error(errors.map((e) => `CHYBA ${e}`).join('\n'));
   process.exit(1);

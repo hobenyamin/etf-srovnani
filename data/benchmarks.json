@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "description": "Referenční průměrné průběžné náklady fondů v EU pro kalkulačku poplatků. Nejde o konkrétní fondy.",
+    "retrieved_at": "2026-10-09",
+    "units": { "ter": "procenta ročně (1.2 = 1,2 %)" },
+    "verified_by_human": false
+  },
+  "benchmarks": [
+    {
+      "id": "esma_passive_equity_etf",
+      "label": "Průměrný akciový ETF v EU",
+      "ter": {
+        "value": 0.2,
+        "source_url": "https://www.esma.europa.eu/sites/default/files/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and_Performance_of_EU_Retail_Investment_Products.pdf",
+        "retrieved_at": "2026-10-09",
+        "note": "ESMA Market Report „Costs and Performance of EU Retail Investment Products 2025“ (ESMA50-1949966494-4065, zveřejněno 3. 3. 2026), data za rok 2024, investiční horizont 1 rok, s. 21 (číslo strany odečteno ze zápatí v extrahovaném textu, ověřit ručně): „In the sample of equity funds, active equity ETFs have higher ongoing costs (0.3%) than passive equity ETFs (0.2%) but remain far below active equity funds excluding ETFs (1.2%).“",
+        "cross_check": []
+      }
+    },
+    {
+      "id": "esma_active_equity_fund",
+      "label": "Průměrný aktivní akciový fond v EU",
+      "ter": {
+        "value": 1.2,
+        "source_url": "https://www.esma.europa.eu/sites/default/files/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and_Performance_of_EU_Retail_Investment_Products.pdf",
+        "retrieved_at": "2026-10-09",
+        "note": "Tentýž úryvek, s. 21: „… active equity funds excluding ETFs (1.2%)“. Jen průběžné náklady; jednorázové (vstupní) poplatky ESMA vykazuje zvlášť a kalkulačka je nezapočítává.",
+        "cross_check": []
+      }
+    }
+  ]
+}
