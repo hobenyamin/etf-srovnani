@@ -1,4 +1,5 @@
 import { Calculator } from "@/components/Calculator";
+import { Comparison } from "@/components/Comparison";
 import { Hero } from "@/components/Hero";
 import { PageView } from "@/components/PageView";
 import { StickyCta } from "@/components/StickyCta";
@@ -11,6 +12,7 @@ export function Landing({ variant }: { variant: AdVariant }) {
       <PageView variant={variant} />
       <Hero variant={variant} />
       <Calculator rows={FEE_ROWS} />
+      <Comparison />
       <StickyCta />
     </main>
   );
