@@ -107,6 +107,19 @@ Proti skutečnému Resend (doména `mail.hosek.cc`, region Ireland) a Supabase o
 | Cooldown 10 min | ✓ druhé odeslání na stejnou adresu e-mail neposlalo (jedno `confirm_sent_at`) |
 | `marketing_audience` a odhlášení | **zatím neověřeno** ručně (jen v PGlite a unit testech) |
 
+### Ruční ověření: cookie lišta a PostHog (krok 4c, 2026-10-09)
+
+Proti skutečnému projektu PostHog Cloud EU ověřil člověk (`npm run dev`, prohlížeč):
+
+| Kontrola | Výsledek |
+| --- | --- |
+| Před volbou a po „Odmítnout“ | ✓ 0 požadavků na `eu.i.posthog.com`, žádné cookies, v Local Storage jen `consent.v1` |
+| Po „Povolit měření“ | ✓ `page_view`, `compare_view` a `form_view` v PostHogu (Activity) s `ad_variant` = `b` a `utm_source` = `test` |
+| Eventy z doby před souhlasem | ✓ eventy kalkulačky se podle návrhu neodeslaly |
+| Odvolání přes „Nastavení cookies“ | ✓ cookie `ph_…` zmizela, další požadavky neodcházejí |
+| Stažení knihovny před volbou | ✗ v `npm run dev` se chunk `posthog-js` stáhl z localhostu už před volbou. Ověřeno v produkčním buildu: tam se knihovna stáhne až po souhlasu, jde jen o dev režim (rozhodnutí 36, E2E test) |
+| Firefox s rozšířenou ochranou proti sledování (výchozí v anonymním okně) | ✗ blokuje `eu.i.posthog.com`, požadavky končí „CORS Failed“ a data **nedorazí, i když návštěvník souhlasil**. Po vypnutí ochrany stav 200. Řešení: reverse proxy přes vlastní doménu, čeká na schválení |
+
 ## Rozhodnutí v nejasnostech
 
 1. **Porovnáváme NYSE ETF s UCITS ekvivalentem.** Fondy domicilované v USA (VOO, SPY, VTI…) si drobný investor v EU běžně nekoupí, protože k nim chybí KID podle nařízení PRIIPs. Stránka proto vždy ukazuje dostupnou evropskou alternativu a nikdy nevyzývá ke koupi US fondu.
@@ -144,7 +157,7 @@ Proti skutečnému Resend (doména `mail.hosek.cc`, region Ireland) a Supabase o
 33. **Bez souhlasu neměříme vůbec nic** (rozhodl člověk). § 89 odst. 3 zákona 127/2005 přebírá čl. 5(3) směrnice ePrivacy. EDPB v Guidelines 2/2023 k jeho technickému rozsahu vykládá „přístup k zařízení“ široce, takže souhlas může potřebovat i měření bez cookies přes JavaScript. Francouzský CNIL má výjimku pro anonymní měření návštěvnosti, u českého ÚOOÚ obdobnou výjimku neznáme. Proto bez souhlasu nenačteme měřicí skript, nic neodešleme a uložíme jen volbu v liště. Cena: funnel v PostHogu vidí jen souhlasící, počty leadů jsou proto v Supabase.
 34. **Vlastní lišta, odmítnout stejně snadné jako povolit:** dvě stejně velká tlačítka vedle sebe, stejný vzhled, žádné předvyplněné volby, bez „nastavení“ o úroveň níž. Lišta neblokuje obsah, nezakryje CTA v hero (testováno na 375 × 667 i 812) a dokud je vidět, spodní CTA se neukazuje. Odvolání přes „Nastavení cookies“ v patičce smaže cookie i úložiště PostHogu.
 35. **Nabízíme jen kategorie, které existují.** Kategorie `ads` je v kódu připravená, ale v liště není: ptát se na souhlas s pixely, které na stránce nejsou, by bylo zavádějící.
-36. **PostHog se stáhne až po souhlasu** (dynamický import). Bez souhlasu stránka nestahuje ani jeho kód, takže neovlivní LCP.
+36. **PostHog se stáhne až po souhlasu** (dynamický import). V produkčním buildu se knihovna (~310 kB) bez souhlasu nestáhne, takže neovlivní LCP. Před volbou se stáhne jen náš kód lišty a obálka s konfigurací (bez knihovny), hlídá to E2E test. V `npm run dev` Turbopack dynamické importy načítá dopředu, takže se tam knihovna stáhne z localhostu už před volbou. K PostHogu nic neodchází, jde jen o vývojový režim.
 37. **Eventy z doby před souhlasem se neposílají dodatečně, kromě `page_view` aktuální stránky.** Ten jen říká, že návštěvník stránku právě vidí, a bez něj by funnel v PostHogu neměl první krok.
 38. **Každý event hned, bez dávkování** (`request_batching: false`). Za návštěvu je jich nejvýš 8, takže po odvolání souhlasu nic nečeká ve frontě. Na mobilu se navíc eventy neztratí při zavření karty. Na chybu přišel E2E test: dávka nasbíraná se souhlasem odešla až po odvolání.
 39. **Cookie PostHogu platí 180 dní** místo výchozích 365 a jen pro vlastní doménu. Na vyhodnocení kampaně to stačí.
