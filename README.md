@@ -61,6 +61,19 @@ Kód a SQL psala AI. Unit testy běží s mockovaným úložištěm a SQL bylo v
 | Čtení veřejným (publishable) klíčem | ✓ odmítnuto: `42501 permission denied for table leads` |
 | `purge_unconfirmed_leads()` | ✓ smazala nepotvrzený lead starší 30 dní; kontrolní `count` po smazání = 0 |
 
+### Ruční ověření: double opt-in a e-mail (krok 4b, 2026-10-09)
+
+Proti skutečnému Resend (doména `mail.hosek.cc`, region Ireland) a Supabase ověřil člověk:
+
+| Kontrola | Výsledek |
+| --- | --- |
+| Doručení do Gmailu | ✓ doručená pošta (ne spam), odesílatel `srovnani@mail.hosek.cc`, obsah v pořádku |
+| SPF / DKIM | ✓ PASS / PASS (doména `mail.hosek.cc`) |
+| DMARC | ✗ FAIL: chyběl záznam. Přidán TXT `_dmarc.mail.hosek.cc` = `v=DMARC1; p=none;`, čeká se na propagaci DNS, **znovu neověřeno** |
+| Potvrzení tlačítkem na `/potvrzeni` | ✓ vyplní `double_opt_in_at` |
+| Cooldown 10 min | ✓ druhé odeslání na stejnou adresu e-mail neposlalo (jedno `confirm_sent_at`) |
+| `marketing_audience` a odhlášení | **zatím neověřeno** ručně (jen v PGlite a unit testech) |
+
 ## Rozhodnutí v nejasnostech
 
 1. **Porovnáváme NYSE ETF s UCITS ekvivalentem.** Fondy domicilované v USA (VOO, SPY, VTI…) si drobný investor v EU běžně nekoupí, protože k nim chybí KID podle nařízení PRIIPs. Stránka proto vždy ukazuje dostupnou evropskou alternativu a nikdy nevyzývá ke koupi US fondu.
@@ -106,6 +119,9 @@ Kód a SQL psala AI. Unit testy běží s mockovaným úložištěm a SQL bylo v
 - **Plné znění zásad ochrany osobních údajů** (`/zasady` je kostra).
 - **Limit odeslání je jen v paměti jedné instance.** Na Vercelu může běžet víc instancí, takže limit je orientační. Pro ostrý provoz: rate limiting ve Vercel Firewall nebo Upstash Redis. Turnstile až při skutečném spamu.
 - **Free plán Supabase se po týdnu nečinnosti uspí** a mazání přes pg_cron pak neběží. Pro ostrý provoz Pro plán.
+- **DMARC:** ověřit PASS po propagaci DNS. Před ostrým provozem zvážit přísnější politiku (`p=quarantine`, později `p=reject`) a reporty (`rua`). `p=none` jen sleduje, nic nechrání.
+- **One-click odhlášení v Gmailu** (`List-Unsubscribe-Post`) otestovat až na Vercelu: Gmail volá `SITE_URL`, který lokálně není dostupný z internetu.
+- **Ruční ověření `marketing_audience` a odhlášení** proti Supabase zatím chybí.
 - **Bounce a stížnosti z Resend (webhooky)** zatím nezpracováváme. Nedoručitelné adresy zůstanou v DB jako nepotvrzené a po 30 dnech se smažou. Pro ostrý provoz napojit webhook a nedoručitelné adrese už nic neposílat.
 - **Kvóta free plánu Resend.** Free plán má denní i měsíční limit e-mailů. Před spuštěním kampaně ověřit v ceníku Resend a podle očekávaného počtu leadů přejít na placený plán. Strop 50 e-mailů za hodinu je ochrana proti zneužití, ne náhrada.
 - **Region funkcí na Vercelu.** Výchozí region serverových funkcí nemusí být v EU. Před nasazením nastavit region Frankfurt (`fra1`), kvůli rychlosti (Supabase je ve Frankfurtu) i kvůli tomu, aby osobní údaje zůstaly v EU. Ověřit v nastavení projektu.
