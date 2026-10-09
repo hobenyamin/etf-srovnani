@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { track } from "@/lib/track";
+import { useBannerVisible } from "@/lib/use-consent";
 
 /** Spodní lišta na mobilu: jen odkaz na kalkulačku, nikdy formulář. Zobrazí se po odscrollování
  *  z hero a zmizí natrvalo, jakmile návštěvník kalkulačku uvidí. */
 export function StickyCta() {
   const [heroOut, setHeroOut] = useState(false);
   const [calcSeen, setCalcSeen] = useState(false);
+  // Dvě spodní lišty přes sebe ne: dokud je vidět lišta cookies, CTA počká
+  const bannerVisible = useBannerVisible();
 
   useEffect(() => {
     const hero = document.getElementById("hero");
@@ -24,7 +27,7 @@ export function StickyCta() {
     return () => observer.disconnect();
   }, []);
 
-  if (!heroOut || calcSeen) return null;
+  if (!heroOut || calcSeen || bannerVisible) return null;
   return (
     <div className="fixed inset-x-0 bottom-0 z-10 border-t border-rule bg-paper/95 px-4 py-3 backdrop-blur-sm">
       <a

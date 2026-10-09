@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CookieSettingsButton } from "@/components/CookieSettingsButton";
 import { OPERATOR } from "@/lib/site";
 
 export function Footer() {
@@ -18,10 +19,7 @@ export function Footer() {
         <Link href="/zasady" className="underline">
           Zásady ochrany osobních údajů
         </Link>
-        {/* Krok 4: tlačítko otevře lištu nastavení cookies */}
-        <Link href="/zasady#cookies" className="underline">
-          Nastavení cookies
-        </Link>
+        <CookieSettingsButton />
       </nav>
     </footer>
   );
