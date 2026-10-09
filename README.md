@@ -118,7 +118,7 @@ Proti skutečnému projektu PostHog Cloud EU ověřil člověk (`npm run dev`, p
 | Eventy z doby před souhlasem | ✓ eventy kalkulačky se podle návrhu neodeslaly |
 | Odvolání přes „Nastavení cookies“ | ✓ cookie `ph_…` zmizela, další požadavky neodcházejí |
 | Stažení knihovny před volbou | ✗ v `npm run dev` se chunk `posthog-js` stáhl z localhostu už před volbou. Ověřeno v produkčním buildu: tam se knihovna stáhne až po souhlasu, jde jen o dev režim (rozhodnutí 36, E2E test) |
-| Firefox s rozšířenou ochranou proti sledování (výchozí v anonymním okně) | ✗ blokuje `eu.i.posthog.com`, požadavky končí „CORS Failed“ a data **nedorazí, i když návštěvník souhlasil**. Po vypnutí ochrany stav 200. Řešení: reverse proxy `/ingest` (rozhodnutí 40), implementováno, **čeká na ruční ověření** |
+| Firefox s rozšířenou ochranou proti sledování (výchozí v anonymním okně) | Bez proxy ✗ blokuje `eu.i.posthog.com`, požadavky končí „CORS Failed“ a data **nedorazí, i když návštěvník souhlasil**. Po vypnutí ochrany stav 200. ✓ **opraveno proxy, ověřeno:** přes reverse proxy `/ingest` (rozhodnutí 40) ve stejném okně po „Povolit měření“ `POST /ingest/e/` → 200 a eventy dorazily do PostHogu (Activity) |
 
 ## Rozhodnutí v nejasnostech
 
