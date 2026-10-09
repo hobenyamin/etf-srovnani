@@ -5,8 +5,8 @@ import { saveQualify } from "@/app/actions/lead";
 import { QUALIFY_ANSWERS } from "@/lib/lead";
 import { track } from "@/lib/track";
 
-/** Stav uložení leadu: čeká se na server / uloženo / nepovedlo se (Supabase nedostupný, limit). */
-export type Delivery = "pending" | "sent" | "failed";
+/** Stav uložení leadu: čeká se na server / uloženo / adresa už dřív potvrzená / nepovedlo se (Supabase, limit). */
+export type Delivery = "pending" | "sent" | "confirmed" | "failed";
 
 /** Děkovací stav: slíbený obsah hned na stránce, ne „čekejte na e-mail“. Jedna nepovinná otázka. */
 export function ThankYou({
@@ -40,7 +40,9 @@ export function ThankYou({
       <p className="mt-2 text-[15px] leading-6 text-muted" role="status" data-testid="delivery">
         {delivery === "failed"
           ? "E-mail se nám teď nepodařilo zpracovat, kopie proto nepřijde. Srovnání máte celé tady na stránce."
-          : "Kopii vám pošleme e-mailem. Potvrďte prosím adresu odkazem, který vám přijde."}
+          : delivery === "confirmed"
+            ? "Tuto adresu už máte potvrzenou, odkaz na srovnání najdete v dřívějším e-mailu."
+            : "Kopii vám pošleme e-mailem. Potvrďte prosím adresu odkazem, který vám přijde."}
       </p>
 
       <div className="mt-8 space-y-8">{children}</div>

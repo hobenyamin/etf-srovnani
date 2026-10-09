@@ -55,7 +55,7 @@ export function LeadForm({ fullComparison }: { fullComparison: ReactNode }) {
     startTransition(async () => {
       try {
         const result = await submitLead(payload);
-        setDelivery(result.ok && result.stored ? "sent" : "failed");
+        setDelivery(!result.ok || !result.stored ? "failed" : result.alreadyConfirmed ? "confirmed" : "sent");
         if (result.ok) setLeadRef(result.ref);
       } catch {
         setDelivery("failed");
