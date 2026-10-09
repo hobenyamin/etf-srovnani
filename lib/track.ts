@@ -1,5 +1,7 @@
-// Měření cesty návštěvníka. Eventy jdou do window.dataLayer (a v dev do konzole).
-// Varianta reklamy a UTM se berou ze stavu návštěvy (lib/visit.ts). Napojení na PostHog je krok 4c.
+// Měření cesty návštěvníka. Eventy jdou vždy do window.dataLayer (jen paměť stránky, nic se
+// neodesílá; háček pro testy, v dev i do konzole) a se souhlasem s měřením i do PostHogu
+// (lib/analytics.ts). Varianta reklamy a UTM se berou ze stavu návštěvy (lib/visit.ts).
+import { capture } from "@/lib/analytics";
 import { type AdVariant, getAdVariant, setAdVariant, utmFromUrl } from "@/lib/visit";
 
 export { type AdVariant, setAdVariant };
@@ -30,9 +32,11 @@ const fired = new Set<TrackEvent>();
 
 export function track(event: TrackEvent, props: Record<string, unknown> = {}) {
   if (typeof window === "undefined") return;
-  const entry: DataLayerEntry = { event, ad_variant: getAdVariant(), ...utmFromUrl(), ...props };
+  const sent = { ad_variant: getAdVariant(), ...utmFromUrl(), ...props };
+  const entry: DataLayerEntry = { event, ...sent };
   window.dataLayer ??= [];
   window.dataLayer.push(entry);
+  capture(event, sent);
   if (process.env.NODE_ENV !== "production") console.debug("[track]", entry);
 }
 
