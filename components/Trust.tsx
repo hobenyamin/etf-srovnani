@@ -1,7 +1,7 @@
 import { DATA_RETRIEVED_AT } from "@/lib/etfs";
 import { ESMA } from "@/lib/fee-rows";
 import { formatDate } from "@/lib/format";
-import { OPERATOR } from "@/lib/site";
+import { OPERATOR, RISK_WARNINGS } from "@/lib/site";
 
 export function Trust() {
   return (
@@ -35,11 +35,9 @@ export function Trust() {
           Upozornění na rizika
         </h3>
         <ul className="mt-2 list-disc space-y-1 pl-5">
-          <li>Hodnota investice může klesat i&nbsp;stoupat, můžete přijít o&nbsp;část vložených peněz.</li>
-          <li>Fondy investují v&nbsp;USD. Změna kurzu USD/CZK může výnos v&nbsp;korunách snížit i&nbsp;zvýšit.</li>
-          <li>Minulé ani modelové výnosy nezaručují výnosy budoucí.</li>
-          <li>Údaje platí k&nbsp;datu uvedenému u&nbsp;zdroje a&nbsp;mohou se změnit.</li>
-          <li>Stránka je vzdělávací srovnání s&nbsp;daty, ne investiční doporučení ani nabídka produktu.</li>
+          {RISK_WARNINGS.map((text) => (
+            <li key={text}>{text}</li>
+          ))}
         </ul>
       </div>
     </section>
