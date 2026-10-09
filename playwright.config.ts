@@ -25,6 +25,10 @@ export default defineConfig({
       SUPABASE_URL: "http://127.0.0.1:9",
       SUPABASE_SECRET_KEY: "e2e-not-a-key",
       LEAD_TOKEN_SECRET: "e2e-secret",
+      // Resend nikdy ostře: neplatný klíč (k odeslání beztak nedojde, databáze je nedostupná)
+      RESEND_API_KEY: "re_e2e_invalid",
+      EMAIL_FROM: "E2E <e2e@example.invalid>",
+      SITE_URL: "http://localhost:3100",
     },
   },
 });

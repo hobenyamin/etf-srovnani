@@ -158,3 +158,44 @@ test("robot s vyplněným honeypotem dostane stejný děkovací stav", async ({ 
   await expect(page.getByTestId("thank-you").getByTestId("pair")).toHaveCount(5);
   await expect(page.getByTestId("delivery")).toContainText("Kopii vám pošleme");
 });
+
+test.describe("double opt-in a odhlášení", () => {
+  test("potvrzení bez tokenu nebo s nesmyslným tokenem srovnání neukáže", async ({ page }) => {
+    await page.goto("/potvrzeni");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Tenhle odkaz nefunguje");
+    await expect(page.getByTestId("pair")).toHaveCount(0);
+
+    await page.goto("/potvrzeni?t=nesmysl");
+    // samotné otevření odkazu nic nepotvrdí – až tlačítko
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Potvrďte svůj e-mail");
+    await page.getByRole("button", { name: "Potvrdit e-mail" }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Tenhle odkaz nefunguje");
+    await expect(page.getByTestId("pair")).toHaveCount(0);
+    await expect(page.getByRole("link", { name: "Zadat e-mail znovu" })).toHaveAttribute("href", "/#formular");
+  });
+
+  test("výpadek databáze při potvrzení: chyba s možností zkusit znovu, žádný lead_confirmed", async ({ page }) => {
+    await page.goto(`/potvrzeni?t=${"A".repeat(43)}`);
+    await page.getByRole("button", { name: "Potvrdit e-mail" }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Teď se to nepovedlo");
+    await expect(page.getByRole("button", { name: "Zkusit znovu" })).toBeVisible();
+    expect(await events(page)).not.toContain("lead_confirmed");
+  });
+
+  test("podvržený odkaz na odhlášení nikoho neodhlásí", async ({ page, request }) => {
+    await page.goto("/odhlaseni?u=unsub:11111111-2222-3333-4444-555555555555.podvrh");
+    await page.getByRole("button", { name: "Odhlásit se" }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Odhlášení se nepovedlo");
+
+    const oneClick = await request.post("/api/odhlaseni?u=podvrh", { form: { "List-Unsubscribe": "One-Click" } });
+    expect(oneClick.status()).toBe(400);
+  });
+
+  test("375 px: stránky potvrzení a odhlášení bez vodorovného scrollu, noindex", async ({ page }) => {
+    for (const url of ["/potvrzeni?t=x", "/odhlaseni?u=x"]) {
+      await page.goto(url);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth), url).toBeLessThanOrEqual(375);
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+    }
+  });
+});
