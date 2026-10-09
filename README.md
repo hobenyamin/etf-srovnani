@@ -118,7 +118,7 @@ Proti skutečnému projektu PostHog Cloud EU ověřil člověk (`npm run dev`, p
 | Eventy z doby před souhlasem | ✓ eventy kalkulačky se podle návrhu neodeslaly |
 | Odvolání přes „Nastavení cookies“ | ✓ cookie `ph_…` zmizela, další požadavky neodcházejí |
 | Stažení knihovny před volbou | ✗ v `npm run dev` se chunk `posthog-js` stáhl z localhostu už před volbou. Ověřeno v produkčním buildu: tam se knihovna stáhne až po souhlasu, jde jen o dev režim (rozhodnutí 36, E2E test) |
-| Firefox s rozšířenou ochranou proti sledování (výchozí v anonymním okně) | ✗ blokuje `eu.i.posthog.com`, požadavky končí „CORS Failed“ a data **nedorazí, i když návštěvník souhlasil**. Po vypnutí ochrany stav 200. Řešení: reverse proxy přes vlastní doménu, čeká na schválení |
+| Firefox s rozšířenou ochranou proti sledování (výchozí v anonymním okně) | ✗ blokuje `eu.i.posthog.com`, požadavky končí „CORS Failed“ a data **nedorazí, i když návštěvník souhlasil**. Po vypnutí ochrany stav 200. Řešení: reverse proxy `/ingest` (rozhodnutí 40), implementováno, **čeká na ruční ověření** |
 
 ## Rozhodnutí v nejasnostech
 
@@ -161,6 +161,11 @@ Proti skutečnému projektu PostHog Cloud EU ověřil člověk (`npm run dev`, p
 37. **Eventy z doby před souhlasem se neposílají dodatečně, kromě `page_view` aktuální stránky.** Ten jen říká, že návštěvník stránku právě vidí, a bez něj by funnel v PostHogu neměl první krok.
 38. **Každý event hned, bez dávkování** (`request_batching: false`). Za návštěvu je jich nejvýš 8, takže po odvolání souhlasu nic nečeká ve frontě. Na mobilu se navíc eventy neztratí při zavření karty. Na chybu přišel E2E test: dávka nasbíraná se souhlasem odešla až po odvolání.
 39. **Cookie PostHogu platí 180 dní** místo výchozích 365 a jen pro vlastní doménu. Na vyhodnocení kampaně to stačí.
+40. **PostHog přes vlastní doménu (reverse proxy `/ingest`).** Prohlížeč posílá eventy na `/ingest/…` na naší doméně a Next.js je přepošle do PostHog EU (`rewrites` v [`next.config.ts`](next.config.ts), podle návodu PostHogu pro Next.js). Bez proxy by v datech chyběla část návštěvníků, kteří s měřením souhlasili. Firefox s rozšířenou ochranou proti sledování (výchozí v anonymním okně) blokuje `eu.i.posthog.com` a požadavky končí „CORS Failed“ (zjištěno ručním testem). Pravděpodobně totéž dělají blokátory reklam, to jsme neměřili. Funnel by tak byl zkreslený různě podle prohlížeče.
+    - **Souhlas se neobchází:** knihovna se dál stáhne a spustí až po „Povolit měření“, mění se jen adresa, kam eventy odcházejí. Kdo si sám nainstaloval blokátor, může proxy vnímat jako obejití své volby; proti tomu stojí jeho výslovný souhlas v liště. Patří do právní kontroly.
+    - **Cesta `/ingest` je zdokumentovaný standard PostHogu.** Zvolili jsme ji vědomě místo úmyslně skryté cesty: je lépe obhajitelná a transparentní (uvedená i v zásadách), i když se časem může dostat na seznamy blokátorů.
+    - **IP adresy:** v projektu PostHog je podle provozovatele zapnuté „Discard client IP data“, takže PostHog IP neukládá bez ohledu na proxy.
+    - **Vedlejší efekt:** `skipTrailingSlashRedirect` (PostHog volá `/ingest/e/` s lomítkem na konci) vypíná přesměrování lomítka v celé aplikaci. `/zasady/` tak vrací stránku místo přesměrování na `/zasady`. Indexovat se dá jen `/`, ostatní stránky mají `noindex`, takže duplicitní URL nevadí.
 
 ## Co chybí a proč
 
@@ -172,7 +177,8 @@ Proti skutečnému projektu PostHog Cloud EU ověřil člověk (`npm run dev`, p
 - **Plné znění zásad ochrany osobních údajů** (`/zasady` je kostra).
 - **Limit odeslání je jen v paměti jedné instance.** Na Vercelu může běžet víc instancí, takže limit je orientační. Pro ostrý provoz: rate limiting ve Vercel Firewall nebo Upstash Redis. Turnstile až při skutečném spamu.
 - **Free plán Supabase se po týdnu nečinnosti uspí** a mazání přes pg_cron pak neběží. Pro ostrý provoz Pro plán.
-- **Zahazování IP v PostHogu:** v projektu zapnout Settings → „Discard client IP data“ (nebo ekvivalent) a pak to uvést v zásadách. Zatím neověřeno.
+- **„Discard client IP data“ v PostHogu** je podle provozovatele zapnuté a uvádí to i `/zasady`. Nastavení v projektu před spuštěním zkontrolovat (Settings projektu PostHog), Claude Code k němu nemá přístup.
+- **Poloha u eventů přes proxy:** po nasazení na Vercel ověřit, jestli PostHog vidí polohu návštěvníka, nebo serveru Vercelu. Pro kampaň jen v ČR ji nepotřebujeme.
 - **Právní kontrola lišty a měření** (§ 89 zákona 127/2005, GDPR) před spuštěním. Naše řešení je konzervativní, ale není to právní rada.
 - **Reklamní pixely a Conversions API** jsou jen navržené (sekce Měření) a čekají na schválení.
 - **DMARC:** ověřit PASS po propagaci DNS. Před ostrým provozem zvážit přísnější politiku (`p=quarantine`, později `p=reject`) a reporty (`rua`). `p=none` jen sleduje, nic nechrání.

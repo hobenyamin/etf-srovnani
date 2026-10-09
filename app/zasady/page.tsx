@@ -99,7 +99,9 @@ export default function Zasady() {
           a&nbsp;odeslání formuláře, potvrzení e-mailu), variantu reklamy a&nbsp;UTM parametry odkazu. PostHog k&nbsp;nim
           přidává technické údaje: adresu stránky, typ prohlížeče a&nbsp;zařízení, jazyk, časové pásmo a&nbsp;velikost
           obrazovky. Žádné nahrávání obrazovky, žádné klikání mimo tyto kroky. Váš e-mail ani tokeny z&nbsp;odkazů
-          v&nbsp;e-mailech do PostHogu neposíláme.
+          v&nbsp;e-mailech do PostHogu neposíláme. Data z&nbsp;měření posíláme přes naši doménu (adresa{" "}
+          <code>/ingest</code>) na servery PostHog v&nbsp;EU; po cestě je předává náš hosting Vercel. PostHog má
+          nastaveno, že IP adresy neukládá.
         </li>
         <li>
           <strong>Reklamní cookies a pixely</strong> (Meta, Google) nepoužíváme.
