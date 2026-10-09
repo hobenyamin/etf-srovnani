@@ -87,6 +87,14 @@ Kód a SQL psala AI. Unit testy běží s mockovaným úložištěm a SQL bylo v
 22. **Výsledek kalkulačky k leadu přepočítává server** ze vstupů oříznutých na povolené rozsahy. Číslům z prohlížeče nevěříme.
 23. **Nepotvrzené adresy mažeme po 30 dnech** (pg_cron, denně). Kdo nepotvrdil e-mail, nemá s námi vztah, který by delší uložení odůvodnil. Lhůtu pro potvrzené adresy určí provozovatel.
 24. **Zápis do databáze jen ze serveru.** RLS je zapnuté bez jediné politiky, práva má jen role `service_role` (tajný klíč, jen na serveru, hlídá balíček `server-only`). Veřejný klíč nic nepřečte ani nezapíše.
+25. **Double opt-in potvrzuje tlačítko, ne odkaz.** Bezpečnostní skenery odkazů (Outlook, firemní filtry) otevírají odkazy v e-mailech samy. Kdyby potvrzoval už samotný odkaz, `double_opt_in_at` by nic nedokazoval. Cena je jedno klepnutí navíc.
+26. **Jeden e-mail: potvrzení a odkaz na srovnání dohromady.** Tlačítko „Potvrdit a otevřít srovnání“ vede na `/potvrzeni`, kde se po potvrzení zobrazí plné srovnání. Návštěvník ho už viděl na stránce, e-mail je kopie a důvod adresu potvrdit.
+27. **Potvrzovací e-mail není obchodní sdělení** (480/2004). Vyřizuje žádost, takže v něm není žádná propagace, jen odkaz, identifikace odesílatele, rizikové upozornění a odhlášení. Novinky smí v budoucnu jít jen adresám ve view `marketing_audience`: se souhlasem, potvrzené a neodhlášené.
+28. **Token v DB jen jako hash, platnost 14 dní.** Nový e-mail token nahradí, platí jen odkaz z posledního e-mailu. Po potvrzení hash zůstává, aby šel odkaz otevřít znovu („už potvrzeno“ + srovnání).
+29. **Ochrana cizích schránek:** stejné adrese nejvýš jeden potvrzovací e-mail za 10 minut a celkem nejvýš 50 za hodinu (atomicky v DB funkci `claim_confirmation`). Už potvrzené adrese e-mail znovu nepošleme.
+30. **E-mail odchází až po odpovědi** (`after()` v Next.js, na Vercelu `waitUntil`). Návštěvník na Resend nečeká. Když Resend selže, lead zůstává a chyba jde do logu bez e-mailové adresy.
+31. **Odhlášení dvojím způsobem:** odkaz v patičce e-mailu (stránka s tlačítkem) a one-click podle RFC 8058 (`List-Unsubscribe-Post`), které nabízí Gmail i Apple Mail. Odkaz je podepsaný HMAC s vlastním účelem, takže ho nejde zaměnit ani podvrhnout. Původní znění a čas souhlasu po odhlášení zůstávají jako doklad.
+32. **Rizikové upozornění má jedno znění** (`RISK_WARNINGS` v [`lib/site.ts`](lib/site.ts)) pro stránku i e-mail.
 
 ## Co chybí a proč
 
@@ -98,6 +106,9 @@ Kód a SQL psala AI. Unit testy běží s mockovaným úložištěm a SQL bylo v
 - **Plné znění zásad ochrany osobních údajů** (`/zasady` je kostra).
 - **Limit odeslání je jen v paměti jedné instance.** Na Vercelu může běžet víc instancí, takže limit je orientační. Pro ostrý provoz: rate limiting ve Vercel Firewall nebo Upstash Redis. Turnstile až při skutečném spamu.
 - **Free plán Supabase se po týdnu nečinnosti uspí** a mazání přes pg_cron pak neběží. Pro ostrý provoz Pro plán.
+- **Bounce a stížnosti z Resend (webhooky)** zatím nezpracováváme. Nedoručitelné adresy zůstanou v DB jako nepotvrzené a po 30 dnech se smažou. Pro ostrý provoz napojit webhook a nedoručitelné adrese už nic neposílat.
+- **Kvóta free plánu Resend.** Free plán má denní i měsíční limit e-mailů. Před spuštěním kampaně ověřit v ceníku Resend a podle očekávaného počtu leadů přejít na placený plán. Strop 50 e-mailů za hodinu je ochrana proti zneužití, ne náhrada.
+- **Region funkcí na Vercelu.** Výchozí region serverových funkcí nemusí být v EU. Před nasazením nastavit region Frankfurt (`fra1`), kvůli rychlosti (Supabase je ve Frankfurtu) i kvůli tomu, aby osobní údaje zůstaly v EU. Ověřit v nastavení projektu.
 - **Lhůta uložení potvrzených adres a příjemci údajů** v zásadách: musí doplnit provozovatel.
 - **Migrace se spouští ručně** v SQL editoru Supabase (bez Supabase CLI). Logika SQL funkcí byla během vývoje ověřena v PGlite (Postgres ve WASM): upsert, práva rolí, mazání po 30 dnech, opakované spuštění.
 - **Daňový tahák (W-8BEN, časový test).** Zatím neexistuje, proto ho stránka neslibuje – ani ve formuláři, ani na děkovací obrazovce. Vrátí se, až bude text se zdroji hotový a zkontrolovaný.
@@ -142,7 +153,8 @@ npm run e2e          # Playwright, mobil 375 px (ostré služby nevolá, viz pla
 ### Nastavení služeb
 
 1. `cp .env.example .env.local` a doplnit hodnoty podle komentářů v souboru. `.env.local` se necommituje.
-2. Supabase: celý obsah [`supabase/migrations/20261009_leads.sql`](supabase/migrations/20261009_leads.sql) spustit v SQL Editoru. Když selže `create extension pg_cron`, zapnout Cron v Dashboardu (Integrations → Cron) a spustit zbytek souboru.
-3. Na Vercelu nastavit stejné proměnné (Settings → Environment Variables).
+2. Supabase: v SQL Editoru spustit postupně celé soubory z [`supabase/migrations/`](supabase/migrations/) podle názvu (`20261009_leads.sql`, pak `20261009_leads_double_opt_in.sql`). Když selže `create extension pg_cron`, zapnout Cron v Dashboardu (Integrations → Cron) a spustit zbytek souboru.
+3. Resend: ověřená doména (zde `mail.hosek.cc`), API klíč s právem Sending access. `SITE_URL` je adresa, na kterou vedou odkazy v e-mailu.
+4. Na Vercelu nastavit stejné proměnné (Settings → Environment Variables).
 
 Variantu hero B zobrazíte přes `/?utm_content=b-zvedavost`.
