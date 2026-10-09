@@ -142,6 +142,7 @@ Toto není právní rada; v README uvést, že před ostrým spuštěním je pot
 - Když narazíš na nejasnost v zadání, navrhni rozhodnutí a zapiš ho do sekce „Rozhodnutí“ v README.
 - Chyby, které uděláš a které jsou opraveny, zapisuj do `docs/ai-chyby.md` (podklad pro README).
 - Před označením úkolu za hotový: build projde, Playwright test na mobilu projde, ruční kontrola v prohlížeči.
+- Bez výslovného souhlasu nepoužívej git stash, reset, checkout souborů ani jiné příkazy, které mění nebo schovávají necommitnuté změny uživatele.
 
 ## Struktura repozitáře
 
