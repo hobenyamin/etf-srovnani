@@ -48,8 +48,20 @@ export default function Zasady() {
         <li>Potvrzenou adresu do odvolání souhlasu nebo žádosti o výmaz, nejdéle [doplní provozovatel].</li>
       </ul>
 
+      <h2 className="mt-8 font-display text-xl font-semibold">Potvrzení e-mailu</h2>
+      <p className="mt-1">
+        Po odeslání formuláře vám pošleme e-mail s&nbsp;odkazem. Teprve klepnutím na tlačítko „Potvrdit e-mail“ na
+        stránce, kam odkaz vede, potvrdíte, že adresa patří vám. Uložíme čas potvrzení.
+      </p>
+
       <h2 className="mt-8 font-display text-xl font-semibold">Příjemci</h2>
-      <p className="mt-1">[doplnit]</p>
+      <p className="mt-1">Zpracovatelé, kteří pro nás údaje technicky zpracovávají:</p>
+      <ul className="mt-1 list-disc space-y-1 pl-5">
+        <li>Supabase – databáze (EU, Frankfurt)</li>
+        <li>Resend – odesílání e-mailů (EU, Irsko)</li>
+        <li>Vercel – provoz webu</li>
+      </ul>
+      <p className="mt-1">Údaje nepředáváme žádným dalším příjemcům ani partnerům. [doplní provozovatel]</p>
 
       <h2 className="mt-8 font-display text-xl font-semibold">Vaše práva</h2>
       <p className="mt-1">
