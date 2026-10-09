@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { ANALYTICS_COOKIE_DAYS } from "@/lib/analytics";
+import { CONSENT_KEY } from "@/lib/consent";
 import { CONSENT, OPERATOR, RETENTION } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -81,7 +83,32 @@ export default function Zasady() {
       <h2 id="cookies" className="mt-8 font-display text-xl font-semibold">
         Cookies
       </h2>
-      <p className="mt-1">[doplnit – analytika a reklamní pixely jen po aktivním souhlasu]</p>
+      <p className="mt-1">
+        Bez vašeho souhlasu neměříme nic: nenačteme žádný měřicí skript, nic neodešleme a&nbsp;do prohlížeče uložíme jen
+        vaši volbu.
+      </p>
+      <ul className="mt-2 list-disc space-y-1 pl-5">
+        <li>
+          <strong>Nezbytné:</strong> <code>{CONSENT_KEY}</code> v&nbsp;úložišti prohlížeče – vaše volba v&nbsp;liště cookies, aby se
+          lišta neukazovala znovu. Ukládá se bez souhlasu, protože bez ní by volba nešla dodržet.
+        </li>
+        <li>
+          <strong>Měření (jen se souhlasem):</strong> PostHog Cloud EU (servery v&nbsp;EU). Cookie a záznam v&nbsp;úložišti
+          prohlížeče začínající <code>ph_</code> s&nbsp;náhodným identifikátorem prohlížeče, platnost{" "}
+          {ANALYTICS_COOKIE_DAYS} dní. Měříme jen kroky na stránce (zobrazení, použití kalkulačky, zobrazení
+          a&nbsp;odeslání formuláře, potvrzení e-mailu), variantu reklamy a&nbsp;UTM parametry odkazu. PostHog k&nbsp;nim
+          přidává technické údaje: adresu stránky, typ prohlížeče a&nbsp;zařízení, jazyk, časové pásmo a&nbsp;velikost
+          obrazovky. Žádné nahrávání obrazovky, žádné klikání mimo tyto kroky. Váš e-mail ani tokeny z&nbsp;odkazů
+          v&nbsp;e-mailech do PostHogu neposíláme.
+        </li>
+        <li>
+          <strong>Reklamní cookies a pixely</strong> (Meta, Google) nepoužíváme.
+        </li>
+      </ul>
+      <p className="mt-2">
+        Souhlas můžete kdykoli změnit nebo odvolat odkazem „Nastavení cookies“ v&nbsp;patičce. Po odvolání údaje PostHogu
+        z&nbsp;prohlížeče smažeme.
+      </p>
     </main>
   );
 }
