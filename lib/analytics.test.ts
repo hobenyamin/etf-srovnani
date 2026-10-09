@@ -72,7 +72,8 @@ describe("track + PostHog", () => {
     const [key, config] = posthog.init.mock.calls[0];
     expect(key).toBe("phc_test");
     expect(config).toMatchObject({
-      api_host: "https://eu.i.posthog.com",
+      api_host: "/ingest",
+      ui_host: "https://eu.posthog.com",
       autocapture: false,
       capture_pageview: false,
       disable_session_recording: true,

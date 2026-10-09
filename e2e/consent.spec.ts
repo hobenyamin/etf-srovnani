@@ -8,19 +8,24 @@ test.use({
     "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36",
 });
 
-const POSTHOG = "https://posthog.e2e.test";
-
 type Captured = { event: string; properties: Record<string, unknown> };
 
-/** Zachytí všechny požadavky na PostHog (falešný host z playwright.config.ts) a rozbalí eventy. */
+/**
+ * Zachytí požadavky na proxy /ingest (v prohlížeči, na server nedojdou) a rozbalí eventy.
+ * `direct` = požadavky přímo na doménu PostHogu – s proxy nesmí být žádný.
+ */
 async function interceptPostHog(page: Page) {
   const requests: string[] = [];
+  const direct: string[] = [];
   const events: Captured[] = [];
+  page.on("request", (r) => {
+    if (/posthog\.(com|e2e\.test)/.test(new URL(r.url()).hostname)) direct.push(r.url());
+  });
   await page.addInitScript(() => {
     Object.defineProperty(Navigator.prototype, "webdriver", { get: () => false });
     Object.defineProperty(Navigator.prototype, "userAgentData", { get: () => undefined });
   });
-  await page.route(`${POSTHOG}/**`, async (route) => {
+  await page.route("**/ingest/**", async (route) => {
     const request = route.request();
     requests.push(request.url());
     const body = request.postDataBuffer();
@@ -42,7 +47,7 @@ async function interceptPostHog(page: Page) {
     }
     await route.fulfill({ status: 200, contentType: "application/json", body: "{}" });
   });
-  return { requests, events };
+  return { requests, direct, events };
 }
 
 async function storageKeys(page: Page) {
@@ -97,6 +102,9 @@ test("po povolení: page_view a další kroky s ad_variant a UTM, bez e-mailu", 
   expect(JSON.stringify(ph.events)).not.toContain("tester@example.cz");
   // nic automatického (autocapture, pageview, pageleave)
   expect(ph.events.filter((e) => e.event.startsWith("$autocapture") || e.event === "$pageview")).toEqual([]);
+  // jen přes vlastní doménu
+  expect(ph.requests.every((url) => new URL(url).pathname.startsWith("/ingest/"))).toBe(true);
+  expect(ph.direct).toEqual([]);
   expect((await page.context().cookies()).map((c) => c.name)).toEqual([expect.stringMatching(/^ph_/)]);
 });
 
@@ -175,4 +183,10 @@ test("knihovna PostHogu se stáhne až po souhlasu (produkční build)", async (
 
   await page.getByRole("button", { name: "Povolit měření" }).click();
   await expect.poll(() => libraryChunks.length).toBe(1);
+});
+
+test("proxy /ingest existuje na serveru a lomítko na konci se nepřesměrovává", async ({ request }) => {
+  // Cíl přesměrování je v testech falešný host, takže server odpoví chybou brány – ne však 404 ani 308.
+  const response = await request.post("/ingest/e/", { data: "{}", maxRedirects: 0 });
+  expect([404, 307, 308]).not.toContain(response.status());
 });

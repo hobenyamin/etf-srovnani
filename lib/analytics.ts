@@ -8,7 +8,8 @@
 import type { CaptureResult, PostHog, Properties } from "posthog-js";
 
 const KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY;
-const HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://eu.i.posthog.com";
+/** Eventy jdou přes vlastní doménu, server je přepošle do PostHog EU (next.config.ts, rewrites). */
+export const ANALYTICS_PATH = "/ingest";
 /** Platnost cookie PostHogu (výchozí 365 dní – na měření kampaně zbytečně dlouho). Uvedeno v zásadách. */
 export const ANALYTICS_COOKIE_DAYS = 180;
 
@@ -39,7 +40,9 @@ async function load(): Promise<PostHog | null> {
   if (!KEY) return null;
   const { default: posthog } = await import("posthog-js");
   posthog.init(KEY, {
-    api_host: HOST,
+    api_host: ANALYTICS_PATH,
+    // odkazy z knihovny do aplikace PostHog (při proxy ji jinak neodvodí)
+    ui_host: "https://eu.posthog.com",
     persistence: "localStorage+cookie",
     cookie_expiration: ANALYTICS_COOKIE_DAYS,
     cross_subdomain_cookie: false,
