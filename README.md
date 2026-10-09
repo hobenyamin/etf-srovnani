@@ -29,7 +29,40 @@ TODO – tři hypotézy seřazené podle očekávaného dopadu.
 
 ## Měření
 
-TODO – funnel `page_view → hero_cta_click → calc_start → calc_result → compare_view → form_view → form_submit → lead_confirmed`, UTM a `ad_variant`, režim bez cookies.
+Funnel: `page_view → hero_cta_click → calc_start → calc_result → compare_view → form_view → form_submit → lead_confirmed`. Každý event nese `ad_variant` (`a`/`b`) a UTM parametry z URL ([`lib/track.ts`](lib/track.ts)).
+
+**Dva zdroje dat, každý na jinou otázku:**
+
+| Otázka | Zdroj | Pokrytí |
+| --- | --- | --- |
+| Kolik leadů a potvrzení přinesla která reklama? | Supabase, tabulka `leads` (`ad_variant`, `utm_*`, `double_opt_in_at`) | **všichni** návštěvníci, kteří odeslali formulář, bez ohledu na cookies |
+| Kde návštěvníci cestou odpadají? | PostHog Cloud EU, funnel 8 eventů | jen návštěvníci, kteří **povolili měření** |
+
+Bez souhlasu se do PostHogu neposílá nic (rozhodnutí 33). Funnel v PostHogu je proto vzorek souhlasících a absolutní čísla v něm nesedí s návštěvností. Pro rozhodování o reklamě platí počty z databáze; PostHog ukazuje poměry mezi kroky.
+
+Konverze podle reklamy (Supabase → SQL Editor):
+
+```sql
+select ad_variant, utm_source, utm_content,
+       count(*)                                          as leady,
+       count(double_opt_in_at)                           as potvrzene,
+       round(100.0 * count(double_opt_in_at) / count(*), 1) as mira_potvrzeni_pct
+from leads
+group by 1, 2, 3
+order by 1, 2, 3;
+```
+
+Pozor: nepotvrzené leady se po 30 dnech mažou, takže starší období zpětně ukáže míru potvrzení 100 %. Čísla za kampaň je potřeba exportovat do 30 dnů.
+
+Funnel v PostHogu: Product analytics → New insight → Funnels, kroky v pořadí výše, breakdown podle `ad_variant`. Krok `lead_confirmed` přichází často z jiného zařízení (e-mail na mobilu) a v rámci jedné návštěvy se nepropojí. Míru potvrzení proto počítáme z databáze.
+
+**Co PostHog dostane:** jen eventy funnelu s `ad_variant` a UTM, plus technické údaje, které přikládá sám (adresa stránky, prohlížeč, zařízení, obrazovka). Nedostane e-mail (žádné `identify`), autocapture, záznam obrazovky ani tokeny z odkazů v e-mailech (`stripSecrets` v [`lib/analytics.ts`](lib/analytics.ts)).
+
+**Reklamní pixely (návrh, neimplementováno):** samostatná kategorie souhlasu `ads` (připravená v [`lib/consent.ts`](lib/consent.ts), v liště se zobrazí až s pixely).
+- Google Ads: Consent Mode v2 s výchozím `denied` pro `ad_storage`, `ad_user_data`, `ad_personalization` a `analytics_storage`, po souhlasu `update` na `granted`.
+- Meta Pixel: načte se až po souhlasu `ads`.
+- Meta Conversions API ze `submitLead`: event `Lead` s `event_id` pro deduplikaci s pixelem, jen pokud návštěvník souhlasil s `ads`. Hashovaný e-mail jen s tímto souhlasem.
+- Zásady i lišta se musí doplnit o pojmenované příjemce (Meta, Google).
 
 ## Reklamy
 
@@ -108,6 +141,13 @@ Proti skutečnému Resend (doména `mail.hosek.cc`, region Ireland) a Supabase o
 30. **E-mail odchází až po odpovědi** (`after()` v Next.js, na Vercelu `waitUntil`). Návštěvník na Resend nečeká. Když Resend selže, lead zůstává a chyba jde do logu bez e-mailové adresy.
 31. **Odhlášení dvojím způsobem:** odkaz v patičce e-mailu (stránka s tlačítkem) a one-click podle RFC 8058 (`List-Unsubscribe-Post`), které nabízí Gmail i Apple Mail. Odkaz je podepsaný HMAC s vlastním účelem, takže ho nejde zaměnit ani podvrhnout. Původní znění a čas souhlasu po odhlášení zůstávají jako doklad.
 32. **Rizikové upozornění má jedno znění** (`RISK_WARNINGS` v [`lib/site.ts`](lib/site.ts)) pro stránku i e-mail.
+33. **Bez souhlasu neměříme vůbec nic** (rozhodl člověk). § 89 odst. 3 zákona 127/2005 přebírá čl. 5(3) směrnice ePrivacy. EDPB v Guidelines 2/2023 k jeho technickému rozsahu vykládá „přístup k zařízení“ široce, takže souhlas může potřebovat i měření bez cookies přes JavaScript. Francouzský CNIL má výjimku pro anonymní měření návštěvnosti, u českého ÚOOÚ obdobnou výjimku neznáme. Proto bez souhlasu nenačteme měřicí skript, nic neodešleme a uložíme jen volbu v liště. Cena: funnel v PostHogu vidí jen souhlasící, počty leadů jsou proto v Supabase.
+34. **Vlastní lišta, odmítnout stejně snadné jako povolit:** dvě stejně velká tlačítka vedle sebe, stejný vzhled, žádné předvyplněné volby, bez „nastavení“ o úroveň níž. Lišta neblokuje obsah, nezakryje CTA v hero (testováno na 375 × 667 i 812) a dokud je vidět, spodní CTA se neukazuje. Odvolání přes „Nastavení cookies“ v patičce smaže cookie i úložiště PostHogu.
+35. **Nabízíme jen kategorie, které existují.** Kategorie `ads` je v kódu připravená, ale v liště není: ptát se na souhlas s pixely, které na stránce nejsou, by bylo zavádějící.
+36. **PostHog se stáhne až po souhlasu** (dynamický import). Bez souhlasu stránka nestahuje ani jeho kód, takže neovlivní LCP.
+37. **Eventy z doby před souhlasem se neposílají dodatečně, kromě `page_view` aktuální stránky.** Ten jen říká, že návštěvník stránku právě vidí, a bez něj by funnel v PostHogu neměl první krok.
+38. **Každý event hned, bez dávkování** (`request_batching: false`). Za návštěvu je jich nejvýš 8, takže po odvolání souhlasu nic nečeká ve frontě. Na mobilu se navíc eventy neztratí při zavření karty. Na chybu přišel E2E test: dávka nasbíraná se souhlasem odešla až po odvolání.
+39. **Cookie PostHogu platí 180 dní** místo výchozích 365 a jen pro vlastní doménu. Na vyhodnocení kampaně to stačí.
 
 ## Co chybí a proč
 
@@ -119,6 +159,9 @@ Proti skutečnému Resend (doména `mail.hosek.cc`, region Ireland) a Supabase o
 - **Plné znění zásad ochrany osobních údajů** (`/zasady` je kostra).
 - **Limit odeslání je jen v paměti jedné instance.** Na Vercelu může běžet víc instancí, takže limit je orientační. Pro ostrý provoz: rate limiting ve Vercel Firewall nebo Upstash Redis. Turnstile až při skutečném spamu.
 - **Free plán Supabase se po týdnu nečinnosti uspí** a mazání přes pg_cron pak neběží. Pro ostrý provoz Pro plán.
+- **Zahazování IP v PostHogu:** v projektu zapnout Settings → „Discard client IP data“ (nebo ekvivalent) a pak to uvést v zásadách. Zatím neověřeno.
+- **Právní kontrola lišty a měření** (§ 89 zákona 127/2005, GDPR) před spuštěním. Naše řešení je konzervativní, ale není to právní rada.
+- **Reklamní pixely a Conversions API** jsou jen navržené (sekce Měření) a čekají na schválení.
 - **DMARC:** ověřit PASS po propagaci DNS. Před ostrým provozem zvážit přísnější politiku (`p=quarantine`, později `p=reject`) a reporty (`rua`). `p=none` jen sleduje, nic nechrání.
 - **One-click odhlášení v Gmailu** (`List-Unsubscribe-Post`) otestovat až na Vercelu: Gmail volá `SITE_URL`, který lokálně není dostupný z internetu.
 - **Ruční ověření `marketing_audience` a odhlášení** proti Supabase zatím chybí.
