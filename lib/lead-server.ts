@@ -1,14 +1,20 @@
-// Uložení leadu na serveru. Úložiště se předává zvenku (`LeadStore`), aby šla logika testovat bez sítě.
+// Uložení leadu, double opt-in a odhlášení na serveru. Úložiště, odesílání e-mailů i odložené úlohy
+// se předávají zvenku, aby šla logika testovat bez sítě.
 // IP adresa slouží jen jako klíč limitu v paměti – do databáze ani do logů nejde.
 import "server-only";
+import { createHash, randomBytes } from "node:crypto";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { CalcInput } from "@/lib/calc";
 import { FEE_ROWS } from "@/lib/fee-rows";
+import { confirmationEmail, CONFIRM_VALID_DAYS } from "@/lib/email-template";
+import type { Mailer } from "@/lib/email";
+import { DATA_RETRIEVED_AT } from "@/lib/etfs";
 import { computeFees } from "@/lib/fees";
 import { type ParsedLead, parseLeadInput, type QualifyAnswer, QUALIFY_ANSWERS } from "@/lib/lead";
 import { createRateLimiter } from "@/lib/rate-limit";
 import { sign, verify } from "@/lib/sign";
-import { CONSENT } from "@/lib/site";
+import { CONSENT, OPERATOR } from "@/lib/site";
+import type { AdVariant, Utm } from "@/lib/visit";
 
 /** Parametry SQL funkce public.upsert_lead (supabase/migrations/20261009_leads.sql). */
 export type UpsertLeadParams = {
@@ -28,14 +34,44 @@ export type UpsertLeadParams = {
 
 export type StoredLead = { id: string; isNew: boolean; doubleOptInAt: string | null; confirmSentAt: string | null };
 
+export type ConfirmStatus = "confirmed" | "already" | "expired" | "invalid";
+export type ConfirmOutcome = { status: ConfirmStatus; adVariant: AdVariant | null; utm: Utm };
+
 export type LeadStore = {
   upsert(params: UpsertLeadParams): Promise<StoredLead>;
   setQualify(id: string, answer: QualifyAnswer): Promise<void>;
+  /** Zabere odeslání potvrzovacího e-mailu (cooldown + hodinový strop v DB). true = poslat. */
+  claimConfirmation(id: string, tokenHash: string): Promise<boolean>;
+  confirm(tokenHash: string): Promise<ConfirmOutcome>;
+  unsubscribe(id: string): Promise<boolean>;
 };
 
 export type SubmitResult =
-  | { ok: true; stored: boolean; ref: string | null }
+  | { ok: true; stored: boolean; ref: string | null; alreadyConfirmed?: boolean }
   | { ok: false; error: "email" | "invalid" };
+
+/** Další potvrzovací e-mail na stejnou adresu nejdřív po této době. */
+export const CONFIRM_COOLDOWN = "10 minutes";
+/** Strop potvrzovacích e-mailů za hodinu celkem – ochrana kvóty Resend a reputace domény. */
+export const CONFIRM_HOURLY_CAP = 50;
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+const TOKEN = /^[A-Za-z0-9_-]{43}$/;
+const UNSUB_PREFIX = "unsub:";
+
+/** 32 náhodných bajtů jako base64url (43 znaků) – jde jen do e-mailu, do DB jen hash. */
+export function newConfirmToken(): string {
+  return randomBytes(32).toString("base64url");
+}
+
+export function hashToken(token: string): string {
+  return createHash("sha256").update(token).digest("hex");
+}
+
+/** Podpis odkazu na odhlášení. Vlastní prefix, aby nešel zaměnit s `ref` pro kvalifikační otázku. */
+export function signUnsubscribe(id: string): string | null {
+  return sign(UNSUB_PREFIX + id);
+}
 
 export type CalcSummary = {
   deposits: number;
@@ -80,6 +116,10 @@ type SubmitContext = {
   ip: string | null;
   userAgent: string | null;
   limiter?: { hit(key: string): boolean };
+  mailer?: Mailer | null;
+  siteUrl?: string | null;
+  /** Spustí úlohu až po odeslání odpovědi (v Next.js `after`), návštěvník na e-mail nečeká. */
+  defer?: (task: () => Promise<void>) => void;
 };
 
 export async function handleSubmit(raw: unknown, ctx: SubmitContext): Promise<SubmitResult> {
@@ -97,7 +137,14 @@ export async function handleSubmit(raw: unknown, ctx: SubmitContext): Promise<Su
 
   try {
     const lead = await ctx.store.upsert(buildLeadParams(parsed.lead, ctx.userAgent));
-    return { ok: true, stored: true, ref: sign(lead.id) };
+    const alreadyConfirmed = lead.doubleOptInAt !== null;
+    if (!alreadyConfirmed) {
+      const store = ctx.store;
+      const task = () => sendConfirmation(lead.id, parsed.lead.email, { store, mailer: ctx.mailer, siteUrl: ctx.siteUrl });
+      if (ctx.defer) ctx.defer(task);
+      else await task();
+    }
+    return { ok: true, stored: true, ref: sign(lead.id), alreadyConfirmed };
   } catch (error) {
     // Bez e-mailu a bez detailů – v chybě databáze může být hodnota řádku.
     console.error("[lead] uložení selhalo:", errorCode(error));
@@ -105,10 +152,70 @@ export async function handleSubmit(raw: unknown, ctx: SubmitContext): Promise<Su
   }
 }
 
+/** Potvrzovací e-mail. Chyby jen loguje – lead zůstává uložený a návštěvník srovnání už má. */
+export async function sendConfirmation(
+  id: string,
+  email: string,
+  deps: { store: LeadStore; mailer?: Mailer | null; siteUrl?: string | null },
+): Promise<void> {
+  const unsubscribe = signUnsubscribe(id);
+  if (!deps.mailer || !deps.siteUrl || !unsubscribe) {
+    console.error("[lead] e-mail se neposílá: chybí RESEND_API_KEY / EMAIL_FROM / SITE_URL / LEAD_TOKEN_SECRET");
+    return;
+  }
+  try {
+    const token = newConfirmToken();
+    const tokenHash = hashToken(token);
+    if (!(await deps.store.claimConfirmation(id, tokenHash))) return; // cooldown nebo strop
+    const unsubscribeUrl = `${deps.siteUrl}/odhlaseni?u=${encodeURIComponent(unsubscribe)}`;
+    const oneClickUrl = `${deps.siteUrl}/api/odhlaseni?u=${encodeURIComponent(unsubscribe)}`;
+    const rendered = confirmationEmail({
+      confirmUrl: `${deps.siteUrl}/potvrzeni?t=${token}`,
+      unsubscribeUrl,
+      dataDate: DATA_RETRIEVED_AT,
+    });
+    await deps.mailer.send({
+      to: email,
+      ...rendered,
+      headers: {
+        "List-Unsubscribe": `<${oneClickUrl}>, <mailto:${OPERATOR.email}?subject=odhlasit>`,
+        "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+      },
+      idempotencyKey: `confirm-${tokenHash.slice(0, 48)}`,
+    });
+  } catch (error) {
+    console.error("[lead] potvrzovací e-mail selhal:", errorCode(error));
+  }
+}
+
+export async function handleConfirm(token: unknown, store: LeadStore | null): Promise<ConfirmOutcome> {
+  const invalid: ConfirmOutcome = { status: "invalid", adVariant: null, utm: {} };
+  if (typeof token !== "string" || !TOKEN.test(token) || !store) return invalid;
+  try {
+    return await store.confirm(hashToken(token));
+  } catch (error) {
+    console.error("[lead] potvrzení selhalo:", errorCode(error));
+    throw new Error("confirm-failed");
+  }
+}
+
+export async function handleUnsubscribe(signed: unknown, store: LeadStore | null): Promise<boolean> {
+  const value = verify(signed);
+  if (!value?.startsWith(UNSUB_PREFIX) || !store) return false;
+  const id = value.slice(UNSUB_PREFIX.length);
+  if (!UUID.test(id)) return false;
+  try {
+    return await store.unsubscribe(id);
+  } catch (error) {
+    console.error("[lead] odhlášení selhalo:", errorCode(error));
+    return false;
+  }
+}
+
 export async function handleQualify(ref: unknown, answer: unknown, store: LeadStore | null): Promise<boolean> {
   const id = verify(ref);
   const valid = QUALIFY_ANSWERS.some((a) => a.value === answer);
-  if (!id || !valid || !store) return false;
+  if (!id || !UUID.test(id) || !valid || !store) return false;
   try {
     await store.setQualify(id, answer as QualifyAnswer);
     return true;
@@ -147,6 +254,43 @@ export function supabaseStore(client: SupabaseClient): LeadStore {
     async setQualify(id, answer) {
       const { error } = await client.from("leads").update({ has_broker: answer }).eq("id", id);
       if (error) throw error;
+    },
+    async claimConfirmation(id, tokenHash) {
+      const { data, error } = await client.rpc("claim_confirmation", {
+        p_id: id,
+        p_token_hash: tokenHash,
+        p_cooldown: CONFIRM_COOLDOWN,
+        p_hourly_cap: CONFIRM_HOURLY_CAP,
+      });
+      if (error) throw error;
+      return data === true;
+    },
+    async confirm(tokenHash) {
+      const { data, error } = await client
+        .rpc("confirm_lead", { p_token_hash: tokenHash, p_valid_for: `${CONFIRM_VALID_DAYS} days` })
+        .single<{
+          status: ConfirmStatus;
+          ad_variant: string | null;
+          utm_source: string | null;
+          utm_medium: string | null;
+          utm_campaign: string | null;
+          utm_content: string | null;
+        }>();
+      if (error) throw error;
+      const utm: Utm = {};
+      for (const key of ["utm_source", "utm_medium", "utm_campaign", "utm_content"] as const) {
+        if (data[key]) utm[key] = data[key];
+      }
+      return {
+        status: data.status,
+        adVariant: data.ad_variant === "a" || data.ad_variant === "b" ? data.ad_variant : null,
+        utm,
+      };
+    },
+    async unsubscribe(id) {
+      const { data, error } = await client.rpc("unsubscribe_lead", { p_id: id });
+      if (error) throw error;
+      return data === true;
     },
   };
 }

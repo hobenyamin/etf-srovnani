@@ -18,7 +18,7 @@ const human = {
   elapsedMs: 15_000,
 };
 
-function fakeStore(overrides: Partial<LeadStore> = {}) {
+export function fakeStore(overrides: Partial<LeadStore> = {}) {
   const calls: UpsertLeadParams[] = [];
   const store: LeadStore = {
     upsert: vi.fn(async (params: UpsertLeadParams) => {
@@ -26,6 +26,9 @@ function fakeStore(overrides: Partial<LeadStore> = {}) {
       return { id: "11111111-2222-3333-4444-555555555555", isNew: true, doubleOptInAt: null, confirmSentAt: null };
     }),
     setQualify: vi.fn(async () => {}),
+    claimConfirmation: vi.fn(async () => true),
+    confirm: vi.fn(async () => ({ status: "invalid" as const, adVariant: null, utm: {} })),
+    unsubscribe: vi.fn(async () => true),
     ...overrides,
   };
   return { store, calls };
@@ -153,11 +156,13 @@ describe("handleSubmit", () => {
 describe("handleQualify", () => {
   it("uloží jen platnou odpověď s pravým podpisem", async () => {
     const { store } = fakeStore();
-    const ref = sign("lead-id")!;
+    const id = "11111111-2222-3333-4444-555555555555";
+    const ref = sign(id)!;
     expect(await handleQualify(ref, "ano", store)).toBe(true);
-    expect(store.setQualify).toHaveBeenCalledWith("lead-id", "ano");
+    expect(store.setQualify).toHaveBeenCalledWith(id, "ano");
+    expect(await handleQualify(sign("unsub:" + id), "ano", store)).toBe(false);
     expect(await handleQualify(ref, "možná", store)).toBe(false);
-    expect(await handleQualify("lead-id.podvrh", "ano", store)).toBe(false);
+    expect(await handleQualify(id + ".podvrh", "ano", store)).toBe(false);
     expect(await handleQualify(sign("jiny-lead", "cizi-tajemstvi"), "ano", store)).toBe(false);
   });
 });
