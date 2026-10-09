@@ -29,6 +29,9 @@ export default defineConfig({
       RESEND_API_KEY: "re_e2e_invalid",
       EMAIL_FROM: "E2E <e2e@example.invalid>",
       SITE_URL: "http://localhost:3100",
+      // PostHog: falešný klíč a host, požadavky zachytává page.route v testech (ostrý projekt nikdy)
+      NEXT_PUBLIC_POSTHOG_KEY: "phc_e2e_test",
+      NEXT_PUBLIC_POSTHOG_HOST: "https://posthog.e2e.test",
     },
   },
 });
