@@ -158,3 +158,21 @@ test("dokud je vidět lišta, spodní CTA se neukazuje (dvě lišty přes sebe n
   await page.locator("#srovnani").scrollIntoViewIfNeeded();
   await expect(page.getByRole("link", { name: "Spočítat své poplatky" })).toHaveCount(0);
 });
+
+test("knihovna PostHogu se stáhne až po souhlasu (produkční build)", async ({ page }) => {
+  // Kód knihovny poznáme podle značky „PostHog.js“ (logovací prefix posthog-js). Náš kód ji nemá.
+  const libraryChunks: string[] = [];
+  page.on("response", async (response) => {
+    if (!response.url().endsWith(".js")) return;
+    const body = await response.text().catch(() => "");
+    if (body.includes("PostHog.js")) libraryChunks.push(response.url());
+  });
+  await page.goto("/");
+  await expect(page.getByTestId("cookie-banner")).toBeVisible();
+  await page.getByLabel("Měsíčně investuji").fill("3000");
+  await page.waitForTimeout(1500);
+  expect(libraryChunks).toEqual([]);
+
+  await page.getByRole("button", { name: "Povolit měření" }).click();
+  await expect.poll(() => libraryChunks.length).toBe(1);
+});
