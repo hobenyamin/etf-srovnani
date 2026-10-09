@@ -47,6 +47,20 @@ TODO – pokyny agentům. Chyby: [`docs/ai-chyby.md`](docs/ai-chyby.md), exporty
 
 **Příklad, proč je zdrojem emitent, a ne AI ani agregátor:** revidující AI označila TER VWCE (0,14 %) a SXR4 (0,03 %) za chybu, protože vycházela ze zastaralých znalostí. Ověření u emitenta ukázalo, že hodnoty jsou správné: TER VWCE klesl z 0,19 % na 0,14 % s účinností od 28. 7. 2026 ([Vanguard, 2. 8. 2026](https://www.ch.vanguard/en/private-investor/insights/we-are-lowering-fees-on-one-of-our-most-popular-etfs); dohledala křížová kontrola, ověřeno i v Claude Code) a TER SXR4 uvádí iShares na stránce fondu i v KID. Znalosti jazykového modelu ani agregátory nemusí být aktuální, proto platí jen web a dokumenty emitenta.
 
+### Ruční ověření: ukládání leadů (krok 4a, 2026-10-09)
+
+Kód a SQL psala AI. Unit testy běží s mockovaným úložištěm a SQL bylo vyzkoušené v PGlite. Proti skutečnému Supabase (Frankfurt, free plán) to ověřil člověk:
+
+| Kontrola | Výsledek |
+| --- | --- |
+| Migrace spuštěná celá v SQL Editoru | ✓ i `create extension pg_cron` na free plánu. Úloha `purge-unconfirmed-leads` je aktivní (`15 3 * * *`) |
+| Uložení leadu z formuláře | ✓ UTM, `ad_variant`, `calc_input`, `calc_result`, `notice_text`. IP nikde |
+| `calc_result` spočítaný serverem | ✓ nezávislý přepočet (2 700 Kč/měs., 12 let, 3 %) sedí ve všech 7 hodnotách |
+| Druhé odeslání stejného e-mailu s jiným UTM a se souhlasem | ✓ jeden řádek, UTM původní, `marketing_consent`, `consent_text` a `consent_at` doplněné |
+| Odpověď na kvalifikační otázku | ✓ `has_broker` uložené |
+| Čtení veřejným (publishable) klíčem | ✓ odmítnuto: `42501 permission denied for table leads` |
+| `purge_unconfirmed_leads()` | ✓ smazala nepotvrzený lead starší 30 dní; kontrolní `count` po smazání = 0 |
+
 ## Rozhodnutí v nejasnostech
 
 1. **Porovnáváme NYSE ETF s UCITS ekvivalentem.** Fondy domicilované v USA (VOO, SPY, VTI…) si drobný investor v EU běžně nekoupí, protože k nim chybí KID podle nařízení PRIIPs. Stránka proto vždy ukazuje dostupnou evropskou alternativu a nikdy nevyzývá ke koupi US fondu.
