@@ -238,7 +238,7 @@ test("formulář jde odeslat jen klávesnicí", async ({ page }) => {
   await expect(page.getByTestId("thank-you")).toBeVisible();
 });
 
-test("375 px: žádný vodorovný scroll, pole mají popisky", async ({ page }) => {
+test("375 px: žádný vodorovný scroll, pole mají popisky a písmo aspoň 16 px", async ({ page }) => {
   for (const url of ["/", "/?utm_content=b", "/zasady"]) {
     await page.goto(url);
     const width = await page.evaluate(() => document.documentElement.scrollWidth);
@@ -248,6 +248,13 @@ test("375 px: žádný vodorovný scroll, pole mají popisky", async ({ page }) 
   // honeypot [name=website] je záměrně skrytý i před čtečkami (aria-hidden)
   for (const input of await page.locator("main input:not([type=radio]):not(.sr-only):not([name=website])").all()) {
     await expect(input).toHaveAccessibleName(/.+/);
+  }
+  // menší písmo v poli = iOS při focusu přiblíží stránku
+  await page.getByLabel("Měsíčně investuji").fill("3000");
+  await expect(page.getByTestId("lead-inline")).toBeVisible();
+  for (const input of await page.locator("main input[type=text], main input[type=email]").all()) {
+    const size = await input.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+    expect(size).toBeGreaterThanOrEqual(16);
   }
 });
 

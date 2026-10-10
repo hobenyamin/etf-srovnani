@@ -1,20 +1,28 @@
 @import "tailwindcss";
 
-/* Směr „Výpis z účtu“: papír, inkoust, jediný akcent pro částky poplatků.
-   Kontrast na papíře: ink 15,5:1, muted 6,0:1, loss 5,3:1, keep 5,5:1.
-   rule (#C9C2B3) má 1,5:1 – jen linky a oddělovače, nikdy text. */
+/* Směr „Výpis z účtu 2.0“: papír, inkoust a tři barvy, každá s jediným významem.
+   - action (kobalt) jen pro primární tlačítka, aktivní stav přepínačů a odkazy-výzvy
+   - loss jen pro „ztrátu“ (náklady), keep jen pro „levnější variantu“
+   Kontrast (WCAG): ink na papíře 15,5:1, muted 6,0:1 (na kartě 6,5:1), loss 5,3:1, keep 5,5:1.
+   Papír na action 5,8:1 (text tlačítka), action na papíře 5,8:1 (odkaz i hrana tlačítka, nutné 3:1),
+   action na kartě 6,4:1, action-press 7,6:1. ink-muted na ink 10,0:1 (děkovací blok).
+   rule (#C9C2B3) má 1,5:1 – jen linky a oddělovače, nikdy text na papíře. */
 @theme {
   --color-paper: #f3efe6;
   --color-card: #fbf9f4;
   --color-ink: #16181d;
+  --color-ink-muted: #c9c2b3;
   --color-muted: #5e5a52;
   --color-rule: #c9c2b3;
   --color-loss: #b03a0a;
   --color-keep: #2f6b4f;
+  --color-action: #1d4ed8;
+  --color-action-press: #1e40af;
 
   --font-display: var(--font-fraunces);
-  --font-sans: var(--font-plex-sans);
-  --font-mono: var(--font-plex-mono);
+  /* Pevná optická velikost: stejný řez nadpisu v každé velikosti (hero A, B i reklamy, ads/_shared/ad.css) */
+  --font-display--font-variation-settings: "opsz" 48;
+  --font-sans: var(--font-atkinson);
 }
 
 body {
@@ -24,10 +32,17 @@ body {
 
 /* Čísla vždy v tabulkových číslicích, aby se řádky účtenky nerozskakovaly */
 .num {
-  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
-  /* nezlomitelná mezera v monospace je široká jako číslice – zúžit oddělovač tisíců */
-  word-spacing: -0.3em;
+}
+
+/* Pole aspoň 16 px: menší písmo v poli iOS při focusu přiblíží celou stránku. V base vrstvě, aby šlo pole
+   zvětšit utilitou (text-lg). Že žádné pole není menší, hlídá E2E test „375 px: … pole mají popisky“. */
+@layer base {
+  input,
+  select,
+  textarea {
+    font-size: max(16px, 1em);
+  }
 }
 
 /* Perforovaný okraj účtenky (zoubky nahoře a dole) */
