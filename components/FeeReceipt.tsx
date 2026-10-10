@@ -1,6 +1,7 @@
 "use client";
 
 import { type ReactNode, useId, useState } from "react";
+import { More } from "@/components/More";
 import type { FeeResult } from "@/lib/fees";
 import { formatDate, formatKc, formatPercent } from "@/lib/format";
 
@@ -33,15 +34,13 @@ export function FeeReceipt({
         <p className="text-center text-[13px] tracking-widest text-muted uppercase">Výpočet poplatků</p>
 
         <div className="mt-3 border-b-2 border-ink pb-3" aria-live="polite">
-          <div className="flex items-baseline justify-between gap-3">
-            <span className="font-semibold">
-              Rozdíl {formatPercent(etf.ter)} vs. {formatPercent(active.ter)} za {years}&nbsp;let
-            </span>
-            <span className="num text-xl font-semibold text-loss" data-testid="calc-gap">
-              {formatKc(result.esmaGap)}
-            </span>
-          </div>
-          <p className="mt-1 text-[13px] leading-5 text-muted">
+          <p className="font-semibold">
+            Rozdíl {formatPercent(etf.ter)} vs. {formatPercent(active.ter)} za {years}&nbsp;let
+          </p>
+          <p className="num text-[40px] leading-[44px] font-bold tracking-tight text-loss" data-testid="calc-gap">
+            {formatKc(result.esmaGap)}
+          </p>
+          <p className="fine mt-1">
             O tolik víc stojí průměrný aktivní akciový fond v&nbsp;EU než průměrný ETF (ESMA).
           </p>
         </div>
@@ -89,22 +88,26 @@ export function FeeReceipt({
 
       {children}
 
-      <div className="mt-4 space-y-2 text-[13px] leading-5 text-muted">
-        <p>
-          <strong className="font-semibold text-ink">Náklad</strong> = zaplacené poplatky + výnos, o&nbsp;který kvůli nim
-          přijdete, proti fondu bez nákladů. Kalkulačka počítá náklady, nedoporučuje žádný fond.
-        </p>
+      {/* Podmínky výpočtu jsou vidět vždy, definice a zdroje jsou v rozbalovacím poli */}
+      <div className="fine mt-6 space-y-1">
+        <p>Kalkulačka počítá náklady, nedoporučuje žádný fond.</p>
         <ul className="list-disc space-y-1 pl-5">
           <li>Modelový výpočet v&nbsp;Kč. Výnos {annualReturn}&nbsp;% je zvolený příklad, ne odhad ani slib.</li>
           <li>Nezahrnuje měnové riziko USD/CZK, poplatky brokera, směnu měn, spread ani daně.</li>
-          <li>
+        </ul>
+        <More summary="Jak počítáme">
+          <p>
+            <strong className="font-semibold text-ink">Náklad</strong> = zaplacené poplatky + výnos, o&nbsp;který kvůli
+            nim přijdete, proti fondu bez nákladů.
+          </p>
+          <p className="mt-1">
             TER fondů od emitentů k&nbsp;{formatDate(fundSource.retrievedAt)} (zdroje u&nbsp;srovnání níže). Průměry{" "}
             <a className="underline" href={active.sourceUrl}>
               ESMA
             </a>{" "}
-            za rok 2024: průběžné náklady bez vstupních poplatků.
-          </li>
-        </ul>
+            za rok 2024 (staženo {formatDate(active.retrievedAt)}): průběžné náklady bez vstupních poplatků.
+          </p>
+        </More>
       </div>
     </div>
   );

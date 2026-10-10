@@ -14,8 +14,8 @@ export function Comparison() {
     0,
   );
   return (
-    <section id="srovnani" aria-labelledby="srovnani-h" className="scroll-mt-4 border-t border-rule px-4 py-10">
-      <h2 id="srovnani-h" className="font-display text-2xl leading-8 font-semibold">
+    <section id="srovnani" aria-labelledby="srovnani-h" className="scroll-mt-4 border-t border-rule px-4 py-12">
+      <h2 id="srovnani-h" className="font-display text-[28px] leading-9 font-semibold">
         Fondy z&nbsp;NYSE a&nbsp;jejich evropské varianty
       </h2>
       <p className="mt-3 text-[15px] leading-6">

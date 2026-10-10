@@ -1,3 +1,4 @@
+import { More } from "@/components/More";
 import type { Fund, FundPair, Sourced } from "@/lib/etfs";
 import { formatBillions, formatDate, formatPercent } from "@/lib/format";
 
@@ -110,18 +111,20 @@ export function PairCard({ pair, full = false }: { pair: FundPair; full?: boolea
           ))}
         </tbody>
       </table>
-      {(full || !same) && <p className="mt-2 text-[13px] leading-5 text-muted">{pair.us.ucits_equivalent!.public_note}</p>}
-      <ol className="mt-2 space-y-0.5 text-[12px] leading-4 text-muted">
-        {sources.map((s, i) => (
-          <li key={s.url} id={`src-${id}-${i + 1}`}>
-            {i + 1}{" "}
-            <a href={s.url} className="underline">
-              {new URL(s.url).hostname}
-            </a>
-            , staženo {formatDate(s.date)}
-          </li>
-        ))}
-      </ol>
+      {(full || !same) && <p className="fine mt-2">{pair.us.ucits_equivalent!.public_note}</p>}
+      <More summary={`Zdroje a data (${sources.length})`} className="mt-1">
+        <ol className="space-y-0.5">
+          {sources.map((s, i) => (
+            <li key={s.url} id={`src-${id}-${i + 1}`}>
+              {i + 1}{" "}
+              <a href={s.url} className="underline">
+                {new URL(s.url).hostname}
+              </a>
+              , staženo {formatDate(s.date)}
+            </li>
+          ))}
+        </ol>
+      </More>
     </article>
   );
 }

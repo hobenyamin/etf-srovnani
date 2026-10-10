@@ -35,7 +35,7 @@ export function ThankYou({
 
   return (
     <div data-testid="thank-you">
-      <h2 ref={heading} tabIndex={-1} id={headingId} className="font-display text-2xl leading-8 font-semibold outline-none">
+      <h2 ref={heading} tabIndex={-1} id={headingId} className="font-display text-[28px] leading-9 font-semibold outline-none">
         Hotovo. Tady je plné srovnání.
       </h2>
       <p className="mt-2 text-[15px] leading-6 text-muted" role="status" data-testid="delivery">

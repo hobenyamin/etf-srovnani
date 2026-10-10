@@ -87,3 +87,13 @@ body {
     opacity: 0.6;
   }
 }
+
+/* Vedlejší text (zdroje, poznámky, metodika): menší, užší sloupec. muted má na papíře 6,0:1, na kartě 6,5:1. */
+@layer components {
+  .fine {
+    max-width: 52ch;
+    font-size: 13px;
+    line-height: 1.25rem;
+    color: var(--color-muted);
+  }
+}

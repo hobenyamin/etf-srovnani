@@ -56,8 +56,8 @@ export function Calculator({ rows, fullComparison }: { rows: FeeRow[]; fullCompa
   const ids = { monthly: useId(), initial: useId(), years: useId(), ret: useId() };
 
   return (
-    <section id="kalkulacka" aria-labelledby="kalkulacka-h" className="scroll-mt-4 border-t border-rule px-4 py-10">
-      <h2 id="kalkulacka-h" className="font-display text-2xl leading-8 font-semibold">
+    <section id="kalkulacka" aria-labelledby="kalkulacka-h" className="scroll-mt-4 border-t border-rule px-4 py-12">
+      <h2 id="kalkulacka-h" className="font-display text-[28px] leading-9 font-semibold">
         Kolik vás budou stát poplatky
       </h2>
       <p className="mt-2 text-[15px] leading-6 text-muted">
@@ -160,7 +160,7 @@ export function Calculator({ rows, fullComparison }: { rows: FeeRow[]; fullCompa
               </label>
             ))}
           </div>
-          <p id={`${ids.ret}-note`} className="mt-2 text-[13px] leading-5 text-muted">
+          <p id={`${ids.ret}-note`} className="fine mt-2">
             Zvolený příklad pro výpočet, ne odhad ani slib. Skutečný výnos může být i&nbsp;záporný.
           </p>
         </fieldset>
@@ -207,7 +207,7 @@ function CalcLead({ flow, fullComparison }: { flow: ReturnType<typeof useLeadFlo
     >
       <TrackView event="form_view" props={{ form_location: "calc" }}>
         <p className="font-semibold">Chcete kompletní srovnání všech 5&nbsp;dvojic fondů NYSE ↔ UCITS?</p>
-        <p className="mt-1 text-[15px] text-muted">Zobrazí se hned po odeslání, kopii pošleme e-mailem.</p>
+        <p className="mt-1 text-[15px] leading-6 text-muted">Zobrazí se hned po odeslání, kopii pošleme e-mailem.</p>
         <LeadFormFields location="calc" submitLabel={SUBMIT_CTA} className="mt-4" />
       </TrackView>
     </div>

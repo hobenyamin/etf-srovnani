@@ -31,14 +31,14 @@ const button =
 export function LeadForm({ fullComparison }: { fullComparison: ReactNode }) {
   const flow = useLeadFlow();
   return (
-    <section id="formular" aria-labelledby="formular-h" className="scroll-mt-4 border-t border-rule px-4 py-10">
+    <section id="formular" aria-labelledby="formular-h" className="scroll-mt-4 border-t border-rule px-4 py-12">
       {flow.submittedAt === "bottom" ? (
         <ThankYou delivery={flow.delivery} leadRef={flow.leadRef}>
           {fullComparison}
         </ThankYou>
       ) : flow.submittedAt === "calc" ? (
         <div data-testid="lead-done">
-          <h2 id="formular-h" className="font-display text-2xl leading-8 font-semibold">
+          <h2 id="formular-h" className="font-display text-[28px] leading-9 font-semibold">
             Plné srovnání máte u&nbsp;svého výpočtu
           </h2>
           <a href={`#${FORM_ANCHOR.calc}`} className="mt-3 inline-block font-semibold text-action underline underline-offset-4">
@@ -47,7 +47,7 @@ export function LeadForm({ fullComparison }: { fullComparison: ReactNode }) {
         </div>
       ) : (
         <>
-          <h2 id="formular-h" className="font-display text-2xl leading-8 font-semibold">
+          <h2 id="formular-h" className="font-display text-[28px] leading-9 font-semibold">
             Plné srovnání všech 5&nbsp;dvojic
           </h2>
           <ul className="mt-4 space-y-2 text-[15px] leading-6">
@@ -186,7 +186,7 @@ export function LeadFormFields({
         {submitLabel}
       </button>
 
-      <p id={ids.gdpr} className="mt-4 text-[13px] leading-5 text-muted">
+      <p id={ids.gdpr} className="fine mt-4">
         {CONSENT.notice} Podrobnosti v{" "}
         <Link href="/zasady" className="underline">
           zásadách ochrany osobních údajů

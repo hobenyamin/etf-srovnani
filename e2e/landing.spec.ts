@@ -147,10 +147,17 @@ test("porovnání: přepínač 3 dvojic, vybraná VOO se zdroji, zamčené na je
   const visible = section.getByRole("tabpanel");
   await expect(visible).toHaveCount(1);
   await expect(visible.getByTestId("pair")).toContainText("VUAA");
+  // zdroje jsou ve sbaleném „Zdroje a data“, horní index u hodnoty ho rozbalí
+  const sources = visible.locator("details");
+  await expect(sources).not.toHaveAttribute("open");
+  await visible.locator('sup a[href^="#src-"]').first().click();
+  await expect(sources).toHaveAttribute("open");
   await expect(visible.locator('ol a[href^="https://"]').first()).toBeVisible();
   for (const tab of ["SPY", "IVV"]) {
     await section.getByRole("tab", { name: tab }).click();
-    await expect(section.getByRole("tabpanel").locator('ol a[href^="https://"]').first()).toBeVisible();
+    const panel = section.getByRole("tabpanel");
+    await panel.getByText(/^Zdroje a data/).click();
+    await expect(panel.locator('ol a[href^="https://"]').first()).toBeVisible();
   }
 
   const locked = page.getByTestId("locked");

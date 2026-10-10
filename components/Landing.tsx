@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { FullComparison } from "@/components/FullComparison";
 import { Hero } from "@/components/Hero";
 import { LeadForm } from "@/components/LeadForm";
+import { OpenSourceOnJump } from "@/components/OpenSourceOnJump";
 import { PageView } from "@/components/PageView";
 import { StickyCta } from "@/components/StickyCta";
 import { Trust } from "@/components/Trust";
@@ -15,6 +16,7 @@ export function Landing({ variant }: { variant: AdVariant }) {
     <>
       <main className="mx-auto w-full max-w-xl flex-1">
         <PageView variant={variant} />
+        <OpenSourceOnJump />
         <Hero variant={variant} />
         <Calculator rows={FEE_ROWS} fullComparison={<FullComparison />} />
         <Comparison />
