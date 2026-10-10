@@ -66,7 +66,18 @@ Funnel v PostHogu: Product analytics → New insight → Funnels, kroky v pořad
 
 ## Reklamy
 
-TODO – varianty A (úspora) a B (zvědavost), napojení hero na `utm_content`. Podklady v [`ads/`](ads/).
+Dvě reklamy pro Meta (Facebook, Instagram), každá s vlastním hero. Texty, vizuály 1:1, 4:5 a 9:16, cílení, rozpočet, pravidla platforem a právní kontrola jsou v [`ads/`](ads/README.md).
+
+| | A – úspora | B – zvědavost |
+| --- | --- | --- |
+| Slib | Při 2 000 Kč měsíčně je rozdíl v poplatcích fondů za 20 let přes 40 000 Kč – i bez výnosu | Proč si v Česku nekoupíte VOO? A jaké alternativy jsou v ČR dostupné |
+| Hero | číslo 44 200 Kč (ESMA, výnos 0 %) → kalkulačka | VOO ↔ VUAA, chybějící KID → srovnání |
+| `utm_content` | `a-uspora` | `b-zvedavost` |
+| Vizuál | [feed 4:5](ads/a-uspora/feed-4x5.png) | [feed 4:5](ads/b-zvedavost/feed-4x5.png) |
+
+- **Reklama říká totéž co hero.** Každé tvrzení má protějšek v hero (tabulky v [`ads/a-uspora/README.md`](ads/a-uspora/README.md) a [`ads/b-zvedavost/README.md`](ads/b-zvedavost/README.md)). Čísla hlídá unit test [`lib/ads.test.ts`](lib/ads.test.ts) proti stejnému výpočtu, ze kterého je hero.
+- **Každé číslo má podmínku hned u sebe:** v nadpisu, popisu i vizuálu, ne jen v jiném poli. Nadpis A proto začíná „2 000 Kč/měs., 20 let:“, protože se v některých umístěních zobrazí bez primárního textu.
+- **Vizuály jsou HTML šablony** ve stylu stránky, renderované do PNG Playwrightem (`npm run render-ads`). Jde o první verzi, finální vzhled doladí designer.
 
 ## Práce s AI
 
@@ -187,6 +198,9 @@ Na https://etf-srovnani.vercel.app. Vyplní se na konci projektu, po úpravě te
 41. **Serverové funkce ve Frankfurtu (`fra1`), nastavené ve [`vercel.json`](vercel.json).** Výchozí region nových projektů na Vercelu je Washington (`iad1`). Supabase je ve Frankfurtu, takže `fra1` zkracuje cestu k databázi a osobní údaje z formuláře zpracovává server v EU. Region je ve `vercel.json`, ne jen v dashboardu, aby byl vidět v repu a verzoval se. Route segment config `preferredRegion` je v Next.js 16 deprecated (dokumentace v `node_modules/next`), proto ne v kódu. Hobby plán povoluje jeden region, `fra1` tedy stačí.
     - **Ve `fra1` běží:** Server Actions (odeslání formuláře, potvrzení, kvalifikační otázka), `/api/odhlaseni` a odeslání e-mailu přes `after()`.
     - **Mimo `fra1`:** statické stránky jdou z CDN Vercelu nejblíž návštěvníkovi. `proxy.ts` (výběr hero podle `utm_content`) Vercel nasazuje do všech regionů bez ohledu na nastavení, ale čte jen `utm_content` a nic neukládá. Rewrite `/ingest` do PostHog EU obsluhuje CDN.
+42. **Reklamy na Meta deklarují speciální kategorii *Financial products and services*, i když pro ČR není výslovně povinná.** Dokumentace Meta ji povinně vyžaduje u reklam zasahujících USA. U Evropy zmiňuje jen úvěrové reklamy („certain parts of Europe“) bez seznamu zemí. Investice a ETF do kategorie tématicky spadají a reklamu bez vhodné kategorie může Meta zamítnout. Cena: věk je pevně 18–65+, takže personu 25–45 let nejde zacílit, bez lookalike publik a zájmy jen ze schváleného seznamu. Personu zasáhnou zájmy a kreativa. Podrobně v [`ads/README.md`](ads/README.md#cílení-a-rozpočet-obě-varianty-stejně).
+43. **V reklamě B se nejmenuje žádný UCITS fond.** VUAA a jeho TER návštěvník uvidí až na stránce. Reklama tak nepropaguje konkrétní nástroj a netvrdí jeho dostupnost v ČR (`registered_in_cz` u VUAA = null). Hlídá unit test.
+44. **Text reklamy A je v prvním odstavci zkrácený:** „i bez výnosu“ místo „i bez jakéhokoli výnosu“, aby se podmínka i „Modelový výpočet, ne doporučení“ vešly do 125 znaků. Tolik doporučuje Meta Ads Guide pro primární text a zbytek se může schovat za „Zobrazit více“. Věcně se nic nemění.
 
 ## Co chybí a proč
 
@@ -210,6 +224,8 @@ Na https://etf-srovnani.vercel.app. Vyplní se na konci projektu, po úpravě te
 - **Region `fra1` ověřit na produkci** (rozhodnutí 41, checklist produkce bod 1).
 - **Lhůta uložení potvrzených adres a příjemci údajů** v zásadách: musí doplnit provozovatel.
 - **Migrace se spouští ručně** v SQL editoru Supabase (bez Supabase CLI). Logika SQL funkcí byla během vývoje ověřena v PGlite (Postgres ve WASM): upsert, práva rolí, mazání po 30 dnech, opakované spuštění.
+- **Zásady Meta pro finanční produkty** jsme nenačetli (stránka se nástrojem nenačte). Před spuštěním kampaně je musí přečíst člověk, včetně ověření inzerenta.
+- **Kampaň na Meta optimalizuje na prokliky, ne na leady.** Bez pixelu a Conversions API (navržené, neimplementované) Meta neví, kdo odeslal formulář. Leady podle varianty počítáme v Supabase.
 - **Daňový tahák (W-8BEN, časový test).** Zatím neexistuje, proto ho stránka neslibuje – ani ve formuláři, ani na děkovací obrazovce. Vrátí se, až bude text se zdroji hotový a zkontrolovaný.
 
 ## Zdroje dat
@@ -232,12 +248,20 @@ Podrobně u každé hodnoty v [`data/etfs.json`](data/etfs.json) (`source_url`, 
 | KID jako podmínka prodeje drobným investorům | Nařízení (EU) č. 1286/2014 (PRIIPs) | [eur-lex.europa.eu](https://eur-lex.europa.eu/eli/reg/2014/1286/oj) | – |
 | Regiony funkcí, limit Hobby = 1 region, middleware ve všech regionech | Vercel Docs – Configuring regions for Vercel Functions | [vercel.com](https://vercel.com/docs/functions/configuring-functions/region) | 2026-10-10 |
 | Hobby jen pro nekomerční užití | Vercel Docs – Fair Use Guidelines, Commercial usage | [vercel.com](https://vercel.com/docs/limits/fair-use-guidelines#commercial-usage) | 2026-10-10 |
+| Speciální kategorie reklam na Meta, omezení cílení | Meta Marketing API – Special Ad Categories | [developers.facebook.com](https://developers.facebook.com/docs/marketing-api/audiences/special-ad-category) | 2026-10-10 |
+| Délky textů a ochranné zóny reklam na Meta | Meta Ads Guide – Instagram feed, Facebook feed, Instagram Stories | [facebook.com/business/ads-guide](https://www.facebook.com/business/ads-guide/update/image/instagram-story) | 2026-10-10 |
+| Ověření finančních inzerentů v Google Ads (ČR) | Google Advertising Policies Help – červen 2026 a Financial Services Verification | [support.google.com](https://support.google.com/adspolicy/answer/17127726?hl=en), [ČR](https://support.google.com/adspolicy/answer/15332527?hl=en&co=GENIE.CountryCode%3DCZ) | 2026-10-10 |
 
 ## Právní upozornění
 
 Stránka je vzdělávací srovnání s daty, ne investiční doporučení ani nabídka produktu. Tento projekt není právní rada; **před ostrým spuštěním je nutná právní kontrola** (PRIIPs, MAR/ZPKT, MiFID II, GDPR, zákony 40/1995, 634/1992, 480/2004 a 127/2005).
 
-Rizika pro „spuštění zítra“ na straně reklamních platforem: Google Ads od roku 2026 vyžaduje v EU/EHP ověření finančních inzerentů (pro nefinanční informační web formulář pro nefinanční inzerenty) a Meta omezuje možnosti cílení u finančních reklam. Hosting: stránka běží na Hobby plánu Vercelu, který je jen pro nekomerční užití. Ostrá kampaň vyžaduje Pro.
+Rizika pro „spuštění zítra“ na straně reklamních platforem (ověřeno 2026-10-10, zdroje v [`ads/README.md`](ads/README.md#pravidla-platforem-ověřeno-2026-10-10)):
+- **Google Ads** vymáhá ověření finančních inzerentů v ČR od 23. 7. 2026 (kategorie mimo jiné *Investment*). Web, který finanční službu nenabízí, ale cílí na lidi, kteří ji hledají, žádá přes G2 jako nefinanční inzerent: popíše důvod a zaručí se, že nebude propagovat finanční služby. Schválení není okamžité. Google Ads proto v tomto projektu nepřipravujeme.
+- **Meta:** speciální kategorie *Financial products and services* omezuje cílení (rozhodnutí 42). Zásady pro finanční produkty mohou vyžadovat licenci a ověření identity inzerenta. Stránku zásad jsme nástrojem nenačetli a **před spuštěním ji musí přečíst člověk**.
+- **Inzerent potřebuje skutečného provozovatele** (název, IČO, sídlo). Ten ukázkovému projektu chybí.
+
+Hosting: stránka běží na Hobby plánu Vercelu, který je jen pro nekomerční užití. Ostrá kampaň vyžaduje Pro.
 
 ## Spuštění lokálně
 
@@ -247,6 +271,7 @@ npm run dev          # http://localhost:3000
 npm run build
 npm test             # unit testy výpočtu (Vitest)
 npm run check-data   # kontrola zdrojů v data/
+npm run render-ads   # vizuály reklam ads/*/ad.html → PNG (potřebuje síť kvůli fontům)
 npx playwright install --with-deps chromium   # jednou
 npm run e2e          # Playwright, mobil 375 px (ostré služby nevolá, viz playwright.config.ts)
 ```
