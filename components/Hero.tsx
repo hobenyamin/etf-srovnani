@@ -25,7 +25,7 @@ function HeroA() {
   return (
     <>
       <h1 className="mt-4 font-display text-[34px] leading-[38px] font-semibold">
-        Kolik vás za 20&nbsp;let stojí poplatky fondu?
+        Kolik dělá rozdíl v&nbsp;poplatcích fondů za 20&nbsp;let?
       </h1>
       <p className="mt-6 text-[15px] leading-6">I bez jakéhokoli výnosu:</p>
       <p className="num text-[44px] leading-[52px] font-semibold text-loss" data-testid="hero-gap">
@@ -58,6 +58,9 @@ function HeroB() {
         Proč si v&nbsp;Česku nekoupíte VOO?
       </h1>
       <p className="mt-3 text-[17px] leading-7">A&nbsp;jaké alternativy jsou v&nbsp;ČR dostupné.</p>
+      <p className="mt-3 text-[15px] leading-6">
+        Fondům z&nbsp;USA chybí KID, který nařízení PRIIPs vyžaduje pro prodej drobným investorům v&nbsp;EU.
+      </p>
       <dl className="receipt mt-6 bg-card px-4 text-[15px]">
         <div className="dotted flex items-baseline justify-between py-2">
           <dt>

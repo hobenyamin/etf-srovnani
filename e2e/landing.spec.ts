@@ -6,7 +6,7 @@ const events = (page: Page) =>
 test("hero A: slib, číslo a CTA nad ohybem, bez e-mailu", async ({ page }) => {
   await page.goto("/?utm_source=meta&utm_content=a-uspora");
   const h1 = page.getByRole("heading", { level: 1 });
-  await expect(h1).toHaveText(/Kolik vás za 20\s+let stojí poplatky fondu\?/);
+  await expect(h1).toHaveText(/Kolik dělá rozdíl v\s+poplatcích fondů za 20\s+let\?/);
   await expect(h1).toBeInViewport();
   await expect(page.getByTestId("hero-gap")).toHaveText("44 200 Kč");
   await expect(page.getByRole("link", { name: "Spočítat pro mě" })).toBeInViewport();
@@ -18,6 +18,8 @@ test("hero B podle utm_content", async ({ page }) => {
   await page.goto("/?utm_content=b-zvedavost");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Proč si v\s+Česku nekoupíte VOO\?/);
   await expect(page.getByText(/jaké alternativy jsou v\s+ČR dostupné/)).toBeVisible();
+  // Reklama B vysvětluje „proč“ – hero musí totéž říct hned, ne až ve srovnání
+  await expect(page.locator("#hero")).toContainText(/chybí KID, který nařízení PRIIPs vyžaduje/);
   await expect(page.getByRole("link", { name: "Ukázat srovnání" })).toBeInViewport();
   expect(new URL(page.url()).pathname).toBe("/");
   await expect.poll(() => page.evaluate(() => window.dataLayer?.[0]?.ad_variant)).toBe("b");
