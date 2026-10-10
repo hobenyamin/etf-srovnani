@@ -1,4 +1,4 @@
-import { expect, type Page, test } from "@playwright/test";
+import { expect, type Locator, type Page, test } from "@playwright/test";
 
 const events = (page: Page) =>
   page.evaluate(() => (window.dataLayer ?? []).map((e) => e.event as string));
@@ -8,6 +8,14 @@ const entry = (page: Page, event: string) =>
 
 const declineCookies = (page: Page) =>
   page.getByTestId("cookie-banner").getByRole("button", { name: "Odmítnout" }).click();
+
+/** Plné srovnání: 5 dvojic v HTML, přepínač s 5 záložkami, vidět je právě jedna (VOO). */
+async function expectFullComparison(scope: Locator) {
+  await expect(scope.getByTestId("pair")).toHaveCount(5);
+  await expect(scope.getByRole("tab")).toHaveCount(5);
+  await expect(scope.getByRole("tab", { selected: true })).toHaveText("VOO");
+  await expect(scope.getByRole("tabpanel")).toHaveCount(1);
+}
 
 /** Vyplní kalkulačku a počká na ustálený výsledek (calc_result). */
 async function calcResult(page: Page, monthly = "3000") {
@@ -97,7 +105,7 @@ test("formulář pod výsledkem: po odeslání jsou obě místa v děkovacím st
 
   const thanks = page.locator("#kalkulacka").getByTestId("thank-you");
   await expect(thanks).toBeVisible();
-  await expect(thanks.getByTestId("pair")).toHaveCount(5);
+  await expectFullComparison(thanks);
   await expect(page.locator("#formular").getByTestId("lead-done")).toBeVisible();
   await expect(page.getByRole("textbox", { name: "E-mail" })).toHaveCount(0);
   await expect(page.getByTestId("thank-you")).toHaveCount(1);
@@ -222,7 +230,7 @@ test("formulář: validace, nepředvyplněný souhlas, děkovací stav s 5 dvoji
   await page.getByRole("button", { name: "Zobrazit plné srovnání" }).click();
   const thanks = page.getByTestId("thank-you");
   await expect(thanks).toBeVisible();
-  await expect(thanks.getByTestId("pair")).toHaveCount(5);
+  await expectFullComparison(thanks);
   await expect(thanks).toContainText("ISIN");
   // jen public_note – žádné interní poznámky z dat
   await expect(thanks).not.toContainText(/tahák/i);

@@ -11,11 +11,15 @@ export function PairTabs({
   tabs,
   panels,
   initial,
+  columns = 3,
+  panelClassName = "",
 }: {
   label: string;
   tabs: { id: string; label: string }[];
   panels: ReactNode[];
   initial: number;
+  columns?: 3 | 5;
+  panelClassName?: string;
 }) {
   const [selected, setSelected] = useState(initial);
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -41,7 +45,7 @@ export function PairTabs({
 
   return (
     <>
-      <div role="tablist" aria-label={label} onKeyDown={onKeyDown} className="grid grid-cols-3 gap-2">
+      <div role="tablist" aria-label={label} onKeyDown={onKeyDown} className={`grid gap-2 ${columns === 5 ? "grid-cols-5" : "grid-cols-3"}`}>
         {tabs.map((tab, i) => (
           <button
             key={tab.id}
@@ -69,7 +73,7 @@ export function PairTabs({
           aria-labelledby={`${base}-tab-${tab.id}`}
           tabIndex={0}
           hidden={i !== selected}
-          className="mt-4 outline-offset-4 focus-visible:outline-2"
+          className={`mt-4 outline-offset-4 focus-visible:outline-2 ${panelClassName}`}
         >
           {panels[i]}
         </div>
