@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { confirmLead } from "@/app/actions/lead";
+import { DoneBanner } from "@/components/DoneBanner";
 import { CONFIRM_VALID_DAYS } from "@/lib/email-template";
 import { setAdVariant, track } from "@/lib/track";
 
@@ -35,11 +36,14 @@ export function ConfirmEmail({ fullComparison }: { fullComparison: ReactNode }) 
 
   if (state === "confirmed" || state === "already") {
     return (
-      <div data-testid="confirmed">
-        <h1 ref={heading} tabIndex={-1} className="mt-4 font-display text-[34px] leading-[38px] font-semibold outline-none">
-          {state === "confirmed" ? "Hotovo, adresa je potvrzená." : "Adresu už máte potvrzenou."}
-        </h1>
-        <p className="mt-2 text-[15px] leading-6 text-muted">Tady je plné srovnání všech 5&nbsp;dvojic.</p>
+      <div data-testid="confirmed" className="mt-4">
+        <DoneBanner
+          title={state === "confirmed" ? "Hotovo, adresa je potvrzená." : "Adresu už máte potvrzenou."}
+          level={1}
+          headingRef={heading}
+        >
+          <p>Tady je plné srovnání všech 5&nbsp;dvojic.</p>
+        </DoneBanner>
         <div className="mt-8 space-y-8">{fullComparison}</div>
       </div>
     );

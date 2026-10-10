@@ -2,6 +2,7 @@
 
 import { type ReactNode, useEffect, useId, useRef, useState } from "react";
 import { saveQualify } from "@/app/actions/lead";
+import { DoneBanner } from "@/components/DoneBanner";
 import { QUALIFY_ANSWERS } from "@/lib/lead";
 import type { Delivery } from "@/lib/lead-flow";
 import { track } from "@/lib/track";
@@ -19,13 +20,15 @@ export function ThankYou({
   headingId?: string;
   children: ReactNode;
 }) {
+  const root = useRef<HTMLDivElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const [answer, setAnswer] = useState<string | null>(null);
   const questionId = useId();
 
   useEffect(() => {
-    heading.current?.focus();
-    heading.current?.scrollIntoView({ block: "start" });
+    // Focus na nadpis, posun na začátek bloku, aby byla vidět i ikona nad nadpisem
+    heading.current?.focus({ preventScroll: true });
+    root.current?.scrollIntoView({ block: "start" });
   }, []);
 
   // Odpověď se uloží, jakmile je známý lead – i když návštěvník odpoví dřív, než server odpoví.
@@ -34,17 +37,17 @@ export function ThankYou({
   }, [answer, leadRef]);
 
   return (
-    <div data-testid="thank-you">
-      <h2 ref={heading} tabIndex={-1} id={headingId} className="font-display text-[28px] leading-9 font-semibold outline-none">
-        Hotovo. Tady je plné srovnání.
-      </h2>
-      <p className="mt-2 text-[15px] leading-6 text-muted" role="status" data-testid="delivery">
-        {delivery === "failed"
-          ? "E-mail se nám teď nepodařilo zpracovat, kopie proto nepřijde. Srovnání máte celé tady na stránce."
-          : delivery === "confirmed"
-            ? "Tuto adresu už máte potvrzenou, odkaz na srovnání najdete v dřívějším e-mailu."
-            : "Kopii vám pošleme e-mailem. Potvrďte prosím adresu odkazem, který vám přijde."}
-      </p>
+    <div ref={root} data-testid="thank-you" className="scroll-mt-4">
+      <DoneBanner title="Hotovo." headingId={headingId} headingRef={heading}>
+        <p className="font-semibold text-paper">Plné srovnání máte hned pod tímto rámečkem.</p>
+        <p className="mt-1" role="status" data-testid="delivery">
+          {delivery === "failed"
+            ? "E-mail se nám teď nepodařilo zpracovat, kopie proto nepřijde. Srovnání máte celé tady na stránce."
+            : delivery === "confirmed"
+              ? "Tuto adresu už máte potvrzenou, odkaz na srovnání najdete v dřívějším e-mailu."
+              : "Kopii vám pošleme e-mailem. Potvrďte prosím adresu odkazem, který vám přijde."}
+        </p>
+      </DoneBanner>
 
       <div className="mt-8 space-y-8">{children}</div>
 
