@@ -58,10 +58,10 @@ function HeroB() {
         Proč si v&nbsp;Česku nekoupíte VOO?
       </h1>
       <p className="mt-3 text-[17px] leading-7">A&nbsp;jaké alternativy jsou v&nbsp;ČR dostupné.</p>
-      <p className="mt-3 text-[15px] leading-6">
+      <p className="mt-2 text-[15px] leading-6">
         Fondům z&nbsp;USA chybí KID, který nařízení PRIIPs vyžaduje pro prodej drobným investorům v&nbsp;EU.
       </p>
-      <dl className="receipt mt-6 bg-card px-4 text-[15px]">
+      <dl className="receipt mt-5 bg-card px-4 text-[15px]">
         <div className="dotted flex items-baseline justify-between py-2">
           <dt>
             <span className="num font-semibold">{pair.us.ticker.value}</span>{" "}
