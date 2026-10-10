@@ -8,15 +8,16 @@
 <link rel="stylesheet" href="../_shared/ad.css">
 <title>Reklama A – úspora</title>
 <style>
-  .gap { font-size: 186px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; color: var(--loss); margin-top: 40px; }
+  /* Velké číslo jako na stránce (.figure): Fraunces s obyčejnou nulou, v inkoustu – důraz nese velikost */
+  .gap { font-family: var(--display); font-variation-settings: "opsz" 48; font-variant-numeric: lining-nums proportional-nums; font-size: 186px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; margin-top: 40px; }
   .cond { font-size: 34px; line-height: 1.35; margin-top: 16px; }
   .receipt { margin-top: 56px; }
   .row { flex-wrap: wrap; font-size: 34px; padding-block: 22px; }
-  /* Pruh = roční náklad ve stejném měřítku (1,2 % : 0,2 %). Zelená jen pro levnější variantu. */
-  .bar { flex-basis: 100%; height: 22px; margin-top: 14px; background: var(--paper); }
+  /* Pruh = roční náklad ve stejném měřítku (1,2 % : 0,2 %). Liší se tvarem jako v účtence: dražší plný, levnější obrys. */
+  .bar { flex-basis: 100%; height: 22px; margin-top: 14px; }
   .bar i { display: block; height: 100%; }
-  .bar .loss { background: var(--loss); }
-  .bar .keep { background: var(--keep); }
+  .bar .full { background: var(--ink); }
+  .bar .outline { border: 4px solid var(--ink); }
   .f-1x1 h1 { font-size: 58px; margin-top: 20px; }
   .f-1x1 .gap { font-size: 164px; margin-top: 24px; }
   .f-1x1 .cond { font-size: 30px; margin-top: 10px; }
@@ -37,11 +38,11 @@
 <main class="frame">
   <p class="label">Srovnání ETF z NYSE · pro investory v ČR</p>
   <h1>Kolik dělá rozdíl v poplatcích fondů za 20 let?</h1>
-  <p class="gap num">44&nbsp;200&nbsp;Kč</p>
+  <p class="gap">44&nbsp;200&nbsp;Kč</p>
   <p class="cond">rozdíl při 2&nbsp;000&nbsp;Kč měsíčně za 20&nbsp;let, výnos 0&nbsp;%</p>
   <div class="receipt">
-    <div class="row"><span>Průměrný aktivní akciový fond v&nbsp;EU</span><span class="num">1,2&nbsp;% ročně</span><span class="bar"><i class="loss" style="width: 100%"></i></span></div>
-    <div class="row"><span>Průměrný akciový ETF v&nbsp;EU</span><span class="num">0,2&nbsp;% ročně</span><span class="bar"><i class="keep" style="width: 16.67%"></i></span></div>
+    <div class="row"><span>Průměrný aktivní akciový fond v&nbsp;EU</span><span class="num">1,2&nbsp;% ročně</span><span class="bar"><i class="full" style="width: 100%"></i></span></div>
+    <div class="row"><span>Průměrný akciový ETF v&nbsp;EU</span><span class="num">0,2&nbsp;% ročně</span><span class="bar"><i class="outline" style="width: 16.67%"></i></span></div>
   </div>
   <div class="spacer"></div>
   <p class="invite">Spočítejte si to pro svou částku →</p>

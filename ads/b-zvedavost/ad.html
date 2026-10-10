@@ -13,11 +13,12 @@
   .receipt { margin-top: 72px; padding-block: calc(var(--tooth) + 32px); }
   .row { font-size: 46px; padding-block: 34px; }
   .row .sub { font-size: 30px; margin-top: 8px; }
-  .tick { font-weight: 700; white-space: nowrap; }
+  .tick { white-space: nowrap; }
   /* Ticker ve stejném písmu jako text: Atkinson Hyperlegible má nulu s lomítkem, O se s ní neplete */
   .ticker { font-weight: 700; }
-  .no { color: var(--loss); }
-  .yes { color: var(--keep); }
+  /* Bez barev a bez symbolů (Meta: žádná falešná zaškrtávátka): „bez KID“ tlumeně, „s KID“ tučně v inkoustu */
+  .no { color: var(--muted); font-weight: 400; }
+  .yes { font-weight: 700; }
   .f-1x1 h1 { font-size: 96px; margin-top: 24px; }
   .f-1x1 .lead { font-size: 38px; margin-top: 20px; }
   .f-1x1 .receipt { margin-top: 44px; padding-block: calc(var(--tooth) + 20px); }
