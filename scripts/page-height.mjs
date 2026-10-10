@@ -1,8 +1,41 @@
-// Výška stránky a sekcí na 375 × 812 (README, Výška stránky). Měří běžící server, cookie lištu odmítne.
-// Spuštění: npm run build && npx next start -p 3100, pak node scripts/page-height.mjs [base_url]
+// Výška stránky a sekcí na 375 × 812 (README, Výška stránky). Cookie lištu odmítne.
+// Spuštění: node scripts/page-height.mjs
+// Server si sestaví a spustí sám se stejnými testovacími proměnnými jako E2E (e2e/test-env.mjs),
+// nikdy s .env.local. Na cizí běžící server se nepřipojí.
+import { spawn } from "node:child_process";
+import { createConnection } from "node:net";
 import { chromium } from "@playwright/test";
+import { assertSafeTestEnv, TEST_ENV } from "../e2e/test-env.mjs";
 
-const BASE = process.argv[2] ?? "http://localhost:3100";
+const PORT = 3101;
+const BASE = `http://localhost:${PORT}`;
+
+const portBusy = () =>
+  new Promise((resolve) => {
+    const socket = createConnection(PORT, "127.0.0.1");
+    socket.once("connect", () => resolve(socket.end() && true));
+    socket.once("error", () => resolve(false));
+  });
+
+if (await portBusy()) throw new Error(`Port ${PORT} je obsazený, cizí server neměříme.`);
+const env = { ...process.env, ...TEST_ENV };
+assertSafeTestEnv(env);
+
+const server = spawn("sh", ["-c", `npm run build && npx next start -p ${PORT}`], { env, detached: true, stdio: "ignore" });
+const stopServer = () => {
+  try {
+    process.kill(-server.pid); // celá skupina procesů, i next-server
+  } catch {
+    // už neběží
+  }
+};
+process.on("exit", stopServer);
+for (let i = 0; ; i++) {
+  if (i > 300) throw new Error("Server se nespustil do 5 minut.");
+  if (await portBusy()) break;
+  await new Promise((r) => setTimeout(r, 1000));
+}
+
 const SECTIONS = ["kalkulacka", "srovnani", "formular"];
 
 async function measure(page) {
@@ -34,6 +67,7 @@ page = await open(browser, "/?utm_content=b-zvedavost");
 rows.push(["hero B po načtení", await measure(page)]);
 
 await browser.close();
+stopServer();
 
 console.log(`| Stav | Stránka | ${SECTIONS.map((s) => `#${s}`).join(" | ")} |`);
 console.log(`| --- | --- | ${SECTIONS.map(() => "---").join(" | ")} |`);
