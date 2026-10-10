@@ -5,7 +5,8 @@ import { formatBillions, formatDate, formatPercent } from "@/lib/format";
 const DISTRIBUTION = { accumulating: "akumulační", distributing: "distribuční" } as const;
 
 type Cell = { text: string; field: Sourced<unknown> | null };
-type Row = { label: string; us: Cell; ucits: Cell };
+/** code: kód (ISIN), který se nesmí zalomit – menší písmo, celý na jednom řádku */
+type Row = { label: string; us: Cell; ucits: Cell; code?: boolean };
 
 const cell = (field: Sourced<unknown>, text: string): Cell => ({ text, field });
 
@@ -43,7 +44,7 @@ function rows(pair: FundPair, full: boolean): Row[] {
       ),
     },
     { label: "Registrace v ČR", us: { text: "–", field: null }, ucits: registration(ucits) },
-    { label: "ISIN", us: cell(us.isin, us.isin.value), ucits: cell(ucits.isin, ucits.isin.value) },
+    { label: "ISIN", us: cell(us.isin, us.isin.value), ucits: cell(ucits.isin, ucits.isin.value), code: true },
   ];
 }
 
@@ -96,7 +97,7 @@ export function PairCard({ pair, full = false }: { pair: FundPair; full?: boolea
                 const n = ref(c.field);
                 return (
                   <td key={i} className="py-1.5 pr-2 break-words">
-                    {c.text}
+                    {row.code ? <span className="text-[13px] tracking-tight whitespace-nowrap">{c.text}</span> : c.text}
                     {n && (
                       <sup>
                         <a href={`#src-${id}-${n}`} className="ml-0.5 text-muted" aria-label={`zdroj ${n}`}>

@@ -21,7 +21,7 @@ export function FullComparison() {
           0,
         )}
         columns={5}
-        panelClassName="rounded-sm bg-card p-4"
+        panelClassName="rounded-sm bg-card px-3 py-4"
       />
     </div>
   );
