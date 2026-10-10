@@ -98,7 +98,57 @@ Výpočet: cena za lead = CPC / 0,032, potvrzený = CPC / 0,016, leady = 4 200 /
 
 ## Hypotézy pro A/B test
 
-TODO – tři hypotézy seřazené podle očekávaného dopadu.
+Seřazené podle očekávaného dopadu na počet leadů. Odhady zlepšení jsou **vlastní předpoklad**, ověřené benchmarky pro tyto změny nemáme.
+
+### Výpočet vzorku
+
+Test dvou podílů, oboustranný, α = 0,05, síla 80 %:
+
+```
+n = ( z_α/2 · √(2 · p̄ · (1 − p̄)) + z_β · √(p1 · (1 − p1) + p2 · (1 − p2)) )² / (p1 − p2)²
+p̄ = (p1 + p2) / 2,   z_α/2 = 1,96,   z_β = 0,84
+```
+
+- `n` = počet **zobrazení stránky na variantu**.
+- Přepočet na prokliky: `n / 0,8` (80 % prokliků se zobrazí, [Očekávaná konverze](#očekávaná-konverze)).
+- Cena: prokliky × CPC. Počítáme s CPC 10 Kč, vlastní předpoklad (prostřední scénář).
+- Zopakovat: `node scripts/sample-size.mjs` (všechny případy níže), nebo `node scripts/sample-size.mjs 0.04 0.06`.
+
+| Hypotéza | p1 → p2 (relativně) | n zobrazení na variantu | Prokliků na variantu | Kč na variantu (CPC 10) | Dní při 300 Kč/den | Dní při 1 500 Kč/den |
+| --- | --- | --- | --- | --- | --- | --- |
+| H1 | 4 % → 6 % (+50 %) | 1 863 | 2 329 | 23 290 | 78 | 16 |
+| H1 | 4 % → 5,2 % (+30 %) | 4 783 | 5 979 | 59 790 | 200 | 40 |
+| H2 | 4 % → 5 % (+25 %) | 6 745 | 8 432 | 84 320 | 282 | 57 |
+| H3 | 35 % → 40,25 % (+15 %), jen souhlasící | 1 336 souhlasících = 2 672 zobrazení | 3 340 | 33 400 | 112 | 23 |
+
+**Co z toho plyne:** testovací rozpočet z [`ads/`](ads/README.md#cílení-a-rozpočet-obě-varianty-stejně) (300 Kč denně na variantu, 7 dní) rozliší CTR a cenu prokliku, ale **rozdíl v leadech ne**. Test na leady potřebuje zhruba 1 500 Kč denně na variantu a 2–8 týdnů, podle toho, jak velký rozdíl chceme poznat. Menší rozdíly prakticky nezměříme: +10 % (4 % → 4,4 %) by chtělo 39 475 zobrazení na variantu. Proto testujeme jen změny, od kterých čekáme velký účinek.
+
+### H1: Reklama A (úspora) vs. B (zvědavost) včetně jejich hero
+
+- **Co měníme:** celou dvojici reklama + hero. A slibuje konkrétní číslo (44 200 Kč) a vede na kalkulačku, B klade otázku (proč ne VOO) a vede na srovnání.
+- **Testuje kombinaci reklama + hero, ne jen kreativu.** Každá reklama vede na vlastní hero, takže výsledek neřekne, jestli vyhrála reklama, nebo hero. Na to by byl potřeba další test (stejná reklama, dvě hero).
+- **Proč čekáme velký rozdíl:** obě varianty přivedou jiné lidi s jiným záměrem. A oslovuje ty, kdo řeší náklady (a kalkulačka jim dá osobní číslo). B oslovuje zvědavé, kteří o VOO slyšeli. U B čekáme vyšší CTR (otázka), u A vyšší podíl leadů (konkrétní hodnota a cesta přes kalkulačku). Na čem záleží: **lead na proklik**, ne CTR. Odhad rozdílu +50 % je vlastní předpoklad.
+- **Metrika:** primární lead / zobrazení stránky (Supabase podle `ad_variant` / Meta landing page views). Sekundární: cena za lead, potvrzený lead / lead, CTR.
+- **Vzorek:** 1 863 zobrazení na variantu pro +50 %, 4 783 pro +30 %.
+- **Spuštění:** už připravené. Dvě reklamy s `utm_content=a-uspora` a `b-zvedavost`. `proxy.ts` vybere hero a stránka uloží `ad_variant`. V Meta rovnoměrné rozdělení publika přes funkci A/B test v Ads Manageru, ne dvě reklamy v jedné sadě, kde by Meta mohla rozpočet sama přesunout k jedné z nich. Konkrétní nastavení ověřit v Ads Manageru.
+
+### H2: Formulář hned pod výsledkem kalkulačky vs. až za srovnáním
+
+- **Co měníme:** dnes vede nabídka v kalkulačce odkazem na formulář, který je až za ukázkou srovnání. Ve variantě bude pole pro e-mail přímo pod výsledkem kalkulačky.
+- **Proč čekáme zlepšení:** výsledek kalkulačky je chvíle největšího zájmu (rozhodnutí 4). Každý posun a sekce navíc mezi výsledkem a formulářem jsou příležitost odejít. Riziko: kdo ještě neviděl ukázku srovnání, neví, co za e-mail dostane. Proto může vyjít i hůř. Odhad +25 % je vlastní předpoklad.
+- **Metrika:** primární lead / zobrazení stránky (Supabase podle `utm_content`). Sekundární (PostHog, jen souhlasící): `form_submit / calc_result`.
+- **Vzorek:** 6 745 zobrazení na variantu (+25 %). Ze tří testů nejdražší, proto až po H1 a jen na vítězné reklamě.
+- **Spuštění (potřebuje kód):** varianta rozvržení v `utm_content`, např. `a-uspora-f1` (dnešní) a `a-uspora-f2` (formulář pod kalkulačkou). `proxy.ts` podle přípony přepíše na staticky předrenderovanou stránku (jako dnes `/v/b`) a `Landing` dostane parametr rozvržení. `ad_variant` zůstává `a`/`b` a tabulka `leads` se nemění: `utm_content` se ukládá už teď, takže stačí `group by utm_content`. V Meta dvě kopie vítězné reklamy s různým `utm_content` v A/B testu. PostHog feature flags nepoužíváme, protože bez souhlasu s měřením se PostHog nenačte (rozhodnutí 33) a varianta by se nevybrala.
+
+### H3: Hero A s posuvníkem částky přímo v hero vs. tlačítko „Spočítat pro mě“
+
+- **Co měníme:** v hero A místo tlačítka jeden posuvník „Měsíčně investuji“. Číslo 44 200 Kč se přepočítá hned, plná kalkulačka zůstává níž.
+- **Proč čekáme zlepšení:** interakce bez kliknutí a posunu stránky. Návštěvník uvidí svoje číslo v první obrazovce. Riziko: hero přestane být jedna zpráva a jedno číslo, a jakmile návštěvník posune, číslo přestane odpovídat slibu reklamy (2 000 Kč). Výchozí hodnota proto musí zůstat 2 000 Kč. Odhad +15 % je vlastní předpoklad.
+- **Metrika:** primární `calc_start / page_view` (PostHog, jen souhlasící). Na leady by test potřeboval vzorek jako H2. Sekundární: lead / zobrazení stránky (Supabase).
+- **Vzorek:** 1 336 **souhlasících** návštěvníků na variantu. Podíl souhlasu s měřením zatím neznáme. Při předpokladu 50 % (vlastní, nahradit skutečným podílem z prvního týdne) to je 2 672 zobrazení.
+- **Spuštění (potřebuje kód):** stejně jako H2 přes příponu `utm_content` (`a-uspora-h1` / `a-uspora-h2`) a staticky předrenderovanou variantu. E2E testy: číslo v hero při výchozí hodnotě stále 44 200 Kč, tlačítko a vstup nad ohybem i na 375 × 667 s cookie lištou.
+
+**Pravidla pro všechny testy:** vždy jen jeden test naráz na stejném publiku. Délku určit předem podle vzorku a neukončovat test dřív, jakmile se objeví „vítěz“. Vždy aspoň celý týden kvůli rozdílu mezi pracovními dny a víkendem. Výsledky z PostHogu (jen souhlasící) brát jako doplněk k Supabase.
 
 ## Měření
 
@@ -345,6 +395,7 @@ npm run build
 npm test             # unit testy výpočtu (Vitest)
 npm run check-data   # kontrola zdrojů v data/
 npm run render-ads   # vizuály reklam ads/*/ad.html → PNG (potřebuje síť kvůli fontům)
+node scripts/sample-size.mjs   # vzorek pro A/B test (README, Hypotézy)
 npx playwright install --with-deps chromium   # jednou
 npm run e2e          # Playwright, mobil 375 px (ostré služby nevolá, viz playwright.config.ts)
 ```
