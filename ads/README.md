@@ -77,13 +77,16 @@ Podle mantinelů v [`CLAUDE.md`](../CLAUDE.md). Toto není právní rada. Před 
 | Žádné personalizované doporučení (MiFID II) | ✓ | ✓ |
 | Netvrdíme, co není ověřené | ✓ | ✓ dostupnost konkrétního UCITS fondu v ČR (`registered_in_cz` u VUAA = null) reklama netvrdí |
 | Žádné fotky, loga emitentů ani vymyšlené značky | ✓ | ✓ |
+| **Žádné falešné ovládací prvky ve vizuálu.** Meta zakazuje obrázky, které napodobují neexistující funkce (tlačítka, přehrávače, zaškrtávátka). Pozvánka na stránku je jen typografický řádek v akční barvě, bez výplně, rámečku a zaoblení. Tlačítko přidá Meta samo (CTA reklamy) | ✓ „Spočítejte si to pro svou částku →“ | ✓ „Podívejte se na srovnání →“ |
 | Hero slibuje totéž co reklama | ✓ tabulka v [`a-uspora/README.md`](a-uspora/README.md) | ✓ tabulka v [`b-zvedavost/README.md`](b-zvedavost/README.md) |
 
 Chybí: **údaje skutečného provozovatele.** Meta i spotřebitelské právo chtějí vědět, kdo inzeruje. Ukázkový projekt je nemá (README, Co chybí).
 
 ## Vizuály
 
-HTML šablony ve stylu stránky (papír, inkoust, účtenka, Fraunces + IBM Plex). Bez fotek a log. Barvy a třídy jsou ve sdíleném [`_shared/ad.css`](_shared/ad.css), převzaté z `app/globals.css`.
+HTML šablony ve stylu stránky „Výpis z účtu 2.0“ (papír, inkoust, účtenka, nadpisy Fraunces s pevnou optickou velikostí `opsz 48`, text a čísla Atkinson Hyperlegible Next s tabulkovými číslicemi). Bez fotek a log. Barvy (včetně akční kobaltové `#1D4ED8`), písma a třídy jsou ve sdíleném [`_shared/ad.css`](_shared/ad.css), převzaté z `app/globals.css`. Pevná optická velikost zajišťuje, že nadpis A (68 px) i B (104 px) má stejný řez.
+
+Spodní třetinu formátů 1:1 a 4:5 vyplňuje větší číslo a účtenka (A s pruhy ve stejném měřítku 1,2 % : 0,2 %, B s většími řádky) a pozvánka na stránku. `npm run render-ads` spadne, když obsah přeteče rám na výšku i na šířku nebo když u 9:16 zajede do spodní ochranné zóny Stories.
 
 ```bash
 npm run render-ads   # ads/*/ad.html → feed-1x1.png, feed-4x5.png, stories-9x16.png (potřebuje síť kvůli Google Fonts)

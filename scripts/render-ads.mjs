@@ -22,9 +22,17 @@ try {
       const url = `${pathToFileURL(join(adsDir, variant, "ad.html")).href}?f=${f}`;
       await page.goto(url, { waitUntil: "networkidle" });
       await page.evaluate(() => document.fonts.ready);
-      // Šablona nesmí přetéct plátno – jinak by se text v PNG oříznul
-      const overflow = await page.evaluate(() => document.querySelector("main").scrollHeight > document.body.clientHeight);
-      if (overflow) throw new Error(`${variant} ${f}: obsah přetéká plátno`);
+      // Šablona nesmí přetéct plátno ani vnitřní okraj rámu – jinak by se text v PNG oříznul,
+      // nebo by u 9:16 zajel do ochranné zóny Stories (padding rámu)
+      const overflow = await page.evaluate(() => {
+        const main = document.querySelector("main");
+        const limit = main.getBoundingClientRect().bottom - parseFloat(getComputedStyle(main).paddingBottom);
+        const bottom = Math.max(...[...main.children].map((el) => el.getBoundingClientRect().bottom));
+        if (main.scrollHeight > document.body.clientHeight || bottom > limit + 1) return "na výšku";
+        const wide = [...main.querySelectorAll("*")].find((el) => el.scrollWidth > el.clientWidth + 1);
+        return wide ? `na šířku (${wide.className || wide.tagName})` : null;
+      });
+      if (overflow) throw new Error(`${variant} ${f}: obsah přetéká ${overflow}`);
       const out = join(adsDir, variant, file);
       await page.screenshot({ path: out });
       console.log(out);

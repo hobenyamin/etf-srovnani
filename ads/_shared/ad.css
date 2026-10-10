@@ -1,4 +1,4 @@
-/* Vizuály reklam ve stylu stránky „Výpis z účtu“. Tokeny převzaté z app/globals.css – při změně palety upravit obojí.
+/* Vizuály reklam ve stylu stránky „Výpis z účtu 2.0“. Tokeny převzaté z app/globals.css – při změně palety upravit obojí.
    Plátno 1080 px na šířku, výška podle formátu (třída na <body>: f-1x1, f-4x5, f-9x16). */
 :root {
   --paper: #f3efe6;
@@ -8,9 +8,9 @@
   --rule: #c9c2b3;
   --loss: #b03a0a;
   --keep: #2f6b4f;
+  --action: #1d4ed8;
   --display: "Fraunces", Georgia, serif;
-  --sans: "IBM Plex Sans", system-ui, sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --sans: "Atkinson Hyperlegible Next", system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; margin: 0; }
@@ -45,6 +45,8 @@ body.f-9x16 { height: 1920px; }
 
 h1 {
   font-family: var(--display);
+  /* Pevná optická velikost jako na stránce: nadpis A (68 px) i B (104 px) má stejný řez */
+  font-variation-settings: "opsz" 48;
   font-weight: 600;
   font-size: 68px;
   line-height: 1.1;
@@ -52,9 +54,7 @@ h1 {
 }
 
 .num {
-  font-family: var(--mono);
   font-variant-numeric: tabular-nums;
-  word-spacing: -0.3em;
 }
 
 /* Účtenka s perforovaným okrajem – stejná maska jako .receipt na stránce */
@@ -84,3 +84,13 @@ h1 {
 }
 
 .spacer { flex: 1; }
+
+/* Pozvánka na stránku: jen typografický řádek v akční barvě. Žádná výplň, rámeček ani zaoblení –
+   Meta zakazuje obrázky, které napodobují neexistující funkce (falešná tlačítka). */
+.invite {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--action);
+  margin-top: 40px;
+  margin-bottom: 28px;
+}

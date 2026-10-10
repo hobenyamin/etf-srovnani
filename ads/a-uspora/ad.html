@@ -4,17 +4,32 @@
 <meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=block">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Fraunces:opsz,wght@9..144,600&display=block">
 <link rel="stylesheet" href="../_shared/ad.css">
 <title>Reklama A – úspora</title>
 <style>
-  .gap { font-size: 150px; font-weight: 600; line-height: 1; color: var(--loss); margin-top: 40px; }
-  .cond { font-size: 32px; line-height: 1.35; margin-top: 16px; }
-  .receipt { margin-top: 48px; }
+  .gap { font-size: 186px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; color: var(--loss); margin-top: 40px; }
+  .cond { font-size: 34px; line-height: 1.35; margin-top: 16px; }
+  .receipt { margin-top: 56px; }
+  .row { flex-wrap: wrap; font-size: 34px; padding-block: 22px; }
+  /* Pruh = roční náklad ve stejném měřítku (1,2 % : 0,2 %). Zelená jen pro levnější variantu. */
+  .bar { flex-basis: 100%; height: 22px; margin-top: 14px; background: var(--paper); }
+  .bar i { display: block; height: 100%; }
+  .bar .loss { background: var(--loss); }
+  .bar .keep { background: var(--keep); }
   .f-1x1 h1 { font-size: 58px; margin-top: 20px; }
-  .f-1x1 .gap { font-size: 130px; margin-top: 28px; }
-  .f-1x1 .receipt { margin-top: 32px; }
-  .f-1x1 .row { padding-block: 10px; font-size: 28px; }
+  .f-1x1 .gap { font-size: 164px; margin-top: 24px; }
+  .f-1x1 .cond { font-size: 30px; margin-top: 10px; }
+  .f-1x1 .receipt { margin-top: 28px; padding-block: calc(var(--tooth) + 12px); }
+  .f-1x1 .row { padding-block: 14px; font-size: 30px; }
+  .f-1x1 .bar { height: 16px; margin-top: 10px; }
+  .f-1x1 .invite { font-size: 32px; margin-bottom: 18px; }
+  .f-9x16 .gap { font-size: 150px; margin-top: 28px; }
+  .f-9x16 .cond { font-size: 30px; }
+  .f-9x16 .receipt { margin-top: 32px; padding-block: calc(var(--tooth) + 14px); }
+  .f-9x16 .row { padding-block: 10px; font-size: 30px; }
+  .f-9x16 .bar { height: 12px; margin-top: 8px; }
+  .f-9x16 .invite { font-size: 32px; margin-top: 28px; }
 </style>
 </head>
 <body>
@@ -25,10 +40,11 @@
   <p class="gap num">44&nbsp;200&nbsp;Kč</p>
   <p class="cond">rozdíl při 2&nbsp;000&nbsp;Kč měsíčně za 20&nbsp;let, výnos 0&nbsp;%</p>
   <div class="receipt">
-    <div class="row"><span>Průměrný aktivní akciový fond v&nbsp;EU</span><span class="num">1,2&nbsp;% ročně</span></div>
-    <div class="row"><span>Průměrný akciový ETF v&nbsp;EU</span><span class="num">0,2&nbsp;% ročně</span></div>
+    <div class="row"><span>Průměrný aktivní akciový fond v&nbsp;EU</span><span class="num">1,2&nbsp;% ročně</span><span class="bar"><i class="loss" style="width: 100%"></i></span></div>
+    <div class="row"><span>Průměrný akciový ETF v&nbsp;EU</span><span class="num">0,2&nbsp;% ročně</span><span class="bar"><i class="keep" style="width: 16.67%"></i></span></div>
   </div>
   <div class="spacer"></div>
+  <p class="invite">Spočítejte si to pro svou částku →</p>
   <p class="note">Průběžné náklady podle ESMA (2026, data za rok 2024). Modelový výpočet, ne doporučení. Hodnota investice může klesat.</p>
 </main>
 </body>
