@@ -45,7 +45,56 @@ Hero B vede rovnou na srovnání (3), ne na kalkulačku. Kdo přišel s otázkou
 
 ## Očekávaná konverze
 
-TODO – odhad konverze s odůvodněním a zdrojem benchmarku.
+**Odhad: 4 % zobrazení stránky skončí leadem a 2 % potvrzeným leadem.** Rozpětí: 2–6 % leadů. Kromě benchmarku níže jsou všechna čísla **vlastní předpoklad**. Ověřená data pro tento typ stránky a publika v ČR nemáme. Odhad nahradí čísla z prvního týdne kampaně.
+
+### Benchmark
+
+[Unbounce – Conversion Benchmark Report 2024](https://unbounce.com/conversion-benchmark-report/finance-insurance-conversion-rate/), data za 23. 7. 2023 – 23. 7. 2024, 41 000 landing pages a 57 milionů konverzí ([tisková zpráva 5. 9. 2024](https://www.newswire.ca/news-releases/unbounce-s-2024-conversion-benchmark-report-proves-that-attention-spans-are-declining-and-so-are-conversion-rates-831617439.html)). Staženo 2026-10-10.
+
+| Medián konverze | Hodnota |
+| --- | --- |
+| Všechna odvětví | 6,6 % |
+| Finanční služby | 8,3 % |
+| – z toho pojištění | 18,2 % |
+| – z toho úvěry | 8,8 % |
+| – **z toho investice** | **3,9 %** |
+| Finanční služby, placené sociální sítě | 9,3 % (Facebook 10,1 %, Instagram 15,5 %) |
+
+**Proč kotvíme na 3,9 % (investice), ne na 8,3 %:** finanční medián táhne nahoru pojištění (18,2 %), které s naším tématem nesouvisí. Unbounce navíc počítá jako konverzi i proklik, ne jen odeslaný formulář, a celosvětová data nejsou česká. 9,3 % u sociálních sítí platí pro finance celkem, ne pro investice. Proto bereme 4 %, což je zhruba medián investic. Hodnota nahoru i dolů je stejně možná: proti nám hraje studené publikum z feedu, pro nás formulář s jediným polem a hodnota ukázaná před žádostí.
+
+### Rozpad funnelu (vlastní předpoklad)
+
+Podíly jsou z návštěvníků, kteří stránku opravdu viděli (zobrazení stránky). Kroky odpovídají eventům v [Měření](#měření).
+
+| Krok | Event | Z prokliků | Ze zobrazení | Z předchozího kroku | Proč |
+| --- | --- | --- | --- | --- | --- |
+| Proklik z reklamy | (Meta: link click) | 100 % | – | – | |
+| Zobrazení stránky | `page_view` (Meta: landing page view) | 80 % | 100 % | 80 % | Část lidí odejde, než se stránka v prohlížeči Facebooku/Instagramu načte. Stránka je statická (LCP cíl < 2,5 s), takže ztráta by měla být malá |
+| Interakce s kalkulačkou | `calc_start` | 28 % | 35 % | 35 % | Hero A vede tlačítkem přímo na kalkulačku, hero B na srovnání, takže u B bude nižší. Část lidí z feedu stránku jen proletí |
+| Zobrazení formuláře | `form_view` | 24 % | 30 % | – | Formulář je čtvrtý v pořadí. Kdo došel až sem, prošel kalkulačku nebo srovnání. Event počítá i ty, kdo kalkulačku přeskočili |
+| **Lead** | `form_submit` | **3,2 %** | **4 %** | 13 % z `form_view` | Kotva na benchmarku investic (3,9 %) |
+| **Potvrzený lead** | `lead_confirmed` | **1,6 %** | **2 %** | 50 % z leadů | Ověřený benchmark pro míru potvrzení double opt-in jsme nenašli (jen blogy bez metodiky). Volíme 50 %, protože srovnání návštěvník dostane už na stránce, takže k potvrzení e-mailu má slabší motivaci. Tlačítko v e-mailu proto zní „Potvrdit a otevřít srovnání“ |
+
+### Cena za lead (vlastní předpoklad)
+
+Cenu prokliku (CPC) pro finance na Meta v ČR z ověřeného zdroje nemáme, proto tři scénáře. Lead = 3,2 % prokliků, potvrzený lead = 1,6 % prokliků.
+
+| CPC | Cena za lead | Cena za potvrzený lead | Testovací rozpočet 4 200 Kč na variantu → leadů |
+| --- | --- | --- | --- |
+| 5 Kč | 156 Kč | 313 Kč | 27 |
+| 10 Kč | 313 Kč | 625 Kč | 13 |
+| 20 Kč | 625 Kč | 1 250 Kč | 7 |
+
+Výpočet: cena za lead = CPC / 0,032, potvrzený = CPC / 0,016, leady = 4 200 / CPC × 0,032 (zaokrouhleno).
+
+### Jak se konverze změří
+
+| Metrika | Čitatel | Jmenovatel | Poznámka |
+| --- | --- | --- | --- |
+| Lead / zobrazení stránky podle reklamy | Supabase: počet řádků v `leads` podle `ad_variant` a `utm_content` (SQL v [Měření](#měření)) | Meta Ads Manager: *landing page views* podle reklamy | Obě čísla jsou úplná a nezávisí na cookies. Podle tohoto poměru se rozhoduje |
+| Potvrzený lead / lead | Supabase: `count(double_opt_in_at)` | Supabase: `count(*)` | Exportovat do 30 dnů, nepotvrzené se pak mažou |
+| Odpady mezi kroky | PostHog: funnel 8 eventů, rozpis podle `ad_variant` | – | Jen návštěvníci, kteří povolili měření. Souhlasící se mohou chovat jinak než ostatní (neměřili jsme), takže brát jako orientační poměry, ne absolutní čísla |
+| CTR, CPC, landing page views | Meta Ads Manager | – | Rozpis podle umístění (feed / Stories) |
 
 ## Hypotézy pro A/B test
 
