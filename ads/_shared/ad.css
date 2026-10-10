@@ -1,0 +1,86 @@
+/* Vizuály reklam ve stylu stránky „Výpis z účtu“. Tokeny převzaté z app/globals.css – při změně palety upravit obojí.
+   Plátno 1080 px na šířku, výška podle formátu (třída na <body>: f-1x1, f-4x5, f-9x16). */
+:root {
+  --paper: #f3efe6;
+  --card: #fbf9f4;
+  --ink: #16181d;
+  --muted: #5e5a52;
+  --rule: #c9c2b3;
+  --loss: #b03a0a;
+  --keep: #2f6b4f;
+  --display: "Fraunces", Georgia, serif;
+  --sans: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; }
+
+html, body { width: 1080px; overflow: hidden; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+body.f-1x1 { height: 1080px; }
+body.f-4x5 { height: 1350px; }
+body.f-9x16 { height: 1920px; }
+
+/* Obsah. U 9:16 mimo ochranné zóny Stories (Meta: ~14 % nahoře, 35 % dole, 6 % po stranách) */
+.frame {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 72px 80px;
+}
+.f-4x5 .frame { padding-block: 96px; }
+.f-9x16 .frame { padding: 290px 90px 690px; }
+
+.label {
+  font-size: 26px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+h1 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 68px;
+  line-height: 1.1;
+  margin-top: 28px;
+}
+
+.num {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  word-spacing: -0.3em;
+}
+
+/* Účtenka s perforovaným okrajem – stejná maska jako .receipt na stránce */
+.receipt {
+  --tooth: 14px;
+  background: var(--card);
+  padding: calc(var(--tooth) + 22px) 36px;
+  mask:
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / calc(2 * var(--tooth)) 51% repeat-x,
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / calc(2 * var(--tooth)) 51% repeat-x;
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+  padding-block: 14px;
+  font-size: 30px;
+}
+.row + .row { border-top: 2px dotted var(--rule); }
+.row .sub { display: block; font-size: 22px; color: var(--muted); margin-top: 4px; }
+
+.note {
+  font-size: 22px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.spacer { flex: 1; }

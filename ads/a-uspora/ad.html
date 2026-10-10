@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=block">
+<link rel="stylesheet" href="../_shared/ad.css">
+<title>Reklama A – úspora</title>
+<style>
+  .gap { font-size: 150px; font-weight: 600; line-height: 1; color: var(--loss); margin-top: 40px; }
+  .cond { font-size: 32px; line-height: 1.35; margin-top: 16px; }
+  .receipt { margin-top: 48px; }
+  .f-1x1 h1 { font-size: 58px; margin-top: 20px; }
+  .f-1x1 .gap { font-size: 130px; margin-top: 28px; }
+  .f-1x1 .receipt { margin-top: 32px; }
+  .f-1x1 .row { padding-block: 10px; font-size: 28px; }
+</style>
+</head>
+<body>
+<script>document.body.className = "f-" + (new URLSearchParams(location.search).get("f") || "4x5");</script>
+<main class="frame">
+  <p class="label">Srovnání ETF z NYSE · pro investory v ČR</p>
+  <h1>Kolik dělá rozdíl v poplatcích fondů za 20 let?</h1>
+  <p class="gap num">44&nbsp;200&nbsp;Kč</p>
+  <p class="cond">rozdíl při 2&nbsp;000&nbsp;Kč měsíčně za 20&nbsp;let, výnos 0&nbsp;%</p>
+  <div class="receipt">
+    <div class="row"><span>Průměrný aktivní akciový fond v&nbsp;EU</span><span class="num">1,2&nbsp;% ročně</span></div>
+    <div class="row"><span>Průměrný akciový ETF v&nbsp;EU</span><span class="num">0,2&nbsp;% ročně</span></div>
+  </div>
+  <div class="spacer"></div>
+  <p class="note">Průběžné náklady podle ESMA (2026, data za rok 2024). Modelový výpočet, ne doporučení. Hodnota investice může klesat.</p>
+</main>
+</body>
+</html>
