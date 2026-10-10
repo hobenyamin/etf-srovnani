@@ -45,6 +45,8 @@ Hero B vede rovnou na srovnání (3), ne na kalkulačku. Kdo přišel s otázkou
 
 Spodní lišta na mobilu se řídí tím, kde návštěvník je. Před výsledkem nabízí „Spočítat své poplatky“, když není vidět hero ani kalkulačka. Po výsledku nabízí „Poslat mi srovnání“ a dá focus do pole pro e-mail. Schová se, když je formulář vidět, po odeslání a dokud je vidět cookie lišta.
 
+Stejnou výzvu má i patička (krok 8b): kdo dočte až dolů, nekončí ve slepé uličce. Lišta se schová, když je výzva v patičce vidět, aby nebyly dvě stejné pod sebou. Logiku sdílí [`components/NextStepCta.tsx`](components/NextStepCta.tsx), v eventu se liší jen `cta: "sticky"` a `cta: "footer"`.
+
 ### Výška stránky na 375 px
 
 Změřeno 2026-10-10 skriptem [`scripts/page-height.mjs`](scripts/page-height.mjs) (375 × 812, produkční build, cookie lišta odmítnutá). Zopakovat: `node scripts/page-height.mjs`. Skript si sám sestaví a spustí server na portu 3101 se stejnými testovacími proměnnými jako E2E ([`e2e/test-env.mjs`](e2e/test-env.mjs)), nikdy s `.env.local`.
@@ -56,6 +58,8 @@ Změřeno 2026-10-10 skriptem [`scripts/page-height.mjs`](scripts/page-height.mj
 | hero B po načtení | 5 613 px | 4 343 px (−23 %) | 1 755 px | 880 px |
 
 Kalkulačka je po načtení nižší (1 562 → 1 167 px), protože rozpis účtenky je na mobilu sbalený. Po výsledku je vyšší (1 696 → 1 712 px), protože obsahuje formulář. Spodní sekce formuláře se po výsledku zmenší na tlačítko (684 → 388 px). Před: commit `375dfdf`, po: krok 8a.
+
+Po kroku 8b (vizuální systém, 2026-10-10): stránka 4 358 px (hero A), 4 634 px (po výsledku), 4 360 px (hero B). Větší nadpisy, čísla a mezery přidaly 20–46 px. Rozbalovací pole se zdroji zkrátila srovnání (880 → 853 px).
 
 ### Velikost HTML: plné srovnání je ve stránce dvakrát
 
@@ -73,6 +77,51 @@ Změřeno 2026-10-10 na produkčním buildu s testovacími proměnnými. Porovn�
 - **Přenos:** po síti jde HTML komprimované, takže navíc je 1,4–3,4 kB. Na 4G jsou to jednotky milisekund. Rozdíl mezi A a B je nejspíš v tom, jak daleko od sebe obě kopie v HTML leží a jestli je gzip najde v okně 32 kB. Neověřovali jsme to.
 - **Vliv na LCP:** prohlížeč musí rozbalit a zpracovat o 46 kB víc dat pro React. Na LCP jsme to neměřili, Lighthouse je v plánu na 15. 10.
 - **Jak to odstranit, pokud to vadí:** předat plné srovnání jen jednou, např. jeden serverový slot v `Landing`, který se po odeslání zobrazí v místě odeslání. Druhá možnost je načíst ho až po odeslání ze Server Action. Zatím ne: rozdíl po kompresi je malý a druhé řešení by porušilo slib „zobrazí se hned“ při výpadku sítě.
+
+### Vizuální systém „Výpis z účtu 2.0“ (krok 8b)
+
+Podle designové revize. Čísla, právní texty, eventy ani chování formulářů se nezměnily.
+
+- **Barvy s jedním významem.** Kobaltová `#1D4ED8` jen pro primární tlačítka, aktivní stav přepínačů a odkazy-výzvy. Oranžovočervená jen pro ztrátu (náklady), zelená jen pro levnější variantu. Tokeny a kontrasty jsou v [`app/globals.css`](app/globals.css).
+- **Písma.** Text i čísla v Atkinson Hyperlegible Next (latin-ext, tabulkové číslice). Nula je přeškrtnutá, takže „VOO“ se nesplete s „V00“. Nadpisy ve Fraunces s pevnou optickou velikostí `opsz 48`, takže nadpis A i B (stránka i reklamy) má stejný řez. Pole formulářů mají aspoň 16 px, menší písmo by iOS při focusu přiblížilo. Hlídá to E2E test.
+- **Hierarchie.** Nadpis hero 36 px, číslo v hero 56 px, rozdíl v účtence 40 px. Vedlejší text (`.fine`, 13 px) je v užším sloupci (52 znaků). Zdroje, metodika a údaje o datech jsou ve sbalených `<details>`. Rizikové upozornění a podmínky u čísel jsou vidět vždy (rozhodnutí 49).
+- **Děkovací stav vybočí:** tmavý blok s ikonou a nadpisem „Hotovo.“, plné srovnání pod ním.
+- **Mikrointerakce:** stisk tlačítek, plynulá změna čísla v účtence (300 ms) a „Ukládáme adresu…“ po odeslání. Při `prefers-reduced-motion` se nic nehýbe, hlídají to dva E2E testy.
+
+| Kontrast (WCAG) | Poměr |
+| --- | --- |
+| Text tlačítka (papír na kobaltu) | 5,8 : 1 |
+| Odkaz-výzva a hrana tlačítka proti papíru (nutné 3 : 1) | 5,8 : 1 |
+| Vedlejší text (muted) na papíře / na kartě | 6,0 : 1 / 6,5 : 1 |
+| Světlý text v děkovacím bloku | 10,0 : 1 |
+
+**Snímky** na 375 × 812 (skript [`scripts/screens.mjs`](scripts/screens.mjs), server s testovacími proměnnými, cookie lišta odmítnutá):
+
+| Stav | Před | Po |
+| --- | --- | --- |
+| Hero A | [pred/1-hero-a.png](docs/screens/pred/1-hero-a.png) | [po/1-hero-a.png](docs/screens/po/1-hero-a.png) |
+| Výsledek kalkulačky | [pred/2-vysledek-kalkulacky.png](docs/screens/pred/2-vysledek-kalkulacky.png) | [po/2-vysledek-kalkulacky.png](docs/screens/po/2-vysledek-kalkulacky.png) |
+| Srovnání | [pred/3-srovnani.png](docs/screens/pred/3-srovnani.png) | [po/3-srovnani.png](docs/screens/po/3-srovnani.png) |
+| Děkovací stav | [pred/4-dekovaci-stav.png](docs/screens/pred/4-dekovaci-stav.png) | [po/4-dekovaci-stav.png](docs/screens/po/4-dekovaci-stav.png) |
+| Hero B | [pred/5-hero-b.png](docs/screens/pred/5-hero-b.png) | [po/5-hero-b.png](docs/screens/po/5-hero-b.png) |
+
+U děkovacího stavu skript zadrží odeslání v prohlížeči, aby se nic neuložilo. Snímek „po“ proto ukazuje stav načítání („Ukládáme adresu…“), snímek „před“ text, který se dřív ukazoval hned.
+
+**Slova na první obrazovce** (375 × 812, jen slova opravdu vidět, nezakrytá lištou):
+
+| | S cookie lištou: před → po | Bez lišty: před → po |
+| --- | --- | --- |
+| Hero A | 107 → 96 (−10 %) | 84 → 74 (−12 %) |
+| Hero B | 101 → 94 (−7 %) | 78 → 72 (−8 %) |
+
+**LCP a CLS** (produkční build s testovacími proměnnými, 375 × 812, síť 150 ms / 1,6 Mb/s, CPU 4× zpomalené, medián z 5 běhů, cookie lišta zobrazená; změřeno Playwrightem přes `PerformanceObserver`, ne Lighthouse):
+
+| | LCP před → po | CLS před → po |
+| --- | --- | --- |
+| Hero A | 736 → 696 ms | 0 → 0 |
+| Hero B | 2 592 → 708 ms | 0 → 0 |
+
+Hero B měl před krokem 8b LCP 2,6 s. Příčinu jsme nezkoumali. Po změně písma je LCP u obou variant pod 0,75 s. Lokální měření nenahrazuje Lighthouse na nasazené stránce (15. 10.).
 
 ## Očekávaná konverze
 
@@ -249,7 +298,7 @@ Dvě reklamy pro Meta (Facebook, Instagram), každá s vlastním hero. Texty, vi
 
 - **Reklama říká totéž co hero.** Každé tvrzení má protějšek v hero (tabulky v [`ads/a-uspora/README.md`](ads/a-uspora/README.md) a [`ads/b-zvedavost/README.md`](ads/b-zvedavost/README.md)). Čísla hlídá unit test [`lib/ads.test.ts`](lib/ads.test.ts) proti stejnému výpočtu, ze kterého je hero.
 - **Každé číslo má podmínku hned u sebe:** v nadpisu, popisu i vizuálu, ne jen v jiném poli. Nadpis A proto začíná „2 000 Kč/měs., 20 let:“, protože se v některých umístěních zobrazí bez primárního textu.
-- **Vizuály jsou HTML šablony** ve stylu stránky, renderované do PNG Playwrightem (`npm run render-ads`). Jde o první verzi, finální vzhled doladí designer.
+- **Vizuály jsou HTML šablony** ve stylu stránky („Výpis z účtu 2.0“: stejné tokeny a písma), renderované do PNG Playwrightem (`npm run render-ads`). Pozvánka na stránku je jen typografický řádek, žádné falešné tlačítko (pravidlo Meta).
 
 ## Práce s AI
 
@@ -386,6 +435,14 @@ Na https://etf-srovnani.vercel.app. Vyplní se na konci projektu, po úpravě te
     - **Přístupnost:** přepínač je WAI-ARIA tabs, ovládá se šipkami, Home a End.
     - **Data zůstávají na serveru:** karty se vykreslují na serveru i se zdroji, přepínač je jen skrývá.
     - **Zamčené dvojice VTI a VT** jsou na jednom řádku. Popis plné verze je ve spodní sekci formuláře.
+49. **Do rozbalovacích polí jde vše kromě rizik a podmínek u čísel, se třemi výjimkami.** Zdroje u srovnání, metodika kalkulačky a odstavce „Odkud jsou data“ a „Kdo za stránkou stojí“ jsou sbalené. Horní index u hodnoty zdroj rozbalí. Vidět zůstávají:
+    - **text o GDPR u formuláře:** správce, účel a právní základ musí být u formuláře,
+    - **údaje o provozovateli v patičce:** povinné,
+    - **odstavec o PRIIPs/KID ve srovnání:** je to odpověď, kterou slibuje reklama B. Nechali jsme ho beze změny, protože jde o právní tvrzení.
+    - V hero A je zdroj (ESMA, data za rok 2024) přímo v podmínce u čísla. Rozbalovací pole by na 375 × 667 posunulo CTA pod cookie lištu. Datum stažení je v „Jak počítáme“ u kalkulačky.
+50. **Tlačítka cookie lišty zůstávají neutrální.** Kobaltová „Povolit měření“ by byla dark pattern a porušila by pravidlo „odmítnout stejně snadno jako přijmout“. Neutrální jsou i tlačítka kvalifikační otázky a „Odhlásit se“, protože nejsou výzvou ke konverzi.
+51. **Fraunces s pevnou optickou velikostí `opsz 48`.** Automatická optická velikost volila u 104 px kontrastnější řez než u 34 px. Pevná hodnota sjednotí nadpisy hero A, B a reklam.
+52. **Tabulkové číslice i za cenu přeškrtnuté nuly.** Atkinson Hyperlegible Next má ve výchozím stavu přeškrtnutou nulu. Obyčejnou nulu dává funkce `salt`, ale jen u proporcionálních číslic: s `tnum` zůstává přeškrtnutá (ověřeno renderem). Zadání chce tabulkové číslice, takže je necháváme. **K rozhodnutí designera:** ve velkých částkách („44 200 Kč“) může přeškrtnutá nula působit rušivě. Alternativa: proporcionální číslice se `salt` jen pro samostatná velká čísla (hero, reklamy), tabulkové v tabulkách.
 
 ## Co chybí a proč
 
