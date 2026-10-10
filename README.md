@@ -374,6 +374,7 @@ Podrobně u každé hodnoty v [`data/etfs.json`](data/etfs.json) (`source_url`, 
 | Speciální kategorie reklam na Meta, omezení cílení | Meta Marketing API – Special Ad Categories | [developers.facebook.com](https://developers.facebook.com/docs/marketing-api/audiences/special-ad-category) | 2026-10-10 |
 | Délky textů a ochranné zóny reklam na Meta | Meta Ads Guide – Instagram feed, Facebook feed, Instagram Stories | [facebook.com/business/ads-guide](https://www.facebook.com/business/ads-guide/update/image/instagram-story) | 2026-10-10 |
 | Ověření finančních inzerentů v Google Ads (ČR) | Google Advertising Policies Help – červen 2026 a Financial Services Verification | [support.google.com](https://support.google.com/adspolicy/answer/17127726?hl=en), [ČR](https://support.google.com/adspolicy/answer/15332527?hl=en&co=GENIE.CountryCode%3DCZ) | 2026-10-10 |
+| Benchmark konverze landing pages (finanční služby, investice, placené sociální sítě) | Unbounce – Conversion Benchmark Report 2024 (data 23. 7. 2023 – 23. 7. 2024) | [unbounce.com](https://unbounce.com/conversion-benchmark-report/finance-insurance-conversion-rate/), [tisková zpráva](https://www.newswire.ca/news-releases/unbounce-s-2024-conversion-benchmark-report-proves-that-attention-spans-are-declining-and-so-are-conversion-rates-831617439.html) | 2026-10-10 |
 
 ## Právní upozornění
 
