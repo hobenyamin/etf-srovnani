@@ -19,12 +19,12 @@ Praktický úkol do výběrového řízení Clientelo Czech s.r.o. Hodnoticí ot
 
 | Kdy | Co návštěvník dostane | Za co |
 | --- | --- | --- |
-| Hned, bez e-mailu | Kalkulačka dopadu poplatků v Kč (vlastní částka, horizont, modelový výnos). Ukázka srovnání 3 dvojic NYSE ↔ UCITS se stejným indexem, se zdrojem a datem | nic |
+| Hned, bez e-mailu | Kalkulačka dopadu poplatků v Kč (vlastní částka, horizont, modelový výnos). Ukázka srovnání 3 dvojic NYSE ↔ UCITS se stejným indexem (přepínač), se zdrojem a datem | nic |
 | Po zadání e-mailu, **hned na stránce** | Plné srovnání všech 5 dvojic: TER, měna, akumulace, burza, velikost fondu, registrace v ČR, ISIN | e-mail (+ nepovinný souhlas s novinkami) |
 | Po odeslání | Děkovací obrazovka se srovnáním (nečeká se na e-mail), jedna nepovinná otázka „Máte už účet u brokera?“ | – |
 | E-mailem | Potvrzovací e-mail (double opt-in), tlačítko „Potvrdit a otevřít srovnání“ | potvrzení adresy |
 
-**Kdy žádáme o kontakt:** až když návštěvník vidí svůj výsledek z kalkulačky (rozhodnutí 4). Nabídka plného srovnání se v kalkulačce objeví až po první změně vstupu. Formulář je až za ukázkou srovnání. V hero žádné pole ani zmínka o e-mailu není (hlídá E2E test) a spodní lepicí lišta vede jen na kalkulačku, nikdy na formulář.
+**Kdy žádáme o kontakt:** až když návštěvník vidí svůj výsledek z kalkulačky (rozhodnutí 4). Pole pro e-mail se objeví hned pod výsledkem, až po první změně vstupu (rozhodnutí 45). Kdo kalkulačku přeskočí (hero B), najde formulář za ukázkou srovnání. V hero žádné pole ani zmínka o e-mailu není (hlídá E2E test). Spodní lepicí lišta vede před výsledkem na kalkulačku a na formulář až po výsledku.
 
 Daňový tahák (W-8BEN) stránka zatím neslibuje, protože neexistuje (Co chybí).
 
@@ -35,13 +35,27 @@ Pořadí v kódu: [`components/Landing.tsx`](components/Landing.tsx).
 | # | Sekce | Úkol | Proč právě tady |
 | --- | --- | --- | --- |
 | 1 | **Hero** | Navázat na slib reklamy: A číslo 44 200 Kč, B otázka „Proč si v Česku nekoupíte VOO?“ a odpověď (chybí KID). Jedno tlačítko | Návštěvník z reklamy během pár sekund kontroluje, jestli je na správném místě. Hero opakuje slib reklamy doslova, jinak odchází. O kontakt v tuhle chvíli nežádáme, protože zatím nic nedostal |
-| 2 | **Kalkulačka** | Z obecného čísla udělat jeho číslo v Kč | Nejsilnější hodnota zdarma a jediná osobní. Kdo zadá vlastní částku, investoval čas a má konkrétní důvod pokračovat. Tlačítko hero A sem vede přímo |
-| 3 | **Ukázka srovnání** | Ukázat, že plná verze má skutečný obsah (3 dvojice se zdrojem a datem) | Důkaz kvality před žádostí o e-mail. Vysvětluje i „proč ne VOO“ (PRIIPs/KID), takže sem vede tlačítko hero B |
-| 4 | **Formulář** | E-mail za plné srovnání (5 dvojic, víc parametrů) | Teprve teď návštěvník ví, co dostane, a viděl kousek zdarma. Jedno pole, výsledek hned na stránce |
+| 2 | **Kalkulačka + formulář pod výsledkem** | Z obecného čísla udělat jeho číslo v Kč. Po výsledku hned pod ním pole pro e-mail („Poslat mi srovnání“) | Nejsilnější hodnota zdarma a jediná osobní. Kdo zadá vlastní částku, investoval čas a má konkrétní důvod pokračovat. Výsledek je okamžik největšího zájmu, proto žádost o kontakt přichází právě tady (rozhodnutí 4 a 45). Rozdíl v Kč i pole jsou vidět na jedné obrazovce. Tlačítko hero A sem vede přímo |
+| 3 | **Ukázka srovnání** | Ukázat, že plná verze má skutečný obsah (přepínač SPY / VOO / IVV, jedna dvojice se zdrojem a datem) | Důkaz kvality před žádostí o e-mail. Vysvětluje i „proč ne VOO“ (PRIIPs/KID), takže sem vede tlačítko hero B. Přepínač místo tří karet zkrátil sekci na polovinu |
+| 4 | **Formulář** | E-mail za plné srovnání (5 dvojic, víc parametrů) | Pro ty, kdo kalkulačku přeskočili (hero B): teprve teď vědí, co dostanou, a viděli kousek zdarma. Po výsledku kalkulačky tu zůstane jen tlačítko na formulář nahoře (rozhodnutí 46) |
 | 5 | **Důvěra** | Kdo za stránkou stojí, odkud jsou data, rizikové upozornění | Pro ty, kdo váhají: hledají to až při rozhodování o e-mailu, ne před ním. Rizikové upozornění tu je celé, krátká upozornění jsou i u čísel výše |
 | 6 | **Patička** | Provozovatel, zásady ochrany údajů, nastavení cookies | Povinné údaje. Nastavení cookies jde kdykoli změnit |
 
 Hero B vede rovnou na srovnání (3), ne na kalkulačku. Kdo přišel s otázkou „proč ne VOO“, chce nejdřív odpověď. Kalkulačku přeskočí, ale formulář (4) má hned pod srovnáním.
+
+Spodní lišta na mobilu se řídí tím, kde návštěvník je. Před výsledkem nabízí „Spočítat své poplatky“, když není vidět hero ani kalkulačka. Po výsledku nabízí „Poslat mi srovnání“ a dá focus do pole pro e-mail. Schová se, když je formulář vidět, po odeslání a dokud je vidět cookie lišta.
+
+### Výška stránky na 375 px
+
+Změřeno 2026-10-10 skriptem [`scripts/page-height.mjs`](scripts/page-height.mjs) (375 × 812, produkční build, cookie lišta odmítnutá). Zopakovat: `npm run build && npx next start -p 3100`, pak `node scripts/page-height.mjs`.
+
+| Stav | Stránka před | Stránka po | `#srovnani` před | `#srovnani` po |
+| --- | --- | --- | --- | --- |
+| hero A po načtení | 5 609 px | 4 339 px (−23 %) | 1 755 px | 880 px (−50 %) |
+| hero A po výsledku kalkulačky | 5 743 px | 4 588 px (−20 %) | 1 755 px | 880 px |
+| hero B po načtení | 5 613 px | 4 343 px (−23 %) | 1 755 px | 880 px |
+
+Kalkulačka je po načtení nižší (1 562 → 1 167 px), protože rozpis účtenky je na mobilu sbalený. Po výsledku je vyšší (1 696 → 1 712 px), protože obsahuje formulář. Spodní sekce formuláře se po výsledku zmenší na tlačítko (684 → 388 px). Před: commit `375dfdf`, po: krok 8a.
 
 ## Očekávaná konverze
 
@@ -118,7 +132,7 @@ p̄ = (p1 + p2) / 2,   z_α/2 = 1,96,   z_β = 0,84
 | --- | --- | --- | --- | --- | --- | --- |
 | H1 | 4 % → 6 % (+50 %) | 1 863 | 2 329 | 23 290 | 78 | 16 |
 | H1 | 4 % → 5,2 % (+30 %) | 4 783 | 5 979 | 59 790 | 200 | 40 |
-| H2 | 4 % → 5 % (+25 %) | 6 745 | 8 432 | 84 320 | 282 | 57 |
+| H2 | 4 % (kontrola: původní odkaz) → 5 % (výchozí: formulář pod výsledkem) (+25 %) | 6 745 | 8 432 | 84 320 | 282 | 57 |
 | H3 | 35 % → 40,25 % (+15 %), jen souhlasící | 1 336 souhlasících = 2 672 zobrazení | 3 340 | 33 400 | 112 | 23 |
 
 **Co z toho plyne:** testovací rozpočet z [`ads/`](ads/README.md#cílení-a-rozpočet-obě-varianty-stejně) (300 Kč denně na variantu, 7 dní) rozliší CTR a cenu prokliku, ale **rozdíl v leadech ne**. Test na leady potřebuje zhruba 1 500 Kč denně na variantu a 2–8 týdnů, podle toho, jak velký rozdíl chceme poznat. Menší rozdíly prakticky nezměříme: +10 % (4 % → 4,4 %) by chtělo 39 475 zobrazení na variantu. Proto testujeme jen změny, od kterých čekáme velký účinek.
@@ -132,13 +146,24 @@ p̄ = (p1 + p2) / 2,   z_α/2 = 1,96,   z_β = 0,84
 - **Vzorek:** 1 863 zobrazení na variantu pro +50 %, 4 783 pro +30 %.
 - **Spuštění:** už připravené. Dvě reklamy s `utm_content=a-uspora` a `b-zvedavost`. `proxy.ts` vybere hero a stránka uloží `ad_variant`. V Meta rovnoměrné rozdělení publika přes funkci A/B test v Ads Manageru, ne dvě reklamy v jedné sadě, kde by Meta mohla rozpočet sama přesunout k jedné z nich. Konkrétní nastavení ověřit v Ads Manageru.
 
-### H2: Formulář hned pod výsledkem kalkulačky vs. až za srovnáním
+### H2: Formulář hned pod výsledkem kalkulačky (výchozí stav) vs. odkaz na formulář za srovnáním
 
-- **Co měníme:** dnes vede nabídka v kalkulačce odkazem na formulář, který je až za ukázkou srovnání. Ve variantě bude pole pro e-mail přímo pod výsledkem kalkulačky.
-- **Proč čekáme zlepšení:** výsledek kalkulačky je chvíle největšího zájmu (rozhodnutí 4). Každý posun a sekce navíc mezi výsledkem a formulářem jsou příležitost odejít. Riziko: kdo ještě neviděl ukázku srovnání, neví, co za e-mail dostane. Proto může vyjít i hůř. Odhad +25 % je vlastní předpoklad.
-- **Metrika:** primární lead / zobrazení stránky (Supabase podle `utm_content`). Sekundární (PostHog, jen souhlasící): `form_submit / calc_result`.
-- **Vzorek:** 6 745 zobrazení na variantu (+25 %). Ze tří testů nejdražší, proto až po H1 a jen na vítězné reklamě.
-- **Spuštění (potřebuje kód):** varianta rozvržení v `utm_content`, např. `a-uspora-f1` (dnešní) a `a-uspora-f2` (formulář pod kalkulačkou). `proxy.ts` podle přípony přepíše na staticky předrenderovanou stránku (jako dnes `/v/b`) a `Landing` dostane parametr rozvržení. `ad_variant` zůstává `a`/`b` a tabulka `leads` se nemění: `utm_content` se ukládá už teď, takže stačí `group by utm_content`. V Meta dvě kopie vítězné reklamy s různým `utm_content` v A/B testu. PostHog feature flags nepoužíváme, protože bez souhlasu s měřením se PostHog nenačte (rozhodnutí 33) a varianta by se nevybrala.
+- **Výchozí stav se změnil (krok 8a, rozhodnutí 45):** formulář pod výsledkem kalkulačky je na stránce už teď. Test proto ověřuje, jestli si to rozhodnutí obhájí v datech.
+- **Kontrola:** původní stav. Pod výsledkem kalkulačky je jen pruh „Chcete kompletní srovnání…“ s odkazem na formulář, který je až za ukázkou srovnání.
+- **Varianta:** dnešní výchozí stav. Pole pro e-mail je přímo pod výsledkem a dole zůstane jen tlačítko, které vede nahoru.
+- **Proč čekáme zlepšení:** výsledek kalkulačky je chvíle největšího zájmu (rozhodnutí 4). Každý posun a sekce navíc mezi výsledkem a formulářem jsou příležitost odejít.
+- **Riziko:** návštěvník může odeslat e-mail dřív, než uvidí ukázku srovnání. Neví pak přesně, co dostane, a může vyjít horší míra potvrzení, i když leadů přibude.
+- **Odhad +25 % je vlastní předpoklad:** kontrola 4 % → varianta 5 %. Odhad 4 % v [Očekávané konverzi](#očekávaná-konverze) jsme nechali beze změny. Vychází z benchmarku, ne z této hypotézy, a zvýšit ho na 5 % by znamenalo počítat s neověřeným výsledkem.
+- **Metrika:** primární lead / zobrazení stránky (Supabase podle `utm_content`). Sekundární:
+  - potvrzený lead / lead (Supabase), hlídá riziko výše,
+  - `form_submit / calc_result` a `form_submit` podle `form_location` (PostHog, jen souhlasící).
+- **Vzorek:** 6 745 zobrazení na variantu. Výpočet je symetrický, takže pro 4 % ↔ 5 % vychází stejně v obou směrech (`node scripts/sample-size.mjs 0.05 0.04`). Ze tří testů nejdražší, proto až po H1 a jen na vítězné reklamě.
+- **Spuštění (potřebuje kód):**
+  - Kontrolní varianta v `utm_content`, např. `a-uspora-f1` (původní odkaz). Bez přípony nebo s `-f2` zůstává dnešní výchozí stav.
+  - `proxy.ts` podle přípony přepíše na staticky předrenderovanou stránku (jako dnes `/v/b`) a `Calculator` dostane parametr `leadPlacement="link"`. Ten místo formuláře vykreslí původní pruh s odkazem a spodní formulář zůstane aktivní.
+  - `ad_variant` zůstává `a`/`b` a tabulka `leads` se nemění: `utm_content` se ukládá už teď, takže stačí `group by utm_content`.
+  - V Meta dvě kopie vítězné reklamy s různým `utm_content` v A/B testu.
+  - PostHog feature flags nepoužíváme, protože bez souhlasu s měřením se PostHog nenačte (rozhodnutí 33) a varianta by se nevybrala.
 
 ### H3: Hero A s posuvníkem částky přímo v hero vs. tlačítko „Spočítat pro mě“
 
@@ -153,6 +178,10 @@ p̄ = (p1 + p2) / 2,   z_α/2 = 1,96,   z_β = 0,84
 ## Měření
 
 Funnel: `page_view → hero_cta_click → calc_start → calc_result → compare_view → form_view → form_submit → lead_confirmed`. Každý event nese `ad_variant` (`a`/`b`) a UTM parametry z URL ([`lib/track.ts`](lib/track.ts)).
+
+- **`form_location`:** `form_view` a `form_submit` nesou místo formuláře, `calc` (pod výsledkem kalkulačky) nebo `bottom` (spodní sekce). `form_view` se posílá jednou za návštěvu, takže říká, který formulář návštěvník uviděl jako první.
+- **`form_cta_click`:** event mimo funnel pro tlačítko „Poslat mi srovnání“ ve spodní liště (`cta: "sticky"`). `hero_cta_click` by po výsledku kalkulačky rozbil pořadí funnelu.
+- **`compare_view` není povinný krok:** od kroku 8a jde formulář odeslat hned pod výsledkem, bez srovnání. Pořadí výše je pořadí sekcí na stránce, ne cesta, kterou musí každý projít.
 
 **Dva zdroje dat, každý na jinou otázku:**
 
@@ -177,7 +206,10 @@ order by 1, 2, 3;
 
 Pozor: nepotvrzené leady se po 30 dnech mažou, takže starší období zpětně ukáže míru potvrzení 100 %. Čísla za kampaň je potřeba exportovat do 30 dnů.
 
-Funnel v PostHogu: Product analytics → New insight → Funnels, kroky v pořadí výše, breakdown podle `ad_variant`. Krok `lead_confirmed` přichází často z jiného zařízení (e-mail na mobilu) a v rámci jedné návštěvy se nepropojí. Míru potvrzení proto počítáme z databáze.
+Funnel v PostHogu: Product analytics → New insight → Funnels, dva funnely s breakdownem podle `ad_variant` nebo `form_location`:
+
+- `page_view → form_view → form_submit` pro všechny,
+- `page_view → calc_result → form_view → form_submit` pro cestu přes kalkulačku (hero B kalkulačku často přeskočí). `compare_view` do funnelu nepatří: v přísném pořadí by z něj vypadli všichni, kdo odeslali formulář pod výsledkem bez srovnání. Podíl `compare_view / page_view` sledovat jako samostatný trend. Krok `lead_confirmed` přichází často z jiného zařízení (e-mail na mobilu) a v rámci jedné návštěvy se nepropojí. Míru potvrzení proto počítáme z databáze.
 
 **Co PostHog dostane:** jen eventy funnelu s `ad_variant` a UTM, plus technické údaje, které přikládá sám (adresa stránky, prohlížeč, zařízení, obrazovka). Nedostane e-mail (žádné `identify`), autocapture, záznam obrazovky ani tokeny z odkazů v e-mailech (`stripSecrets` v [`lib/analytics.ts`](lib/analytics.ts)).
 
@@ -324,6 +356,19 @@ Na https://etf-srovnani.vercel.app. Vyplní se na konci projektu, po úpravě te
 42. **Reklamy na Meta deklarují speciální kategorii *Financial products and services*, i když pro ČR není výslovně povinná.** Dokumentace Meta ji povinně vyžaduje u reklam zasahujících USA. U Evropy zmiňuje jen úvěrové reklamy („certain parts of Europe“) bez seznamu zemí. Investice a ETF do kategorie tématicky spadají a reklamu bez vhodné kategorie může Meta zamítnout. Cena: věk je pevně 18–65+, takže personu 25–45 let nejde zacílit, bez lookalike publik a zájmy jen ze schváleného seznamu. Personu zasáhnou zájmy a kreativa. Podrobně v [`ads/README.md`](ads/README.md#cílení-a-rozpočet-obě-varianty-stejně).
 43. **V reklamě B se nejmenuje žádný UCITS fond.** VUAA a jeho TER návštěvník uvidí až na stránce. Reklama tak nepropaguje konkrétní nástroj a netvrdí jeho dostupnost v ČR (`registered_in_cz` u VUAA = null). Hlídá unit test.
 44. **Text reklamy A je v prvním odstavci zkrácený:** „i bez výnosu“ místo „i bez jakéhokoli výnosu“, aby se podmínka i „Modelový výpočet, ne doporučení“ vešly do 125 znaků. Tolik doporučuje Meta Ads Guide pro primární text a zbytek se může schovat za „Zobrazit více“. Věcně se nic nemění.
+45. **Formulář je hned pod výsledkem kalkulačky, ne až za srovnáním** (krok 8a, designová revize). Okamžik nejvyššího zájmu je výsledek kalkulačky (rozhodnutí 4). Dřív tam byl jen odkaz a návštěvník musel přeskočit ukázku srovnání. Původně to byla hypotéza H2, teď je to výchozí stav a H2 testuje původní odkaz jako kontrolu.
+    - **Rozdíl v Kč i pole pro e-mail na jedné obrazovce** (375 × 812 i 667, hlídá E2E test). Souhrnný řádek „Rozdíl“ je proto nahoře v účtence. Vklady a náklady podle TER jsou v rozpisu, který je na mobilu sbalený.
+    - **Předpoklady výpočtu se nesbalují:** výnos jako příklad, co výpočet nezahrnuje, zdroje. Podle právních mantinelů musí být vidět.
+    - **Formulář pod výsledkem se chová stejně jako ten dole:** stejný souhlas, GDPR text, honeypot, časová past i `submitLead`. Tlačítko říká, co návštěvník dostane („Poslat mi srovnání“), ne otázku.
+46. **Na stránce je vždy jen jeden aktivní formulář.** Před výsledkem kalkulačky je aktivní spodní formulář (hero B kalkulačku přeskočí). Po výsledku je aktivní formulář pod ním a dole zůstane jen tlačítko, které vede nahoru a dá focus do pole.
+    - **Výjimka:** kdo už psal do spodního formuláře, tomu zůstane aktivní, aby nepřišel o rozepsaný e-mail.
+    - Odkaz u zamčených dvojic i spodní lišta vedou vždy do aktivního formuláře, nikdy na mezikrok.
+47. **Po odeslání jsou obě místa v děkovacím stavu, plné srovnání je jen jedno.** Zobrazí se tam, kde návštěvník formulář odeslal, na druhém místě je krátké „Plné srovnání už máte“ s odkazem. Dvakrát pět dvojic by stránku zbytečně prodloužilo a ID nadpisů a kotev zdrojů by se opakovala. Stav sdílí [`lib/lead-flow.ts`](lib/lead-flow.ts).
+48. **Srovnání má přepínač SPY / VOO / IVV, výchozí VOO.** Jedna karta místo tří zkrátila sekci z 1 755 na 880 px.
+    - **Proč VOO:** navazuje na hero a reklamu B („Proč si v Česku nekoupíte VOO?“).
+    - **Přístupnost:** přepínač je WAI-ARIA tabs, ovládá se šipkami, Home a End.
+    - **Data zůstávají na serveru:** karty se vykreslují na serveru i se zdroji, přepínač je jen skrývá.
+    - **Zamčené dvojice VTI a VT** jsou na jednom řádku. Popis plné verze je ve spodní sekci formuláře.
 
 ## Co chybí a proč
 
