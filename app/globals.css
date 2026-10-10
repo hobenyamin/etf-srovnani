@@ -63,3 +63,27 @@ body {
     scroll-behavior: smooth;
   }
 }
+
+/* Primární tlačítko (akční barva): CTA v hero, odeslání formuláře, spodní lišta, potvrzení e-mailu.
+   Velikost a odsazení dodává utilita u konkrétního tlačítka. */
+@layer components {
+  .btn-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    background: var(--color-action);
+    color: var(--color-paper);
+    font-weight: 600;
+    outline-offset: 4px;
+  }
+  .btn-primary:active {
+    background: var(--color-action-press);
+  }
+  .btn-primary:focus-visible {
+    outline: 2px solid var(--color-ink);
+  }
+  .btn-primary:disabled {
+    opacity: 0.6;
+  }
+}

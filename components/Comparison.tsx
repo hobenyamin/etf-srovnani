@@ -51,7 +51,7 @@ export function Comparison() {
             .map((p) => `${p.us.ticker.value} → ${p.ucits.ticker.value}`)
             .join(", ")}
         </p>
-        <LeadFormLink className="shrink-0 font-semibold underline underline-offset-4">Plné srovnání →</LeadFormLink>
+        <LeadFormLink className="shrink-0 font-semibold text-action underline underline-offset-4">Plné srovnání →</LeadFormLink>
       </div>
     </section>
   );

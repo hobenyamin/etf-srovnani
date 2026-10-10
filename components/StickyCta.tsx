@@ -8,7 +8,7 @@ import { useBannerVisible } from "@/lib/use-consent";
 import { useLeadFlow } from "@/lib/use-lead-flow";
 
 const bar = "fixed inset-x-0 bottom-0 z-10 border-t border-rule bg-paper/95 px-4 py-3 backdrop-blur-sm";
-const cta = "mx-auto flex h-12 w-full max-w-xl items-center justify-center rounded-sm bg-ink font-semibold text-paper";
+const cta = "btn-primary mx-auto h-12 w-full max-w-xl";
 
 /**
  * Spodní lišta na mobilu podle toho, kde návštěvník je:

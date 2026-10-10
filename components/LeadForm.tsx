@@ -22,7 +22,7 @@ import { getAdVariant, getCalcInput, utmFromUrl } from "@/lib/visit";
 export const SUBMIT_CTA = "Poslat mi srovnání";
 
 const button =
-  "flex h-14 w-full items-center justify-center rounded-sm bg-ink text-base font-semibold text-paper outline-offset-4 focus-visible:outline-2 focus-visible:outline-ink";
+  "btn-primary h-14 w-full text-base";
 
 /**
  * Spodní sekce formuláře. Pro ty, kdo kalkulačku přeskočili (hero B). Po výsledku kalkulačky je
@@ -41,7 +41,7 @@ export function LeadForm({ fullComparison }: { fullComparison: ReactNode }) {
           <h2 id="formular-h" className="font-display text-2xl leading-8 font-semibold">
             Plné srovnání máte u&nbsp;svého výpočtu
           </h2>
-          <a href={`#${FORM_ANCHOR.calc}`} className="mt-3 inline-block font-semibold underline underline-offset-4">
+          <a href={`#${FORM_ANCHOR.calc}`} className="mt-3 inline-block font-semibold text-action underline underline-offset-4">
             Zobrazit srovnání ↑
           </a>
         </div>

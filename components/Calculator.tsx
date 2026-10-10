@@ -89,7 +89,7 @@ export function Calculator({ rows, fullComparison }: { rows: FeeRow[]; fullCompa
                   touch();
                   setMonthlyText(formatInteger(amount));
                 }}
-                className="num h-10 flex-1 rounded-sm border border-ink text-[14px] aria-pressed:bg-ink aria-pressed:text-paper"
+                className="num h-10 flex-1 rounded-sm border border-ink text-[14px] aria-pressed:border-action aria-pressed:bg-action aria-pressed:font-semibold aria-pressed:text-paper"
               >
                 {formatInteger(amount)}
               </button>
@@ -133,7 +133,7 @@ export function Calculator({ rows, fullComparison }: { rows: FeeRow[]; fullCompa
               touch();
               setYears(Number(e.target.value));
             }}
-            className="mt-3 h-8 w-full accent-ink"
+            className="mt-3 h-8 w-full accent-action"
           />
         </div>
 
@@ -143,7 +143,7 @@ export function Calculator({ rows, fullComparison }: { rows: FeeRow[]; fullCompa
             {RETURN_OPTIONS.map((rate) => (
               <label
                 key={rate}
-                className="num flex h-11 cursor-pointer items-center justify-center rounded-sm border border-ink text-[15px] has-checked:bg-ink has-checked:text-paper has-focus-visible:outline-2 has-focus-visible:outline-offset-2"
+                className="num flex h-11 cursor-pointer items-center justify-center rounded-sm border border-ink text-[15px] has-checked:border-action has-checked:bg-action has-checked:font-semibold has-checked:text-paper has-focus-visible:outline-2 has-focus-visible:outline-offset-2"
               >
                 <input
                   type="radio"
@@ -192,7 +192,7 @@ function CalcLead({ flow, fullComparison }: { flow: ReturnType<typeof useLeadFlo
     return (
       <p className="mt-6 font-semibold" data-testid="lead-done">
         Plné srovnání už máte.{" "}
-        <a href="#formular" className="underline underline-offset-4">
+        <a href="#formular" className="text-action underline underline-offset-4">
           Zobrazit ↓
         </a>
       </p>

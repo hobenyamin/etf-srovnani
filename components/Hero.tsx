@@ -6,7 +6,7 @@ import { formatDate, formatInteger, formatKc, formatPercent } from "@/lib/format
 import type { AdVariant } from "@/lib/track";
 
 const cta =
-  "mt-7 flex h-14 w-full items-center justify-center rounded-sm bg-ink px-6 text-base font-semibold text-paper outline-offset-4 focus-visible:outline-2 focus-visible:outline-ink";
+  "btn-primary mt-7 h-14 w-full px-6 text-base";
 
 export function Hero({ variant }: { variant: AdVariant }) {
   return (

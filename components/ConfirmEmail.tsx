@@ -10,7 +10,7 @@ import { setAdVariant, track } from "@/lib/track";
 type State = "idle" | "working" | "confirmed" | "already" | "expired" | "invalid" | "error";
 
 const button =
-  "mt-6 flex h-14 w-full items-center justify-center rounded-sm bg-ink text-base font-semibold text-paper outline-offset-4 focus-visible:outline-2 focus-visible:outline-ink disabled:opacity-60";
+  "btn-primary mt-6 h-14 w-full text-base";
 
 /** Potvrzení adresy tlačítkem. Po potvrzení hned plné srovnání a event lead_confirmed s atribucí leadu. */
 export function ConfirmEmail({ fullComparison }: { fullComparison: ReactNode }) {
