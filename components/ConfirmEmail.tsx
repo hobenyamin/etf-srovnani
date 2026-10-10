@@ -38,8 +38,7 @@ export function ConfirmEmail({ fullComparison }: { fullComparison: ReactNode }) 
     return (
       <div data-testid="confirmed" className="mt-4">
         <DoneBanner
-          title={state === "confirmed" ? "Hotovo, adresa je potvrzená." : "Adresu už máte potvrzenou."}
-          stamp="POTVRZENO"
+          title={state === "confirmed" ? "Potvrzeno." : "Adresu už máte potvrzenou."}
           level={1}
           headingRef={heading}
         >

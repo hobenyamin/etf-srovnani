@@ -85,7 +85,7 @@ Podle designové revize. Čísla, právní texty, eventy ani chování formulá�
 - **Barvy s jedním významem.** Kobaltová `#1D4ED8` jen pro primární tlačítka, aktivní stav přepínačů a odkazy-výzvy. Oranžovočervená jen pro ztrátu (náklady), zelená jen pro levnější variantu (v kroku 8c zrušeno, viz níže). Tokeny a kontrasty jsou v [`app/globals.css`](app/globals.css).
 - **Písma.** Text i čísla v Atkinson Hyperlegible Next (latin-ext, tabulkové číslice). Nula je přeškrtnutá, takže „VOO“ se nesplete s „V00“. Nadpisy ve Fraunces s pevnou optickou velikostí `opsz 48`, takže nadpis A i B (stránka i reklamy) má stejný řez. Pole formulářů mají aspoň 16 px, menší písmo by iOS při focusu přiblížilo. Hlídá to E2E test.
 - **Hierarchie.** Nadpis hero 36 px, číslo v hero 56 px, rozdíl v účtence 40 px. Vedlejší text (`.fine`, 13 px) je v užším sloupci (52 znaků). Zdroje, metodika a údaje o datech jsou ve sbalených `<details>`. Rizikové upozornění a podmínky u čísel jsou vidět vždy (rozhodnutí 49).
-- **Děkovací stav vybočí:** tmavý blok s ikonou (od kroku 8c razítkem) a nadpisem „Hotovo.“, plné srovnání pod ním.
+- **Děkovací stav vybočí:** tmavý blok s ikonou a nadpisem „Hotovo.“, plné srovnání pod ním (od kroku 8c bez ikony, nadpis „Odesláno.“).
 - **Mikrointerakce:** stisk tlačítek, plynulá změna čísla v účtence (300 ms) a „Ukládáme adresu…“ po odeslání. Při `prefers-reduced-motion` se nic nehýbe, hlídají to dva E2E testy.
 
 | Kontrast (WCAG) | Poměr |
@@ -123,13 +123,13 @@ U děkovacího stavu skript zadrží odeslání v prohlížeči, aby se nic neul
 
 Hero B měl před krokem 8b LCP 2,6 s. Příčinu jsme nezkoumali. Po změně písma je LCP u obou variant pod 0,75 s. Lokální měření nenahrazuje Lighthouse na nasazené stránce (15. 10.).
 
-### Krok 8c: klidnější barvy, velká čísla, razítko, animace
+### Krok 8c: klidnější barvy, velká čísla, děkovací blok, animace
 
 Podle designové revize 8b: kobaltová vedle oranžovočervené působila křiklavě a přeškrtnutá nula ve velkých částkách rušila. Čísla, právní texty, eventy ani chování formulářů se nezměnily.
 
 - **Ztráta už není barva.** Oranžovočervená a zelená zmizely ze stránky i z reklam. Částky a rozdíly jsou v inkoustu (15,5 : 1), důraz nese velikost a tloušťka. Pruhy v rozpisu účtenky i v reklamě A rozlišuje tvar: dražší srovnání (průměrný aktivní fond) plný pruh, ostatní řádky obrys. V reklamě B je „bez KID“ tlumeně (muted, 6,5 : 1 na kartě) a „s KID“ tučně v inkoustu, bez symbolů podobných zaškrtávátkům. Kobalt je jediný výrazný akcent. Červená `#B03A0A` (5,3 : 1) zůstala jen pro chybový stav: validaci formuláře a varování na `/zasady` (rozhodnutí 53 a 54).
 - **Velká čísla ve Fraunces.** Atkinson Hyperlegible Next obyčejnou nulu nemá (rozhodnutí 52). Samostatná velká čísla (hero A, rozdíl v účtence, číslo v reklamě A) jsou proto v nadpisovém písmu Fraunces s obyčejnou nulou a proporcionálními číslicemi. Text, tabulky, data, tickery a ISIN zůstávají v Atkinson s tabulkovými číslicemi. Animovaný rozdíl v účtence má pevnou šířku podle výsledné hodnoty, takže se při animaci nerozskakuje (E2E test).
-- **Razítko.** Děkovací blok má místo ikony razítko „ODESLÁNO“ (na `/potvrzeni` „POTVRZENO“): dvojitý světlý obrys, pootočení −6°, otisk 320 ms. Jen ozdoba (`aria-hidden`), stav nese nadpis.
+- **Děkovací blok bez ozdob.** Místo ikony a „Hotovo.“ nese stav sám nadpis: „Odesláno.“, na `/potvrzeni` „Potvrzeno.“. Nadpis se jemně prolne (320 ms). Razítko „ODESLÁNO“ z první verze 8c jsme po kontrole na telefonu odstranili, nadpis říká totéž bez ozdoby navíc.
 - **Plné srovnání s přepínačem.** Místo 5 karet pod sebou přepínač SPY / VOO / IVV / VTI / VT (výchozí VOO) a jedna karta na světlém podkladu. Všech 5 dvojic zůstává v HTML.
 - **Animace:** spodní lišta přijede a odjede (200 ms). Při odjezdu je `inert`, nedá se na ni klepnout ani se na ni dostat tabulátorem. Sekce pod první obrazovkou se při posunu objeví (opacity a posun o 12 px, 400 ms). Skrývá se až po načtení JavaScriptu a jen to, co je celé pod obrazovkou, takže bez JS se nic neskryje. Rozbalovací pole se otevírají plynule v prohlížečích s `interpolate-size` (Chrome), jinde bez animace. Animuje se jen `transform`, `opacity` a výška obsahu `details` po kliknutí, CLS zůstává 0. Při `prefers-reduced-motion` se nic z toho nehýbe (E2E test).
 
@@ -142,7 +142,7 @@ Podle designové revize 8b: kobaltová vedle oranžovočervené působila křikl
 
 Nový skript měří u stejného kódu o 12–24 ms víc než ten původní (696 / 708 ms výše). Rozdíl je v měření, ne v kódu.
 
-**Snímky po** ve stejné tabulce výše ([`docs/screens/po/`](docs/screens/po/)) jsou po kroku 8c. **Záznam animací** na 375 × 812: [`docs/screens/animace.webm`](docs/screens/animace.webm) (posun a objevení sekcí, spodní lišta, plynulé číslo, „Jak počítáme“, razítko; skript [`scripts/record-animations.mjs`](scripts/record-animations.mjs)). GIF není: Playwright nahrává jen webm a ffmpeg v systému nebyl.
+**Snímky po** ve stejné tabulce výše ([`docs/screens/po/`](docs/screens/po/)) jsou po kroku 8c. **Záznam animací** na 375 × 812: [`docs/screens/animace.webm`](docs/screens/animace.webm) (posun a objevení sekcí, spodní lišta, plynulé číslo, „Jak počítáme“, děkovací blok; skript [`scripts/record-animations.mjs`](scripts/record-animations.mjs)). GIF není: Playwright nahrává jen webm a ffmpeg v systému nebyl.
 
 ## Očekávaná konverze
 

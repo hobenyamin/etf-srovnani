@@ -26,7 +26,7 @@ export function ThankYou({
   const questionId = useId();
 
   useEffect(() => {
-    // Focus na nadpis, posun na začátek bloku, aby byla vidět i ikona nad nadpisem
+    // Focus na nadpis, posun na začátek bloku
     heading.current?.focus({ preventScroll: true });
     root.current?.scrollIntoView({ block: "start" });
   }, []);
@@ -38,7 +38,7 @@ export function ThankYou({
 
   return (
     <div ref={root} data-testid="thank-you" className="scroll-mt-4">
-      <DoneBanner title="Hotovo." headingId={headingId} headingRef={heading}>
+      <DoneBanner title="Odesláno." headingId={headingId} headingRef={heading}>
         <p className="font-semibold text-paper">Plné srovnání máte hned pod tímto rámečkem.</p>
         <p className="mt-1" role="status" data-testid="delivery">
           {delivery === "pending" ? (

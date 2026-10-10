@@ -506,7 +506,7 @@ test("šířka čísla v účtence se během animace nemění", async ({ page })
   expect(widths.length).toBeLessThanOrEqual(2);
 });
 
-test("omezení pohybu: tlačítka a lišta bez přechodu, číslo skočí rovnou, děkovací blok i razítko bez animace", async ({ page }) => {
+test("omezení pohybu: tlačítka a lišta bez přechodu, číslo skočí rovnou, děkovací blok i nadpis bez animace", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   await declineCookies(page);
@@ -531,7 +531,7 @@ test("omezení pohybu: tlačítka a lišta bez přechodu, číslo skočí rovnou
   await inline.getByRole("button", { name: "Poslat mi srovnání" }).click();
   const banner = page.getByTestId("thank-you").locator(".done-banner");
   expect(await banner.evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
-  expect(await banner.locator(".stamp").evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
+  expect(await banner.locator(".done-title").evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
 });
 
 test("CTA v patičce: před výsledkem kalkulačka, po výsledku formulář, po odeslání nic; s lištou se nepřekrývá", async ({ page }) => {

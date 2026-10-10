@@ -122,8 +122,8 @@ body {
   .done-banner {
     animation: done-in 280ms ease-out both;
   }
-  .stamp {
-    animation: stamp-in 320ms 120ms ease-out both;
+  .done-title {
+    animation: fade-in 320ms 120ms ease-out both;
   }
 
   /* Spodní lišta: příjezd zdola (@starting-style), odjezd přes třídu leaving (StickyCta, usePresence) */
@@ -188,41 +188,15 @@ body {
     transform: translateY(8px);
   }
 }
-/* Otisk razítka: shora větší a průhledné, lehký překmit pod konečnou velikost, pak klid */
-@keyframes stamp-in {
+@keyframes fade-in {
   from {
     opacity: 0;
-    transform: rotate(-6deg) scale(1.6);
-  }
-  70% {
-    opacity: 1;
-    transform: rotate(-6deg) scale(0.94);
-  }
-  to {
-    transform: rotate(-6deg) scale(1);
   }
 }
 @keyframes pulse-dot {
   to {
     opacity: 0.25;
   }
-}
-
-/* Razítko v děkovacím bloku (ODESLÁNO / POTVRZENO): světlý obrys na tmavém bloku, druhá linka přes outline
-   jako dvojitá čára účtenky. Jen ozdoba, stav nese nadpis. */
-.stamp {
-  display: inline-block;
-  padding: 4px 12px;
-  border: 2.5px solid var(--color-paper);
-  border-radius: 2px;
-  outline: 1px solid var(--color-paper);
-  outline-offset: 3px;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  line-height: 20px;
-  text-transform: uppercase;
-  transform: rotate(-6deg);
 }
 
 /* Stav načítání: bod vedle textu („Ukládáme adresu…“). Bez animace zůstane plný bod a text. */
