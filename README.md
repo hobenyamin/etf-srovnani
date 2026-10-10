@@ -4,7 +4,7 @@ Konverzní landing page (lead magnet) pro českého drobného investora, který 
 
 Praktický úkol do výběrového řízení Clientelo Czech s.r.o. Hodnoticí otázka: *Mohli bychom na tuto stránku zítra spustit placenou reklamu?*
 
-- Nasazená stránka: TODO
+- Nasazená stránka: https://etf-srovnani.vercel.app (Vercel Hobby, funkce ve Frankfurtu)
 - Reklamy: [`ads/`](ads/)
 
 ## Cílová skupina
@@ -120,6 +120,24 @@ Proti skutečnému projektu PostHog Cloud EU ověřil člověk (`npm run dev`, p
 | Stažení knihovny před volbou | ✗ v `npm run dev` se chunk `posthog-js` stáhl z localhostu už před volbou. Ověřeno v produkčním buildu: tam se knihovna stáhne až po souhlasu, jde jen o dev režim (rozhodnutí 36, E2E test) |
 | Firefox s rozšířenou ochranou proti sledování (výchozí v anonymním okně) | Bez proxy ✗ blokuje `eu.i.posthog.com`, požadavky končí „CORS Failed“ a data **nedorazí, i když návštěvník souhlasil**. Po vypnutí ochrany stav 200. ✓ **opraveno proxy, ověřeno:** přes reverse proxy `/ingest` (rozhodnutí 40) ve stejném okně po „Povolit měření“ `POST /ingest/e/` → 200 a eventy dorazily do PostHogu (Activity) |
 
+### Ruční ověření: produkce (krok 6)
+
+Na https://etf-srovnani.vercel.app. Vyplní se na konci projektu, po úpravě textů a designu.
+
+| # | Kontrola | Jak | Výsledek |
+| --- | --- | --- | --- |
+| 1 | Region funkcí | `curl -sI -X POST "https://etf-srovnani.vercel.app/api/odhlaseni?u=x"` → hlavička `x-vercel-id` končí na `fra1::…` (nebo Deployment → Functions) | |
+| 2 | noindex | `curl -s https://etf-srovnani.vercel.app/potvrzeni \| grep -o '<meta name="robots"[^>]*>'`, totéž pro `/odhlaseni`, `/zasady`, `/v/b`. `/` noindex mít nesmí | |
+| 3 | Hero B | `/?utm_content=b-zvedavost` ukáže variantu B (proxy na Vercelu) | |
+| 4 | Odeslání formuláře | z mobilu s `?utm_source=test&utm_content=b-test`. V Supabase řádek s `ad_variant`, `utm_*`, `consent_text`, `calc_input`, `calc_result` | |
+| 5 | E-mail a odkazy | dorazí do Gmailu. Odkazy na potvrzení a odhlášení vedou na `https://etf-srovnani.vercel.app`, ne na localhost | |
+| 6 | Potvrzení | tlačítko na `/potvrzeni` vyplní `double_opt_in_at` | |
+| 7 | One-click odhlášení v Gmailu | tlačítko „Odhlásit“ u odesílatele. U nového odesílatele s malým objemem ho Gmail nemusí ukázat, záložně: „Zobrazit originál“ → URL z `List-Unsubscribe` → `curl -X POST "<URL>"` → „Odhlášeno.“. V DB je pak souhlas s novinkami odvolaný (zároveň ověří `marketing_audience`) | |
+| 8 | Cookie lišta a `/ingest` | před volbou a po „Odmítnout“ žádný požadavek na `/ingest`. Po „Povolit měření“ `POST /ingest/e/` → 200 a event v PostHogu (Activity). Totéž ve Firefoxu v anonymním okně | |
+| 9 | Poloha u eventu v PostHogu | `$geoip_country_code` / `$geoip_city_name` u eventu: ČR, poloha serveru Vercelu (Frankfurt/USA), nebo nic (kvůli „Discard client IP data“) | |
+| 10 | DMARC | `dig +short TXT _dmarc.mail.hosek.cc` vrátí záznam. V Gmailu „Zobrazit originál“: SPF, DKIM i DMARC PASS | |
+| 11 | Lighthouse na mobilu | PageSpeed Insights, mobil: Performance, LCP (cíl < 2,5 s), CLS, Accessibility, datum měření | |
+
 ## Rozhodnutí v nejasnostech
 
 1. **Porovnáváme NYSE ETF s UCITS ekvivalentem.** Fondy domicilované v USA (VOO, SPY, VTI…) si drobný investor v EU běžně nekoupí, protože k nim chybí KID podle nařízení PRIIPs. Stránka proto vždy ukazuje dostupnou evropskou alternativu a nikdy nevyzývá ke koupi US fondu.
@@ -166,6 +184,9 @@ Proti skutečnému projektu PostHog Cloud EU ověřil člověk (`npm run dev`, p
     - **Cesta `/ingest` je zdokumentovaný standard PostHogu.** Zvolili jsme ji vědomě místo úmyslně skryté cesty: je lépe obhajitelná a transparentní (uvedená i v zásadách), i když se časem může dostat na seznamy blokátorů.
     - **IP adresy:** v projektu PostHog je zapnuté „Discard client IP data“ (ověřil člověk 2026-10-09), takže PostHog IP neukládá bez ohledu na proxy.
     - **Vedlejší efekt:** `skipTrailingSlashRedirect` (PostHog volá `/ingest/e/` s lomítkem na konci) vypíná přesměrování lomítka v celé aplikaci. `/zasady/` tak vrací stránku místo přesměrování na `/zasady`. Indexovat se dá jen `/`, ostatní stránky mají `noindex`, takže duplicitní URL nevadí.
+41. **Serverové funkce ve Frankfurtu (`fra1`), nastavené ve [`vercel.json`](vercel.json).** Výchozí region nových projektů na Vercelu je Washington (`iad1`). Supabase je ve Frankfurtu, takže `fra1` zkracuje cestu k databázi a osobní údaje z formuláře zpracovává server v EU. Region je ve `vercel.json`, ne jen v dashboardu, aby byl vidět v repu a verzoval se. Route segment config `preferredRegion` je v Next.js 16 deprecated (dokumentace v `node_modules/next`), proto ne v kódu. Hobby plán povoluje jeden region, `fra1` tedy stačí.
+    - **Ve `fra1` běží:** Server Actions (odeslání formuláře, potvrzení, kvalifikační otázka), `/api/odhlaseni` a odeslání e-mailu přes `after()`.
+    - **Mimo `fra1`:** statické stránky jdou z CDN Vercelu nejblíž návštěvníkovi. `proxy.ts` (výběr hero podle `utm_content`) Vercel nasazuje do všech regionů bez ohledu na nastavení, ale čte jen `utm_content` a nic neukládá. Rewrite `/ingest` do PostHog EU obsluhuje CDN.
 
 ## Co chybí a proč
 
@@ -185,7 +206,8 @@ Proti skutečnému projektu PostHog Cloud EU ověřil člověk (`npm run dev`, p
 - **Ruční ověření `marketing_audience` a odhlášení** proti Supabase zatím chybí.
 - **Bounce a stížnosti z Resend (webhooky)** zatím nezpracováváme. Nedoručitelné adresy zůstanou v DB jako nepotvrzené a po 30 dnech se smažou. Pro ostrý provoz napojit webhook a nedoručitelné adrese už nic neposílat.
 - **Kvóta free plánu Resend.** Free plán má denní i měsíční limit e-mailů. Před spuštěním kampaně ověřit v ceníku Resend a podle očekávaného počtu leadů přejít na placený plán. Strop 50 e-mailů za hodinu je ochrana proti zneužití, ne náhrada.
-- **Region funkcí na Vercelu.** Výchozí region serverových funkcí nemusí být v EU. Před nasazením nastavit region Frankfurt (`fra1`), kvůli rychlosti (Supabase je ve Frankfurtu) i kvůli tomu, aby osobní údaje zůstaly v EU. Ověřit v nastavení projektu.
+- **Hobby plán Vercelu je jen pro nekomerční osobní užití.** Podle Fair Use Guidelines Vercel za komerční užití považuje mimo jiné „Advertising the sale of a product or service“ a placenou tvorbu webu. Ukázka do výběrového řízení na Hobby být může, **ostrá kampaň pro klienta potřebuje Pro** (mimo jiné až 5 regionů funkcí místo 1). Spolu s Pro plánem Supabase a placeným Resend to patří do rozpočtu spuštění.
+- **Region `fra1` ověřit na produkci** (rozhodnutí 41, checklist produkce bod 1).
 - **Lhůta uložení potvrzených adres a příjemci údajů** v zásadách: musí doplnit provozovatel.
 - **Migrace se spouští ručně** v SQL editoru Supabase (bez Supabase CLI). Logika SQL funkcí byla během vývoje ověřena v PGlite (Postgres ve WASM): upsert, práva rolí, mazání po 30 dnech, opakované spuštění.
 - **Daňový tahák (W-8BEN, časový test).** Zatím neexistuje, proto ho stránka neslibuje – ani ve formuláři, ani na děkovací obrazovce. Vrátí se, až bude text se zdroji hotový a zkontrolovaný.
@@ -208,12 +230,14 @@ Podrobně u každé hodnoty v [`data/etfs.json`](data/etfs.json) (`source_url`, 
 | Pokrytí indexu MSCI USA | MSCI – factsheet indexu | [msci.com](https://www.msci.com/documents/10199/255599/msci-usa-index-net.pdf) | 2026-10-09 |
 | Průměrné náklady ETF a aktivních fondů v EU | ESMA – Costs and Performance of EU Retail Investment Products 2025 (data 2024) | [esma.europa.eu](https://www.esma.europa.eu/sites/default/files/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and_Performance_of_EU_Retail_Investment_Products.pdf) | 2026-10-09 |
 | KID jako podmínka prodeje drobným investorům | Nařízení (EU) č. 1286/2014 (PRIIPs) | [eur-lex.europa.eu](https://eur-lex.europa.eu/eli/reg/2014/1286/oj) | – |
+| Regiony funkcí, limit Hobby = 1 region, middleware ve všech regionech | Vercel Docs – Configuring regions for Vercel Functions | [vercel.com](https://vercel.com/docs/functions/configuring-functions/region) | 2026-10-10 |
+| Hobby jen pro nekomerční užití | Vercel Docs – Fair Use Guidelines, Commercial usage | [vercel.com](https://vercel.com/docs/limits/fair-use-guidelines#commercial-usage) | 2026-10-10 |
 
 ## Právní upozornění
 
 Stránka je vzdělávací srovnání s daty, ne investiční doporučení ani nabídka produktu. Tento projekt není právní rada; **před ostrým spuštěním je nutná právní kontrola** (PRIIPs, MAR/ZPKT, MiFID II, GDPR, zákony 40/1995, 634/1992, 480/2004 a 127/2005).
 
-Rizika pro „spuštění zítra“ na straně reklamních platforem: Google Ads od roku 2026 vyžaduje v EU/EHP ověření finančních inzerentů (pro nefinanční informační web formulář pro nefinanční inzerenty) a Meta omezuje možnosti cílení u finančních reklam.
+Rizika pro „spuštění zítra“ na straně reklamních platforem: Google Ads od roku 2026 vyžaduje v EU/EHP ověření finančních inzerentů (pro nefinanční informační web formulář pro nefinanční inzerenty) a Meta omezuje možnosti cílení u finančních reklam. Hosting: stránka běží na Hobby plánu Vercelu, který je jen pro nekomerční užití. Ostrá kampaň vyžaduje Pro.
 
 ## Spuštění lokálně
 
@@ -232,6 +256,25 @@ npm run e2e          # Playwright, mobil 375 px (ostré služby nevolá, viz pla
 1. `cp .env.example .env.local` a doplnit hodnoty podle komentářů v souboru. `.env.local` se necommituje.
 2. Supabase: v SQL Editoru spustit postupně celé soubory z [`supabase/migrations/`](supabase/migrations/) podle názvu (`20261009_leads.sql`, pak `20261009_leads_double_opt_in.sql`). Když selže `create extension pg_cron`, zapnout Cron v Dashboardu (Integrations → Cron) a spustit zbytek souboru.
 3. Resend: ověřená doména (zde `mail.hosek.cc`), API klíč s právem Sending access. `SITE_URL` je adresa, na kterou vedou odkazy v e-mailu.
-4. Na Vercelu nastavit stejné proměnné (Settings → Environment Variables).
+4. Na Vercelu nastavit stejné proměnné, viz [Nasazení na Vercel](#nasazení-na-vercel).
 
 Variantu hero B zobrazíte přes `/?utm_content=b-zvedavost`.
+
+## Nasazení na Vercel
+
+Produkce: https://etf-srovnani.vercel.app, Hobby plán, serverové funkce ve Frankfurtu (`fra1`, [`vercel.json`](vercel.json), rozhodnutí 41).
+
+Proměnné prostředí (Settings → Environment Variables) jsou nastavené **jen pro Production**. Náhledové deploye (Preview) tak nezapisují do ostré databáze a neposílají e-maily s odkazy na produkci. Formulář v nich projde, ale lead se neuloží. Změna proměnné se projeví až v dalším deployi.
+
+| Proměnná | Typ | Čte se | Hodnota / poznámka |
+| --- | --- | --- | --- |
+| `SUPABASE_URL` | server | za běhu | `https://<ref>.supabase.co`. Není tajná, ale do prohlížeče nepatří |
+| `SUPABASE_SECRET_KEY` | **tajná** (Sensitive) | za běhu | `sb_secret_…`, obchází RLS |
+| `LEAD_TOKEN_SECRET` | **tajná** (Sensitive) | za běhu | vlastní hodnota pro produkci (`openssl rand -base64 32`). Změna zneplatní odkazy v odeslaných e-mailech |
+| `RESEND_API_KEY` | **tajná** (Sensitive) | za běhu | Sending access, doména `mail.hosek.cc` |
+| `EMAIL_FROM` | server | za běhu | `Srovnání ETF <srovnani@mail.hosek.cc>` |
+| `SITE_URL` | server | za běhu | `https://etf-srovnani.vercel.app`, bez lomítka na konci. Ne `VERCEL_URL`, ta je pro každý deploy jiná. Bez ní se potvrzovací e-mail neodešle |
+| `NEXT_PUBLIC_POSTHOG_KEY` | veřejná | **při buildu** | `phc_…`, vloží se do JavaScriptu v prohlížeči |
+| `NEXT_PUBLIC_POSTHOG_HOST` | veřejná | **při buildu** | `https://eu.i.posthog.com`, cíl rewrite `/ingest` v [`next.config.ts`](next.config.ts) |
+
+Výsledky ručních testů na produkci: [Ruční ověření: produkce](#ruční-ověření-produkce-krok-6).
