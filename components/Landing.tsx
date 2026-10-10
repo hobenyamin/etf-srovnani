@@ -24,7 +24,7 @@ export function Landing({ variant }: { variant: AdVariant }) {
         <Trust />
         <StickyCta />
       </main>
-      <Footer />
+      <Footer cta />
     </>
   );
 }

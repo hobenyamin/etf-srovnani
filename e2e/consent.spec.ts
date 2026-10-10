@@ -164,7 +164,8 @@ for (const height of [812, 667]) {
 test("dokud je vidět lišta, spodní CTA se neukazuje (dvě lišty přes sebe ne)", async ({ page }) => {
   await page.goto("/");
   await page.locator("#srovnani").scrollIntoViewIfNeeded();
-  await expect(page.getByRole("link", { name: "Spočítat své poplatky" })).toHaveCount(0);
+  // stejná výzva je i v patičce (FooterCta), tady jde o spodní lištu
+  await expect(page.getByTestId("sticky-cta")).toHaveCount(0);
 });
 
 test("knihovna PostHogu se stáhne až po souhlasu (produkční build)", async ({ page }) => {

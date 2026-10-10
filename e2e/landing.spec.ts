@@ -429,3 +429,34 @@ test("omezení pohybu: tlačítka bez přechodu, číslo skočí rovnou, děkova
   const banner = page.getByTestId("thank-you").locator(".done-banner");
   expect(await banner.evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
 });
+
+test("CTA v patičce: před výsledkem kalkulačka, po výsledku formulář, po odeslání nic; s lištou se nepřekrývá", async ({ page }) => {
+  await page.goto("/");
+  await declineCookies(page);
+  const footer = page.getByTestId("footer-cta");
+  await footer.scrollIntoViewIfNeeded();
+  await expect(page.getByTestId("sticky-cta")).toHaveCount(0);
+  const toCalc = footer.getByRole("link", { name: "Spočítat své poplatky" });
+  await expect(toCalc).toHaveAttribute("href", "#kalkulacka");
+  await toCalc.click();
+  await expect(page.locator("#kalkulacka")).toBeInViewport();
+  expect(await entry(page, "hero_cta_click")).toMatchObject({ cta: "footer" });
+
+  await calcResult(page);
+  await footer.scrollIntoViewIfNeeded();
+  await expect(page.getByTestId("sticky-cta")).toHaveCount(0);
+  await footer.getByRole("button", { name: "Poslat mi srovnání" }).click();
+  const field = page.getByTestId("lead-inline").getByRole("textbox", { name: "E-mail" });
+  await expect(field).toBeFocused();
+  expect(await entry(page, "form_cta_click")).toMatchObject({ cta: "footer" });
+
+  await field.fill("paticka@example.com");
+  await page.getByTestId("lead-inline").getByRole("button", { name: "Poslat mi srovnání" }).click();
+  await expect(page.getByTestId("thank-you")).toBeVisible();
+  await expect(footer).toHaveCount(0);
+});
+
+test("na stránce potvrzení patička CTA nemá", async ({ page }) => {
+  await page.goto("/potvrzeni?t=x");
+  await expect(page.getByTestId("footer-cta")).toHaveCount(0);
+});
