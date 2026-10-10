@@ -35,7 +35,7 @@ function mailer() {
 }
 
 const human = {
-  email: "jan@seznam.cz",
+  email: "jan@example.com",
   marketing: false,
   adVariant: "a",
   utm: {},
@@ -57,7 +57,7 @@ describe("sendConfirmation", () => {
   it("do DB jde jen hash tokenu z odkazu, e-mail má odhlášení a one-click hlavičky", async () => {
     const s = store();
     const { mailer: m, sent } = mailer();
-    await sendConfirmation(ID, "jan@seznam.cz", { store: s, mailer: m, siteUrl: SITE });
+    await sendConfirmation(ID, "jan@example.com", { store: s, mailer: m, siteUrl: SITE });
 
     expect(sent).toHaveLength(1);
     const email = sent[0];
@@ -66,7 +66,7 @@ describe("sendConfirmation", () => {
     expect(claimedId).toBe(ID);
     expect(storedHash).toBe(hashToken(token));
     expect(storedHash).not.toContain(token);
-    expect(email.to).toBe("jan@seznam.cz");
+    expect(email.to).toBe("jan@example.com");
     expect(email.headers?.["List-Unsubscribe"]).toContain(`${SITE}/api/odhlaseni?u=`);
     expect(email.headers?.["List-Unsubscribe-Post"]).toBe("List-Unsubscribe=One-Click");
     expect(email.idempotencyKey).toMatch(/^confirm-[0-9a-f]+$/);
@@ -74,23 +74,23 @@ describe("sendConfirmation", () => {
 
   it("cooldown nebo strop (claim = false) → e-mail neodejde", async () => {
     const { mailer: m, sent } = mailer();
-    await sendConfirmation(ID, "jan@seznam.cz", { store: store({ claimConfirmation: vi.fn(async () => false) }), mailer: m, siteUrl: SITE });
+    await sendConfirmation(ID, "jan@example.com", { store: store({ claimConfirmation: vi.fn(async () => false) }), mailer: m, siteUrl: SITE });
     expect(sent).toHaveLength(0);
   });
 
   it("bez konfigurace Resend / SITE_URL / tajemství nic nezabere ani neodešle", async () => {
     const s = store();
-    await sendConfirmation(ID, "jan@seznam.cz", { store: s, mailer: null, siteUrl: SITE });
-    await sendConfirmation(ID, "jan@seznam.cz", { store: s, mailer: mailer().mailer, siteUrl: null });
+    await sendConfirmation(ID, "jan@example.com", { store: s, mailer: null, siteUrl: SITE });
+    await sendConfirmation(ID, "jan@example.com", { store: s, mailer: mailer().mailer, siteUrl: null });
     vi.stubEnv("LEAD_TOKEN_SECRET", "");
-    await sendConfirmation(ID, "jan@seznam.cz", { store: s, mailer: mailer().mailer, siteUrl: SITE });
+    await sendConfirmation(ID, "jan@example.com", { store: s, mailer: mailer().mailer, siteUrl: SITE });
     expect(s.claimConfirmation).not.toHaveBeenCalled();
   });
 
   it("chyba Resend nevyhodí výjimku a neloguje e-mail", async () => {
     const failing: Mailer = { send: vi.fn().mockRejectedValue({ name: "validation_error", message: "Invalid `to` field" }) };
-    await expect(sendConfirmation(ID, "jan@seznam.cz", { store: store(), mailer: failing, siteUrl: SITE })).resolves.toBeUndefined();
-    expect(JSON.stringify(vi.mocked(console.error).mock.calls)).not.toContain("jan@seznam.cz");
+    await expect(sendConfirmation(ID, "jan@example.com", { store: store(), mailer: failing, siteUrl: SITE })).resolves.toBeUndefined();
+    expect(JSON.stringify(vi.mocked(console.error).mock.calls)).not.toContain("jan@example.com");
   });
 });
 

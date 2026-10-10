@@ -92,7 +92,7 @@ test("formulář pod výsledkem: po odeslání jsou obě místa v děkovacím st
   await calcResult(page);
   const inline = page.getByTestId("lead-inline");
   await inline.scrollIntoViewIfNeeded();
-  await inline.getByRole("textbox", { name: "E-mail" }).fill("ivana@example.cz");
+  await inline.getByRole("textbox", { name: "E-mail" }).fill("ivana@example.com");
   await inline.getByRole("button", { name: "Poslat mi srovnání" }).click();
 
   const thanks = page.locator("#kalkulacka").getByTestId("thank-you");
@@ -107,7 +107,7 @@ test("formulář pod výsledkem: po odeslání jsou obě místa v děkovacím st
 
 test("spodní formulář: form_location bottom, po odeslání se u kalkulačky formulář neukáže", async ({ page }) => {
   await page.goto("/#formular");
-  await page.getByRole("textbox", { name: "E-mail" }).fill("ota@example.cz");
+  await page.getByRole("textbox", { name: "E-mail" }).fill("ota@example.com");
   await page.getByRole("button", { name: "Zobrazit plné srovnání" }).click();
   await expect(page.locator("#formular").getByTestId("thank-you")).toBeVisible();
   expect(await entry(page, "form_view")).toMatchObject({ form_location: "bottom" });
@@ -120,10 +120,10 @@ test("spodní formulář: form_location bottom, po odeslání se u kalkulačky f
 
 test("rozepsaný spodní formulář zůstane aktivní i po výsledku kalkulačky", async ({ page }) => {
   await page.goto("/#formular");
-  await page.getByRole("textbox", { name: "E-mail" }).fill("rozepsano@example.cz");
+  await page.getByRole("textbox", { name: "E-mail" }).fill("rozepsano@example.com");
   await calcResult(page);
   await expect(page.getByTestId("lead-inline")).toHaveCount(0);
-  await expect(page.locator("#formular").getByRole("textbox", { name: "E-mail" })).toHaveValue("rozepsano@example.cz");
+  await expect(page.locator("#formular").getByRole("textbox", { name: "E-mail" })).toHaveValue("rozepsano@example.com");
 });
 
 test("kalkulačka při 2 000 Kč / 20 let / 0 % ukáže stejný rozdíl jako hero", async ({ page }) => {
@@ -206,12 +206,12 @@ test("formulář: validace, nepředvyplněný souhlas, děkovací stav s 5 dvoji
 
   await page.getByRole("button", { name: "Zobrazit plné srovnání" }).click();
   await expect(page.locator("#formular").getByRole("alert")).toHaveText(/Vyplňte prosím e-mail/);
-  await page.getByRole("textbox", { name: "E-mail" }).fill("jan@seznam");
+  await page.getByRole("textbox", { name: "E-mail" }).fill("jan@example");
   await page.getByRole("button", { name: "Zobrazit plné srovnání" }).click();
   await expect(page.locator("#formular").getByRole("alert")).toHaveText(/Zkontrolujte/);
   await expect(page.getByRole("textbox", { name: "E-mail" })).toHaveAttribute("aria-invalid", "true");
 
-  await page.getByRole("textbox", { name: "E-mail" }).fill("jan@seznam.cz");
+  await page.getByRole("textbox", { name: "E-mail" }).fill("jan@example.com");
   await page.getByRole("button", { name: "Zobrazit plné srovnání" }).click();
   const thanks = page.getByTestId("thank-you");
   await expect(thanks).toBeVisible();
@@ -228,7 +228,7 @@ test("formulář: validace, nepředvyplněný souhlas, děkovací stav s 5 dvoji
 test("formulář jde odeslat jen klávesnicí", async ({ page }) => {
   await page.goto("/#formular");
   await page.getByRole("textbox", { name: "E-mail" }).focus();
-  await page.keyboard.type("eva@example.cz");
+  await page.keyboard.type("eva@example.com");
   await page.keyboard.press("Tab");
   await expect(page.getByRole("checkbox")).toBeFocused();
   await page.keyboard.press("Space");
@@ -262,7 +262,7 @@ test("měření: celá cesta v pořadí funnelu s ad_variant a UTM", async ({ pa
   const inline = page.getByTestId("lead-inline");
   await inline.scrollIntoViewIfNeeded();
   await expect.poll(() => events(page)).toContain("form_view");
-  await inline.getByRole("textbox", { name: "E-mail" }).fill("petr@example.cz");
+  await inline.getByRole("textbox", { name: "E-mail" }).fill("petr@example.com");
   await inline.getByRole("button", { name: "Poslat mi srovnání" }).click();
   await expect(page.getByTestId("thank-you")).toBeVisible();
 
@@ -279,7 +279,7 @@ test("nedostupná databáze: srovnání se zobrazí i tak a stránka to řekne",
   await page.goto("/#formular");
   // déle než časová past proti robotům (MIN_FILL_MS), aby šel požadavek opravdu do databáze
   await page.waitForTimeout(2100);
-  await page.getByRole("textbox", { name: "E-mail" }).fill("jana@example.cz");
+  await page.getByRole("textbox", { name: "E-mail" }).fill("jana@example.com");
   await page.getByRole("button", { name: "Zobrazit plné srovnání" }).click();
   const thanks = page.getByTestId("thank-you");
   await expect(thanks.getByTestId("pair")).toHaveCount(5);
@@ -291,7 +291,7 @@ test("robot s vyplněným honeypotem dostane stejný děkovací stav", async ({ 
   const honeypot = page.locator('input[name="website"]');
   await expect(honeypot).toHaveAttribute("tabindex", "-1");
   await honeypot.fill("https://spam.example", { force: true });
-  await page.getByRole("textbox", { name: "E-mail" }).fill("bot@example.cz");
+  await page.getByRole("textbox", { name: "E-mail" }).fill("bot@example.com");
   await page.getByRole("button", { name: "Zobrazit plné srovnání" }).click();
   await expect(page.getByTestId("thank-you").getByTestId("pair")).toHaveCount(5);
   await expect(page.getByTestId("delivery")).toContainText("Kopii vám pošleme");
@@ -365,7 +365,7 @@ test("kontextová lišta: před výpočtem kalkulačka, po výsledku formulář,
   await expect(sticky).toHaveCount(0);
   expect(await entry(page, "form_cta_click")).toMatchObject({ cta: "sticky" });
 
-  await field.fill("lenka@example.cz");
+  await field.fill("lenka@example.com");
   await page.getByTestId("lead-inline").getByRole("button", { name: "Poslat mi srovnání" }).click();
   await expect(page.getByTestId("thank-you")).toBeVisible();
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));

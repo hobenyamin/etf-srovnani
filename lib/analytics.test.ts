@@ -17,7 +17,7 @@ function stubBrowser(search = "?utm_source=meta&utm_content=a-uspora") {
     );
   const cookies: string[] = [];
   vi.stubGlobal("window", {
-    location: { search, hostname: "srovnani.example.cz" },
+    location: { search, hostname: "srovnani.example.com" },
     localStorage: storage(ls),
     sessionStorage: storage(new Map()),
     dataLayer: [] as DataLayer,

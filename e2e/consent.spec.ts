@@ -89,7 +89,7 @@ test("po povolení: page_view a další kroky s ad_variant a UTM, bez e-mailu", 
 
   await page.locator("#formular").scrollIntoViewIfNeeded();
   await page.waitForTimeout(2100); // časová past formuláře
-  await page.getByRole("textbox", { name: "E-mail" }).fill("tester@example.cz");
+  await page.getByRole("textbox", { name: "E-mail" }).fill("tester@example.com");
   await page.getByRole("button", { name: "Zobrazit plné srovnání" }).click();
   await expect(page.getByTestId("thank-you")).toBeVisible();
 
@@ -99,7 +99,7 @@ test("po povolení: page_view a další kroky s ad_variant a UTM, bez e-mailu", 
   const pageView = ph.events.find((e) => e.event === "page_view")!;
   expect(pageView.properties).toMatchObject({ ad_variant: "b", utm_source: "meta", utm_campaign: "etf", utm_content: "b-zvedavost" });
   expect(ph.events.filter((e) => e.event === "page_view")).toHaveLength(1);
-  expect(JSON.stringify(ph.events)).not.toContain("tester@example.cz");
+  expect(JSON.stringify(ph.events)).not.toContain("tester@example.com");
   // nic automatického (autocapture, pageview, pageleave)
   expect(ph.events.filter((e) => e.event.startsWith("$autocapture") || e.event === "$pageview")).toEqual([]);
   // jen přes vlastní doménu

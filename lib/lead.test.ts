@@ -9,7 +9,7 @@ import { sign, verify } from "./sign";
 import { CONSENT } from "./site";
 
 const human = {
-  email: " Jan.Novak@Seznam.cz ",
+  email: " Jan.Novak@Example.com ",
   marketing: false,
   adVariant: "a",
   utm: { utm_source: "meta", utm_content: "a-uspora" },
@@ -48,9 +48,9 @@ afterEach(() => {
 describe("parseLeadInput", () => {
   it("normalizuje e-mail a odmítne neplatný", () => {
     const ok = parseLeadInput(human);
-    expect(ok.ok && ok.lead.email).toBe("jan.novak@seznam.cz");
-    expect(parseLeadInput({ ...human, email: "jan@seznam" })).toEqual({ ok: false, error: "email" });
-    expect(parseLeadInput({ ...human, email: `${"a".repeat(250)}@x.cz` })).toEqual({ ok: false, error: "email" });
+    expect(ok.ok && ok.lead.email).toBe("jan.novak@example.com");
+    expect(parseLeadInput({ ...human, email: "jan@example" })).toEqual({ ok: false, error: "email" });
+    expect(parseLeadInput({ ...human, email: `${"a".repeat(250)}@example.com` })).toEqual({ ok: false, error: "email" });
     expect(parseLeadInput(null)).toEqual({ ok: false, error: "invalid" });
     expect(parseLeadInput({ ...human, email: 42 })).toEqual({ ok: false, error: "invalid" });
   });
@@ -117,7 +117,7 @@ describe("handleSubmit", () => {
     expect(result.ok && verify(result.ref)).toBe("11111111-2222-3333-4444-555555555555");
     expect(calls).toHaveLength(1);
     expect(JSON.stringify(calls[0])).not.toContain("203.0.113.7");
-    expect(calls[0]).toMatchObject({ p_email: "jan.novak@seznam.cz", p_utm_source: "meta", p_ad_variant: "a", p_user_agent: "Mozilla/5.0 Test" });
+    expect(calls[0]).toMatchObject({ p_email: "jan.novak@example.com", p_utm_source: "meta", p_ad_variant: "a", p_user_agent: "Mozilla/5.0 Test" });
   });
 
   it("robot dostane stejnou odpověď jako člověk, nic se neuloží", async () => {
@@ -132,7 +132,7 @@ describe("handleSubmit", () => {
     const result = await handleSubmit(human, ctx(store));
     expect(result).toEqual({ ok: true, stored: false, ref: null });
     const logged = JSON.stringify(vi.mocked(console.error).mock.calls);
-    expect(logged).not.toContain("seznam.cz");
+    expect(logged.toLowerCase()).not.toContain("jan.novak");
   });
 
   it("chybějící konfigurace Supabase → stored:false", async () => {
