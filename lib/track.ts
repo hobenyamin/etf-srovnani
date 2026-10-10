@@ -18,7 +18,7 @@ export const FUNNEL_EVENTS = [
 ] as const;
 
 export type FunnelEvent = (typeof FUNNEL_EVENTS)[number];
-export type TrackEvent = FunnelEvent | "qualify_answer";
+export type TrackEvent = FunnelEvent | "qualify_answer" | "form_cta_click";
 
 type DataLayerEntry = Record<string, unknown> & { event: TrackEvent };
 

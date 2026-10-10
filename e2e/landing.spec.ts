@@ -287,3 +287,36 @@ test.describe("double opt-in a odhlášení", () => {
     }
   });
 });
+
+test("kontextová lišta: před výpočtem kalkulačka, po výsledku formulář, schová se u formuláře a po odeslání", async ({ page }) => {
+  const sticky = page.getByTestId("sticky-cta");
+  // kus pod začátek sekce: kotva #srovnani (scroll-mt-4) nechá vidět posledních 16 px kalkulačky
+  const jumpTo = (id: string) =>
+    page.locator(`#${id}`).evaluate((el) => window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + 200, behavior: "instant" }));
+
+  // příchod rovnou na srovnání (kalkulačku přeskočil): lišta nabízí kalkulačku
+  await page.goto("/");
+  await declineCookies(page);
+  await jumpTo("srovnani");
+  await expect(sticky.getByRole("link", { name: "Spočítat své poplatky" })).toBeVisible();
+  await sticky.getByRole("link").click();
+  await expect(sticky).toHaveCount(0);
+
+  await calcResult(page);
+  await jumpTo("srovnani");
+  const send = sticky.getByRole("button", { name: "Poslat mi srovnání" });
+  await expect(send).toBeVisible();
+  await send.click();
+  const field = page.getByTestId("lead-inline").getByRole("textbox", { name: "E-mail" });
+  await expect(field).toBeFocused();
+  await expect(field).toBeInViewport();
+  // formulář je vidět → lišta zmizí
+  await expect(sticky).toHaveCount(0);
+  expect(await entry(page, "form_cta_click")).toMatchObject({ cta: "sticky" });
+
+  await field.fill("lenka@example.cz");
+  await page.getByTestId("lead-inline").getByRole("button", { name: "Poslat mi srovnání" }).click();
+  await expect(page.getByTestId("thank-you")).toBeVisible();
+  await jumpTo("srovnani");
+  await expect(sticky).toHaveCount(0);
+});

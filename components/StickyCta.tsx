@@ -1,14 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { SUBMIT_CTA } from "@/components/LeadForm";
+import { FORM_ANCHOR, focusLeadForm } from "@/lib/lead-flow";
 import { track } from "@/lib/track";
 import { useBannerVisible } from "@/lib/use-consent";
+import { useLeadFlow } from "@/lib/use-lead-flow";
 
-/** Spodní lišta na mobilu: jen odkaz na kalkulačku, nikdy formulář. Zobrazí se po odscrollování
- *  z hero a zmizí natrvalo, jakmile návštěvník kalkulačku uvidí. */
+const bar = "fixed inset-x-0 bottom-0 z-10 border-t border-rule bg-paper/95 px-4 py-3 backdrop-blur-sm";
+const cta = "mx-auto flex h-12 w-full max-w-xl items-center justify-center rounded-sm bg-ink font-semibold text-paper";
+
+/**
+ * Spodní lišta na mobilu podle toho, kde návštěvník je:
+ * - před výsledkem kalkulačky odkaz na kalkulačku, když není vidět hero ani kalkulačka (typicky hero B
+ *   → srovnání). Kalkulačka začíná už v první obrazovce, „jednou viděná“ by lištu schovala hned po načtení,
+ * - po výsledku „Poslat mi srovnání“ → pole pro e-mail. Schová se, když je formulář vidět, a po odeslání.
+ */
 export function StickyCta() {
   const [heroOut, setHeroOut] = useState(false);
-  const [calcSeen, setCalcSeen] = useState(false);
+  const [calcInView, setCalcInView] = useState(true);
+  const [formVisible, setFormVisible] = useState(false);
+  const flow = useLeadFlow();
   // Dvě spodní lišty přes sebe ne: dokud je vidět lišta cookies, CTA počká
   const bannerVisible = useBannerVisible();
 
@@ -19,7 +31,7 @@ export function StickyCta() {
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         if (entry.target === hero) setHeroOut(!entry.isIntersecting);
-        if (entry.target === calc && entry.isIntersecting) setCalcSeen(true);
+        if (entry.target === calc) setCalcInView(entry.isIntersecting);
       }
     });
     observer.observe(hero);
@@ -27,14 +39,48 @@ export function StickyCta() {
     return () => observer.disconnect();
   }, []);
 
-  if (!heroOut || calcSeen || bannerVisible) return null;
+  // Formulář pod kalkulačkou vzniká až po výsledku, proto se sleduje znovu při každé změně
+  useEffect(() => {
+    if (!flow.calcDone) return;
+    const visible = new Set<Element>();
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) visible.add(entry.target);
+        else visible.delete(entry.target);
+      }
+      setFormVisible(visible.size > 0);
+    });
+    for (const id of Object.values(FORM_ANCHOR)) {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    }
+    return () => observer.disconnect();
+  }, [flow.calcDone, flow.activeForm]);
+
+  if (bannerVisible || flow.submittedAt) return null;
+
+  if (flow.calcDone) {
+    if (formVisible) return null;
+    return (
+      <div className={bar} data-testid="sticky-cta">
+        <button
+          type="button"
+          onClick={() => {
+            track("form_cta_click", { cta: "sticky" });
+            focusLeadForm();
+          }}
+          className={cta}
+        >
+          {SUBMIT_CTA}
+        </button>
+      </div>
+    );
+  }
+
+  if (!heroOut || calcInView) return null;
   return (
-    <div className="fixed inset-x-0 bottom-0 z-10 border-t border-rule bg-paper/95 px-4 py-3 backdrop-blur-sm">
-      <a
-        href="#kalkulacka"
-        onClick={() => track("hero_cta_click", { cta: "sticky" })}
-        className="mx-auto flex h-12 max-w-xl items-center justify-center rounded-sm bg-ink font-semibold text-paper"
-      >
+    <div className={bar} data-testid="sticky-cta">
+      <a href="#kalkulacka" onClick={() => track("hero_cta_click", { cta: "sticky" })} className={cta}>
         Spočítat své poplatky
       </a>
     </div>
