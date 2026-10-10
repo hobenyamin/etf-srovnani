@@ -3,19 +3,20 @@
 import { type ReactNode, useEffect, useId, useRef, useState } from "react";
 import { saveQualify } from "@/app/actions/lead";
 import { QUALIFY_ANSWERS } from "@/lib/lead";
+import type { Delivery } from "@/lib/lead-flow";
 import { track } from "@/lib/track";
-
-/** Stav uložení leadu: čeká se na server / uloženo / adresa už dřív potvrzená / nepovedlo se (Supabase, limit). */
-export type Delivery = "pending" | "sent" | "confirmed" | "failed";
 
 /** Děkovací stav: slíbený obsah hned na stránce, ne „čekejte na e-mail“. Jedna nepovinná otázka. */
 export function ThankYou({
   delivery,
   leadRef,
+  headingId = "formular-h",
   children,
 }: {
   delivery: Delivery;
   leadRef: string | null;
+  /** Na stránce jsou dvě místa formuláře, každé s vlastním nadpisem */
+  headingId?: string;
   children: ReactNode;
 }) {
   const heading = useRef<HTMLHeadingElement>(null);
@@ -34,7 +35,7 @@ export function ThankYou({
 
   return (
     <div data-testid="thank-you">
-      <h2 ref={heading} tabIndex={-1} id="formular-h" className="font-display text-2xl leading-8 font-semibold outline-none">
+      <h2 ref={heading} tabIndex={-1} id={headingId} className="font-display text-2xl leading-8 font-semibold outline-none">
         Hotovo. Tady je plné srovnání.
       </h2>
       <p className="mt-2 text-[15px] leading-6 text-muted" role="status" data-testid="delivery">
