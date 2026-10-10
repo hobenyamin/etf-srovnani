@@ -1,11 +1,18 @@
+import { LeadFormLink } from "@/components/LeadFormLink";
 import { PairCard } from "@/components/PairCard";
+import { PairTabs } from "@/components/PairTabs";
 import { TrackView } from "@/components/TrackView";
 import { lockedPairs, previewPairs } from "@/lib/etfs";
 
 const PRIIPS_URL = "https://eur-lex.europa.eu/eli/reg/2014/1286/oj";
 
 export function Comparison() {
-  const [first, ...rest] = previewPairs();
+  const pairs = previewPairs();
+  // Výchozí VOO: navazuje na hero a reklamu B
+  const initial = Math.max(
+    pairs.findIndex((p) => p.us.id === "VOO"),
+    0,
+  );
   return (
     <section id="srovnani" aria-labelledby="srovnani-h" className="scroll-mt-4 border-t border-rule px-4 py-10">
       <h2 id="srovnani-h" className="font-display text-2xl leading-8 font-semibold">
@@ -21,29 +28,30 @@ export function Comparison() {
         z&nbsp;Irska. Srovnání je informativní, nejde o&nbsp;doporučení.
       </p>
 
-      <div className="mt-8 space-y-8">
+      <div className="mt-6">
         <TrackView event="compare_view">
-          <PairCard pair={first} />
+          <PairTabs
+            label="Fond z NYSE"
+            tabs={pairs.map((p) => ({ id: p.us.id, label: p.us.ticker.value }))}
+            panels={pairs.map((p) => (
+              <PairCard key={p.us.id} pair={p} />
+            ))}
+            initial={initial}
+          />
         </TrackView>
-        {rest.map((pair) => (
-          <PairCard key={pair.us.id} pair={pair} />
-        ))}
       </div>
 
-      <div className="mt-8 border-2 border-dashed border-ink p-4" data-testid="locked">
-        <p className="font-semibold">
-          V&nbsp;plné verzi navíc:{" "}
+      <div
+        className="mt-6 flex items-center justify-between gap-3 border-2 border-dashed border-ink px-4 py-3"
+        data-testid="locked"
+      >
+        <p className="text-[15px] leading-5">
+          <span className="font-semibold">V&nbsp;plné verzi navíc:</span>{" "}
           {lockedPairs()
             .map((p) => `${p.us.ticker.value} → ${p.ucits.ticker.value}`)
             .join(", ")}
         </p>
-        <p className="mt-1 text-[15px] leading-6 text-muted">
-          Celý americký trh a&nbsp;celý svět: nejbližší UCITS alternativy a&nbsp;v&nbsp;čem se od originálu liší. Plus
-          velikost fondů, registrace v&nbsp;ČR a&nbsp;ISIN u&nbsp;všech dvojic.
-        </p>
-        <a href="#formular" className="mt-3 inline-block font-semibold underline underline-offset-4">
-          Zobrazit plné srovnání →
-        </a>
+        <LeadFormLink className="shrink-0 font-semibold underline underline-offset-4">Plné srovnání →</LeadFormLink>
       </div>
     </section>
   );

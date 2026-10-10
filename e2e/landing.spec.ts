@@ -136,15 +136,65 @@ test("kalkulačka při 2 000 Kč / 20 let / 0 % ukáže stejný rozdíl jako her
   await expect(page.getByTestId("calc-gap")).toHaveText(hero!);
 });
 
-test("porovnání: 3 dvojice se zdroji, zamčené vedou na formulář", async ({ page }) => {
+test("porovnání: přepínač 3 dvojic, vybraná VOO se zdroji, zamčené na jednom řádku", async ({ page }) => {
   await page.goto("/");
-  const pairs = page.locator("#srovnani").getByTestId("pair");
-  await expect(pairs).toHaveCount(3);
-  for (const pair of await pairs.all()) {
-    await expect(pair.locator('ol a[href^="https://"]').first()).toBeVisible();
+  const section = page.locator("#srovnani");
+  const tabs = section.getByRole("tab");
+  await expect(tabs).toHaveText(["SPY", "VOO", "IVV"]);
+  await expect(section.getByRole("tab", { name: "VOO" })).toHaveAttribute("aria-selected", "true");
+  // všechny tři karty jsou v HTML, vidět je jen vybraná
+  await expect(section.getByTestId("pair")).toHaveCount(3);
+  const visible = section.getByRole("tabpanel");
+  await expect(visible).toHaveCount(1);
+  await expect(visible.getByTestId("pair")).toContainText("VUAA");
+  await expect(visible.locator('ol a[href^="https://"]').first()).toBeVisible();
+  for (const tab of ["SPY", "IVV"]) {
+    await section.getByRole("tab", { name: tab }).click();
+    await expect(section.getByRole("tabpanel").locator('ol a[href^="https://"]').first()).toBeVisible();
   }
-  await expect(page.getByTestId("locked")).toContainText("VTI");
-  await expect(page.getByTestId("locked").getByRole("link")).toHaveAttribute("href", "#formular");
+
+  const locked = page.getByTestId("locked");
+  await expect(locked).toContainText("VTI");
+  await expect(locked).toContainText("VT →");
+  await expect(locked.getByRole("link")).toHaveAttribute("href", "#formular");
+  // jeden řádek: text a odkaz vedle sebe, ne pod sebou
+  const [text, link] = [await locked.locator("p").boundingBox(), await locked.getByRole("link").boundingBox()];
+  expect(link!.x).toBeGreaterThan(text!.x + text!.width - 1);
+});
+
+test("přepínač srovnání jde ovládat klávesnicí", async ({ page }) => {
+  await page.goto("/");
+  const section = page.locator("#srovnani");
+  const tab = (name: string) => section.getByRole("tab", { name });
+  const panel = section.getByRole("tabpanel");
+
+  await tab("VOO").focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(tab("IVV")).toBeFocused();
+  await expect(tab("IVV")).toHaveAttribute("aria-selected", "true");
+  await expect(tab("VOO")).toHaveAttribute("aria-selected", "false");
+  await expect(panel).toContainText("SXR8");
+  await page.keyboard.press("ArrowRight");
+  await expect(tab("SPY")).toBeFocused();
+  await page.keyboard.press("ArrowLeft");
+  await expect(tab("IVV")).toBeFocused();
+  await page.keyboard.press("Home");
+  await expect(tab("SPY")).toHaveAttribute("aria-selected", "true");
+  await expect(panel).toContainText("SPYL");
+  await page.keyboard.press("End");
+  await expect(tab("IVV")).toHaveAttribute("aria-selected", "true");
+  // jen vybraný tab je v pořadí Tab, další Tab vede do panelu
+  await expect(tab("SPY")).toHaveAttribute("tabindex", "-1");
+  await page.keyboard.press("Tab");
+  await expect(panel).toBeFocused();
+  await expect(panel).toHaveAttribute("aria-labelledby", (await tab("IVV").getAttribute("id"))!);
+});
+
+test("srovnání na 375 px je výrazně nižší než tři karty pod sebou", async ({ page }) => {
+  await page.goto("/");
+  // před přepínačem (tři karty) měřilo 1 755 px, scripts/page-height.mjs
+  const box = await page.locator("#srovnani").boundingBox();
+  expect(box!.height).toBeLessThan(1200);
 });
 
 test("formulář: validace, nepředvyplněný souhlas, děkovací stav s 5 dvojicemi", async ({ page }) => {
@@ -303,7 +353,8 @@ test("kontextová lišta: před výpočtem kalkulačka, po výsledku formulář,
   await expect(sticky).toHaveCount(0);
 
   await calcResult(page);
-  await jumpTo("srovnani");
+  // nahoře na stránce není vidět žádný formulář (srovnání je krátké, pod ním už je spodní sekce)
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
   const send = sticky.getByRole("button", { name: "Poslat mi srovnání" });
   await expect(send).toBeVisible();
   await send.click();
@@ -317,6 +368,6 @@ test("kontextová lišta: před výpočtem kalkulačka, po výsledku formulář,
   await field.fill("lenka@example.cz");
   await page.getByTestId("lead-inline").getByRole("button", { name: "Poslat mi srovnání" }).click();
   await expect(page.getByTestId("thank-you")).toBeVisible();
-  await jumpTo("srovnani");
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
   await expect(sticky).toHaveCount(0);
 });
