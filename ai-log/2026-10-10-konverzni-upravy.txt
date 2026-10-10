@@ -1,0 +1,2931 @@
+
+❯ /clear
+
+❯ Přečti CLAUDE.md, README.md a docs/backlog-texty-design.md. Commituj,
+  nepushuj.
+
+  Krok 8a: konverzní úpravy stránky podle designové revize. Barvy, fonty a
+  texty teď neměň, ty přijdou zvlášť. V plan mode navrhni:
+
+  Formulář přímo pod výsledkem kalkulačky. Po výsledku (calc_result) se pod
+  účtenkou objeví inline pole pro e-mail s tlačítkem, které říká, co dostanu
+  (např. „Poslat mi srovnání“), ne otázku. Stávající pruh „Chcete kompletní
+  srovnání…“ nahradí. Souhlas s novinkami, GDPR informace, honeypot, časová
+  past a celé chování submitLead zůstávají beze změny. Formulář dole na stránce
+  zůstane pro ty, kdo kalkulačku přeskočí (hero B). Ošetři, aby jeden
+  návštěvník neviděl dva aktivní formuláře najednou a po odeslání jedním se oba
+  přepnuly do děkovacího stavu. Eventy form_view a form_submit musí fungovat u
+  obou míst, přidej vlastnost form_location.
+  Kontextová spodní sticky lišta. Stávající StickyCta: před výpočtem „Spočítat
+  své poplatky“ (→ kalkulačka), po calc_result „Poslat mi srovnání“ (→ inline
+  formulář, focus do pole). Skrýt, když je formulář vidět na obrazovce a po
+  odeslání. Pravidla vůči cookie liště zůstávají.
+  Porovnání s přepínačem. Místo tří karet pod sebou segmentový přepínač (SPY /
+  VOO / IVV) a pod ním jedna kompaktní karta dvojice. Přepínač ovladatelný
+  klávesnicí (role tablist/tab), zdroje u hodnot zůstávají. Zamčené dvojice VTI
+  a VT jako jeden řádek s CTA na formulář. Cíl: výrazně menší výška sekce na
+  375 px (změř před a po).
+
+  Dále:
+
+  README: A/B hypotéza 2 se tím stává výchozím stavem. Uprav ji tak, aby
+  kontrolní variantou byl původní stav (odkaz na formulář), a přepočítej, co je
+  potřeba. Do „Rozhodnutí“ zapiš proč (designová revize: okamžik nejvyššího
+  zájmu je výsledek kalkulačky).
+  Testy: uprav E2E podle nových toků, přidej testy pro inline formulář,
+  kontextovou lištu a přepínač (klávesnice). Funnel test musí dál projít ve
+  správném pořadí.
+  Změř výšku stránky na 375 px před a po a zapiš do README.
+
+  Nic neimplementuj, dokud plán neschválím.
+
+  Searched for 2 patterns, read 1 file, listed 1 directory, ran 2 shell commands (ctrl+o to expand)
+
+● Mám načtený kód formuláře, kalkulačky, sticky lišty, srovnání, testy i README.
+  Ještě ověřuji, jak je v README popsaný funnel, a pak sepíšu plán.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Updated plan
+  ⎿  /plan to preview
+  ⎿  Error: The user doesn't want to proceed with this tool use. The tool use
+     was rejected (eg. if it was a file edit, the new_string was NOT written to
+     the file). The user provided the following reason for the rejection:  Plán
+     schvaluji s jednou zásadní úpravou: inline formulář nesmí být po výsledku
+     pod ohybem. Na 375 × 812 (i 375 × 667) musí být po calc_result zároveň
+     vidět výsledné číslo (rozdíl) i pole pro e-mail. Navrhni a implementuj
+     nejmenší změnu, která to splní, např. formulář hned pod souhrnný řádek
+     „Rozdíl“ a podrobné řádky účtenky pod něj nebo do rozbalovacího „Zobrazit
+     rozpis“ (výchozí sbalené na mobilu). Přidej E2E test, který to ověří
+     (boundingBox čísla i pole v rámci viewportu). Pořadí funnelu v testu nesmí
+     určovat UX: compare_view už není povinný krok. Jinak beze změny. Po
+     dokončení se zastav. Commituj, nepushuj.
+
+● Updated plan
+  ⎿  /plan to preview
+
+● Updated plan
+  ⎿  /plan to preview
+
+● Updated plan
+  ⎿  /plan to preview
+
+● User approved Claude's plan
+  ⎿  Plan saved to:
+     ~/.claude/plans/pasted-content-id-23ee-p-e-ti-claude-md-starry-piglet.md ·
+     /plan to edit
+     Krok 8a: konverzní úpravy stránky (formulář u výsledku, kontextová lišta,
+     přepínač srovnání)
+
+     Kontext
+
+     Designová revize: návštěvník má nejvyšší zájem ve chvíli, kdy vidí výsledek
+     kalkulačky, ale dnes dostane jen odkaz („Chcete kompletní srovnání…“) na
+     formulář až za ukázkou srovnání. Srovnání navíc zabírá tři karty pod sebou.
+     Cíl je zkrátit cestu od calc_result k form_submit a zmenšit výšku stránky
+     na 375 px. Barvy, fonty a texty se nemění (krok 8b). Výjimkou je nové
+     tlačítko „Poslat mi srovnání“ a nezbytné popisky nových prvků. Commituji po
+     krocích, nepushuji.
+
+     0. Měření „před“ (první krok, ještě před změnami kódu)
+
+     - Nový skript scripts/page-height.mjs (Playwright, 375 × 812, produkční
+       build na :3100 jako E2E). Měří document.documentElement.scrollHeight a
+       výšky #kalkulacka, #srovnani a #formular ve třech stavech:
+       a. hero A po načtení,
+       b. hero A po výsledku kalkulačky (vyplnit 3 000, počkat na calc_result),
+       c. hero B po načtení.
+     - Cookie lištu odmítne, aby neovlivnila měření. Spustím ho na aktuálním
+       master, výsledek si uložím, po implementaci spustím znovu. Obě tabulky
+       půjdou do README.
+     - Commit: „Skript na měření výšky stránky na 375 px“
+
+     1. Sdílený stav leadu: jeden aktivní formulář
+
+     Nový lib/lead-flow.ts: malý externí store (subscribe/getSnapshot, stejný
+     vzor jako lib/consent.ts + use-consent.ts) a hook useLeadFlow().
+
+     - Stav: activeForm: "bottom" | "calc", submitted, delivery, leadRef,
+       bottomTouched.
+     - calcResultShown(): volá ho Calculator ve stejném místě jako dnes
+       setResultShown. Přepne activeForm na "calc", pokud návštěvník ještě
+       nepsal do spodního formuláře (bottomTouched). Rozepsaný e-mail se tím
+       neztratí a pořád platí, že aktivní je jen jeden formulář.
+     - focusLeadForm(): najde e-mailové pole aktivního formuláře, posune ho do
+       středu obrazovky (scrollIntoView({block:"center"})) a dá mu focus
+       (focus({preventScroll:true})). Používá ho sticky lišta i CTA u zamčených
+       dvojic.
+     - Odeslání: markSubmitted() a setDelivery() přesunou stav
+       submitted/delivery/leadRef z LeadForm do storu. Po odeslání jedním
+       formulářem se tak oba přepnou do děkovacího stavu.
+
+     Refaktor components/LeadForm.tsx:
+
+     - LeadFormFields (location: "calc" | "bottom", submitLabel): element <form>
+       s e-mailem, honeypotem, souhlasem s novinkami, tlačítkem a GDPR textem.
+       Logika onSubmit zůstává doslova stejná (validace, payload, submitLead,
+       mapování delivery). Změní se jen dvě věci:
+       - trackOnce("form_submit", { marketing_consent, form_location }),
+       - stav se zapisuje do storu.
+     - Časová past a honeypot zůstávají per instance: shownAt se nastaví při
+       připojení té instance formuláře, která se odesílá.
+     - LeadForm (spodní sekce #formular):
+       - activeForm === "bottom" → dnešní obsah beze změny. TrackView pošle
+         form_view s form_location: "bottom".
+       - activeForm === "calc" → krátký odkaz místo formuláře: stávající nadpis
+         a seznam, co plná verze obsahuje, a tlačítko „Poslat mi srovnání“,
+         které zavolá focusLeadForm(). Žádné druhé pole pro e-mail.
+       - po odeslání ve spodní sekci → ThankYou s plným srovnáním (jako dnes).
+       - po odeslání u kalkulačky → krátké potvrzení „Plné srovnání máte u
+         výpočtu výše“ s odkazem.
+     - TrackView dostane volitelné props a předá je do trackOnce. form_view
+       zůstává jednou za návštěvu (trackOnce), form_location říká, který
+       formulář návštěvník uviděl jako první.
+
+     Inline formulář v components/Calculator.tsx:
+
+     - Pruh lead-offer nahradí blok #formular-kalkulacka
+       (data-testid="lead-inline"). Zobrazí se po calc_result, když activeForm
+       === "calc".
+     - Obsah bloku:
+       - stávající věta „Chcete kompletní srovnání všech 5 dvojic fondů NYSE ↔
+         UCITS?“ jako popisek,
+       - stávající věta „Zobrazí se hned po odeslání, kopii pošleme e-mailem.“,
+       - LeadFormFields location="calc" submitLabel="Poslat mi srovnání". Na 375
+         px je pole nad tlačítkem (obojí 48–56 px na výšku), od sm vedle sebe.
+         Pod tím souhlas a GDPR text, beze změny.
+     - Při zobrazení pole nedostane focus (návštěvník ještě může upravovat
+       vstupy).
+     - Po odeslání se v tomto místě ukáže ThankYou s plným srovnáním
+       (scrollIntoView + focus na nadpis už ThankYou dělá sám).
+     - Obsah pro ThankYou se předává přes props: FullComparison je serverová
+       komponenta. Landing ji předá do Calculator jako prop fullComparison
+       stejně jako dnes do LeadForm, takže data zůstanou mimo klientský bundle.
+     - ID se nesmí opakovat: ThankYou se vykreslí vždy jen v jednom místě, takže
+       id="formular-h" a kotvy zdrojů src-…-full jsou na stránce jen jednou.
+
+     1b. Číslo i pole na jedné obrazovce (úprava po schválení)
+
+     Požadavek: na 375 × 812 i 375 × 667 musí být po calc_result současně vidět
+     rozdíl (calc-gap) i pole pro e-mail. Nejmenší změna je v
+     components/FeeReceipt.tsx, pořadí uvnitř účtenky bude takové:
+
+     1. Hlavička a souhrn: hlavička „Výpočet poplatků“ a hned pod ní souhrnný
+        řádek „Rozdíl … vs. …“ s číslem a větou o ESMA. aria-live se přesune na
+        souhrn.
+     2. Slot children: sem Calculator vloží inline formulář (po calc_result)
+        nebo ThankYou (po odeslání).
+     3. Rozpis: tlačítko „Zobrazit rozpis“ / „Skrýt rozpis“ (aria-expanded,
+        aria-controls) a pod ním obsah:
+        - vklady celkem a modelová hodnota,
+        - řádky nákladů podle TER s pruhy.
+        - Na mobilu je rozpis výchozí sbalený (hidden sm:block, tlačítko
+          sm:hidden).
+     4. Poznámky pod účtenkou (předpoklady, „nedoporučuje žádný fond“, zdroje):
+        zůstávají vždy viditelné. Předpoklady kalkulačky musí být vidět podle
+        právních mantinelů, proto se nesbalují.
+
+     Texty se nemění, jen se přeskládají. Nový je pouze popisek tlačítka
+     rozpisu.
+
+     2. Kontextová sticky lišta (components/StickyCta.tsx)
+
+     - Před calc_result: beze změny. „Spočítat své poplatky“ → #kalkulacka,
+       zobrazí se po odscrollování z hero, zmizí, jakmile návštěvník uvidí
+       kalkulačku. Event hero_cta_click {cta:"sticky"}.
+     - Po calc_result (activeForm === "calc", nebo kdykoli po výsledku): „Poslat
+       mi srovnání“. Klik zavolá focusLeadForm() a pošle nový event mimo funnel
+       form_cta_click {cta:"sticky"}, přidaný do typu TrackEvent vedle
+       qualify_answer. hero_cta_click by po výsledku rozbil pořadí funnelu.
+     - Kdy se skryje:
+       - když je vidět #formular-kalkulacka nebo #formular (IntersectionObserver
+         na oba prvky),
+       - po odeslání,
+       - dokud je vidět cookie lišta (pravidlo zůstává).
+     - Pro hero B bez kalkulačky se chování nemění.
+
+     3. Srovnání s přepínačem (components/Comparison.tsx)
+
+     Nová klientská komponenta components/PairTabs.tsx:
+
+     - Rozhraní: dostane tabs: {id, label}[] a panely jako ReactNode[]. Panely
+       jsou karty PairCard vykreslené na serveru, takže data a zdroje zůstávají
+       serverové.
+     - ARIA:
+       - role="tablist" s aria-label,
+       - tlačítka role="tab" s aria-selected, aria-controls a plovoucím tabIndex
+         (vybraný 0, ostatní −1),
+       - role="tabpanel" s aria-labelledby, tabIndex=0 a hidden u neaktivních.
+     - Klávesnice: šipky ←/→ (dokola), Home a End. Výběr se přepne s focusem
+       (automatická aktivace, panely jsou jen 3).
+     - Vzhled: segmentový přepínač, tři stejně široká tlačítka (vzhled podle
+       stávajících předvoleb částky v kalkulačce: border-ink, vybrané bg-ink
+       text-paper, výška 44 px).
+     - Pořadí a výchozí výběr: pořadí podle dat (previewPairs()), výchozí VOO.
+       Navazuje na hero a reklamu B, které mluví o VOO.
+
+     Úpravy v Comparison.tsx:
+
+     - Úvodní odstavec o PRIIPs/KID zůstává. Pod ním TrackView
+       event="compare_view" obaluje přepínač a kartu.
+     - PairCard se nemění: stejné řádky, horní indexy zdrojů a seznam zdrojů s
+       datem stažení. Výška klesne tím, že je vidět jedna karta místo tří.
+     - Zamčené dvojice na jednom řádku: VTI → SXR4, VT → VWCE vlevo a CTA „Plné
+       srovnání →“ vpravo, čárkovaný rámeček zůstává (data-testid="locked").
+       - Odstavec s popisem plné verze z řádku vypadne. Stejný obsah má spodní
+         sekce formuláře.
+       - CTA je malá klientská komponenta LeadFormLink: jde o <a
+         href="#formular">, a když je aktivní inline formulář, místo kotvy
+         zavolá focusLeadForm(). Návštěvník tak nikdy nemusí dvakrát
+         přeskakovat.
+
+     4. README
+
+     - H2 přepsat:
+       - Kontrola (A) = původní stav: odkaz „Chcete kompletní srovnání…“ vede na
+         formulář za srovnáním.
+       - Varianta (B) = nový výchozí stav: formulář pod výsledkem.
+       - Hypotéza: výchozí stav přinese +25 %, tj. kontrola 4 % → varianta 5 %.
+         Vzorek pro 4 % ↔ 5 % se nemění (test je symetrický), ověřím ho přes
+         node scripts/sample-size.mjs 0.04 0.05 a tabulku podle výsledku
+         upravím.
+       - Riziko je teď opačné: návštěvník může odeslat e-mail, aniž viděl ukázku
+         srovnání. Sekundární metrika: potvrzený lead / lead (Supabase) a nově
+         form_submit podle form_location.
+       - Spuštění (potřebuje kód): přípona utm_content -f1 = původní odkaz
+         (Calculator dostane prop leadPlacement="link"), výchozí = inline.
+         Neimplementuji, jen popíšu.
+     - Rozhodnutí: nové body 45–48:
+       - inline formulář u výsledku (designová revize: okamžik nejvyššího zájmu
+         je výsledek kalkulačky, H2 se tím stává výchozím stavem),
+       - jen jeden aktivní formulář a výjimka pro rozepsaný spodní formulář,
+       - děkovací stav s plným srovnáním tam, kde návštěvník odeslal, a jinde
+         krátké potvrzení,
+       - přepínač s výchozím VOO.
+     - Struktura stránky: upravit řádky 2 a 4 tabulky a větu pod ní (formulář je
+       teď hlavně u výsledku, spodní pro hero B). Bez toho by README popisovalo
+       jiný stav než kód.
+     - Měření:
+       - přidat vlastnost form_location (calc/bottom) a event form_cta_click,
+       - u funnelu v PostHogu upozornit, že compare_view už není povinný krok
+         (inline formulář jde odeslat bez srovnání). Funnel proto bez
+         compare_view, s breakdownem podle form_location. compare_view jako
+         samostatný poměr.
+     - Nová podsekce s výškami stránky před a po (tabulka ze skriptu, s datem
+       měření a příkazem pro zopakování).
+     - components/README.md doplnit, pokud komponenty popisuje (zkontroluji).
+
+     5. Testy (e2e/landing.spec.ts, případně e2e/consent.spec.ts)
+
+     Úpravy stávajících testů:
+
+     - kalkulačka: lead-offer → lead-inline. Před výsledkem neexistuje. Po
+       výsledku je vidět s polem „E-mail“ a tlačítkem „Poslat mi srovnání“.
+       #formular už pole pro e-mail nemá, má tlačítko „Poslat mi srovnání“.
+     - porovnání:
+       - tablist se 3 taby, vybraný VOO,
+       - vidět je právě jedna karta pair se zdroji https://,
+       - locked obsahuje VTI a VT a má CTA.
+     - formulář (/#formular, bez kalkulačky): testy validace, klávesnice,
+       nedostupné databáze a honeypotu zůstávají a musí projít beze změny
+       (spodní formulář je aktivní).
+
+     Nové testy:
+
+     1. Inline formulář:
+        - odeslání pod výsledkem → thank-you u kalkulačky s 5 dvojicemi,
+        - spodní sekce ukazuje krátké potvrzení,
+        - na stránce není žádné pole „E-mail“,
+        - v dataLayer mají form_view a form_submit form_location: "calc".
+     2. Spodní formulář: form_submit má form_location: "bottom". Po odeslání
+        dole a následném výsledku kalkulačky se inline formulář neukáže.
+     3. Rozepsaný spodní formulář: napsat do spodního pole, pak výsledek
+        kalkulačky → inline se neukáže, spodní pole si hodnotu ponechá.
+     4. Sticky lišta:
+        - po odmítnutí cookies a posunu za hero je vidět „Spočítat své
+          poplatky“,
+        - po výsledku a posunu na srovnání je vidět „Poslat mi srovnání“, klik
+          dá focus inline poli,
+        - když je formulář vidět, lišta zmizí,
+        - po odeslání lišta není.
+     5. Přepínač klávesnicí:
+        - Tab na vybraný tab, → přepne na IVV a změní panel, ← zpět,
+        - Home → SPY, End → IVV,
+        - aria-selected a hidden panelů odpovídají.
+     6. Funnel (přirozená cesta A):
+        - hero CTA → vyplnit kalkulačku → formulář u výsledku → odeslat,
+        - povinné kroky page_view, hero_cta_click, calc_start, calc_result,
+          form_view, form_submit musí přijít v tomto pořadí (podposloupnost),
+        - compare_view není povinný a jeho pozici test neurčuje,
+        - ad_variant a UTM u všech eventů, form_location: "calc".
+     7. Číslo i pole na jedné obrazovce (375 × 812 a 375 × 667, cookie lišta
+        odmítnutá):
+        - po calc_result posunout souhrn „Rozdíl“ k hornímu okraji,
+        - boundingBox čísla calc-gap i pole „E-mail“ musí ležet celé ve
+          viewportu.
+     8. Rozpis: výchozí sbalený, aria-expanded="false". Po kliknutí se ukážou
+        řádky nákladů a „Vklady celkem“.
+     9. Výška #srovnani na 375 px je menší než dnešní hodnota ze skriptu: test
+        jako pojistka proti návratu tří karet.
+
+     Stávající consent test „dokud je vidět lišta, spodní CTA se neukazuje“
+     zůstává.
+
+     Pořadí commitů (každý malý, česky)
+
+     1. Skript na měření výšky stránky
+     2. Sdílený stav leadu a refaktor LeadForm na pole + sekci (chování beze
+        změny, testy projdou)
+     3. Formulář pod výsledkem kalkulačky (+ testy)
+     4. Kontextová sticky lišta (+ testy)
+     5. Srovnání s přepínačem a jedním řádkem zamčených dvojic (+ testy)
+     6. README: H2, rozhodnutí, struktura, měření, výšky před a po
+
+     Krok 1b (přeskládání účtenky + rozpis) jde jako samostatný commit hned po
+     kroku 3. Po dokončení se zastavím a připomenu /export do ai-log/.
+
+     Ověření
+
+     - npm run build, npm run lint, npm test (unit), npx playwright test
+       (všechny E2E na 375 px)
+     - node scripts/page-height.mjs před a po → čísla do README
+     - Ruční kontrola v prohlížeči na 375 px:
+       - hero A: kalkulačka → inline formulář → odeslání → oba stavy děkovací,
+       - hero B: srovnání → spodní formulář,
+       - přepínač myší a klávesnicí,
+       - sticky v obou stavech, s cookie lištou i bez ní
+
+● Začínám krokem 0: skript na měření a čísla „před“ na současném kódu.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Write(scripts/page-height.mjs)
+  ⎿  Wrote 42 lines to scripts/page-height.mjs
+       1 // Výška stránky a sekcí na 375 × 812 (README, Výška stránky). M
+         ěří běžící server, cookie lištu odmítne.
+         cripts/page-height.mjs [base_url]
+       3 import { chromium } from "@playwright/test";
+       4
+       6 const SECTIONS = ["kalkulacka", "srovnani", "formular"];
+       7
+       8 async function measure(page) {
+      10     const out = { stranka: document.documentElement.scrollHeight
+          };
+     … +41 lines (ctrl+o to expand)
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● Čísla „před“: stránka má 5 609 px, sekce srovnání 1 755 px. Commituji skript.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Write(lib/lead-flow.ts)
+  ⎿  Wrote 79 lines to lib/lead-flow.ts
+       1 // Stav formuláře na stránce sdílený mezi oběma místy (pod výsle
+       2 // a srovnáním. Jen v paměti stránky. Aktivní je vždy jen jeden
+         formulář a po odeslání kterýmkoli
+       3 // z nich se oba přepnou do děkovacího stavu.
+       5 /** Stav uložení leadu: čeká se na server / uloženo / adresa už
+         dřív potvrzená / nepovedlo se (Supabase, limit). */
+         d";
+       7
+       8 export type FormLocation = "calc" | "bottom";
+      10 export type LeadFlow = {
+     … +81 lines (ctrl+o to expand)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Bash(cat > lib/use-lead-flow.ts <<'EOF'
+      "use client";…)
+  ⎿  Updated components/ThankYou.tsx (+5 -4)
+       3  import { type ReactNode, useEffect, useId, useRef, useState } f
+          rom "react";
+       4  import { saveQualify } from "@/app/actions/lead";
+       5  import { QUALIFY_ANSWERS } from "@/lib/lead";
+       6 +import type { Delivery } from "@/lib/lead-flow";               
+       7  import { track } from "@/lib/track";
+       8  
+       8 -/** Stav uložení leadu: čeká se na server / uloženo / adresa už
+         - dřív potvrzená / nepovedlo se (Supabase, limit). */           
+       9 -export type Delivery = "pending" | "sent" | "confirmed" | "fail
+         -ed";                                                           
+      10 -                                                               
+       9  /** Děkovací stav: slíbený obsah hned na stránce, ne „čekejte n
+          a e-mail“. Jedna nepovinná otázka. */
+      10  export function ThankYou({
+      11    delivery,
+      12    leadRef,
+      13 +  headingId = "formular-h",                                    
+      14    children,
+      15  }: {
+      16    delivery: Delivery;
+      17    leadRef: string | null;
+      18 +  /** Na stránce jsou dvě místa formuláře, každé s vlastním nad
+         +pisem */                                                       
+      19 +  headingId?: string;                                          
+      20    children: ReactNode;
+      21  }) {
+      22    const heading = useRef<HTMLHeadingElement>(null);
+     ...
+      35  
+      36    return (
+      37      <div data-testid="thank-you">
+      37 -      <h2 ref={heading} tabIndex={-1} id="formular-h" className
+         -="font-display text-2xl leading-8 font-semibold outline-none"> 
+      38 +      <h2 ref={heading} tabIndex={-1} id={headingId} className=
+         +"font-display text-2xl leading-8 font-semibold outline-none">  
+      39          Hotovo. Tady je plné srovnání.
+      40        </h2>
+      41        <p className="mt-2 text-[15px] leading-6 text-muted" role
+          ="status" data-testid="delivery">
+  ⎿  Created lib/use-lead-flow.ts (+8 -0)
+      1 +"use client";                                                   
+      2 +                                                                
+      3 +import { useSyncExternalStore } from "react";                   
+      4 +import { getLeadFlow, getServerLeadFlow, subscribeLeadFlow } fro
+        +m "@/lib/lead-flow";                                            
+      5 +                                                                
+      6 +export function useLeadFlow() {                                 
+      7 +  return useSyncExternalStore(subscribeLeadFlow, getLeadFlow, ge
+        +tServerLeadFlow);                                               
+      8 +}                                                               
+
+● Teď refaktor LeadForm.tsx na sdílená pole a sekci.
+
+● Write(components/LeadForm.tsx)
+  ⎿  Added 140 lines, removed 92 lines
+       1  "use client";
+       2  
+       3  import Link from "next/link";
+       4 -import { type FormEvent, type ReactNode, useEffect, useId, useR
+         -ef, useState, useTransition } from "react";                    
+       4 +import { type FormEvent, type ReactNode, useEffect, useId, useR
+         +ef, useState } from "react";                                   
+       5  import { submitLead } from "@/app/actions/lead";
+       6 -import { type Delivery, ThankYou } from "@/components/ThankYou"
+         -;                                                              
+       6 +import { ThankYou } from "@/components/ThankYou";              
+       7  import { TrackView } from "@/components/TrackView";
+       8  import { isValidEmail, type LeadPayload, normalizeEmail } from 
+          "@/lib/lead";
+       9 +import {                                                       
+      10 +  FORM_ANCHOR,                                                 
+      11 +  focusLeadForm,                                               
+      12 +  type FormLocation,                                           
+      13 +  markSubmitted,                                               
+      14 +  setDelivery,                                                 
+      15 +  touchBottomForm,                                             
+      16 +} from "@/lib/lead-flow";                                      
+      17  import { CONSENT } from "@/lib/site";
+      18  import { trackOnce } from "@/lib/track";
+      19 +import { useLeadFlow } from "@/lib/use-lead-flow";             
+      20  import { getAdVariant, getCalcInput, utmFromUrl } from "@/lib/v
+          isit";
+      21  
+      22 +export const SUBMIT_CTA = "Poslat mi srovnání";                
+      23 +                                                               
+      24 +const button =                                                 
+      25 +  "flex h-14 w-full items-center justify-center rounded-sm bg-i
+         +nk text-base font-semibold text-paper outline-offset-4 focus-vi
+         +sible:outline-2 focus-visible:outline-ink";                    
+      26 +                                                               
+      27  /**
+      28 + * Spodní sekce formuláře. Pro ty, kdo kalkulačku přeskočili (h
+         +ero B). Po výsledku kalkulačky je                              
+      29 + * aktivní formulář pod ním a tady zůstane jen odkaz na něj – n
+         +ávštěvník nikdy nevidí dvě pole pro e-mail.                    
+      30 + */                                                            
+      31 +export function LeadForm({ fullComparison }: { fullComparison: 
+         +ReactNode }) {                                                 
+      32 +  const flow = useLeadFlow();                                  
+      33 +  return (                                                     
+      34 +    <section id="formular" aria-labelledby="formular-h" classNa
+         +me="scroll-mt-4 border-t border-rule px-4 py-10">              
+      35 +      {flow.submittedAt === "bottom" ? (                       
+      36 +        <ThankYou delivery={flow.delivery} leadRef={flow.leadRe
+         +f}>                                                            
+      37 +          {fullComparison}                                     
+      38 +        </ThankYou>                                            
+      39 +      ) : flow.submittedAt === "calc" ? (                      
+      40 +        <div data-testid="lead-done">                          
+      41 +          <h2 id="formular-h" className="font-display text-2xl 
+         +leading-8 font-semibold">                                      
+      42 +            Plné srovnání máte u&nbsp;svého výpočtu            
+      43 +          </h2>                                                
+      44 +          <a href={`#${FORM_ANCHOR.calc}`} className="mt-3 inli
+         +ne-block font-semibold underline underline-offset-4">          
+      45 +            Zobrazit srovnání ↑                                
+      46 +          </a>                                                 
+      47 +        </div>                                                 
+      48 +      ) : (                                                    
+      49 +        <>                                                     
+      50 +          <h2 id="formular-h" className="font-display text-2xl 
+         +leading-8 font-semibold">                                      
+      51 +            Plné srovnání všech 5&nbsp;dvojic                  
+      52 +          </h2>                                                
+      53 +          <ul className="mt-4 space-y-2 text-[15px] leading-6">
+      54 +            <li className="dotted pb-2">                       
+      55 +              VOO, SPY, IVV, VTI a&nbsp;VT vedle UCITS fondů, k
+         +teré jsou v&nbsp;ČR dostupné                                   
+      56 +            </li>                                              
+      57 +            <li className="dotted pb-2">TER, měna, akumulace, b
+         +urza, velikost fondu, registrace v&nbsp;ČR, ISIN</li>          
+      58 +          </ul>                                                
+      59 +          <p className="mt-3 text-[15px] font-semibold">Zobrazí
+         + se hned po odeslání, kopii pošleme e-mailem.</p>              
+      60 +          {flow.activeForm === "bottom" ? (                    
+      61 +            <TrackView event="form_view" props={{ form_location
+         +: "bottom" }}>                                                 
+      62 +              <LeadFormFields location="bottom" submitLabel="Zo
+         +brazit plné srovnání" className="mt-6" />                      
+      63 +            </TrackView>                                       
+      64 +          ) : (                                                
+      65 +            <button type="button" onClick={focusLeadForm} class
+         +Name={`mt-6 ${button}`} data-testid="lead-pointer">            
+      66 +              {SUBMIT_CTA}                                     
+      67 +            </button>                                          
+      68 +          )}                                                   
+      69 +        </>                                                    
+      70 +      )}                                                       
+      71 +    </section>                                                 
+      72 +  );                                                           
+      73 +}                                                              
+      74 +                                                               
+      75 +/**                                                            
+      76   * E-mail + nepovinný souhlas s novinkami. Po odeslání se slíbe
+          ný obsah zobrazí hned – uložení leadu
+      77   * běží na pozadí, a když selže (Supabase nedostupný), návštěvn
+          ík srovnání stejně dostane.
+      78   */
+      17 -export function LeadForm({ fullComparison }: { fullComparison: 
+         -ReactNode }) {                                                 
+      79 +export function LeadFormFields({                               
+      80 +  location,                                                    
+      81 +  submitLabel,                                                 
+      82 +  className = "",                                              
+      83 +}: {                                                           
+      84 +  location: FormLocation;                                      
+      85 +  submitLabel: string;                                         
+      86 +  className?: string;                                          
+      87 +}) {                                                           
+      88    const [email, setEmail] = useState("");
+      89    const [marketing, setMarketing] = useState(false);
+      90    const [error, setError] = useState<string | null>(null);
+      21 -  const [submitted, setSubmitted] = useState(false);           
+      22 -  const [delivery, setDelivery] = useState<Delivery>("pending")
+         -;                                                              
+      23 -  const [leadRef, setLeadRef] = useState<string | null>(null); 
+      24 -  const [, startTransition] = useTransition();                 
+      91    const emailRef = useRef<HTMLInputElement>(null);
+      92    const honeypotRef = useRef<HTMLInputElement>(null);
+      93    const shownAt = useRef(0);
+     ...
+      106        return;
+      107      }
+      108      setError(null);
+       43 -    trackOnce("form_submit", { marketing_consent: marketing })
+          -;                                                             
+       44 -    setSubmitted(true);                                       
+      109 +    trackOnce("form_submit", { marketing_consent: marketing, f
+          +orm_location: location });                                    
+      110  
+      111      const payload: LeadPayload = {
+      112        email: value,
+     ...
+      117        website: honeypotRef.current?.value ?? "",
+      118        elapsedMs: Date.now() - shownAt.current,
+      119      };
+       55 -    startTransition(async () => {                             
+      120 +    markSubmitted(location);                                  
+      121 +    // Formulář se tím odpojí, výsledek uložení jde do sdílené
+          +ho stavu (lib/lead-flow.ts)                                   
+      122 +    void (async () => {                                       
+      123        try {
+      124          const result = await submitLead(payload);
+       58 -        setDelivery(!result.ok || !result.stored ? "failed" : 
+          -result.alreadyConfirmed ? "confirmed" : "sent");              
+       59 -        if (result.ok) setLeadRef(result.ref);                
+      125 +        setDelivery(                                          
+      126 +          !result.ok || !result.stored ? "failed" : result.alr
+          +eadyConfirmed ? "confirmed" : "sent",                         
+      127 +          result.ok ? result.ref : null,                      
+      128 +        );                                                    
+      129        } catch {
+       61 -        setDelivery("failed");                                
+      130 +        setDelivery("failed", null);                          
+      131        }
+       63 -    });                                                       
+      132 +    })();                                                     
+      133    }
+      134  
+      135    return (
+       67 -    <section id="formular" aria-labelledby="formular-h" classN
+          -ame="scroll-mt-4 border-t border-rule px-4 py-10">            
+       68 -      {submitted ? (                                          
+       69 -        <ThankYou delivery={delivery} leadRef={leadRef}>      
+       70 -          {fullComparison}                                    
+       71 -        </ThankYou>                                           
+       72 -      ) : (                                                   
+       73 -        <TrackView event="form_view">                         
+       74 -          <h2 id="formular-h" className="font-display text-2xl
+          - leading-8 font-semibold">                                    
+       75 -            Plné srovnání všech 5&nbsp;dvojic                 
+       76 -          </h2>                                               
+       77 -          <ul className="mt-4 space-y-2 text-[15px] leading-6"
+          ->                                                             
+       78 -            <li className="dotted pb-2">                      
+       79 -              VOO, SPY, IVV, VTI a&nbsp;VT vedle UCITS fondů, 
+          -které jsou v&nbsp;ČR dostupné                                 
+       80 -            </li>                                             
+       81 -            <li className="dotted pb-2">TER, měna, akumulace, 
+          -burza, velikost fondu, registrace v&nbsp;ČR, ISIN</li>        
+       82 -          </ul>                                               
+       83 -          <p className="mt-3 text-[15px] font-semibold">Zobraz
+          -í se hned po odeslání, kopii pošleme e-mailem.</p>            
+      136 +    <form noValidate onSubmit={onSubmit} className={`relative 
+          +${className}`} aria-describedby={ids.gdpr}>                   
+      137 +      <label htmlFor={ids.email} className="block font-semibol
+          +d">                                                           
+      138 +        E-mail                                                
+      139 +      </label>                                                
+      140 +      <input                                                  
+      141 +        ref={emailRef}                                        
+      142 +        id={ids.email}                                        
+      143 +        name="email"                                          
+      144 +        type="email"                                          
+      145 +        inputMode="email"                                     
+      146 +        autoComplete="email"                                  
+      147 +        required                                              
+      148 +        value={email}                                         
+      149 +        onChange={(e) => {                                    
+      150 +          if (location === "bottom") touchBottomForm();       
+      151 +          setEmail(e.target.value);                           
+      152 +        }}                                                    
+      153 +        aria-invalid={error ? true : undefined}               
+      154 +        aria-describedby={error ? ids.error : undefined}      
+      155 +        className="mt-2 h-12 w-full rounded-sm border border-i
+          +nk bg-card px-3 text-lg aria-invalid:border-2 aria-invalid:bor
+          +der-loss"                                                     
+      156 +      />                                                      
+      157 +      {error && (                                             
+      158 +        <p id={ids.error} role="alert" className="mt-2 text-[1
+          +5px] font-semibold text-loss">                                
+      159 +          {error}                                             
+      160 +        </p>                                                  
+      161 +      )}                                                      
+      162  
+       85 -          <form noValidate onSubmit={onSubmit} className="rela
+          -tive mt-6" aria-describedby={ids.gdpr}>                       
+       86 -            <label htmlFor={ids.email} className="block font-s
+          -emibold">                                                     
+       87 -              E-mail                                          
+       88 -            </label>                                          
+       89 -            <input                                            
+       90 -              ref={emailRef}                                  
+       91 -              id={ids.email}                                  
+       92 -              name="email"                                    
+       93 -              type="email"                                    
+       94 -              inputMode="email"                               
+       95 -              autoComplete="email"                            
+       96 -              required                                        
+       97 -              value={email}                                   
+       98 -              onChange={(e) => setEmail(e.target.value)}      
+       99 -              aria-invalid={error ? true : undefined}         
+      100 -              aria-describedby={error ? ids.error : undefined}
+      101 -              className="mt-2 h-12 w-full rounded-sm border bo
+          -rder-ink bg-card px-3 text-lg aria-invalid:border-2 aria-inval
+          -id:border-loss"                                               
+      102 -            />                                                
+      103 -            {error && (                                       
+      104 -              <p id={ids.error} role="alert" className="mt-2 t
+          -ext-[15px] font-semibold text-loss">                          
+      105 -                {error}                                       
+      106 -              </p>                                            
+      107 -            )}                                                
+      163 +      {/* Past na roboty: člověk pole nevidí ani na něj nedojd
+          +e klávesnicí. */}                                             
+      164 +      <div aria-hidden className="absolute -left-[9999px] h-px
+          + w-px overflow-hidden">                                       
+      165 +        <label>                                               
+      166 +          Nevyplňujte                                         
+      167 +          <input ref={honeypotRef} name="website" type="text" 
+          +tabIndex={-1} autoComplete="off" defaultValue="" />           
+      168 +        </label>                                              
+      169 +      </div>                                                  
+      170  
+      109 -            {/* Past na roboty: člověk pole nevidí ani na něj 
+          -nedojde klávesnicí. */}                                       
+      110 -            <div aria-hidden className="absolute -left-[9999px
+          -] h-px w-px overflow-hidden">                                 
+      111 -              <label>                                         
+      112 -                Nevyplňujte                                   
+      113 -                <input ref={honeypotRef} name="website" type="
+          -text" tabIndex={-1} autoComplete="off" defaultValue="" />     
+      114 -              </label>                                        
+      115 -            </div>                                            
+      171 +      <div className="mt-4 flex gap-3">                       
+      172 +        <input                                                
+      173 +          id={ids.consent}                                    
+      174 +          name="marketing"                                    
+      175 +          type="checkbox"                                     
+      176 +          checked={marketing}                                 
+      177 +          onChange={(e) => setMarketing(e.target.checked)}    
+      178 +          className="mt-0.5 size-5 shrink-0 accent-ink"       
+      179 +        />                                                    
+      180 +        <label htmlFor={ids.consent} className="text-[14px] le
+          +ading-5">                                                     
+      181 +          {CONSENT.marketing} <span className="text-muted">(ne
+          +povinné)</span>                                               
+      182 +        </label>                                              
+      183 +      </div>                                                  
+      184  
+      117 -            <div className="mt-4 flex gap-3">                 
+      118 -              <input                                          
+      119 -                id={ids.consent}                              
+      120 -                name="marketing"                              
+      121 -                type="checkbox"                               
+      122 -                checked={marketing}                           
+      123 -                onChange={(e) => setMarketing(e.target.checked
+          -)}                                                            
+      124 -                className="mt-0.5 size-5 shrink-0 accent-ink" 
+      125 -              />                                              
+      126 -              <label htmlFor={ids.consent} className="text-[14
+          -px] leading-5">                                               
+      127 -                {CONSENT.marketing} <span className="text-mute
+          -d">(nepovinné)</span>                                         
+      128 -              </label>                                        
+      129 -            </div>                                            
+      185 +      <button type="submit" className={`mt-6 ${button}`}>     
+      186 +        {submitLabel}                                         
+      187 +      </button>                                               
+      188  
+      131 -            <button                                           
+      132 -              type="submit"                                   
+      133 -              className="mt-6 flex h-14 w-full items-center ju
+          -stify-center rounded-sm bg-ink text-base font-semibold text-pa
+          -per outline-offset-4 focus-visible:outline-2 focus-visible:out
+          -line-ink"                                                     
+      134 -            >                                                 
+      135 -              Zobrazit plné srovnání                          
+      136 -            </button>                                         
+      137 -                                                              
+      138 -            <p id={ids.gdpr} className="mt-4 text-[13px] leadi
+          -ng-5 text-muted">                                             
+      139 -              {CONSENT.notice} Podrobnosti v{" "}             
+      140 -              <Link href="/zasady" className="underline">     
+      141 -                zásadách ochrany osobních údajů               
+      142 -              </Link>                                         
+      143 -              .                                               
+      144 -            </p>                                              
+      145 -          </form>                                             
+      146 -        </TrackView>                                          
+      147 -      )}                                                      
+      148 -    </section>                                                
+      189 +      <p id={ids.gdpr} className="mt-4 text-[13px] leading-5 t
+          +ext-muted">                                                   
+      190 +        {CONSENT.notice} Podrobnosti v{" "}                   
+      191 +        <Link href="/zasady" className="underline">           
+      192 +          zásadách ochrany osobních údajů                     
+      193 +        </Link>                                               
+      194 +        .                                                     
+      195 +      </p>                                                    
+      196 +    </form>                                                   
+      197    );
+      198  }
+
+● Bash(cat > components/TrackView.tsx <<'EOF'
+      "use client";…)
+  ⎿  Updated components/TrackView.tsx (+11 -2)
+       4  import { type TrackEvent, trackOnce } from "@/lib/track";
+       5  
+       6  /** Odešle event (jednou), když je obsah z poloviny vidět. */
+       7 -export function TrackView({ event, children }: { event: TrackEv
+         -ent; children: ReactNode }) {                                  
+       7 +export function TrackView({                                    
+       8 +  event,                                                       
+       9 +  props,                                                       
+      10 +  children,                                                    
+      11 +}: {                                                           
+      12 +  event: TrackEvent;                                           
+      13 +  props?: Record<string, unknown>;                             
+      14 +  children: ReactNode;                                         
+      15 +}) {                                                           
+      16    const ref = useRef<HTMLDivElement>(null);
+      17 +  const propsRef = useRef(props);                              
+      18    useEffect(() => {
+      19      const el = ref.current;
+      20      if (!el) return;
+      21      const observer = new IntersectionObserver(
+      22        ([entry]) => {
+      23          if (entry.isIntersecting) {
+      15 -          trackOnce(event);                                    
+      24 +          trackOnce(event, propsRef.current);                  
+      25            observer.disconnect();
+      26          }
+      27        },
+  ⎿  (timeout 3m)
+
+● Typy i lint prochází. Zastavím starý server a spustím E2E na novém buildu.
+
+  Ran 1 shell command (ctrl+o to expand)
+● Background command "Start production server on port 3100" failed with exit
+code 144
+
+  Ran 4 shell commands (ctrl+o to expand)
+
+● Všech 24 testů prochází proti testovací konfiguraci. Chybu zapíšu do
+  docs/ai-chyby.md a commitnu refaktor.
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(cat >> docs/ai-chyby.md <<'EOF'
+      | 2026-10-10 | Před E2E testy jsem ukončila server pro měření výšky přes
+      `pkill -f "next start -p 3100"`. Proces `next-server` (…)
+  ⎿  Updated docs/ai-chyby.md (+1 -0)
+      23  | 2026-10-09 | Při porovnání chování lomítka na konci URL jsem 
+          bez souhlasu schovala necommitnuté změny do `git stash`, abych 
+          sestavila předchozí verzi. Ve stejném příkazu `pkill` ukončil c
+          elý shell, `git stash pop` se nespustil a změny (proxy `/ingest
+          `) zůstaly jen ve stashi | AI si všimla výstupu (exit 144) a hn
+          ed zkontrolovala `git stash list` a `git status` | Změny vrácen
+          y `git stash pop`, ověřeno, že se nic neztratilo (potvrdil i čl
+          ověk). Nové pravidlo v CLAUDE.md: bez výslovného souhlasu žádné
+           příkazy, které mění nebo schovávají necommitnuté změny. Na por
+          ovnání verzí slouží samostatný `git worktree` |
+      24  | 2026-10-10 | Do hero B jsem přidala větu o KID a commitla ji 
+          po spuštění jen E2E testů s „hero“ v názvu. Test „lišta nezakry
+          je CTA v hero ani na 375 × 667“ je v `consent.spec.ts` a nespus
+          til se: CTA hero B se posunulo o 4,5 px pod cookie lištu | Celá
+           sada E2E před dalším commitem | Menší mezery v hero B (−8 px),
+           celá sada prošla. Rezerva je jen ~3,5 px, poznámka pro designe
+          ra v backlogu. Pravidlo: před commitem změny stránky vždy celé 
+          `npm run e2e`, ne výběr podle názvu |
+      25  | 2026-10-10 | Ticker VOO jsem ve vizuálu reklamy B vysadila mo
+          nospace písmem IBM Plex Mono (třída `.num`, stejně jako na strá
+          nce). V něm je písmeno O úzké a v PNG se četlo jako „V00“ s nul
+          ami. V souboru byla správně písmena O (ověřeno bajty), chyba by
+          la jen ve čtení. Při kontrole PNG jsem si toho nevšimla | Lidsk
+          á kontrola vizuálu | Ticker ve vizuálu bezpatkovým IBM Plex San
+          s. `lib/ads.test.ts` porovnává ticker a burzu s `data/etfs.json
+          `, zakazuje „V00“ v textech i šabloně a hlídá, že ticker není v
+           `.num`. Stejné riziko na stránce zapsáno do backlogu |
+      26 +| 2026-10-10 | Před E2E testy jsem ukončila server pro měření v
+         +ýšky přes `pkill -f "next start -p 3100"`. Proces `next-server`
+         + (dítě) to nezachytilo a dál běžel s `.env.local`. Playwright h
+         +o díky `reuseExistingServer` použil místo testovacího serveru s
+         + nedostupnou databází. Testovací odeslání formuláře (po časové 
+         +pasti nejspíš `jana@example.cz`, `tester@example.cz`) tak mohla
+         + jít do ostré Supabase a Resend mohl zkusit poslat potvrzení na
+         + doménu example.cz | Dva testy „nedostupná databáze“ neprošly, 
+         +`ss -ltnp` ukázal běžící `next-server` | Server ukončen podle P
+         +ID, celá sada znovu proti testovací konfiguraci (24/24). Kontro
+         +la a smazání testovacích řádků v tabulce `leads` čeká na člověk
+         +a. Pravidlo: před `npx playwright test` ověřit, že port 3100 je
+         + volný (`ss -ltn`), měřicí server spouštět s proměnnými z `play
+         +wright.config.ts` |                                            
+
+● Teď krok 1b: přeskládání účtenky (souhrn „Rozdíl“ nahoře, slot pro formulář,
+  rozpis sbalený na mobilu).
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(node -e '
+      const fs=require("fs");const f="components/FeeReceipt.tsx";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated components/FeeReceipt.tsx (+57 -32)
+       1 +"use client";                                                  
+       2 +                                                               
+       3 +import { type ReactNode, useId, useState } from "react";       
+       4  import type { FeeResult } from "@/lib/fees";
+       5  import { formatDate, formatKc, formatPercent } from "@/lib/form
+          at";
+       6  
+       4 -/** Výsledek kalkulačky jako účtenka: vklady, náklady podle TER
+         - (s pruhy ve stejném měřítku), rozdíl ESMA. */                 
+       7 +/**                                                            
+       8 + * Výsledek kalkulačky jako účtenka: nahoře rozdíl ESMA, pod úč
+         +tenkou místo pro formulář (children),                          
+       9 + * aby bylo číslo i pole pro e-mail vidět na jedné obrazovce. R
+         +ozpis (vklady, náklady podle TER                               
+      10 + * s pruhy ve stejném měřítku) je na mobilu sbalený. Předpoklad
+         +y výpočtu jsou vidět vždy.                                     
+      11 + */                                                            
+      12  export function FeeReceipt({
+      13    result,
+      14    years,
+      15    annualReturn,
+      16 +  children,                                                    
+      17  }: {
+      18    result: FeeResult;
+      19    years: number;
+      20    annualReturn: number;
+      21 +  children?: ReactNode;                                        
+      22  }) {
+      23 +  const [open, setOpen] = useState(false);                     
+      24 +  const breakdownId = useId();                                 
+      25    const maxCost = Math.max(...result.rows.map((r) => r.cost), 1
+          );
+      26    const etf = result.rows.find((r) => r.id === "esma_passive_eq
+          uity_etf")!;
+      27    const active = result.rows.find((r) => r.id === "esma_active_
+          equity_fund")!;
+     ...
+      29  
+      30    return (
+      31      <div className="mt-8">
+      21 -      <div className="receipt bg-card px-4 text-[15px]" aria-li
+         -ve="polite" data-testid="receipt">                             
+      32 +      <div className="receipt bg-card px-4 text-[15px]" data-te
+         +stid="receipt">                                                
+      33          <p className="text-center text-[13px] tracking-widest t
+          ext-muted uppercase">Výpočet poplatků</p>
+      34  
+      24 -        <dl className="mt-3">                                  
+      25 -          <Line label="Vklady celkem" value={formatKc(result.de
+         -posits)} />                                                    
+      26 -          <Line label={`Modelová hodnota bez poplatků (${annual
+         -Return} %)`} value={formatKc(result.grossValue)} />            
+      27 -        </dl>                                                  
+      28 -                                                               
+     … 82 more lines (ctrl+o to expand)
+
+● Teď inline formulář v Calculator.tsx.
+
+● Bash(node -e '
+      const fs=require("fs");const f="components/Calculator.tsx";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated components/Calculator.tsx (+53 -18)
+       1  "use client";
+       2  
+       3 -import { useEffect, useId, useMemo, useState } from "react";   
+       3 +import { type ReactNode, useEffect, useId, useMemo, useState } 
+         +from "react";                                                  
+       4  import { FeeReceipt } from "@/components/FeeReceipt";
+       5 +import { LeadFormFields, SUBMIT_CTA } from "@/components/LeadFo
+         +rm";                                                           
+       6 +import { ThankYou } from "@/components/ThankYou";              
+       7 +import { TrackView } from "@/components/TrackView";            
+       8  import { clampInput, DEFAULT_INPUT, LIMITS, RETURN_OPTIONS } fr
+          om "@/lib/calc";
+       9  import { computeFees, type FeeRow } from "@/lib/fees";
+      10  import { formatInteger, parseAmount } from "@/lib/format";
+      11 +import { calcResultShown, FORM_ANCHOR } from "@/lib/lead-flow";
+      12  import { trackOnce } from "@/lib/track";
+      13 +import { useLeadFlow } from "@/lib/use-lead-flow";             
+      14  import { setCalcInput } from "@/lib/visit";
+      15  
+      16  const MONTHLY_PRESETS = [1000, 2000, 5000];
+      17  
+      13 -export function Calculator({ rows }: { rows: FeeRow[] }) {     
+      18 +export function Calculator({ rows, fullComparison }: { rows: Fe
+         +eRow[]; fullComparison: ReactNode }) {                         
+      19    const [monthlyText, setMonthlyText] = useState(formatInteger(
+          DEFAULT_INPUT.monthly));
+      20    const [initialText, setInitialText] = useState(formatInteger(
+          DEFAULT_INPUT.initial));
+      21    const [years, setYears] = useState(DEFAULT_INPUT.years);
+      22    const [annualReturn, setAnnualReturn] = useState(DEFAULT_INPU
+          T.annualReturn);
+      23    const [interacted, setInteracted] = useState(false);
+      19 -  const [resultShown, setResultShown] = useState(false);       
+      24 +  const flow = useLeadFlow();                                  
+      25  
+      26    const input = useMemo(
+      27      () =>
+     ...
+      48      const timer = setTimeout(() => {
+      49        setCalcInput(input);
+      50        trackOnce("calc_result", { calc_input: input, calc_result
+          : { esma_gap: Math.round(gap) } });
+      46 -      setResultShown(true);                                    
+      51 +      calcResultShown();                                       
+      52      }, 800);
+      53      return () => clearTimeout(timer);
+      54    }, [interacted, input, gap]);
+     ...
+      166          </fieldset>
+      167        </div>
+     … 66 more lines (ctrl+o to expand)
+  ⎿  Updated components/Landing.tsx (+1 -1)
+      16        <main className="mx-auto w-full max-w-xl flex-1">
+      17          <PageView variant={variant} />
+      18          <Hero variant={variant} />
+      19 -        <Calculator rows={FEE_ROWS} />                         
+      19 +        <Calculator rows={FEE_ROWS} fullComparison={<FullCompar
+         +ison />} />                                                    
+      20          <Comparison />
+      21          <LeadForm fullComparison={<FullComparison />} />
+      22          <Trust />
+  ⎿  (timeout 3m)
+
+● Typy i lint prochází. Teď upravím E2E testy pro kalkulačku a funnel a přidám
+  testy pro formulář pod výsledkem.
+
+● Bash(node -e '
+      const fs=require("fs");const f="e2e/landing.spec.ts";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated e2e/landing.spec.ts (+23 -12)
+       3  const events = (page: Page) =>
+       4    page.evaluate(() => (window.dataLayer ?? []).map((e) => e.eve
+          nt as string));
+       5  
+       6 +const entry = (page: Page, event: string) =>                   
+       7 +  page.evaluate((name) => window.dataLayer?.find((e) => e.event
+         + === name), event);                                            
+       8 +                                                               
+       9 +const declineCookies = (page: Page) =>                         
+      10 +  page.getByTestId("cookie-banner").getByRole("button", { name:
+         + "Odmítnout" }).click();                                       
+      11 +                                                               
+      12 +/** Vyplní kalkulačku a počká na ustálený výsledek (calc_result
+         +). */                                                          
+      13 +async function calcResult(page: Page, monthly = "3000") {      
+      14 +  await page.getByLabel("Měsíčně investuji").fill(monthly);    
+      15 +  await expect.poll(() => events(page)).toContain("calc_result"
+         +);                                                             
+      16 +}                                                              
+      17 +                                                               
+      18  test("hero A: slib, číslo a CTA nad ohybem, bez e-mailu", async
+           ({ page }) => {
+      19    await page.goto("/?utm_source=meta&utm_content=a-uspora");
+      20    const h1 = page.getByRole("heading", { level: 1 });
+     ...
+      126    }
+      127  });
+      128  
+      117 -// Varianta A: CTA vede na kalkulačku, takže pořadí odpovídá f
+          -unnelu z CLAUDE.md.                                           
+      118 -// (U varianty B vede CTA na srovnání a compare_view přijde př
+          -ed kalkulačkou – to je v pořádku.)                            
+      129 +// Varianta A, přirozená cesta: hero → kalkulačka → formulář p
+          +od výsledkem. compare_view není povinný                       
+      130 +// krok (formulář jde odeslat i bez srovnání), proto test hlíd
+          +á jen pořadí povinných kroků.                                 
+      131  test("měření: celá cesta v pořadí funnelu s ad_variant a UTM",
+            async ({ page }) => {
+      132    await page.goto("/?utm_source=meta&utm_campaign=etf&utm_cont
+           ent=a-uspora");
+      133    await expect.poll(() => events(page)).toContain("page_view")
+           ;
+      134    await page.getByRole("link", { name: "Spočítat pro mě" }).cl
+           ick();
+      135    await page.locator("#kalkulacka").scrollIntoViewIfNeeded();
+      124 -  await page.getByLabel("Měsíčně investuji").fill("5000");    
+      125 -  await expect(page.getByTestId("lead-offer")).toBeVisible(); 
+      126 -  await page.locator("#srovnani").getByTestId("pair").first().
+          -scrollIntoViewIfNeeded();                                     
+      127 -  await expect.poll(() => events(page)).toContain("compare_vie
+          -w");                                                          
+      128 -  await page.getByTestId("lead-offer").click();               
+      136 +  await calcResult(page, "5000");                             
+      137 +  const inline = page.getByTestId("lead-inline");             
+      138 +  await inline.scrollIntoViewIfNeeded();                      
+      139    await expect.poll(() => events(page)).toContain("form_view")
+           ;
+      130 -  await page.getByRole("textbox", { name: "E-mail" }).fill("pe
+          -tr@example.cz");                                              
+     … 17 more lines (ctrl+o to expand)
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(S=/tmp/claude-1000/-home-snnikol-work-etf-srovnani/b0022e53-3bbf-4de4-861
+      0-4aaf94387183/scratchpad && cat > $S/calc-tests.ts <<'EOF'
+      test("kalkulačka: CTA, změn…)
+  ⎿  Updated e2e/landing.spec.ts (+84 -9)
+       37    await expect.poll(() => page.evaluate(() => window.dataLayer
+           ?.[0]?.ad_variant)).toBe("b");
+       38  });
+       39  
+       40 -test("kalkulačka: CTA, změna vstupu, účtenka v Kč a nabídka pl
+          -né verze", async ({ page }) => {                              
+       40 +test("kalkulačka: CTA, změna vstupu, účtenka v Kč a formulář p
+          +od výsledkem", async ({ page }) => {                          
+       41    await page.goto("/");
+       42    await page.getByRole("link", { name: "Spočítat pro mě" }).cl
+           ick();
+       43    await expect(page.locator("#kalkulacka")).toBeInViewport();
+       44 -  await expect(page.getByTestId("lead-offer")).toHaveCount(0);
+       45 -                                                              
+       46 -  const monthly = page.getByLabel("Měsíčně investuji");       
+       47 -  await monthly.fill("3000");                                 
+       48 -  await expect(page.getByTestId("receipt")).toContainText("720
+          - 000 Kč");                                                    
+       49 -  await expect(page.getByTestId("calc-gap")).toHaveText(/^\d[\
+          -d ]* Kč$/);                                                   
+       50 -  await expect(page.getByTestId("lead-offer")).toBeVisible(); 
+       51 -  await expect(page.getByTestId("lead-offer")).toHaveAttribute
+          -("href", "#formular");                                        
+       44 +  await expect(page.getByTestId("lead-inline")).toHaveCount(0)
+          +;                                                             
+       45 +                                                              
+       46 +  await page.getByLabel("Měsíčně investuji").fill("3000");    
+       47 +  await expect(page.getByTestId("calc-gap")).toHaveText(/^\d[\
+          +d ]* Kč$/);                                                   
+       48 +  const inline = page.getByTestId("lead-inline");             
+       49 +  await expect(inline).toBeVisible();                         
+       50 +  await expect(inline.getByRole("textbox", { name: "E-mail" })
+          +).toBeVisible();                                              
+       51 +  await expect(inline.getByRole("button", { name: "Poslat mi s
+          +rovnání" })).toBeVisible();                                   
+       52 +  // jen jeden aktivní formulář: dole zůstane tlačítko, které 
+          +vede sem                                                      
+       53 +  await expect(page.getByRole("textbox", { name: "E-mail" })).
+          +toHaveCount(1);                                               
+       54 +  await expect(page.locator("#formular").getByTestId("lead-poi
+          +nter")).toHaveText("Poslat mi srovnání");                     
+       55 +});                                                           
+       56 +                                                              
+       57 +test("rozpis účtenky je na mobilu sbalený a jde rozbalit", asy
+          +nc ({ page }) => {                                            
+       58 +  await page.goto("/");                                       
+       59 +  await page.getByLabel("Měsíčně investuji").fill("3000");    
+       60 +  const toggle = page.getByRole("button", { name: "Zobrazit ro
+          +zpis" });                                                     
+       61 +  await expect(toggle).toHaveAttribute("aria-expanded", "false
+          +");                                                           
+       62 +  await expect(page.getByTestId("receipt-breakdown")).toBeHidd
+          +en();                                                         
+       63 +  await toggle.click();                                       
+       64 +  await expect(page.getByRole("button", { name: "Skrýt rozpis"
+          + })).toHaveAttribute("aria-expanded", "true");                
+       65 +  const breakdown = page.getByTestId("receipt-breakdown");    
+       66 +  await expect(breakdown).toBeVisible();                      
+       67 +  await expect(breakdown).toContainText("Vklady celkem");     
+     … 62 more lines (ctrl+o to expand)
+
+● Bash(sed -i 's/await
+      expect(page.getByTestId("lead-offer")).toBeVisible();/await
+      expect(page.getByTestId("lead-inline")).toBeVisible();/'
+      e2e/consent.spec.ts && ss -…)
+  ⎿  Updated e2e/consent.spec.ts (+1 -1)
+      65  
+      66    // návštěvník používá stránku bez volby
+      67    await page.getByLabel("Měsíčně investuji").fill("3000");
+      68 -  await expect(page.getByTestId("lead-offer")).toBeVisible();  
+      68 +  await expect(page.getByTestId("lead-inline")).toBeVisible(); 
+      69    expect(ph.requests).toEqual([]);
+      70    expect(await page.context().cookies()).toEqual([]);
+      71    expect((await storageKeys(page)).local).toEqual([]);
+  ⎿  (timeout 6m 40s)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Původní regex měl v sobě pevnou mezeru, při kopírování se z ní stala obyčejná.
+  Nahradím ji \s.
+
+● Bash(sed -i '0,/toHaveText(\/\^\\d\[\\d \]\*
+      Kč\$\/)/s//toHaveText(\/^\\d[\\d\\s]*\\sKč$\/)/' e2e/landing.spec.ts &&
+      grep -n 'calc-gap")).toHaveText' e2e/landing.spe…)
+  ⎿  Updated e2e/landing.spec.ts (+1 -1)
+      44    await expect(page.getByTestId("lead-inline")).toHaveCount(0);
+      45  
+      46    await page.getByLabel("Měsíčně investuji").fill("3000");
+      47 -  await expect(page.getByTestId("calc-gap")).toHaveText(/^\d[\d
+         - ]* Kč$/);                                                     
+      47 +  await expect(page.getByTestId("calc-gap")).toHaveText(/^\d[\d
+         +\s]*\sKč$/);                                                   
+      48    const inline = page.getByTestId("lead-inline");
+      49    await expect(inline).toBeVisible();
+      50    await expect(inline.getByRole("textbox", { name: "E-mail" }))
+          .toBeVisible();
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Všech 30 testů prochází. Commituji ve dvou krocích: účtenku zvlášť, formulář
+  pod výsledkem zvlášť.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Teď kontextová sticky lišta.
+
+● Bash(sed -i 's/export type TrackEvent = FunnelEvent | "qualify_answer";/export
+      type TrackEvent = FunnelEvent | "qualify_answer" | "form_cta_click";/'
+      lib/track.ts &&…)
+  ⎿  Updated components/StickyCta.tsx (+54 -9)
+       1  "use client";
+       2  
+       3  import { useEffect, useState } from "react";
+       4 +import { SUBMIT_CTA } from "@/components/LeadForm";            
+       5 +import { FORM_ANCHOR, focusLeadForm } from "@/lib/lead-flow";  
+       6  import { track } from "@/lib/track";
+       7  import { useBannerVisible } from "@/lib/use-consent";
+       8 +import { useLeadFlow } from "@/lib/use-lead-flow";             
+       9  
+       7 -/** Spodní lišta na mobilu: jen odkaz na kalkulačku, nikdy form
+         -ulář. Zobrazí se po odscrollování                              
+       8 - *  z hero a zmizí natrvalo, jakmile návštěvník kalkulačku uvid
+         -í. */                                                          
+      10 +const bar = "fixed inset-x-0 bottom-0 z-10 border-t border-rule
+         + bg-paper/95 px-4 py-3 backdrop-blur-sm";                      
+      11 +const cta = "mx-auto flex h-12 w-full max-w-xl items-center jus
+         +tify-center rounded-sm bg-ink font-semibold text-paper";       
+      12 +                                                               
+      13 +/**                                                            
+      14 + * Spodní lišta na mobilu podle toho, kde návštěvník je:       
+      15 + * - před výsledkem kalkulačky odkaz na kalkulačku (po odscroll
+         +ování z hero, zmizí, jakmile ji uvidí),                        
+      16 + * - po výsledku „Poslat mi srovnání“ → pole pro e-mail. Schová
+         + se, když je formulář vidět, a po odeslání.                    
+      17 + */                                                            
+      18  export function StickyCta() {
+      19    const [heroOut, setHeroOut] = useState(false);
+      20    const [calcSeen, setCalcSeen] = useState(false);
+      21 +  const [formVisible, setFormVisible] = useState(false);       
+      22 +  const flow = useLeadFlow();                                  
+      23    // Dvě spodní lišty přes sebe ne: dokud je vidět lišta cookie
+          s, CTA počká
+      24    const bannerVisible = useBannerVisible();
+      25  
+     ...
+      38      return () => observer.disconnect();
+      39    }, []);
+      40  
+      30 -  if (!heroOut || calcSeen || bannerVisible) return null;      
+      41 +  // Formulář pod kalkulačkou vzniká až po výsledku, proto se s
+         +leduje znovu při každé změně                                   
+      42 +  useEffect(() => {                                            
+      43 +    if (!flow.calcDone) return;                                
+      44 +    const visible = new Set<Element>();                        
+      45 +    const observer = new IntersectionObserver((entries) => {   
+      46 +      for (const entry of entries) {                           
+      47 +        if (entry.isIntersecting) visible.add(entry.target);   
+      48 +        else visible.delete(entry.target);                     
+      49 +      }                                                        
+     … 42 more lines (ctrl+o to expand)
+  ⎿  Updated lib/track.ts (+1 -1)
+      18  ] as const;
+      19  
+      20  export type FunnelEvent = (typeof FUNNEL_EVENTS)[number];
+      21 -export type TrackEvent = FunnelEvent | "qualify_answer";       
+      21 +export type TrackEvent = FunnelEvent | "qualify_answer" | "form
+         +_cta_click";                                                   
+      22  
+      23  type DataLayerEntry = Record<string, unknown> & { event: TrackE
+          vent };
+      24  
+  ⎿  (timeout 3m)
+
+● Bash(sed -i 's|      <div className={bar}>|      <div className={bar}
+      data-testid="sticky-cta">|; s|    <div className={bar}>|    <div
+      className={bar} data-testid="s…)
+  ⎿  Updated components/StickyCta.tsx (+2 -2)
+      61    if (flow.calcDone) {
+      62      if (formVisible) return null;
+      63      return (
+      64 -      <div className={bar}>                                    
+      64 +      <div className={bar} data-testid="sticky-cta">           
+      65          <button
+      66            type="button"
+      67            onClick={() => {
+     ...
+      78  
+      79    if (!heroOut || calcSeen) return null;
+      80    return (
+      81 -    <div className={bar}>                                      
+      81 +    <div className={bar} data-testid="sticky-cta">             
+      82        <a href="#kalkulacka" onClick={() => track("hero_cta_clic
+          k", { cta: "sticky" })} className={cta}>
+      83          Spočítat své poplatky
+      84        </a>
+  ⎿  Updated e2e/landing.spec.ts (+31 -0)
+      287      }
+      288    });
+      289  });
+      290 +                                                              
+      291 +test("kontextová lišta: před výpočtem kalkulačka, po výsledku 
+          +formulář, schová se u formuláře a po odeslání", async ({ page 
+          +}) => {                                                       
+      292 +  const sticky = page.getByTestId("sticky-cta");              
+      293 +  const jumpTo = (id: string) =>                              
+      294 +    page.locator(`#${id}`).evaluate((el) => el.scrollIntoView(
+          +{ block: "start", behavior: "instant" }));                    
+      295 +                                                              
+      296 +  // příchod rovnou na srovnání (kalkulačku přeskočil): lišta 
+          +nabízí kalkulačku                                             
+      297 +  await page.goto("/#srovnani");                              
+      298 +  await declineCookies(page);                                 
+      299 +  await expect(sticky.getByRole("link", { name: "Spočítat své 
+          +poplatky" })).toBeVisible();                                  
+      300 +  await sticky.getByRole("link").click();                     
+      301 +  await expect(sticky).toHaveCount(0);                        
+      302 +                                                              
+      303 +  await calcResult(page);                                     
+      304 +  await jumpTo("srovnani");                                   
+      305 +  const send = sticky.getByRole("button", { name: "Poslat mi s
+          +rovnání" });                                                  
+      306 +  await expect(send).toBeVisible();                           
+      307 +  await send.click();                                         
+      308 +  const field = page.getByTestId("lead-inline").getByRole("tex
+          +tbox", { name: "E-mail" });                                   
+      309 +  await expect(field).toBeFocused();                          
+      310 +  await expect(field).toBeInViewport();                       
+      311 +  // formulář je vidět → lišta zmizí                          
+      312 +  await expect(sticky).toHaveCount(0);                        
+      313 +  expect(await entry(page, "form_cta_click")).toMatchObject({ 
+          +cta: "sticky" });                                             
+      314 +                                                              
+      315 +  await field.fill("lenka@example.cz");                       
+      316 +  await page.getByTestId("lead-inline").getByRole("button", { 
+          +name: "Poslat mi srovnání" }).click();                        
+      317 +  await expect(page.getByTestId("thank-you")).toBeVisible();  
+      318 +  await jumpTo("srovnani");                                   
+      319 +  await expect(sticky).toHaveCount(0);                        
+      320 +});                                                           
+  ⎿  (timeout 6m 40s)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Načtení s kotvou nejspíš plynule odscrolluje přes kalkulačku. V testu proto
+  skočím na srovnání okamžitě.
+
+● Bash(node -e '
+      const fs=require("fs");const f="e2e/landing.spec.ts";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated e2e/landing.spec.ts (+2 -1)
+      294      page.locator(`#${id}`).evaluate((el) => el.scrollIntoView(
+           { block: "start", behavior: "instant" }));
+      295  
+      296    // příchod rovnou na srovnání (kalkulačku přeskočil): lišta 
+           nabízí kalkulačku
+      297 -  await page.goto("/#srovnani");                              
+      297 +  await page.goto("/");                                       
+      298    await declineCookies(page);
+      299 +  await jumpTo("srovnani");                                   
+      300    await expect(sticky.getByRole("link", { name: "Spočítat své 
+           poplatky" })).toBeVisible();
+      301    await sticky.getByRole("link").click();
+      302    await expect(sticky).toHaveCount(0);
+  ⎿  (timeout 5m)
+
+● Lišta se nejspíš neukáže proto, že kalkulačka je na 375 × 812 vidět už při
+  načtení. Tak se stránka chovala už před touto změnou, ověřím to.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Bash(node -e '
+      const fs=require("fs");const f="components/StickyCta.tsx";let
+      s=fs.readFileSync(f,"utf8");…)  ⎿  Updated components/StickyCta.tsx (+5 -4)
+      12  
+      13  /**
+      14   * Spodní lišta na mobilu podle toho, kde návštěvník je:
+      15 - * - před výsledkem kalkulačky odkaz na kalkulačku (po odscroll
+         -ování z hero, zmizí, jakmile ji uvidí),                        
+      15 + * - před výsledkem kalkulačky odkaz na kalkulačku, když není v
+         +idět hero ani kalkulačka (typicky hero B                       
+      16 + *   → srovnání). Kalkulačka začíná už v první obrazovce, „jedn
+         +ou viděná“ by lištu schovala hned po načtení,                  
+      17   * - po výsledku „Poslat mi srovnání“ → pole pro e-mail. Schová
+           se, když je formulář vidět, a po odeslání.
+      18   */
+      19  export function StickyCta() {
+      20    const [heroOut, setHeroOut] = useState(false);
+      20 -  const [calcSeen, setCalcSeen] = useState(false);             
+      21 +  const [calcInView, setCalcInView] = useState(true);          
+      22    const [formVisible, setFormVisible] = useState(false);
+      23    const flow = useLeadFlow();
+      24    // Dvě spodní lišty přes sebe ne: dokud je vidět lišta cookie
+          s, CTA počká
+     ...
+      31      const observer = new IntersectionObserver((entries) => {
+      32        for (const entry of entries) {
+      33          if (entry.target === hero) setHeroOut(!entry.isIntersec
+          ting);
+      33 -        if (entry.target === calc && entry.isIntersecting) setC
+         -alcSeen(true);                                                 
+      34 +        if (entry.target === calc) setCalcInView(entry.isInters
+         +ecting);                                                       
+      35        }
+      36      });
+      37      observer.observe(hero);
+     ...
+      77      );
+      78    }
+      79  
+      79 -  if (!heroOut || calcSeen) return null;                       
+      80 +  if (!heroOut || calcInView) return null;                     
+      81    return (
+      82      <div className={bar} data-testid="sticky-cta">
+      83        <a href="#kalkulacka" onClick={() => track("hero_cta_clic
+          k", { cta: "sticky" })} className={cta}>
+  ⎿  (timeout 6m 40s)
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● Skok na #srovnani nechá kvůli scroll-mt-4 vidět posledních 16 px kalkulačky. V
+  testu proto posunu stránku o kus dál.
+
+● Bash(node -e '
+      const fs=require("fs");const f="e2e/landing.spec.ts";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated e2e/landing.spec.ts (+2 -1)
+      290  
+      291  test("kontextová lišta: před výpočtem kalkulačka, po výsledku 
+           formulář, schová se u formuláře a po odeslání", async ({ page 
+           }) => {
+      292    const sticky = page.getByTestId("sticky-cta");
+      293 +  // kus pod začátek sekce: kotva #srovnani (scroll-mt-4) nech
+          +á vidět posledních 16 px kalkulačky                           
+      294    const jumpTo = (id: string) =>
+      294 -    page.locator(`#${id}`).evaluate((el) => el.scrollIntoView(
+          -{ block: "start", behavior: "instant" }));                    
+      295 +    page.locator(`#${id}`).evaluate((el) => window.scrollTo({ 
+          +top: el.getBoundingClientRect().top + window.scrollY + 200, be
+          +havior: "instant" }));                                        
+      296  
+      297    // příchod rovnou na srovnání (kalkulačku přeskočil): lišta 
+           nabízí kalkulačku
+      298    await page.goto("/");
+  ⎿  (timeout 6m 40s)
+
+● Všech 31 testů prochází. Zapíšu nalezenou chybu lišty do ai-chyby a commitnu.
+
+● Bash(cat >> docs/ai-chyby.md <<'EOF'
+      | 2026-10-10 | Sticky lišta „Spočítat své poplatky“ (krok 3) zmizela
+      natrvalo, jakmile byla kalkulačka jednou vidět. Kalkulačka…)
+  ⎿  Updated docs/ai-chyby.md (+1 -0)
+      24  | 2026-10-10 | Do hero B jsem přidala větu o KID a commitla ji 
+          po spuštění jen E2E testů s „hero“ v názvu. Test „lišta nezakry
+          je CTA v hero ani na 375 × 667“ je v `consent.spec.ts` a nespus
+          til se: CTA hero B se posunulo o 4,5 px pod cookie lištu | Celá
+           sada E2E před dalším commitem | Menší mezery v hero B (−8 px),
+           celá sada prošla. Rezerva je jen ~3,5 px, poznámka pro designe
+          ra v backlogu. Pravidlo: před commitem změny stránky vždy celé 
+          `npm run e2e`, ne výběr podle názvu |
+      25  | 2026-10-10 | Ticker VOO jsem ve vizuálu reklamy B vysadila mo
+          nospace písmem IBM Plex Mono (třída `.num`, stejně jako na strá
+          nce). V něm je písmeno O úzké a v PNG se četlo jako „V00“ s nul
+          ami. V souboru byla správně písmena O (ověřeno bajty), chyba by
+          la jen ve čtení. Při kontrole PNG jsem si toho nevšimla | Lidsk
+          á kontrola vizuálu | Ticker ve vizuálu bezpatkovým IBM Plex San
+          s. `lib/ads.test.ts` porovnává ticker a burzu s `data/etfs.json
+          `, zakazuje „V00“ v textech i šabloně a hlídá, že ticker není v
+           `.num`. Stejné riziko na stránce zapsáno do backlogu |
+      26  | 2026-10-10 | Před E2E testy jsem ukončila server pro měření v
+          ýšky přes `pkill -f "next start -p 3100"`. Proces `next-server`
+           (dítě) to nezachytilo a dál běžel s `.env.local`. Playwright h
+          o díky `reuseExistingServer` použil místo testovacího serveru s
+           nedostupnou databází. Testovací odeslání formuláře (po časové 
+          pasti nejspíš `jana@example.cz`, `tester@example.cz`) tak mohla
+           jít do ostré Supabase a Resend mohl zkusit poslat potvrzení na
+           doménu example.cz | Dva testy „nedostupná databáze“ neprošly, 
+          `ss -ltnp` ukázal běžící `next-server` | Server ukončen podle P
+          ID, celá sada znovu proti testovací konfiguraci (24/24). Kontro
+          la a smazání testovacích řádků v tabulce `leads` čeká na člověk
+          a. Pravidlo: před `npx playwright test` ověřit, že port 3100 je
+           volný (`ss -ltn`), měřicí server spouštět s proměnnými z `play
+          wright.config.ts` |
+      27 +| 2026-10-10 | Sticky lišta „Spočítat své poplatky“ (krok 3) zm
+         +izela natrvalo, jakmile byla kalkulačka jednou vidět. Kalkulačk
+         +a ale začíná už v první obrazovce (521 px od vrchu na 375 × 667
+         + i 812), takže se lišta nikdy neukázala. Test hlídal jen to, že
+         + se neukáže s cookie lištou, ne že se vůbec ukáže | Nový E2E te
+         +st kontextové lišty (krok 8a) | Lišta se ukáže, když není vidět
+         + hero ani kalkulačka (typicky hero B → srovnání). E2E test hlíd
+         +á oba stavy lišty |                                            
+
+● Teď přepínač ve srovnání.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Bash(cat > components/PairTabs.tsx <<'EOF'
+      "use client";…)
+  ⎿  Created components/LeadFormLink.tsx (+21 -0)
+       1 +"use client";                                                  
+       2 +                                                               
+       3 +import type { ReactNode } from "react";                        
+       4 +import { focusLeadForm, getLeadFlow } from "@/lib/lead-flow";  
+       5 +                                                               
+       6 +/** Odkaz na formulář: když je aktivní ten pod kalkulačkou, ved
+         +e rovnou do jeho pole (žádné dvojí přeskakování). */           
+       7 +export function LeadFormLink({ className, children }: { classNa
+         +me?: string; children: ReactNode }) {                          
+       8 +  return (                                                     
+       9 +    <a                                                         
+      10 +      href="#formular"                                         
+      11 +      onClick={(e) => {                                        
+      12 +        if (getLeadFlow().activeForm !== "calc") return;       
+      13 +        e.preventDefault();                                    
+      14 +        focusLeadForm();                                       
+      15 +      }}                                                       
+      16 +      className={className}                                    
+      17 +    >                                                          
+      18 +      {children}                                               
+      19 +    </a>                                                       
+      20 +  );                                                           
+      21 +}                                                              
+  ⎿  Created components/PairTabs.tsx (+80 -0)
+       1 +"use client";                                                  
+       2 +                                                               
+       3 +import { type KeyboardEvent, type ReactNode, useId, useRef, use
+         +State } from "react";                                          
+       4 +                                                               
+       5 +/**                                                            
+       6 + * Segmentový přepínač dvojic (WAI-ARIA tabs): šipky ←/→ dokola
+         +, Home a End, výběr se přepíná                                 
+       7 + * s focusem. Panely jsou karty vykreslené na serveru, tady se 
+         +jen skrývají.                                                  
+       8 + */                                                            
+       9 +export function PairTabs({                                     
+      10 +  label,                                                       
+      11 +  tabs,                                                        
+      12 +  panels,                                                      
+      13 +  initial,                                                     
+      14 +}: {                                                           
+      15 +  label: string;                                               
+      16 +  tabs: { id: string; label: string }[];                       
+      17 +  panels: ReactNode[];                                         
+      18 +  initial: number;                                             
+      19 +}) {                                                           
+      20 +  const [selected, setSelected] = useState(initial);           
+      21 +  const refs = useRef<(HTMLButtonElement | null)[]>([]);       
+      22 +  const base = useId();                                        
+      23 +                                                               
+      24 +  function select(i: number) {                                 
+      25 +    setSelected(i);                                            
+      26 +    refs.current[i]?.focus();                                  
+      27 +  }                                                            
+      28 +                                                               
+      29 +  function onKeyDown(e: KeyboardEvent) {                       
+      30 +    const last = tabs.length - 1;                              
+      31 +    const next =                                               
+      32 +      e.key === "ArrowRight" ? (selected === last ? 0 : selecte
+         +d + 1)                                                         
+      33 +      : e.key === "ArrowLeft" ? (selected === 0 ? last : select
+         +ed - 1)                                                        
+      34 +      : e.key === "Home" ? 0                                   
+      35 +      : e.key === "End" ? last                                 
+      36 +      : null;                                                  
+      37 +    if (next === null) return;                                 
+      38 +    e.preventDefault();                                        
+      39 +    select(next);                                              
+      40 +  }                                                            
+     … 40 more lines (ctrl+o to expand)
+
+● Bash(node -e '
+      const fs=require("fs");const f="components/Comparison.tsx";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated components/Comparison.tsx (+24 -16)
+       1 +import { LeadFormLink } from "@/components/LeadFormLink";      
+       2  import { PairCard } from "@/components/PairCard";
+       3 +import { PairTabs } from "@/components/PairTabs";              
+       4  import { TrackView } from "@/components/TrackView";
+       5  import { lockedPairs, previewPairs } from "@/lib/etfs";
+       6  
+       7  const PRIIPS_URL = "https://eur-lex.europa.eu/eli/reg/2014/1286
+          /oj";
+       8  
+       9  export function Comparison() {
+       8 -  const [first, ...rest] = previewPairs();                     
+      10 +  const pairs = previewPairs();                                
+      11 +  // Výchozí VOO: navazuje na hero a reklamu B                 
+      12 +  const initial = Math.max(                                    
+      13 +    pairs.findIndex((p) => p.us.id === "VOO"),                 
+      14 +    0,                                                         
+      15 +  );                                                           
+      16    return (
+      17      <section id="srovnani" aria-labelledby="srovnani-h" classNa
+          me="scroll-mt-4 border-t border-rule px-4 py-10">
+      18        <h2 id="srovnani-h" className="font-display text-2xl lead
+          ing-8 font-semibold">
+     ...
+      28          z&nbsp;Irska. Srovnání je informativní, nejde o&nbsp;do
+          poručení.
+      29        </p>
+      30  
+      24 -      <div className="mt-8 space-y-8">                         
+      31 +      <div className="mt-6">                                   
+      32          <TrackView event="compare_view">
+      26 -          <PairCard pair={first} />                            
+      33 +          <PairTabs                                            
+      34 +            label="Fond z NYSE"                                
+      35 +            tabs={pairs.map((p) => ({ id: p.us.id, label: p.us.
+         +ticker.value }))}                                              
+      36 +            panels={pairs.map((p) => (                         
+      37 +              <PairCard key={p.us.id} pair={p} />              
+      38 +            ))}                                                
+      39 +            initial={initial}                                  
+      40 +          />                                                   
+      41          </TrackView>
+      28 -        {rest.map((pair) => (                                  
+      29 -          <PairCard key={pair.us.id} pair={pair} />            
+      30 -        ))}                                                    
+      42        </div>
+      43  
+     … 24 more lines (ctrl+o to expand)
+  ⎿  (timeout 3m)
+
+● Teď testy přepínače a výšky srovnání.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Bash(S=/tmp/claude-1000/-home-snnikol-work-etf-srovnani/b0022e53-3bbf-4de4-861
+      0-4aaf94387183/scratchpad && cat > $S/cmp.ts <<'EOF'
+      test("porovnání: přepínač 3 dvojic…)
+  ⎿  Updated e2e/landing.spec.ts (+57 -7)
+      136    await expect(page.getByTestId("calc-gap")).toHaveText(hero!)
+           ;
+      137  });
+      138  
+      139 -test("porovnání: 3 dvojice se zdroji, zamčené vedou na formulá
+          -ř", async ({ page }) => {                                     
+      139 +test("porovnání: přepínač 3 dvojic, vybraná VOO se zdroji, zam
+          +čené na jednom řádku", async ({ page }) => {                  
+      140    await page.goto("/");
+      141 -  const pairs = page.locator("#srovnani").getByTestId("pair");
+      142 -  await expect(pairs).toHaveCount(3);                         
+      143 -  for (const pair of await pairs.all()) {                     
+      144 -    await expect(pair.locator('ol a[href^="https://"]').first(
+          -)).toBeVisible();                                             
+      141 +  const section = page.locator("#srovnani");                  
+      142 +  const tabs = section.getByRole("tab");                      
+      143 +  await expect(tabs).toHaveText(["SPY", "VOO", "IVV"]);       
+      144 +  await expect(section.getByRole("tab", { name: "VOO" })).toHa
+          +veAttribute("aria-selected", "true");                         
+      145 +  // všechny tři karty jsou v HTML, vidět je jen vybraná      
+      146 +  await expect(section.getByTestId("pair")).toHaveCount(3);   
+      147 +  const visible = section.getByRole("tabpanel");              
+      148 +  await expect(visible).toHaveCount(1);                       
+      149 +  await expect(visible.getByTestId("pair")).toContainText("VUA
+          +A");                                                          
+      150 +  await expect(visible.locator('ol a[href^="https://"]').first
+          +()).toBeVisible();                                            
+      151 +  for (const tab of ["SPY", "IVV"]) {                         
+      152 +    await section.getByRole("tab", { name: tab }).click();    
+      153 +    await expect(section.getByRole("tabpanel").locator('ol a[h
+          +ref^="https://"]').first()).toBeVisible();                    
+      154    }
+      146 -  await expect(page.getByTestId("locked")).toContainText("VTI"
+          -);                                                            
+      147 -  await expect(page.getByTestId("locked").getByRole("link")).t
+          -oHaveAttribute("href", "#formular");                          
+      155 +                                                              
+      156 +  const locked = page.getByTestId("locked");                  
+      157 +  await expect(locked).toContainText("VTI");                  
+      158 +  await expect(locked).toContainText("VT →");                 
+      159 +  await expect(locked.getByRole("link")).toHaveAttribute("href
+          +", "#formular");                                              
+      160 +  // jeden řádek: text a odkaz vedle sebe, ne pod sebou       
+      161 +  const [text, link] = [await locked.locator("p").boundingBox(
+          +), await locked.getByRole("link").boundingBox()];             
+      162 +  expect(link!.x).toBeGreaterThan(text!.x + text!.width - 1); 
+      163 +});                                                           
+      164 +                                                              
+      165 +test("přepínač srovnání jde ovládat klávesnicí", async ({ page
+          + }) => {                                                      
+      166 +  await page.goto("/");                                       
+      167 +  const section = page.locator("#srovnani");                  
+      168 +  const tab = (name: string) => section.getByRole("tab", { nam
+          +e });                                                         
+     … 32 more lines (ctrl+o to expand)
+  ⎿  (timeout 6m 40s)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Bash(node -e '
+      const fs=require("fs");const f="e2e/landing.spec.ts";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated e2e/landing.spec.ts (+3 -2)
+      353    await expect(sticky).toHaveCount(0);
+      354  
+      355    await calcResult(page);
+      356 -  await jumpTo("srovnani");                                   
+      356 +  // nahoře na stránce není vidět žádný formulář (srovnání je 
+          +krátké, pod ním už je spodní sekce)                           
+      357 +  await page.evaluate(() => window.scrollTo({ top: 0, behavior
+          +: "instant" }));                                              
+      358    const send = sticky.getByRole("button", { name: "Poslat mi s
+           rovnání" });
+      359    await expect(send).toBeVisible();
+      360    await send.click();
+     ...
+      368    await field.fill("lenka@example.cz");
+      369    await page.getByTestId("lead-inline").getByRole("button", { 
+           name: "Poslat mi srovnání" }).click();
+      370    await expect(page.getByTestId("thank-you")).toBeVisible();
+      370 -  await jumpTo("srovnani");                                   
+      371 +  await page.evaluate(() => window.scrollTo({ top: 0, behavior
+          +: "instant" }));                                              
+      372    await expect(sticky).toHaveCount(0);
+      373  });
+  ⎿  (timeout 6m 40s)
+
+● Všech 33 testů prochází. Pouštím unit testy a commituji.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Měřím výšky „po“. Server spouštím s testovací konfigurací z Playwrightu, ne s
+  .env.local.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Výsledek: stránka se zkrátila z 5 609 na 4 339 px (−23 %), srovnání z 1 755 na
+  880 px (−50 %). Teď README.
+
+  Read 1 file, ran 1 shell command (ctrl+o to expand)
+
+● Update(README.md)
+  ⎿  Added 17 lines, removed 6 lines
+      132  - **Vzorek:** 1 863 zobrazení na variantu pro +50 %, 4 783 pro
+            +30 %.
+      133  - **Spuštění:** už připravené. Dvě reklamy s `utm_content=a-us
+           pora` a `b-zvedavost`. `proxy.ts` vybere hero a stránka uloží 
+           `ad_variant`. V Meta rovnoměrné rozdělení publika přes funkci 
+           A/B test v Ads Manageru, ne dvě reklamy v jedné sadě, kde by M
+           eta mohla rozpočet sama přesunout k jedné z nich. Konkrétní na
+           stavení ověřit v Ads Manageru.
+      134  
+      135 -### H2: Formulář hned pod výsledkem kalkulačky vs. až za srovn
+          -áním                                                          
+      135 +### H2: Formulář hned pod výsledkem kalkulačky (výchozí stav) 
+          +vs. odkaz na formulář za srovnáním                            
+      136  
+      137 -- **Co měníme:** dnes vede nabídka v kalkulačce odkazem na for
+          -mulář, který je až za ukázkou srovnání. Ve variantě bude pole 
+          -pro e-mail přímo pod výsledkem kalkulačky.                    
+      138 -- **Proč čekáme zlepšení:** výsledek kalkulačky je chvíle nejv
+          -ětšího zájmu (rozhodnutí 4). Každý posun a sekce navíc mezi vý
+          -sledkem a formulářem jsou příležitost odejít. Riziko: kdo ješt
+          -ě neviděl ukázku srovnání, neví, co za e-mail dostane. Proto m
+          -ůže vyjít i hůř. Odhad +25 % je vlastní předpoklad.           
+      139 -- **Metrika:** primární lead / zobrazení stránky (Supabase pod
+          -le `utm_content`). Sekundární (PostHog, jen souhlasící): `form
+          -_submit / calc_result`.                                       
+      140 -- **Vzorek:** 6 745 zobrazení na variantu (+25 %). Ze tří test
+          -ů nejdražší, proto až po H1 a jen na vítězné reklamě.         
+      141 -- **Spuštění (potřebuje kód):** varianta rozvržení v `utm_cont
+          -ent`, např. `a-uspora-f1` (dnešní) a `a-uspora-f2` (formulář p
+          -od kalkulačkou). `proxy.ts` podle přípony přepíše na staticky 
+          -předrenderovanou stránku (jako dnes `/v/b`) a `Landing` dostan
+          -e parametr rozvržení. `ad_variant` zůstává `a`/`b` a tabulka `
+          -leads` se nemění: `utm_content` se ukládá už teď, takže stačí 
+          -`group by utm_content`. V Meta dvě kopie vítězné reklamy s růz
+          -ným `utm_content` v A/B testu. PostHog feature flags nepoužívá
+          -me, protože bez souhlasu s měřením se PostHog nenačte (rozhodn
+          -utí 33) a varianta by se nevybrala.                           
+      137 +- **Výchozí stav se změnil (krok 8a, rozhodnutí 45):** formulá
+          +ř pod výsledkem kalkulačky je na stránce už teď. Test proto ov
+          +ěřuje, jestli si to rozhodnutí obhájí v datech.               
+      138 +- **Kontrola:** původní stav. Pod výsledkem kalkulačky je jen 
+          +pruh „Chcete kompletní srovnání…“ s odkazem na formulář, který
+          + je až za ukázkou srovnání.                                   
+      139 +- **Varianta:** dnešní výchozí stav. Pole pro e-mail je přímo 
+          +pod výsledkem a dole zůstane jen tlačítko, které vede nahoru. 
+      140 +- **Proč čekáme zlepšení:** výsledek kalkulačky je chvíle nejv
+          +ětšího zájmu (rozhodnutí 4). Každý posun a sekce navíc mezi vý
+          +sledkem a formulářem jsou příležitost odejít.                 
+      141 +- **Riziko:** návštěvník může odeslat e-mail dřív, než uvidí u
+          +kázku srovnání. Neví pak přesně, co dostane, a může vyjít horš
+          +í míra potvrzení, i když leadů přibude.                       
+      142 +- **Odhad +25 % je vlastní předpoklad:** kontrola 4 % → varian
+          +ta 5 %. Odhad 4 % v [Očekávané konverzi](#očekávaná-konverze) 
+          +jsme nechali beze změny. Vychází z benchmarku, ne z této hypot
+          +ézy, a zvýšit ho na 5 % by znamenalo počítat s neověřeným výsl
+          +edkem.                                                        
+      143 +- **Metrika:** primární lead / zobrazení stránky (Supabase pod
+          +le `utm_content`). Sekundární:                                
+      144 +  - potvrzený lead / lead (Supabase), hlídá riziko výše,      
+      145 +  - `form_submit / calc_result` a `form_submit` podle `form_lo
+          +cation` (PostHog, jen souhlasící).                            
+      146 +- **Vzorek:** 6 745 zobrazení na variantu. Výpočet je symetric
+          +ký, takže pro 4 % ↔ 5 % vychází stejně v obou směrech (`node s
+          +cripts/sample-size.mjs 0.05 0.04`). Ze tří testů nejdražší, pr
+          +oto až po H1 a jen na vítězné reklamě.                        
+      147 +- **Spuštění (potřebuje kód):**                               
+      148 +  - Kontrolní varianta v `utm_content`, např. `a-uspora-f1` (p
+          +ůvodní odkaz). Bez přípony nebo s `-f2` zůstává dnešní výchozí
+          + stav.                                                        
+      149 +  - `proxy.ts` podle přípony přepíše na staticky předrenderova
+          +nou stránku (jako dnes `/v/b`) a `Calculator` dostane parametr
+          + `leadPlacement="link"`. Ten místo formuláře vykreslí původní 
+          +pruh s odkazem a spodní formulář zůstane aktivní.             
+      150 +  - `ad_variant` zůstává `a`/`b` a tabulka `leads` se nemění: 
+          +`utm_content` se ukládá už teď, takže stačí `group by utm_cont
+          +ent`.                                                         
+      151 +  - V Meta dvě kopie vítězné reklamy s různým `utm_content` v 
+          +A/B testu.                                                    
+      152 +  - PostHog feature flags nepoužíváme, protože bez souhlasu s 
+          +měřením se PostHog nenačte (rozhodnutí 33) a varianta by se ne
+          +vybrala.                                                      
+      153  
+      154  ### H3: Hero A s posuvníkem částky přímo v hero vs. tlačítko „
+           Spočítat pro mě“
+      155  
+
+● Update(README.md)
+  ⎿  Added 1 line, removed 1 line
+      118  | --- | --- | --- | --- | --- | --- | --- |
+      119  | H1 | 4 % → 6 % (+50 %) | 1 863 | 2 329 | 23 290 | 78 | 16 |
+      120  | H1 | 4 % → 5,2 % (+30 %) | 4 783 | 5 979 | 59 790 | 200 | 40
+            |
+      121 -| H2 | 4 % → 5 % (+25 %) | 6 745 | 8 432 | 84 320 | 282 | 57 |
+      121 +| H2 | 4 % (kontrola: původní odkaz) → 5 % (výchozí: formulář 
+          +pod výsledkem) (+25 %) | 6 745 | 8 432 | 84 320 | 282 | 57 |  
+      122  | H3 | 35 % → 40,25 % (+15 %), jen souhlasící | 1 336 souhlasí
+           cích = 2 672 zobrazení | 3 340 | 33 400 | 112 | 23 |
+      123  
+      124  **Co z toho plyne:** testovací rozpočet z [`ads/`](ads/README.
+           md#cílení-a-rozpočet-obě-varianty-stejně) (300 Kč denně na var
+           iantu, 7 dní) rozliší CTR a cenu prokliku, ale **rozdíl v lead
+           ech ne**. Test na leady potřebuje zhruba 1 500 Kč denně na var
+           iantu a 2–8 týdnů, podle toho, jak velký rozdíl chceme poznat.
+            Menší rozdíly prakticky nezměříme: +10 % (4 % → 4,4 %) by cht
+           ělo 39 475 zobrazení na variantu. Proto testujeme jen změny, o
+           d kterých čekáme velký účinek.
+
+● Update(README.md)
+  ⎿  Added 3 lines, removed 3 lines
+      35  | # | Sekce | Úkol | Proč právě tady |
+      36  | --- | --- | --- | --- |
+      37  | 1 | **Hero** | Navázat na slib reklamy: A číslo 44 200 Kč, B 
+          otázka „Proč si v Česku nekoupíte VOO?“ a odpověď (chybí KID). 
+          Jedno tlačítko | Návštěvník z reklamy během pár sekund kontrolu
+          je, jestli je na správném místě. Hero opakuje slib reklamy dosl
+          ova, jinak odchází. O kontakt v tuhle chvíli nežádáme, protože 
+          zatím nic nedostal |
+      38 -| 2 | **Kalkulačka** | Z obecného čísla udělat jeho číslo v Kč 
+         -| Nejsilnější hodnota zdarma a jediná osobní. Kdo zadá vlastní 
+         -částku, investoval čas a má konkrétní důvod pokračovat. Tlačítk
+         -o hero A sem vede přímo |                                      
+      39 -| 3 | **Ukázka srovnání** | Ukázat, že plná verze má skutečný o
+         -bsah (3 dvojice se zdrojem a datem) | Důkaz kvality před žádost
+         -í o e-mail. Vysvětluje i „proč ne VOO“ (PRIIPs/KID), takže sem 
+         -vede tlačítko hero B |                                         
+      40 -| 4 | **Formulář** | E-mail za plné srovnání (5 dvojic, víc par
+         -ametrů) | Teprve teď návštěvník ví, co dostane, a viděl kousek 
+         -zdarma. Jedno pole, výsledek hned na stránce |                 
+      38 +| 2 | **Kalkulačka + formulář pod výsledkem** | Z obecného čísl
+         +a udělat jeho číslo v Kč. Po výsledku hned pod ním pole pro e-m
+         +ail („Poslat mi srovnání“) | Nejsilnější hodnota zdarma a jedin
+         +á osobní. Kdo zadá vlastní částku, investoval čas a má konkrétn
+         +í důvod pokračovat. Výsledek je okamžik největšího zájmu, proto
+         + žádost o kontakt přichází právě tady (rozhodnutí 4 a 45). Rozd
+         +íl v Kč i pole jsou vidět na jedné obrazovce. Tlačítko hero A s
+         +em vede přímo |                                                
+      39 +| 3 | **Ukázka srovnání** | Ukázat, že plná verze má skutečný o
+         +bsah (přepínač SPY / VOO / IVV, jedna dvojice se zdrojem a date
+         +m) | Důkaz kvality před žádostí o e-mail. Vysvětluje i „proč ne
+         + VOO“ (PRIIPs/KID), takže sem vede tlačítko hero B. Přepínač mí
+         +sto tří karet zkrátil sekci na polovinu |                      
+      40 +| 4 | **Formulář** | E-mail za plné srovnání (5 dvojic, víc par
+         +ametrů) | Pro ty, kdo kalkulačku přeskočili (hero B): teprve te
+         +ď vědí, co dostanou, a viděli kousek zdarma. Po výsledku kalkul
+         +ačky tu zůstane jen tlačítko na formulář nahoře (rozhodnutí 46)
+         + |                                                             
+      41  | 5 | **Důvěra** | Kdo za stránkou stojí, odkud jsou data, rizi
+          kové upozornění | Pro ty, kdo váhají: hledají to až při rozhodo
+          vání o e-mailu, ne před ním. Rizikové upozornění tu je celé, kr
+          átká upozornění jsou i u čísel výše |
+      42  | 6 | **Patička** | Provozovatel, zásady ochrany údajů, nastave
+          ní cookies | Povinné údaje. Nastavení cookies jde kdykoli změni
+          t |
+      43  
+
+● Update(README.md)
+  ⎿  Added 14 lines
+      43  
+      44  Hero B vede rovnou na srovnání (3), ne na kalkulačku. Kdo přiše
+          l s otázkou „proč ne VOO“, chce nejdřív odpověď. Kalkulačku pře
+          skočí, ale formulář (4) má hned pod srovnáním.
+      45  
+      46 +Spodní lišta na mobilu se řídí tím, kde návštěvník je. Před výs
+         +ledkem nabízí „Spočítat své poplatky“, když není vidět hero ani
+         + kalkulačka. Po výsledku nabízí „Poslat mi srovnání“ a dá focus
+         + do pole pro e-mail. Schová se, když je formulář vidět, po odes
+         +lání a dokud je vidět cookie lišta.                            
+      47 +                                                               
+      48 +### Výška stránky na 375 px                                    
+      49 +                                                               
+      50 +Změřeno 2026-10-10 skriptem [`scripts/page-height.mjs`](scripts
+         +/page-height.mjs) (375 × 812, produkční build, cookie lišta odm
+         +ítnutá). Zopakovat: `npm run build && npx next start -p 3100`, 
+         +pak `node scripts/page-height.mjs`.                            
+      51 +                                                               
+      52 +| Stav | Stránka před | Stránka po | `#srovnani` před | `#srovn
+         +ani` po |                                                      
+      53 +| --- | --- | --- | --- | --- |                                
+      54 +| hero A po načtení | 5 609 px | 4 339 px (−23 %) | 1 755 px | 
+         +880 px (−50 %) |                                               
+      55 +| hero A po výsledku kalkulačky | 5 743 px | 4 588 px (−20 %) |
+         + 1 755 px | 880 px |                                           
+      56 +| hero B po načtení | 5 613 px | 4 343 px (−23 %) | 1 755 px | 
+         +880 px |                                                       
+      57 +                                                               
+      58 +Kalkulačka je po načtení nižší (1 562 → 1 167 px), protože rozp
+         +is účtenky je na mobilu sbalený. Po výsledku je vyšší (1 696 → 
+         +1 712 px), protože obsahuje formulář. Spodní sekce formuláře se
+         + po výsledku zmenší na tlačítko (684 → 388 px). Před: commit `3
+         +75dfdf`, po: krok 8a.                                          
+      59 +                                                               
+      60  ## Očekávaná konverze
+      61  
+      62  **Odhad: 4 % zobrazení stránky skončí leadem a 2 % potvrzeným l
+          eadem.** Rozpětí: 2–6 % leadů. Kromě benchmarku níže jsou všech
+          na čísla **vlastní předpoklad**. Ověřená data pro tento typ str
+          ánky a publika v ČR nemáme. Odhad nahradí čísla z prvního týdne
+           kampaně.
+
+● Update(README.md)
+  ⎿  Added 4 lines
+      179  
+      180  Funnel: `page_view → hero_cta_click → calc_start → calc_result
+            → compare_view → form_view → form_submit → lead_confirmed`. K
+           aždý event nese `ad_variant` (`a`/`b`) a UTM parametry z URL (
+           [`lib/track.ts`](lib/track.ts)).
+      181  
+      182 +- **`form_location`:** `form_view` a `form_submit` nesou místo
+          + formuláře, `calc` (pod výsledkem kalkulačky) nebo `bottom` (s
+          +podní sekce). `form_view` se posílá jednou za návštěvu, takže 
+          +říká, který formulář návštěvník uviděl jako první.            
+      183 +- **`form_cta_click`:** event mimo funnel pro tlačítko „Poslat
+          + mi srovnání“ ve spodní liště (`cta: "sticky"`). `hero_cta_cli
+          +ck` by po výsledku kalkulačky rozbil pořadí funnelu.          
+      184 +- **`compare_view` není povinný krok:** od kroku 8a jde formul
+          +ář odeslat hned pod výsledkem, bez srovnání. Pořadí výše je po
+          +řadí sekcí na stránce, ne cesta, kterou musí každý projít.    
+      185 +                                                              
+      186  **Dva zdroje dat, každý na jinou otázku:**
+      187  
+      188  | Otázka | Zdroj | Pokrytí |
+
+● Update(README.md)
+  ⎿  Added 1 line, removed 1 line
+      206  
+      207  Pozor: nepotvrzené leady se po 30 dnech mažou, takže starší ob
+           dobí zpětně ukáže míru potvrzení 100 %. Čísla za kampaň je pot
+           řeba exportovat do 30 dnů.
+      208  
+      209 -Funnel v PostHogu: Product analytics → New insight → Funnels, 
+          -kroky v pořadí výše, breakdown podle `ad_variant`. Krok `lead_
+          -confirmed` přichází často z jiného zařízení (e-mail na mobilu)
+          - a v rámci jedné návštěvy se nepropojí. Míru potvrzení proto p
+          -očítáme z databáze.                                           
+      209 +Funnel v PostHogu: Product analytics → New insight → Funnels, 
+          +kroky `page_view → calc_result → form_view → form_submit`, bre
+          +akdown podle `ad_variant` nebo `form_location`. `compare_view`
+          + do funnelu nepatří: v přísném pořadí by z něj vypadli všichni
+          +, kdo odeslali formulář pod výsledkem bez srovnání. Podíl `com
+          +pare_view / page_view` sledovat jako samostatný trend. Krok `l
+          +ead_confirmed` přichází často z jiného zařízení (e-mail na mob
+          +ilu) a v rámci jedné návštěvy se nepropojí. Míru potvrzení pro
+          +to počítáme z databáze.                                       
+      210  
+      211  **Co PostHog dostane:** jen eventy funnelu s `ad_variant` a UT
+           M, plus technické údaje, které přikládá sám (adresa stránky, p
+           rohlížeč, zařízení, obrazovka). Nedostane e-mail (žádné `ident
+           ify`), autocapture, záznam obrazovky ani tokeny z odkazů v e-m
+           ailech (`stripSecrets` v [`lib/analytics.ts`](lib/analytics.ts
+           )).
+      212  
+
+● Update(README.md)  ⎿  Added 4 lines, removed 1 line
+      206  
+      207  Pozor: nepotvrzené leady se po 30 dnech mažou, takže starší ob
+           dobí zpětně ukáže míru potvrzení 100 %. Čísla za kampaň je pot
+           řeba exportovat do 30 dnů.
+      208  
+      209 -Funnel v PostHogu: Product analytics → New insight → Funnels, 
+          -kroky `page_view → calc_result → form_view → form_submit`, bre
+          -akdown podle `ad_variant` nebo `form_location`. `compare_view`
+          - do funnelu nepatří: v přísném pořadí by z něj vypadli všichni
+          -, kdo odeslali formulář pod výsledkem bez srovnání. Podíl `com
+          -pare_view / page_view` sledovat jako samostatný trend. Krok `l
+          -ead_confirmed` přichází často z jiného zařízení (e-mail na mob
+          -ilu) a v rámci jedné návštěvy se nepropojí. Míru potvrzení pro
+          -to počítáme z databáze.                                       
+      209 +Funnel v PostHogu: Product analytics → New insight → Funnels, 
+          +dva funnely s breakdownem podle `ad_variant` nebo `form_locati
+          +on`:                                                          
+      210  
+      211 +- `page_view → form_view → form_submit` pro všechny,          
+      212 +- `page_view → calc_result → form_view → form_submit` pro cest
+          +u přes kalkulačku (hero B kalkulačku často přeskočí). `compare
+          +_view` do funnelu nepatří: v přísném pořadí by z něj vypadli v
+          +šichni, kdo odeslali formulář pod výsledkem bez srovnání. Podí
+          +l `compare_view / page_view` sledovat jako samostatný trend. K
+          +rok `lead_confirmed` přichází často z jiného zařízení (e-mail 
+          +na mobilu) a v rámci jedné návštěvy se nepropojí. Míru potvrze
+          +ní proto počítáme z databáze.                                 
+      213 +                                                              
+      214  **Co PostHog dostane:** jen eventy funnelu s `ad_variant` a UT
+           M, plus technické údaje, které přikládá sám (adresa stránky, p
+           rohlížeč, zařízení, obrazovka). Nedostane e-mail (žádné `ident
+           ify`), autocapture, záznam obrazovky ani tokeny z odkazů v e-m
+           ailech (`stripSecrets` v [`lib/analytics.ts`](lib/analytics.ts
+           )).
+      215  
+      216  **Reklamní pixely (návrh, neimplementováno):** samostatná kate
+           gorie souhlasu `ads` (připravená v [`lib/consent.ts`](lib/cons
+           ent.ts), v liště se zobrazí až s pixely).
+
+● Teď rozhodnutí 45–48.
+
+● Update(README.md)
+  ⎿  Added 13 lines
+      356  42. **Reklamy na Meta deklarují speciální kategorii *Financial
+            products and services*, i když pro ČR není výslovně povinná.*
+           * Dokumentace Meta ji povinně vyžaduje u reklam zasahujících U
+           SA. U Evropy zmiňuje jen úvěrové reklamy („certain parts of Eu
+           rope“) bez seznamu zemí. Investice a ETF do kategorie tématick
+           y spadají a reklamu bez vhodné kategorie může Meta zamítnout. 
+           Cena: věk je pevně 18–65+, takže personu 25–45 let nejde zacíl
+           it, bez lookalike publik a zájmy jen ze schváleného seznamu. P
+           ersonu zasáhnou zájmy a kreativa. Podrobně v [`ads/README.md`]
+           (ads/README.md#cílení-a-rozpočet-obě-varianty-stejně).
+      357  43. **V reklamě B se nejmenuje žádný UCITS fond.** VUAA a jeho
+            TER návštěvník uvidí až na stránce. Reklama tak nepropaguje k
+           onkrétní nástroj a netvrdí jeho dostupnost v ČR (`registered_i
+           n_cz` u VUAA = null). Hlídá unit test.
+      358  44. **Text reklamy A je v prvním odstavci zkrácený:** „i bez v
+           ýnosu“ místo „i bez jakéhokoli výnosu“, aby se podmínka i „Mod
+           elový výpočet, ne doporučení“ vešly do 125 znaků. Tolik doporu
+           čuje Meta Ads Guide pro primární text a zbytek se může schovat
+            za „Zobrazit více“. Věcně se nic nemění.
+      359 +45. **Formulář je hned pod výsledkem kalkulačky, ne až za srov
+          +náním** (krok 8a, designová revize). Okamžik nejvyššího zájmu 
+          +je výsledek kalkulačky (rozhodnutí 4). Dřív tam byl jen odkaz 
+          +a návštěvník musel přeskočit ukázku srovnání. Původně to byla 
+          +hypotéza H2, teď je to výchozí stav a H2 testuje původní odkaz
+          + jako kontrolu.                                               
+      360 +    - **Rozdíl v Kč i pole pro e-mail na jedné obrazovce** (37
+          +5 × 812 i 667, hlídá E2E test). Souhrnný řádek „Rozdíl“ je pro
+          +to nahoře v účtence. Vklady a náklady podle TER jsou v rozpisu
+          +, který je na mobilu sbalený.                                 
+      361 +    - **Předpoklady výpočtu se nesbalují:** výnos jako příklad
+          +, co výpočet nezahrnuje, zdroje. Podle právních mantinelů musí
+          + být vidět.                                                   
+      362 +    - **Formulář pod výsledkem se chová stejně jako ten dole:*
+          +* stejný souhlas, GDPR text, honeypot, časová past i `submitLe
+          +ad`. Tlačítko říká, co návštěvník dostane („Poslat mi srovnání
+          +“), ne otázku.                                                
+      363 +46. **Na stránce je vždy jen jeden aktivní formulář.** Před vý
+          +sledkem kalkulačky je aktivní spodní formulář (hero B kalkulač
+          +ku přeskočí). Po výsledku je aktivní formulář pod ním a dole z
+          +ůstane jen tlačítko, které vede nahoru a dá focus do pole.    
+      364 +    - **Výjimka:** kdo už psal do spodního formuláře, tomu zůs
+          +tane aktivní, aby nepřišel o rozepsaný e-mail.                
+      365 +    - Odkaz u zamčených dvojic i spodní lišta vedou vždy do ak
+          +tivního formuláře, nikdy na mezikrok.                         
+      366 +47. **Po odeslání jsou obě místa v děkovacím stavu, plné srovn
+          +ání je jen jedno.** Zobrazí se tam, kde návštěvník formulář od
+          +eslal, na druhém místě je krátké „Plné srovnání už máte“ s odk
+          +azem. Dvakrát pět dvojic by stránku zbytečně prodloužilo a ID 
+          +nadpisů a kotev zdrojů by se opakovala. Stav sdílí [`lib/lead-
+          +flow.ts`](lib/lead-flow.ts).                                  
+      367 +48. **Srovnání má přepínač SPY / VOO / IVV, výchozí VOO.** Jed
+          +na karta místo tří zkrátila sekci z 1 755 na 880 px.          
+      368 +    - **Proč VOO:** navazuje na hero a reklamu B („Proč si v Č
+          +esku nekoupíte VOO?“).                                        
+      369 +    - **Přístupnost:** přepínač je WAI-ARIA tabs, ovládá se ši
+          +pkami, Home a End.                                            
+      370 +    - **Data zůstávají na serveru:** karty se vykreslují na se
+          +rveru i se zdroji, přepínač je jen skrývá.                    
+      371 +    - **Zamčené dvojice VTI a VT** jsou na jednom řádku. Popis
+          + plné verze je ve spodní sekci formuláře.                     
+      372  
+      373  ## Co chybí a proč
+      374  
+
+  Searched for 1 pattern, ran 1 shell command (ctrl+o to expand)
+
+● Řádek 27 v README popisuje starý stav, opravím ho.
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(node -e '
+      const fs=require("fs");let s=fs.readFileSync("README.md","utf8");…)
+  ⎿  Updated README.md (+2 -2)
+      19  
+      20  | Kdy | Co návštěvník dostane | Za co |
+      21  | --- | --- | --- |
+      22 -| Hned, bez e-mailu | Kalkulačka dopadu poplatků v Kč (vlastní 
+         -částka, horizont, modelový výnos). Ukázka srovnání 3 dvojic NYS
+         -E ↔ UCITS se stejným indexem, se zdrojem a datem | nic |       
+      22 +| Hned, bez e-mailu | Kalkulačka dopadu poplatků v Kč (vlastní 
+         +částka, horizont, modelový výnos). Ukázka srovnání 3 dvojic NYS
+         +E ↔ UCITS se stejným indexem (přepínač), se zdrojem a datem | n
+         +ic |                                                           
+      23  | Po zadání e-mailu, **hned na stránce** | Plné srovnání všech 
+          5 dvojic: TER, měna, akumulace, burza, velikost fondu, registra
+          ce v ČR, ISIN | e-mail (+ nepovinný souhlas s novinkami) |
+      24  | Po odeslání | Děkovací obrazovka se srovnáním (nečeká se na e
+          -mail), jedna nepovinná otázka „Máte už účet u brokera?“ | – |
+      25  | E-mailem | Potvrzovací e-mail (double opt-in), tlačítko „Potv
+          rdit a otevřít srovnání“ | potvrzení adresy |
+      26  
+      27 -**Kdy žádáme o kontakt:** až když návštěvník vidí svůj výsledek
+         - z kalkulačky (rozhodnutí 4). Nabídka plného srovnání se v kalk
+         -ulačce objeví až po první změně vstupu. Formulář je až za ukázk
+         -ou srovnání. V hero žádné pole ani zmínka o e-mailu není (hlídá
+         - E2E test) a spodní lepicí lišta vede jen na kalkulačku, nikdy 
+         -na formulář.                                                   
+      27 +**Kdy žádáme o kontakt:** až když návštěvník vidí svůj výsledek
+         + z kalkulačky (rozhodnutí 4). Pole pro e-mail se objeví hned po
+         +d výsledkem, až po první změně vstupu (rozhodnutí 45). Kdo kalk
+         +ulačku přeskočí (hero B), najde formulář za ukázkou srovnání. V
+         + hero žádné pole ani zmínka o e-mailu není (hlídá E2E test). Sp
+         +odní lepicí lišta vede před výsledkem na kalkulačku a na formul
+         +ář až po výsledku.                                             
+      28  
+      29  Daňový tahák (W-8BEN) stránka zatím neslibuje, protože neexistu
+          je (Co chybí).
+      30  
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Krok 8a je hotový v 7 commitech na master, nic jsem nepushnul. Build, lint, 70
+  unit testů i 33 E2E testů na 375 px prochází. V prohlížeči jsem stránku ručně
+  neprocházel, to zbývá na vás.
+
+  Nejdřív moje chyba, kterou musíte zkontrolovat. Při prvním běhu E2E testů
+  zůstal na portu 3100 můj server pro měření výšky. Běžel s .env.local, tedy s
+  ostrou konfigurací Supabase a Resendu, a Playwright ho použil místo
+  testovacího serveru. Testovací odeslání formuláře tak mohla skončit v ostré
+  tabulce leads (nejspíš jana@example.cz a tester@example.cz). Resend mohl
+  zkusit poslat potvrzení na example.cz. Prosím zkontrolujte tabulku a případné
+  testovací řádky smažte, sám jsem do ostré databáze nesahal. Všechny další běhy
+  už šly proti testovací konfiguraci. Chybu jsem zapsal do docs/ai-chyby.md i s
+  pravidlem, jak se jí vyhnout.
+
+  Výška stránky na 375 px:
+
+  ┌─────────────────────────┬──────────┬──────────────────┐
+  │                         │   Před   │        Po        │
+  ├─────────────────────────┼──────────┼──────────────────┤
+  │ Celá stránka po načtení │ 5 609 px │ 4 339 px (−23 %) │
+  ├─────────────────────────┼──────────┼──────────────────┤
+  │ Sekce srovnání          │ 1 755 px │ 880 px (−50 %)   │
+  └─────────────────────────┴──────────┴──────────────────┘
+
+  Co se změnilo:
+  - Formulář pod výsledkem: po výsledku kalkulačky je hned pod souhrnným řádkem
+    „Rozdíl“ pole pro e-mail s tlačítkem „Poslat mi srovnání“. Podrobné řádky
+    účtenky jsou v rozpisu, který je na mobilu sbalený. Předpoklady výpočtu
+    zůstávají vidět vždy. Test ověřuje, že rozdíl i pole jsou na 375 × 812 i 375
+    × 667 vidět najednou.
+  - Jeden aktivní formulář: po výsledku zůstane dole jen tlačítko, které vede
+    nahoru. Kdo už psal do spodního formuláře, tomu zůstane aktivní, aby
+    nepřišel o rozepsaný e-mail. Po odeslání jsou obě místa v děkovacím stavu.
+    Plné srovnání se ukáže jen tam, kde návštěvník odeslal, na druhém místě je
+    krátké „Plné srovnání už máte“.
+  - Měření: form_view a form_submit nesou form_location. Tlačítko ve spodní
+    liště posílá nový event mimo funnel form_cta_click. Funnel test hlídá jen
+    pořadí povinných kroků, compare_view povinný není.
+  - Spodní lišta: před výsledkem nabízí kalkulačku, po výsledku formulář a dá
+    focus do pole. Schová se, když je formulář vidět, a po odeslání.
+  - Přepínač srovnání: SPY / VOO / IVV ovladatelný i klávesnicí, výchozí VOO.
+    Zamčené VTI a VT jsou na jednom řádku a odkaz vede rovnou do aktivního
+    formuláře.
+  - README: v A/B hypotéze 2 je kontrolou původní odkaz na formulář. Vzorek
+    zůstává 6 745 zobrazení na variantu, protože výpočet vychází v obou směrech
+    stejně. Přibyla rozhodnutí 45–48, úpravy v sekcích Struktura stránky a
+    Měření a tabulka výšek.
+
+  Na co jsem narazil:
+  - Lišta „Spočítat své poplatky“ se nikdy neukázala. Kalkulačka začíná už v
+    první obrazovce (521 px od vrchu) a lišta se schovala natrvalo hned po
+    načtení. Teď se ukáže, když není vidět hero ani kalkulačka, typicky u hero B
+    na srovnání. Zapsáno do ai-chyby.
+  - Funnel v PostHogu: v README navrhuji dva funnely bez compare_view, protože
+    jinak by z funnelu vypadli ti, kdo odeslali formulář hned pod výsledkem.
+
+  Drobné odchylky od plánu:
+  - K řádku „Rozdíl“ jsem přidal „za N let“. Údaj o délce investování byl jinak
+    jen ve sbaleném rozpisu.
+  - Odkaz u zamčených dvojic jsem zkrátil na „Plné srovnání →“, aby se vešel na
+    jeden řádek.
+  - Na mobilu je pole pro e-mail nad tlačítkem, ne vedle něj.
+  - Plné srovnání se teď do stránky posílá dvakrát (jako součást formuláře pod
+    výsledkem i dole). O kolik to zvětšilo HTML, jsem neměřil.
+
+  Nezapomeňte na /export do ai-log/.
+
+❯ Úklid po incidentu s portem 3100: v leads byly testovací řádky (jana@,
+  tester@, petr@example.cz), ručně smazány. Resend: na všechny 3 adresy
+  example.cz e-maily skutečně odešly, stav „Delivery Delayed“, nejspíš skončí
+  jako bounce. Zapiš to do docs/ai-chyby.md včetně dopadu (bounce na nové
+  doméně mail.hosek.cc, example.cz není rezervovaná doména).
+  Přidej pojistky:
+
+  Všechny testovací e-maily v testech přepiš na rezervovanou doménu podle RFC
+  2606 (např. @example.com nebo @test.invalid).
+  playwright.config.ts: reuseExistingServer: false, nebo ověř, že server běží s
+  testovacími proměnnými. Pokud testovací server míří na ostrý SUPABASE_URL
+  nebo má skutečný RESEND_API_KEY, testy musí spadnout před prvním testem.
+  scripts/page-height.mjs nikdy nespouštět s .env.local, ať používá stejné
+  testovací proměnné jako E2E.
+  Změř, o kolik se zvětšilo HTML kvůli dvojímu vykreslení plného srovnání, a
+  zapiš do README.
+  Commituj, nepushuj.
+
+● Pustím se do toho. Nejdřív zjistím, kde všude jsou testovací e-maily a jak je
+  nastavený TypeScript.
+
+  Listed 1 directory, ran 1 shell command (ctrl+o to expand)
+
+● Bash(sed -i -e 's/@Seznam\.cz/@Example.com/g' -e
+      's/@seznam\.cz/@example.com/g' -e 's/@seznam"/@example"/g' -e
+      's/@example\.cz/@example.com/g' -e 's/@x\.cz/@example.…)
+  ⎿  Updated e2e/consent.spec.ts (+2 -2)
+      89  
+      90    await page.locator("#formular").scrollIntoViewIfNeeded();
+      91    await page.waitForTimeout(2100); // časová past formuláře
+      92 -  await page.getByRole("textbox", { name: "E-mail" }).fill("tes
+         -ter@example.cz");                                              
+      92 +  await page.getByRole("textbox", { name: "E-mail" }).fill("tes
+         +ter@example.com");                                             
+      93    await page.getByRole("button", { name: "Zobrazit plné srovnán
+          í" }).click();
+      94    await expect(page.getByTestId("thank-you")).toBeVisible();
+      95  
+     ...
+       99    const pageView = ph.events.find((e) => e.event === "page_vie
+           w")!;
+      100    expect(pageView.properties).toMatchObject({ ad_variant: "b",
+            utm_source: "meta", utm_campaign: "etf", utm_content: "b-zved
+           avost" });
+      101    expect(ph.events.filter((e) => e.event === "page_view")).toH
+           aveLength(1);
+      102 -  expect(JSON.stringify(ph.events)).not.toContain("tester@exam
+          -ple.cz");                                                     
+      102 +  expect(JSON.stringify(ph.events)).not.toContain("tester@exam
+          +ple.com");                                                    
+      103    // nic automatického (autocapture, pageview, pageleave)
+      104    expect(ph.events.filter((e) => e.event.startsWith("$autocapt
+           ure") || e.event === "$pageview")).toEqual([]);
+      105    // jen přes vlastní doménu
+  ⎿  Updated e2e/landing.spec.ts (+11 -11)
+      92    await calcResult(page);
+      93    const inline = page.getByTestId("lead-inline");
+      94    await inline.scrollIntoViewIfNeeded();
+      95 -  await inline.getByRole("textbox", { name: "E-mail" }).fill("i
+         -vana@example.cz");                                             
+      95 +  await inline.getByRole("textbox", { name: "E-mail" }).fill("i
+         +vana@example.com");                                            
+      96    await inline.getByRole("button", { name: "Poslat mi srovnání"
+           }).click();
+      97  
+      98    const thanks = page.locator("#kalkulacka").getByTestId("thank
+          -you");
+     ...
+      107  
+      108  test("spodní formulář: form_location bottom, po odeslání se u 
+           kalkulačky formulář neukáže", async ({ page }) => {
+      109    await page.goto("/#formular");
+      110 -  await page.getByRole("textbox", { name: "E-mail" }).fill("ot
+          -a@example.cz");                                               
+      110 +  await page.getByRole("textbox", { name: "E-mail" }).fill("ot
+          +a@example.com");                                              
+      111    await page.getByRole("button", { name: "Zobrazit plné srovná
+           ní" }).click();
+      112    await expect(page.locator("#formular").getByTestId("thank-yo
+           u")).toBeVisible();
+      113    expect(await entry(page, "form_view")).toMatchObject({ form_
+           location: "bottom" });
+     ...
+      120  
+      121  test("rozepsaný spodní formulář zůstane aktivní i po výsledku 
+           kalkulačky", async ({ page }) => {
+      122    await page.goto("/#formular");
+      123 -  await page.getByRole("textbox", { name: "E-mail" }).fill("ro
+          -zepsano@example.cz");                                         
+      123 +  await page.getByRole("textbox", { name: "E-mail" }).fill("ro
+          +zepsano@example.com");                                        
+      124    await calcResult(page);
+      125    await expect(page.getByTestId("lead-inline")).toHaveCount(0)
+           ;
+      126 -  await expect(page.locator("#formular").getByRole("textbox", 
+          -{ name: "E-mail" })).toHaveValue("rozepsano@example.cz");     
+      126 +  await expect(page.locator("#formular").getByRole("textbox", 
+          +{ name: "E-mail" })).toHaveValue("rozepsano@example.com");    
+      127  });
+      128  
+      129  test("kalkulačka při 2 000 Kč / 20 let / 0 % ukáže stejný rozd
+           íl jako hero", async ({ page }) => {
+     ...
+      206  
+      207    await page.getByRole("button", { name: "Zobrazit plné srovná
+           ní" }).click();
+      208    await expect(page.locator("#formular").getByRole("alert")).t
+           oHaveText(/Vyplňte prosím e-mail/);
+      209 -  await page.getByRole("textbox", { name: "E-mail" }).fill("ja
+          -n@seznam");                                                   
+      209 +  await page.getByRole("textbox", { name: "E-mail" }).fill("ja
+          +n@example");                                                  
+      210    await page.getByRole("button", { name: "Zobrazit plné srovná
+           ní" }).click();
+      211    await expect(page.locator("#formular").getByRole("alert")).t
+           oHaveText(/Zkontrolujte/);
+      212    await expect(page.getByRole("textbox", { name: "E-mail" })).
+           toHaveAttribute("aria-invalid", "true");
+      213  
+      214 -  await page.getByRole("textbox", { name: "E-mail" }).fill("ja
+          -n@seznam.cz");                                                
+      214 +  await page.getByRole("textbox", { name: "E-mail" }).fill("ja
+          +n@example.com");                                              
+      215    await page.getByRole("button", { name: "Zobrazit plné srovná
+           ní" }).click();
+     … 42 more lines (ctrl+o to expand)
+  ⎿  Updated lib/double-opt-in.test.ts (+9 -9)
+      35  }
+      36  
+      37  const human = {
+      38 -  email: "jan@seznam.cz",                                      
+      38 +  email: "jan@example.com",                                    
+      39    marketing: false,
+      40    adVariant: "a",
+      41    utm: {},
+     ...
+      57    it("do DB jde jen hash tokenu z odkazu, e-mail má odhlášení a
+           one-click hlavičky", async () => {
+      58      const s = store();
+      59      const { mailer: m, sent } = mailer();
+      60 -    await sendConfirmation(ID, "jan@seznam.cz", { store: s, mai
+         -ler: m, siteUrl: SITE });                                      
+      60 +    await sendConfirmation(ID, "jan@example.com", { store: s, m
+         +ailer: m, siteUrl: SITE });                                    
+      61  
+      62      expect(sent).toHaveLength(1);
+      63      const email = sent[0];
+     ...
+      66      expect(claimedId).toBe(ID);
+      67      expect(storedHash).toBe(hashToken(token));
+      68      expect(storedHash).not.toContain(token);
+      69 -    expect(email.to).toBe("jan@seznam.cz");                    
+      69 +    expect(email.to).toBe("jan@example.com");                  
+      70      expect(email.headers?.["List-Unsubscribe"]).toContain(`${SI
+          TE}/api/odhlaseni?u=`);
+      71      expect(email.headers?.["List-Unsubscribe-Post"]).toBe("List
+          -Unsubscribe=One-Click");
+      72      expect(email.idempotencyKey).toMatch(/^confirm-[0-9a-f]+$/)
+          ;
+     ...
+      74  
+      75    it("cooldown nebo strop (claim = false) → e-mail neodejde", a
+          sync () => {
+      76      const { mailer: m, sent } = mailer();
+      77 -    await sendConfirmation(ID, "jan@seznam.cz", { store: store(
+         -{ claimConfirmation: vi.fn(async () => false) }), mailer: m, si
+         -teUrl: SITE });                                                
+      77 +    await sendConfirmation(ID, "jan@example.com", { store: stor
+         +e({ claimConfirmation: vi.fn(async () => false) }), mailer: m, 
+         +siteUrl: SITE });                                              
+      78      expect(sent).toHaveLength(0);
+      79    });
+      80  
+      81    it("bez konfigurace Resend / SITE_URL / tajemství nic nezaber
+          e ani neodešle", async () => {
+      82      const s = store();
+      83 -    await sendConfirmation(ID, "jan@seznam.cz", { store: s, mai
+         -ler: null, siteUrl: SITE });                                   
+      84 -    await sendConfirmation(ID, "jan@seznam.cz", { store: s, mai
+         -ler: mailer().mailer, siteUrl: null });                        
+      83 +    await sendConfirmation(ID, "jan@example.com", { store: s, m
+         +ailer: null, siteUrl: SITE });                                 
+      84 +    await sendConfirmation(ID, "jan@example.com", { store: s, m
+         +ailer: mailer().mailer, siteUrl: null });                      
+      85      vi.stubEnv("LEAD_TOKEN_SECRET", "");
+      86 -    await sendConfirmation(ID, "jan@seznam.cz", { store: s, mai
+         -ler: mailer().mailer, siteUrl: SITE });                        
+     … 13 more lines (ctrl+o to expand)
+  ⎿  Updated lib/lead.test.ts (+5 -5)
+       9  import { CONSENT } from "./site";
+      10  
+      11  const human = {
+      12 -  email: " Jan.Novak@Seznam.cz ",                              
+      12 +  email: " Jan.Novak@Example.com ",                            
+      13    marketing: false,
+      14    adVariant: "a",
+      15    utm: { utm_source: "meta", utm_content: "a-uspora" },
+     ...
+      48  describe("parseLeadInput", () => {
+      49    it("normalizuje e-mail a odmítne neplatný", () => {
+      50      const ok = parseLeadInput(human);
+      51 -    expect(ok.ok && ok.lead.email).toBe("jan.novak@seznam.cz");
+      52 -    expect(parseLeadInput({ ...human, email: "jan@seznam" })).t
+         -oEqual({ ok: false, error: "email" });                         
+      53 -    expect(parseLeadInput({ ...human, email: `${"a".repeat(250)
+         -}@x.cz` })).toEqual({ ok: false, error: "email" });            
+      51 +    expect(ok.ok && ok.lead.email).toBe("jan.novak@example.com"
+         +);                                                             
+      52 +    expect(parseLeadInput({ ...human, email: "jan@example" })).
+         +toEqual({ ok: false, error: "email" });                        
+      53 +    expect(parseLeadInput({ ...human, email: `${"a".repeat(250)
+         +}@example.com` })).toEqual({ ok: false, error: "email" });     
+      54      expect(parseLeadInput(null)).toEqual({ ok: false, error: "i
+          nvalid" });
+      55      expect(parseLeadInput({ ...human, email: 42 })).toEqual({ o
+          k: false, error: "invalid" });
+      56    });
+     ...
+      117      expect(result.ok && verify(result.ref)).toBe("11111111-222
+           2-3333-4444-555555555555");
+      118      expect(calls).toHaveLength(1);
+      119      expect(JSON.stringify(calls[0])).not.toContain("203.0.113.
+           7");
+      120 -    expect(calls[0]).toMatchObject({ p_email: "jan.novak@sezna
+          -m.cz", p_utm_source: "meta", p_ad_variant: "a", p_user_agent: 
+          -"Mozilla/5.0 Test" });                                        
+      120 +    expect(calls[0]).toMatchObject({ p_email: "jan.novak@examp
+          +le.com", p_utm_source: "meta", p_ad_variant: "a", p_user_agent
+          +: "Mozilla/5.0 Test" });                                      
+      121    });
+      122  
+      123    it("robot dostane stejnou odpověď jako člověk, nic se neulož
+           í", async () => {
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Bash(sed -i 's/expect(logged).not.toContain("seznam.cz");/expect(logged.toLowe
+      rCase()).not.toContain("jan.novak");/' lib/lead.test.ts && grep -n
+      "example\.cz" lib/an…)
+  ⎿  Updated lib/lead.test.ts (+1 -1)
+      132      const result = await handleSubmit(human, ctx(store));
+      133      expect(result).toEqual({ ok: true, stored: false, ref: nul
+           l });
+      134      const logged = JSON.stringify(vi.mocked(console.error).moc
+           k.calls);
+      135 -    expect(logged).not.toContain("seznam.cz");                
+      135 +    expect(logged.toLowerCase()).not.toContain("jan.novak");  
+      136    });
+      137  
+      138    it("chybějící konfigurace Supabase → stored:false", async ()
+            => {
+
+● Bash(sed -i 's/srovnani\.example\.cz/srovnani.example.com/'
+      lib/analytics.test.ts && grep -n "example" lib/analytics.test.ts | head -5
+      && npm test 2>&1 | tail -3)
+  ⎿  Updated lib/analytics.test.ts (+1 -1)
+      17      );
+      18    const cookies: string[] = [];
+      19    vi.stubGlobal("window", {
+      20 -    location: { search, hostname: "srovnani.example.cz" },     
+      20 +    location: { search, hostname: "srovnani.example.com" },    
+      21      localStorage: storage(ls),
+      22      sessionStorage: storage(new Map()),
+      23      dataLayer: [] as DataLayer,
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Unit testy prochází (70/70) i s novými adresami. Teď přidám pojistku:
+  testovací proměnné budou ve sdíleném souboru a před spuštěním se zkontrolují.
+
+● Bash(cat > e2e/test-env.mjs <<'EOF'
+      // Proměnné testovacího serveru, společné pro E2E (playwright.config.ts) a
+      měření výšky…)
+  ⎿  Created e2e/test-env.mjs (+36 -0)
+       1 +// Proměnné testovacího serveru, společné pro E2E (playwright.c
+         +onfig.ts) a měření výšky                                       
+       2 +// (scripts/page-height.mjs). Mají přednost před .env.local: Ne
+         +xt.js proměnné, které už v procesu                             
+       3 +// jsou, z .env souborů nepřepisuje. Testy tak nikdy nesáhnou n
+         +a ostré služby.                                                
+       4 +export const TEST_ENV = {                                      
+       5 +  // Supabase na nedostupné adrese: ověřujeme, že návštěvník sr
+         +ovnání dostane i bez databáze                                  
+       6 +  SUPABASE_URL: "http://127.0.0.1:9",                          
+       7 +  SUPABASE_SECRET_KEY: "e2e-not-a-key",                        
+       8 +  LEAD_TOKEN_SECRET: "e2e-secret",                             
+       9 +  // Resend nikdy ostře: neplatný klíč (k odeslání beztak nedoj
+         +de, databáze je nedostupná)                                    
+      10 +  RESEND_API_KEY: "re_e2e_invalid",                            
+      11 +  EMAIL_FROM: "E2E <e2e@example.invalid>",                     
+      12 +  SITE_URL: "http://localhost:3100",                           
+      13 +  // PostHog: falešný klíč a host, požadavky zachytává page.rou
+         +te v testech (ostrý projekt nikdy)                             
+      14 +  NEXT_PUBLIC_POSTHOG_KEY: "phc_e2e_test",                     
+      15 +  NEXT_PUBLIC_POSTHOG_HOST: "https://posthog.e2e.test",        
+      16 +};                                                             
+      17 +                                                               
+      18 +/**                                                            
+      19 + * Spadne, pokud by testovací server mířil na ostrou databázi n
+         +ebo měl skutečný klíč k e-mailům.                              
+      20 + * Volá se před startem serveru, takže se nespustí ani build, a
+         +ni první test.                                                 
+      21 + */                                                            
+      22 +export function assertSafeTestEnv(env) {                       
+      23 +  const problems = [];                                         
+      24 +  const supabaseHost = (() => {                                
+      25 +    try {                                                      
+      26 +      return new URL(env.SUPABASE_URL ?? "").hostname;         
+      27 +    } catch {                                                  
+      28 +      return "";                                               
+      29 +    }                                                          
+      30 +  })();                                                        
+      31 +  if (!["127.0.0.1", "localhost"].includes(supabaseHost)) probl
+         +ems.push(`SUPABASE_URL míří na ${supabaseHost || "?"}`);       
+      32 +  if (!env.RESEND_API_KEY?.startsWith("re_e2e_")) problems.push
+         +("RESEND_API_KEY není testovací (re_e2e_…)");                  
+      33 +  if (!/@[^>]+\.invalid>?$/.test(env.EMAIL_FROM ?? "")) problem
+         +s.push("EMAIL_FROM není na doméně .invalid");                  
+      34 +  if (!env.NEXT_PUBLIC_POSTHOG_HOST?.endsWith(".test")) problem
+         +s.push("NEXT_PUBLIC_POSTHOG_HOST není testovací");             
+      35 +  if (problems.length) throw new Error(`Testovací server by sah
+         +al na ostré služby: ${problems.join("; ")}`);                  
+      36 +}                                                              
+  ⎿  Updated playwright.config.ts (+8 -15)
+      1  import { defineConfig } from "@playwright/test";
+      2 +import { assertSafeTestEnv, TEST_ENV } from "./e2e/test-env.mjs"
+        +;                                                               
+      3 +                                                                
+      4 +// Pojistka před během: server dostane jen testovací proměnné, j
+        +inak testy vůbec nezačnou.                                      
+      5 +assertSafeTestEnv({ ...process.env, ...TEST_ENV });             
+      6  
+      7  // Mobile first: všechny testy na šířce 375 px (iPhone SE / mini
+         ) proti produkčnímu buildu.
+      8  export default defineConfig({
+     ...
+      21    webServer: {
+      22      command: "npm run build && npx next start -p 3100",
+      23      url: "http://localhost:3100",
+      20 -    reuseExistingServer: !process.env.CI,                      
+      24 +    // Nikdy cizí server: ten na portu 3100 mohl běžet s .env.l
+         +ocal (ostrá Supabase a Resend).                                
+      25 +    // Když je port obsazený, Playwright skončí chybou ještě př
+         +ed prvním testem.                                              
+      26 +    reuseExistingServer: false,                                
+      27      timeout: 180_000,
+      22 -    // Proměnné z procesu mají přednost před .env.local – testy
+         - nikdy nesáhnou na ostré služby.                               
+      23 -    // Supabase míří na nedostupnou adresu: ověřujeme, že návšt
+         -ěvník srovnání dostane i bez databáze.                         
+      24 -    env: {                                                     
+      25 -      SUPABASE_URL: "http://127.0.0.1:9",                      
+      26 -      SUPABASE_SECRET_KEY: "e2e-not-a-key",                    
+      27 -      LEAD_TOKEN_SECRET: "e2e-secret",                         
+      28 -      // Resend nikdy ostře: neplatný klíč (k odeslání beztak n
+         -edojde, databáze je nedostupná)                                
+      29 -      RESEND_API_KEY: "re_e2e_invalid",                        
+      30 -      EMAIL_FROM: "E2E <e2e@example.invalid>",                 
+      31 -      SITE_URL: "http://localhost:3100",                       
+      32 -      // PostHog: falešný klíč a host, požadavky zachytává page
+         -.route v testech (ostrý projekt nikdy)                         
+      33 -      NEXT_PUBLIC_POSTHOG_KEY: "phc_e2e_test",                 
+      34 -      NEXT_PUBLIC_POSTHOG_HOST: "https://posthog.e2e.test",    
+      35 -    },                                                         
+      28 +    env: TEST_ENV,                                             
+      29    },
+      30  });
+  ⎿  (timeout 3m)
+
+● Typy i lint prochází. Ověřím obě pojistky: kontrolu proměnných se špatnými
+  hodnotami a obsazený port 3100.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Bash(node -e '
+      const fs=require("fs");const f="scripts/page-height.mjs";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated scripts/page-height.mjs (+36 -3)
+       1 -// Výška stránky a sekcí na 375 × 812 (README, Výška stránky). 
+         -Měří běžící server, cookie lištu odmítne.                      
+       2 -// Spuštění: npm run build && npx next start -p 3100, pak node 
+         -scripts/page-height.mjs [base_url]                             
+       1 +// Výška stránky a sekcí na 375 × 812 (README, Výška stránky). 
+         +Cookie lištu odmítne.                                          
+       2 +// Spuštění: node scripts/page-height.mjs                      
+       3 +// Server si sestaví a spustí sám se stejnými testovacími promě
+         +nnými jako E2E (e2e/test-env.mjs),                             
+       4 +// nikdy s .env.local. Na cizí běžící server se nepřipojí.     
+       5 +import { spawn } from "node:child_process";                    
+       6 +import { createConnection } from "node:net";                   
+       7  import { chromium } from "@playwright/test";
+       8 +import { assertSafeTestEnv, TEST_ENV } from "../e2e/test-env.mj
+         +s";                                                            
+       9  
+       5 -const BASE = process.argv[2] ?? "http://localhost:3100";       
+      10 +const PORT = 3101;                                             
+      11 +const BASE = `http://localhost:${PORT}`;                       
+      12 +                                                               
+      13 +const portBusy = () =>                                         
+      14 +  new Promise((resolve) => {                                   
+      15 +    const socket = createConnection(PORT, "127.0.0.1");        
+      16 +    socket.once("connect", () => resolve(socket.end() && true))
+         +;                                                              
+      17 +    socket.once("error", () => resolve(false));                
+      18 +  });                                                          
+      19 +                                                               
+      20 +if (await portBusy()) throw new Error(`Port ${PORT} je obsazený
+         +, cizí server neměříme.`);                                     
+      21 +const env = { ...process.env, ...TEST_ENV };                   
+      22 +assertSafeTestEnv(env);                                        
+      23 +                                                               
+      24 +const server = spawn("sh", ["-c", `npm run build && npx next st
+         +art -p ${PORT}`], { env, detached: true, stdio: "ignore" });   
+      25 +const stopServer = () => {                                     
+      26 +  try {                                                        
+      27 +    process.kill(-server.pid); // celá skupina procesů, i next-
+         +server                                                         
+      28 +  } catch {                                                    
+      29 +    // už neběží                                               
+      30 +  }                                                            
+      31 +};                                                             
+      32 +process.on("exit", stopServer);                                
+      33 +for (let i = 0; ; i++) {                                       
+      34 +  if (i > 300) throw new Error("Server se nespustil do 5 minut.
+         +");                                                            
+      35 +  if (await portBusy()) break;                                 
+      36 +  await new Promise((r) => setTimeout(r, 1000));               
+      37 +}                                                              
+     … 10 more lines (ctrl+o to expand)
+  ⎿  (timeout 6m 40s)
+
+● Bash(sed -i 's|^  await new Promise((r) => setTimeout(r, 1000));\n}|&|'
+      scripts/page-height.mjs && node -e 'const fs=require("fs");const
+      f="scripts/page-height.mjs";…)
+  ⎿  Updated scripts/page-height.mjs (+1 -0)
+      35    if (await portBusy()) break;
+      36    await new Promise((r) => setTimeout(r, 1000));
+      37  }
+      38 +                                                               
+      39  const SECTIONS = ["kalkulacka", "srovnani", "formular"];
+      40  
+      41  async function measure(page) {
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Build ve worktree selhal, podívám se proč.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Turbopack nepřijme symlink na node_modules mimo projekt. Ve worktree proto
+  nainstaluji závislosti zvlášť.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Rozdíl je překvapivě velký: nekomprimované HTML vzrostlo z 64,6 na 156,2 kB,
+  zatímco komprimované jen z 11,2 na 14,6 kB. Než to zapíšu, zkontroluji, proč
+  tolik.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● pkill -f "next-server" zabil i můj vlastní shell, protože ten text byl v
+  příkazové řádce. Zkontroluji porty a podívám se na data podrobněji.
+
+  Ran 4 shell commands (ctrl+o to expand)
+● Server komprimuje HTML po částech, jak ho streamuje, takže čísla gzip mezi
+  stránkami A a B nesedí. Pro férové srovnání zkomprimuji staženou stránku
+  lokálně.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Servery z měření pořád běží (kill mířil na špatné PID). Ukončím je podle PID z
+  ss.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Výsledky jsou platné: plné srovnání navíc přidá asi 46 kB nekomprimovaného
+  HTML a po gzip 1,4 kB (hero A) až 3,4 kB (hero B). Uklidím worktree a zapíšu
+  výsledky do README.
+
+  Read 1 file, ran 1 shell command (ctrl+o to expand)
+
+● Update(README.md)
+  ⎿  Added 1 line, removed 1 line
+      47  
+      48  ### Výška stránky na 375 px
+      49  
+      50 -Změřeno 2026-10-10 skriptem [`scripts/page-height.mjs`](scripts
+         -/page-height.mjs) (375 × 812, produkční build, cookie lišta odm
+         -ítnutá). Zopakovat: `npm run build && npx next start -p 3100`, 
+         -pak `node scripts/page-height.mjs`.                            
+      50 +Změřeno 2026-10-10 skriptem [`scripts/page-height.mjs`](scripts
+         +/page-height.mjs) (375 × 812, produkční build, cookie lišta odm
+         +ítnutá). Zopakovat: `node scripts/page-height.mjs`. Skript si s
+         +ám sestaví a spustí server na portu 3101 se stejnými testovacím
+         +i proměnnými jako E2E ([`e2e/test-env.mjs`](e2e/test-env.mjs)),
+         + nikdy s `.env.local`.                                         
+      51  
+      52  | Stav | Stránka před | Stránka po | `#srovnani` před | `#srovn
+          ani` po |
+      53  | --- | --- | --- | --- | --- |
+
+● Update(README.md)
+  ⎿  Added 17 lines
+      57  
+      58  Kalkulačka je po načtení nižší (1 562 → 1 167 px), protože rozp
+          is účtenky je na mobilu sbalený. Po výsledku je vyšší (1 696 → 
+          1 712 px), protože obsahuje formulář. Spodní sekce formuláře se
+           po výsledku zmenší na tlačítko (684 → 388 px). Před: commit `3
+          75dfdf`, po: krok 8a.
+      59  
+      60 +### Velikost HTML: plné srovnání je ve stránce dvakrát         
+      61 +                                                               
+      62 +Plné srovnání (5 dvojic, obsah za e-mail) dostávají jako hotový
+         + obsah ze serveru obě místa formuláře: pod kalkulačkou i dole (
+         +rozhodnutí 47). Vidět je nejvýš jednou, ale data pro React (RSC
+         + payload) jdou v HTML dvakrát.                                 
+      63 +                                                               
+      64 +Změřeno 2026-10-10 na produkčním buildu s testovacími proměnným
+         +i. Porovnání: stejný kód, jen kalkulačka dostala `fullCompariso
+         +n={null}`. gzip = stažené HTML zkomprimované lokálně (`gzip -c`
+         +).                                                             
+      65 +                                                               
+      66 +| Stránka | Jedno vykreslení | Dvě vykreslení (dnes) | Rozdíl |
+      67 +| --- | --- | --- | --- |                                      
+      68 +| `/` (hero A), nekomprimované | 110,3 kB | 156,2 kB | +45,9 kB
+         + (+42 %) |                                                     
+      69 +| `/` (hero A), gzip | 13,2 kB | 14,6 kB | +1,4 kB (+11 %) |   
+      70 +| hero B, nekomprimované | 112,2 kB | 158,0 kB | +45,8 kB (+41 
+         +%) |                                                           
+      71 +| hero B, gzip | 13,3 kB | 16,7 kB | +3,4 kB (+25 %) |         
+      72 +                                                               
+      73 +- **Přenos:** po síti jde HTML komprimované, takže navíc je 1,4
+         +–3,4 kB. Na 4G jsou to jednotky milisekund. Rozdíl mezi A a B j
+         +e nejspíš v tom, jak daleko od sebe obě kopie v HTML leží a jes
+         +tli je gzip najde v okně 32 kB. Neověřovali jsme to.           
+      74 +- **Vliv na LCP:** prohlížeč musí rozbalit a zpracovat o 46 kB 
+         +víc dat pro React. Na LCP jsme to neměřili, Lighthouse je v plá
+         +nu na 15. 10.                                                  
+      75 +- **Jak to odstranit, pokud to vadí:** předat plné srovnání jen
+         + jednou, např. jeden serverový slot v `Landing`, který se po od
+         +eslání zobrazí v místě odeslání. Druhá možnost je načíst ho až 
+         +po odeslání ze Server Action. Zatím ne: rozdíl po kompresi je m
+         +alý a druhé řešení by porušilo slib „zobrazí se hned“ při výpad
+         +ku sítě.                                                       
+      76 +                                                               
+      77  ## Očekávaná konverze
+      78  
+      79  **Odhad: 4 % zobrazení stránky skončí leadem a 2 % potvrzeným l
+          eadem.** Rozpětí: 2–6 % leadů. Kromě benchmarku níže jsou všech
+          na čísla **vlastní předpoklad**. Ověřená data pro tento typ str
+          ánky a publika v ČR nemáme. Odhad nahradí čísla z prvního týdne
+           kampaně.
+
+  Searched for 1 pattern, read 1 file (ctrl+o to expand)
+
+● Update(docs/ai-chyby.md)
+  ⎿  Added 2 lines, removed 1 line
+      23  | 2026-10-09 | Při porovnání chování lomítka na konci URL jsem 
+          bez souhlasu schovala necommitnuté změny do `git stash`, abych 
+          sestavila předchozí verzi. Ve stejném příkazu `pkill` ukončil c
+          elý shell, `git stash pop` se nespustil a změny (proxy `/ingest
+          `) zůstaly jen ve stashi | AI si všimla výstupu (exit 144) a hn
+          ed zkontrolovala `git stash list` a `git status` | Změny vrácen
+          y `git stash pop`, ověřeno, že se nic neztratilo (potvrdil i čl
+          ověk). Nové pravidlo v CLAUDE.md: bez výslovného souhlasu žádné
+           příkazy, které mění nebo schovávají necommitnuté změny. Na por
+          ovnání verzí slouží samostatný `git worktree` |
+      24  | 2026-10-10 | Do hero B jsem přidala větu o KID a commitla ji 
+          po spuštění jen E2E testů s „hero“ v názvu. Test „lišta nezakry
+          je CTA v hero ani na 375 × 667“ je v `consent.spec.ts` a nespus
+          til se: CTA hero B se posunulo o 4,5 px pod cookie lištu | Celá
+           sada E2E před dalším commitem | Menší mezery v hero B (−8 px),
+           celá sada prošla. Rezerva je jen ~3,5 px, poznámka pro designe
+          ra v backlogu. Pravidlo: před commitem změny stránky vždy celé 
+          `npm run e2e`, ne výběr podle názvu |
+      25  | 2026-10-10 | Ticker VOO jsem ve vizuálu reklamy B vysadila mo
+          nospace písmem IBM Plex Mono (třída `.num`, stejně jako na strá
+          nce). V něm je písmeno O úzké a v PNG se četlo jako „V00“ s nul
+          ami. V souboru byla správně písmena O (ověřeno bajty), chyba by
+          la jen ve čtení. Při kontrole PNG jsem si toho nevšimla | Lidsk
+          á kontrola vizuálu | Ticker ve vizuálu bezpatkovým IBM Plex San
+          s. `lib/ads.test.ts` porovnává ticker a burzu s `data/etfs.json
+          `, zakazuje „V00“ v textech i šabloně a hlídá, že ticker není v
+           `.num`. Stejné riziko na stránce zapsáno do backlogu |
+      26 -| 2026-10-10 | Před E2E testy jsem ukončila server pro měření v
+         -ýšky přes `pkill -f "next start -p 3100"`. Proces `next-server`
+         - (dítě) to nezachytilo a dál běžel s `.env.local`. Playwright h
+         -o díky `reuseExistingServer` použil místo testovacího serveru s
+         - nedostupnou databází. Testovací odeslání formuláře (po časové 
+         -pasti nejspíš `jana@example.cz`, `tester@example.cz`) tak mohla
+         - jít do ostré Supabase a Resend mohl zkusit poslat potvrzení na
+         - doménu example.cz | Dva testy „nedostupná databáze“ neprošly, 
+         -`ss -ltnp` ukázal běžící `next-server` | Server ukončen podle P
+         -ID, celá sada znovu proti testovací konfiguraci (24/24). Kontro
+         -la a smazání testovacích řádků v tabulce `leads` čeká na člověk
+         -a. Pravidlo: před `npx playwright test` ověřit, že port 3100 je
+         - volný (`ss -ltn`), měřicí server spouštět s proměnnými z `play
+         -wright.config.ts` |                                            
+      26 +| 2026-10-10 | **Testy zapisovaly do ostré databáze a posílaly 
+         +skutečné e-maily.** Pro měření výšky jsem spustila produkční se
+         +rver s `.env.local` (ostrá Supabase a Resend). Před E2E testy j
+         +sem ho ukončila přes `pkill -f "next start -p 3100"`, proces `n
+         +ext-server` (dítě) to ale nezachytilo a běžel dál. Playwright h
+         +o díky `reuseExistingServer: true` použil místo vlastního testo
+         +vacího serveru s nedostupnou databází. **Dopad:** v ostré tabul
+         +ce `leads` vznikly 3 testovací řádky (`jana@`, `tester@`, `petr
+         +@example.cz`). Resend na všechny tři adresy skutečně odeslal po
+         +tvrzovací e-mail, stav „Delivery Delayed“, nejspíš skončí jako 
+         +bounce. `example.cz` není rezervovaná doména (RFC 2606 rezervuj
+         +e jen `example.com/.net/.org` a TLD `.test`, `.invalid`…), takž
+         +e e-maily mohly dojít na skutečný server. Bounce zhoršuje reput
+         +aci odesílatele, a to na nové doméně `mail.hosek.cc`, která žád
+         +nou historii nemá | Dva testy „nedostupná databáze“ neprošly, `
+         +ss -ltnp` ukázal běžící `next-server`. Řádky v `leads` a stav v
+         + Resendu ověřil člověk | Server ukončen podle PID, celá sada zn
+         +ovu proti testovací konfiguraci. Testovací řádky ručně smazal č
+         +lověk. **Pojistky:** (1) všechny e-maily v testech na rezervova
+         +ných doménách (`example.com`, `example`, odesílatel `example.in
+         +valid`), (2) `reuseExistingServer: false`: obsazený port 3100 z
+         +astaví Playwright před prvním testem (ověřeno), (3) testovací p
+         +roměnné jsou v jednom souboru `e2e/test-env.mjs` a `assertSafeT
+         +estEnv` shodí běh před startem serveru, pokud `SUPABASE_URL` ne
+         +míří na localhost nebo `RESEND_API_KEY` není `re_e2e_…`, (4) `s
+         +cripts/page-height.mjs` si spouští vlastní server na portu 3101
+         + s týmiž proměnnými, nikdy s `.env.local`. Bounce v Resendu sle
+         +dovat, adresy případně odstranit ze seznamu potlačených |      
+      27 +| 2026-10-10 | Při měření velikosti HTML (jedno vs. dvojí vykre
+         +slení plného srovnání) nahradil `sed` ve zkušební kopii `fullCo
+         +mparison` u kalkulačky i u spodního formuláře. Varianta „jedno 
+         +vykreslení“ tak neměla plné srovnání vůbec a rozdíl vycházel dv
+         +ojnásobný (+91,6 kB) | Kontrola, odkud rozdíl pochází: v HTML v
+         +arianty „jedno vykreslení“ chyběly kotvy `src-…-full` i řádky I
+         +SIN | Opravená varianta, změřeno znovu (+45,9 kB, gzip +1,4 kB)
+         +, do README až ověřená čísla |                                 
+      28  | 2026-10-10 | Sticky lišta „Spočítat své poplatky“ (krok 3) zm
+          izela natrvalo, jakmile byla kalkulačka jednou vidět. Kalkulačk
+          a ale začíná už v první obrazovce (521 px od vrchu na 375 × 667
+           i 812), takže se lišta nikdy neukázala. Test hlídal jen to, že
+           se neukáže s cookie lištou, ne že se vůbec ukáže | Nový E2E te
+          st kontextové lišty (krok 8a) | Lišta se ukáže, když není vidět
+           hero ani kalkulačka (typicky hero B → srovnání). E2E test hlíd
+          á oba stavy lišty |
+
+  Read 1 file (ctrl+o to expand)
+
+● Zapisuji poslední drobnost do README (popis npm run e2e) a pak pouštím celou
+  sadu testů.
+
+● Update(README.md)
+  ⎿  Added 2 lines, removed 1 line
+      460  npm run render-ads   # vizuály reklam ads/*/ad.html → PNG (pot
+           řebuje síť kvůli fontům)
+      461  node scripts/sample-size.mjs   # vzorek pro A/B test (README, 
+           Hypotézy)
+      462  npx playwright install --with-deps chromium   # jednou
+      463 -npm run e2e          # Playwright, mobil 375 px (ostré služby 
+          -nevolá, viz playwright.config.ts)                             
+      463 +npm run e2e          # Playwright, mobil 375 px (ostré služby 
+          +nevolá, viz e2e/test-env.mjs; port 3100 musí být volný)       
+      464 +node scripts/page-height.mjs   # výška stránky na 375 px (vlas
+          +tní testovací server na portu 3101)                           
+      465  ```
+      466  
+      467  ### Nastavení služeb
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Typy, lint, 70 unit testů a 33 E2E testů prochází. Výpisy „uložení selhalo:
+  fetch failed“ potvrzují, že testy běží proti nedostupné testovací databázi.
+  Commituji po částech.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Pojistky jsou hotové ve 4 commitech na master, nic jsem nepushnul. 70 unit
+  testů i 33 E2E testů prochází a testy dál běží proti nedostupné testovací
+  databázi.
+
+  Zápis incidentu v docs/ai-chyby.md: upravil jsem původní řádek o tři řádky v
+  leads, tři e-maily skutečně odeslané přes Resend a dopad. Zapsal jsem, že
+  example.cz není rezervovaná doména a bounce zhoršuje reputaci nové domény
+  mail.hosek.cc. Přibyl i seznam pojistek a doporučení sledovat bounce v
+  Resendu.
+
+  Pojistky:
+  - Testovací e-maily: všechny jsou teď na example.com, neplatná adresa je
+    jan@example, odesílatel example.invalid. Kromě example.cz testy používaly i
+    seznam.cz (skutečná doména) a x.cz. Jedna kontrola v unit testu hledala v
+    logu text „seznam.cz“ a po změně domény by procházela vždy, takže teď hledá
+    jméno z adresy.
+  - playwright.config.ts: reuseExistingServer: false. Ověřil jsem, že obsazený
+    port 3100 zastaví Playwright chybou ještě před buildem a prvním testem.
+  - Kontrola proměnných: testovací proměnné jsou v jednom souboru
+    e2e/test-env.mjs. Kontrola assertSafeTestEnv běží při načtení konfigurace a
+    shodí běh, pokud SUPABASE_URL nemíří na localhost nebo RESEND_API_KEY
+    nezačíná re_e2e_. Na obou případech jsem ověřil, že spadne. Kontroluje
+    proměnné, které server dostane. Že server po startu opravdu běží s nimi,
+    zajišťuje kombinace s reuseExistingServer: false: Playwright vždy spustí
+    vlastní server s těmito proměnnými a Next.js je nepřepíše hodnotami z
+    .env.local.
+  - scripts/page-height.mjs: sám sestaví a spustí server na portu 3101 se
+    stejnými proměnnými, po měření ho ukončí a k cizímu běžícímu serveru se
+    nepřipojí. Naměřil stejné výšky jako předtím.
+
+  Velikost HTML (zapsáno v README):
+
+  ┌──────────────────────┬─────────────────┬─────────────────────┬─────────┐
+  │       Stránka        │     Jedno       │   Dvě vykreslení    │ Rozdíl  │
+  │                      │   vykreslení    │       (dnes)        │         │
+  ├──────────────────────┼─────────────────┼─────────────────────┼─────────┤
+  │ hero A,              │ 110,3 kB        │ 156,2 kB            │ +45,9   │
+  │ nekomprimované       │                 │                     │ kB      │
+  ├──────────────────────┼─────────────────┼─────────────────────┼─────────┤
+  │ hero A, gzip         │ 13,2 kB         │ 14,6 kB             │ +1,4 kB │
+  ├──────────────────────┼─────────────────┼─────────────────────┼─────────┤
+  │ hero B,              │ 112,2 kB        │ 158,0 kB            │ +45,8   │
+  │ nekomprimované       │                 │                     │ kB      │
+  ├──────────────────────┼─────────────────┼─────────────────────┼─────────┤
+  │ hero B, gzip         │ 13,3 kB         │ 16,7 kB             │ +3,4 kB │
+  └──────────────────────┴─────────────────┴─────────────────────┴─────────┘
+
+  Po síti jde HTML komprimované, takže navíc je 1,4–3,4 kB. Vliv na LCP jsem
+  neměřil, to doplní Lighthouse 15. 10. Možnou opravu jsem do README jen popsal,
+  neimplementoval.
+
+  Při měření jsem udělal další chybu: ve zkušební kopii jsem plné srovnání
+  omylem odebral i spodnímu formuláři, takže rozdíl nejdřív vycházel
+  dvojnásobný. Přišel jsem na to před zápisem, do README šla jen ověřená čísla a
+  chybu jsem taky zapsal do ai-chyby.
+
+  Nezapomeňte na /export do ai-log/.
