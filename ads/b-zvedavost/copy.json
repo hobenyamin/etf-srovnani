@@ -1,0 +1,13 @@
+{
+  "variant": "b",
+  "name": "B – zvědavost",
+  "primary_text": [
+    "Proč si v Česku nekoupíte VOO? A jaké alternativy jsou v ČR dostupné. Vzdělávací srovnání, ne doporučení.",
+    "Fondům z USA chybí KID, který nařízení PRIIPs vyžaduje pro prodej drobným investorům v EU. Ukážeme fondy UCITS, které sledují stejný index jako VOO – s poplatky, zdrojem a datem dat.",
+    "Hodnota investice může klesat. Fondy investují v USD, kurz USD/CZK může výsledek snížit i zvýšit."
+  ],
+  "headline": "Proč si v Česku nekoupíte VOO?",
+  "description": "Srovnání ETF z NYSE a UCITS",
+  "cta": "Zjistit víc",
+  "url": "https://etf-srovnani.vercel.app/?utm_source=meta&utm_medium=paid_social&utm_campaign=etf-srovnani-cz-2026-10&utm_content=b-zvedavost"
+}

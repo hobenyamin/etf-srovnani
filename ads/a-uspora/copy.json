@@ -1,0 +1,13 @@
+{
+  "variant": "a",
+  "name": "A – úspora",
+  "primary_text": [
+    "Při 2 000 Kč měsíčně je rozdíl v poplatcích fondů za 20 let přes 40 000 Kč – i bez výnosu. Modelový výpočet, ne doporučení.",
+    "Spočítejte si to pro svou částku – výsledek v Kč, bez registrace.",
+    "Průměrné průběžné náklady ETF (0,2 %) vs. aktivních akciových fondů v EU (1,2 %) podle ESMA (2026, data 2024), 2 000 Kč měsíčně po dobu 20 let, výnos 0 %: rozdíl 44 200 Kč. Hodnota investice může klesat."
+  ],
+  "headline": "2 000 Kč/měs., 20 let: rozdíl 44 200 Kč",
+  "description": "Kalkulačka poplatků v Kč",
+  "cta": "Zjistit víc",
+  "url": "https://etf-srovnani.vercel.app/?utm_source=meta&utm_medium=paid_social&utm_campaign=etf-srovnani-cz-2026-10&utm_content=a-uspora"
+}
