@@ -385,3 +385,47 @@ test("kontextová lišta: před výpočtem kalkulačka, po výsledku formulář,
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
   await expect(sticky).toHaveCount(0);
 });
+
+/** Hodnoty, které číslo v účtence projde po klepnutí na předvolbu 5 000 Kč (mezistavy animace). */
+async function gapValuesAfterPreset(page: Page) {
+  const gap = page.getByTestId("calc-gap");
+  await gap.evaluate((el) => {
+    const values = new Set<string>();
+    new MutationObserver(() => values.add(el.textContent ?? "")).observe(el, {
+      characterData: true,
+      childList: true,
+      subtree: true,
+    });
+    (window as unknown as { gapValues: Set<string> }).gapValues = values;
+  });
+  await page.getByRole("button", { name: "5 000" }).click();
+  await page.waitForTimeout(600);
+  return page.evaluate(() => [...(window as unknown as { gapValues: Set<string> }).gapValues]);
+}
+
+test("číslo v účtence se mění plynule a skončí na přesné hodnotě", async ({ page }) => {
+  await page.goto("/");
+  await declineCookies(page);
+  const values = await gapValuesAfterPreset(page);
+  expect(values.length).toBeGreaterThan(2);
+  await expect(page.getByTestId("calc-gap")).toHaveText(values.at(-1)!);
+  // čtečka dostane jen výslednou hodnotu
+  await expect(page.locator("#kalkulacka .sr-only", { hasText: values.at(-1)! })).toHaveCount(1);
+});
+
+test("omezení pohybu: tlačítka bez přechodu, číslo skočí rovnou, děkovací blok bez animace", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await declineCookies(page);
+  const cta = page.getByRole("link", { name: "Spočítat pro mě" });
+  expect(await cta.evaluate((el) => getComputedStyle(el).transitionDuration)).toBe("0s");
+
+  expect(await gapValuesAfterPreset(page)).toHaveLength(1);
+
+  await expect.poll(() => events(page)).toContain("calc_result");
+  const inline = page.getByTestId("lead-inline");
+  await inline.getByRole("textbox", { name: "E-mail" }).fill("klid@example.com");
+  await inline.getByRole("button", { name: "Poslat mi srovnání" }).click();
+  const banner = page.getByTestId("thank-you").locator(".done-banner");
+  expect(await banner.evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
+});

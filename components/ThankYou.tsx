@@ -41,7 +41,12 @@ export function ThankYou({
       <DoneBanner title="Hotovo." headingId={headingId} headingRef={heading}>
         <p className="font-semibold text-paper">Plné srovnání máte hned pod tímto rámečkem.</p>
         <p className="mt-1" role="status" data-testid="delivery">
-          {delivery === "failed"
+          {delivery === "pending" ? (
+            <>
+              <span aria-hidden className="pulse-dot mr-2" />
+              Ukládáme adresu…
+            </>
+          ) : delivery === "failed"
             ? "E-mail se nám teď nepodařilo zpracovat, kopie proto nepřijde. Srovnání máte celé tady na stránce."
             : delivery === "confirmed"
               ? "Tuto adresu už máte potvrzenou, odkaz na srovnání najdete v dřívějším e-mailu."
@@ -70,7 +75,7 @@ export function ThankYou({
                   track("qualify_answer", { has_broker: a.value });
                   setAnswer(a.value);
                 }}
-                className="h-11 rounded-sm border border-ink text-[15px]"
+                className="press h-11 rounded-sm border border-ink text-[15px]"
               >
                 {a.label}
               </button>

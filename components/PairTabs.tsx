@@ -55,7 +55,7 @@ export function PairTabs({
             aria-controls={`${base}-panel-${tab.id}`}
             tabIndex={i === selected ? 0 : -1}
             onClick={() => select(i)}
-            className="num h-11 rounded-sm border border-ink text-[15px] outline-offset-2 focus-visible:outline-2 aria-selected:border-action aria-selected:bg-action aria-selected:font-semibold aria-selected:text-paper"
+            className="press num h-11 rounded-sm border border-ink text-[15px] outline-offset-2 focus-visible:outline-2 aria-selected:border-action aria-selected:bg-action aria-selected:font-semibold aria-selected:text-paper"
           >
             {tab.label}
           </button>

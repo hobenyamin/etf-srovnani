@@ -7,7 +7,7 @@ import { saveConsent } from "@/lib/consent";
 import { useBannerVisible, useConsent } from "@/lib/use-consent";
 
 const choice =
-  "flex h-12 items-center justify-center rounded-sm border-2 border-ink bg-card px-3 text-[15px] font-semibold text-ink outline-offset-2 focus-visible:outline-2 focus-visible:outline-ink";
+  "press flex h-12 items-center justify-center rounded-sm border-2 border-ink bg-card px-3 text-[15px] font-semibold text-ink outline-offset-2 focus-visible:outline-2 focus-visible:outline-ink";
 
 /**
  * Lišta souhlasu s měřením. Odmítnout je stejně snadné jako povolit: stejná velikost, stejný vzhled,

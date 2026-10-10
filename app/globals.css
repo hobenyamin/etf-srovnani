@@ -97,3 +97,57 @@ body {
     color: var(--color-muted);
   }
 }
+
+/* Mikrointerakce. Jen když návštěvník nemá zapnuté omezení pohybu; jinak zůstane jen změna barvy.
+   Animuje se jen transform a opacity (žádný posun layoutu, CLS beze změny) a nic v hero (LCP). */
+@media (prefers-reduced-motion: no-preference) {
+  .btn-primary,
+  .press {
+    transition:
+      background-color 120ms ease-out,
+      transform 120ms ease-out;
+  }
+  .btn-primary:active,
+  .press:active {
+    transform: translateY(1px) scale(0.985);
+  }
+
+  .done-banner {
+    animation: done-in 280ms ease-out both;
+  }
+  .done-icon {
+    animation: done-icon 420ms 120ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .pulse-dot {
+    animation: pulse-dot 900ms ease-in-out infinite alternate;
+  }
+}
+
+@keyframes done-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@keyframes done-icon {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+@keyframes pulse-dot {
+  to {
+    opacity: 0.25;
+  }
+}
+
+/* Stav načítání: bod vedle textu („Ukládáme adresu…“). Bez animace zůstane plný bod a text. */
+.pulse-dot {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 9999px;
+  background: currentColor;
+  vertical-align: 0.1em;
+}

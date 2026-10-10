@@ -89,7 +89,7 @@ export function Calculator({ rows, fullComparison }: { rows: FeeRow[]; fullCompa
                   touch();
                   setMonthlyText(formatInteger(amount));
                 }}
-                className="num h-10 flex-1 rounded-sm border border-ink text-[14px] aria-pressed:border-action aria-pressed:bg-action aria-pressed:font-semibold aria-pressed:text-paper"
+                className="press num h-10 flex-1 rounded-sm border border-ink text-[14px] aria-pressed:border-action aria-pressed:bg-action aria-pressed:font-semibold aria-pressed:text-paper"
               >
                 {formatInteger(amount)}
               </button>
@@ -143,7 +143,7 @@ export function Calculator({ rows, fullComparison }: { rows: FeeRow[]; fullCompa
             {RETURN_OPTIONS.map((rate) => (
               <label
                 key={rate}
-                className="num flex h-11 cursor-pointer items-center justify-center rounded-sm border border-ink text-[15px] has-checked:border-action has-checked:bg-action has-checked:font-semibold has-checked:text-paper has-focus-visible:outline-2 has-focus-visible:outline-offset-2"
+                className="press num flex h-11 cursor-pointer items-center justify-center rounded-sm border border-ink text-[15px] has-checked:border-action has-checked:bg-action has-checked:font-semibold has-checked:text-paper has-focus-visible:outline-2 has-focus-visible:outline-offset-2"
               >
                 <input
                   type="radio"

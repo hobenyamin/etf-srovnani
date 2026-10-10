@@ -55,7 +55,14 @@ export function ConfirmEmail({ fullComparison }: { fullComparison: ReactNode }) 
         <h1 className="mt-4 font-display text-[34px] leading-[38px] font-semibold">Potvrďte svůj e-mail</h1>
         <p className="mt-3 text-[15px] leading-6">Jedním klepnutím potvrdíte adresu a otevře se plné srovnání.</p>
         <button type="button" onClick={confirm} disabled={state === "working"} className={button}>
-          {state === "working" ? "Potvrzuji…" : "Potvrdit e-mail"}
+          {state === "working" ? (
+            <>
+              <span aria-hidden className="pulse-dot mr-2" />
+              Potvrzuji…
+            </>
+          ) : (
+            "Potvrdit e-mail"
+          )}
         </button>
       </>
     );

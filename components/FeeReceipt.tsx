@@ -4,6 +4,7 @@ import { type ReactNode, useId, useState } from "react";
 import { More } from "@/components/More";
 import type { FeeResult } from "@/lib/fees";
 import { formatDate, formatKc, formatPercent } from "@/lib/format";
+import { useTween } from "@/lib/use-tween";
 
 /**
  * Výsledek kalkulačky jako účtenka: nahoře rozdíl ESMA, pod účtenkou místo pro formulář (children),
@@ -22,6 +23,7 @@ export function FeeReceipt({
   children?: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const gap = useTween(result.esmaGap);
   const breakdownId = useId();
   const maxCost = Math.max(...result.rows.map((r) => r.cost), 1);
   const etf = result.rows.find((r) => r.id === "esma_passive_equity_etf")!;
@@ -37,9 +39,11 @@ export function FeeReceipt({
           <p className="font-semibold">
             Rozdíl {formatPercent(etf.ter)} vs. {formatPercent(active.ter)} za {years}&nbsp;let
           </p>
-          <p className="num text-[40px] leading-[44px] font-bold tracking-tight text-loss" data-testid="calc-gap">
-            {formatKc(result.esmaGap)}
+          {/* Animované číslo čtečka nečte (hlásila by každý snímek), dostane jen výslednou hodnotu */}
+          <p aria-hidden className="num text-[40px] leading-[44px] font-bold tracking-tight text-loss" data-testid="calc-gap">
+            {formatKc(gap)}
           </p>
+          <p className="sr-only">{formatKc(result.esmaGap)}</p>
           <p className="fine mt-1">
             O tolik víc stojí průměrný aktivní akciový fond v&nbsp;EU než průměrný ETF (ESMA).
           </p>
