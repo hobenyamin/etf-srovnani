@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
-/* Směr „Výpis z účtu 2.0“: papír, inkoust a tři barvy, každá s jediným významem.
+/* Směr „Výpis z účtu 2.0“: papír, inkoust a jediný výrazný akcent.
    - action (kobalt) jen pro primární tlačítka, aktivní stav přepínačů a odkazy-výzvy
-   - loss jen pro „ztrátu“ (náklady), keep jen pro „levnější variantu“
-   Kontrast (WCAG): ink na papíře 15,5:1, muted 6,0:1 (na kartě 6,5:1), loss 5,3:1, keep 5,5:1.
+   - error jen pro chybový stav (validace formuláře, varování na /zasady), ne pro „ztrátu“.
+     Částky nese ink, důraz velikost a tloušťka. Pruhy v účtence rozliší tvar (plný / obrys), ne barva.
+   Kontrast (WCAG): ink na papíře 15,5:1, muted 6,0:1 (na kartě 6,5:1), error 5,3:1.
    Papír na action 5,8:1 (text tlačítka), action na papíře 5,8:1 (odkaz i hrana tlačítka, nutné 3:1),
    action na kartě 6,4:1, action-press 7,6:1. ink-muted na ink 10,0:1 (děkovací blok).
    rule (#C9C2B3) má 1,5:1 – jen linky a oddělovače, nikdy text na papíře. */
@@ -14,8 +15,7 @@
   --color-ink-muted: #c9c2b3;
   --color-muted: #5e5a52;
   --color-rule: #c9c2b3;
-  --color-loss: #b03a0a;
-  --color-keep: #2f6b4f;
+  --color-error: #b03a0a;
   --color-action: #1d4ed8;
   --color-action-press: #1e40af;
 

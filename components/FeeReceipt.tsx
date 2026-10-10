@@ -40,7 +40,7 @@ export function FeeReceipt({
             Rozdíl {formatPercent(etf.ter)} vs. {formatPercent(active.ter)} za {years}&nbsp;let
           </p>
           {/* Animované číslo čtečka nečte (hlásila by každý snímek), dostane jen výslednou hodnotu */}
-          <p aria-hidden className="num text-[40px] leading-[44px] font-bold tracking-tight text-loss" data-testid="calc-gap">
+          <p aria-hidden className="num text-[40px] leading-[44px] font-bold tracking-tight" data-testid="calc-gap">
             {formatKc(gap)}
           </p>
           <p className="sr-only">{formatKc(result.esmaGap)}</p>
@@ -76,11 +76,12 @@ export function FeeReceipt({
                     <span className={row.kind === "fund" ? "num font-semibold" : ""}>{row.label}</span>{" "}
                     <span className="num whitespace-nowrap text-muted">{formatPercent(row.ter)}</span>
                   </span>
-                  <span className="num font-semibold whitespace-nowrap text-loss">−{formatKc(row.cost)}</span>
+                  <span className="num font-semibold whitespace-nowrap">−{formatKc(row.cost)}</span>
                 </div>
-                <div aria-hidden className="mt-1.5 h-1.5 bg-paper">
+                {/* Dražší srovnání (průměrný aktivní fond) plný pruh, ostatní obrys: liší se tvarem, ne barvou */}
+                <div aria-hidden className="mt-1.5 h-1.5">
                   <div
-                    className={row.kind === "fund" ? "h-full bg-keep" : "h-full bg-loss"}
+                    className={row.id === active.id ? "h-full bg-ink" : "h-full border-[1.5px] border-ink"}
                     style={{ width: `${Math.max((row.cost / maxCost) * 100, 0.8)}%` }}
                   />
                 </div>

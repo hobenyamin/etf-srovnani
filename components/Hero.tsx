@@ -28,7 +28,7 @@ function HeroA() {
         Kolik dělá rozdíl v&nbsp;poplatcích fondů za 20&nbsp;let?
       </h1>
       <p className="mt-5 text-[15px] leading-6">I bez jakéhokoli výnosu:</p>
-      <p className="num text-[56px] leading-[56px] font-bold tracking-tight text-loss" data-testid="hero-gap">
+      <p className="num text-[56px] leading-[56px] font-bold tracking-tight" data-testid="hero-gap">
         {formatKc(gap)}
       </p>
       <p className="mt-1 text-[15px] leading-6">

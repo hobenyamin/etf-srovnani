@@ -152,10 +152,10 @@ export function LeadFormFields({
         }}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? ids.error : undefined}
-        className="mt-2 h-12 w-full rounded-sm border border-ink bg-card px-3 text-lg aria-invalid:border-2 aria-invalid:border-loss"
+        className="mt-2 h-12 w-full rounded-sm border border-ink bg-card px-3 text-lg aria-invalid:border-2 aria-invalid:border-error"
       />
       {error && (
-        <p id={ids.error} role="alert" className="mt-2 text-[15px] font-semibold text-loss">
+        <p id={ids.error} role="alert" className="mt-2 text-[15px] font-semibold text-error">
           {error}
         </p>
       )}

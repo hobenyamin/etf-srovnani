@@ -17,7 +17,7 @@ export default function Zasady() {
         ← Zpět na srovnání
       </Link>
       <h1 className="mt-4 font-display text-[34px] leading-[38px] font-semibold">Zásady ochrany osobních údajů</h1>
-      <p className="mt-4 border-2 border-loss p-3 font-semibold text-loss">
+      <p className="mt-4 border-2 border-error p-3 font-semibold text-error">
         Koncept – plné znění doplní provozovatel a před spuštěním projde právní kontrolou.
       </p>
 
