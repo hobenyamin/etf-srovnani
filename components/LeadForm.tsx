@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { type FormEvent, type ReactNode, useEffect, useId, useRef, useState } from "react";
 import { submitLead } from "@/app/actions/lead";
+import { More } from "@/components/More";
 import { ThankYou } from "@/components/ThankYou";
 import { TrackView } from "@/components/TrackView";
 import { isValidEmail, type LeadPayload, normalizeEmail } from "@/lib/lead";
@@ -186,13 +187,26 @@ export function LeadFormFields({
         {submitLabel}
       </button>
 
-      <p id={ids.gdpr} className="fine mt-4">
-        {CONSENT.notice} Podrobnosti v{" "}
-        <Link href="/zasady" className="underline">
-          zásadách ochrany osobních údajů
-        </Link>
-        .
-      </p>
+      {/* Vrstvená informace (čl. 13 GDPR): správce a účel vidět vždy, zbytek v „Podrobnosti“ */}
+      <div className="mt-4" data-testid="gdpr">
+        <p id={ids.gdpr} className="fine">
+          {CONSENT.noticeShort}
+        </p>
+        <More summary="Podrobnosti">
+          <ul className="space-y-1">
+            {CONSENT.noticeDetails.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+          <p className="mt-1">
+            Celé znění v{" "}
+            <Link href="/zasady" className="underline">
+              zásadách ochrany osobních údajů
+            </Link>
+            .
+          </p>
+        </More>
+      </div>
     </form>
   );
 }

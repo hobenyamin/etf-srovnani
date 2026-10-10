@@ -457,7 +457,7 @@ Na https://etf-srovnani.vercel.app. Vyplní se na konci projektu, po úpravě te
     - **Data zůstávají na serveru:** karty se vykreslují na serveru i se zdroji, přepínač je jen skrývá.
     - **Zamčené dvojice VTI a VT** jsou na jednom řádku. Popis plné verze je ve spodní sekci formuláře.
 49. **Do rozbalovacích polí jde vše kromě rizik a podmínek u čísel, se třemi výjimkami.** Zdroje u srovnání, metodika kalkulačky a odstavce „Odkud jsou data“ a „Kdo za stránkou stojí“ jsou sbalené. Horní index u hodnoty zdroj rozbalí. Vidět zůstávají:
-    - **text o GDPR u formuláře:** správce, účel a právní základ musí být u formuláře,
+    - **první vrstva informace o GDPR u formuláře** (vrstvená informace podle čl. 13 GDPR, upraveno po kontrole na telefonu 2026-10-11): u obou formulářů je vidět jeden řádek „Správce: Nikolas Hošek. E-mail použijeme k zaslání srovnání.“ a formulář na něj odkazuje přes `aria-describedby`. Hned pod ním je rozbalovací pole „Podrobnosti“ (druhá vrstva): právní základ, doba uložení, práva a kontakt, odkaz na `/zasady`. Dřív byl celý odstavec vidět a pod tlačítkem zabíral nejvíc místa. K leadu se ukládá znění obou vrstev (`notice_text`). Text u checkboxu souhlasu s novinkami se nesbaluje: souhlas musí být informovaný. Že právní základ nemusí být v první vrstvě, je náš výklad, patří do právní kontroly,
     - **údaje o provozovateli v patičce:** povinné,
     - **odstavec o PRIIPs/KID ve srovnání:** je to odpověď, kterou slibuje reklama B. Nechali jsme ho beze změny, protože jde o právní tvrzení.
     - V hero A je zdroj (ESMA, data za rok 2024) přímo v podmínce u čísla. Rozbalovací pole by na 375 × 667 posunulo CTA pod cookie lištu. Datum stažení je v „Jak počítáme“ u kalkulačky.

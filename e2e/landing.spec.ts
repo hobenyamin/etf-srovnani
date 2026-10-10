@@ -240,6 +240,37 @@ test("formulář: validace, nepředvyplněný souhlas, děkovací stav s 5 dvoji
   expect(paragraphs.join(" ")).not.toContain("https://");
 });
 
+test("GDPR u obou formulářů: správce a účel vidět, podrobnosti rozbalitelné, souhlas s novinkami celý", async ({ page }) => {
+  await page.goto("/");
+  await declineCookies(page);
+  await calcResult(page);
+  // pod výsledkem aktivní formulář, dole jen tlačítko – spodní formulář se zkontroluje na B (bez kalkulačky)
+  for (const form of [page.getByTestId("lead-inline"), null]) {
+    if (!form) {
+      await page.goto("/?utm_content=b-zvedavost");
+    }
+    const scope = form ?? page.locator("#formular");
+    const gdpr = scope.getByTestId("gdpr");
+    await gdpr.scrollIntoViewIfNeeded();
+    await expect(gdpr.getByText("Správce: Nikolas Hošek. E-mail použijeme k zaslání srovnání.")).toBeVisible();
+    // formulář odkazuje na první vrstvu (aria-describedby)
+    const describedBy = await scope.locator("form").getAttribute("aria-describedby");
+    await expect(page.locator(`[id="${describedBy}"]`)).toHaveText(/^Správce:/);
+
+    const details = gdpr.getByText(/Právní základ/);
+    await expect(details).toBeHidden();
+    await gdpr.getByText("Podrobnosti", { exact: true }).click();
+    await expect(details).toBeVisible();
+    await expect(details).toContainText("čl. 6 odst. 1 písm. b GDPR");
+    await expect(gdpr.getByText(/Doba uložení: nepotvrzenou adresu mažeme po 30 dnech/)).toBeVisible();
+    await expect(gdpr.getByText(/Vaše práva/)).toBeVisible();
+    await expect(gdpr.getByRole("link", { name: "zásadách ochrany osobních údajů" })).toHaveAttribute("href", "/zasady");
+
+    // informovaný souhlas: text u checkboxu je celý vidět, nic z něj není sbalené
+    await expect(scope.getByText(/Chci občas dostávat e-mailem novinky ke srovnání ETF\. Souhlas můžu kdykoli odvolat/)).toBeVisible();
+  }
+});
+
 test("formulář jde odeslat jen klávesnicí", async ({ page }) => {
   await page.goto("/#formular");
   await page.getByRole("textbox", { name: "E-mail" }).focus();
