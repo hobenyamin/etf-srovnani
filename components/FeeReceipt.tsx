@@ -1,16 +1,27 @@
+"use client";
+
+import { type ReactNode, useId, useState } from "react";
 import type { FeeResult } from "@/lib/fees";
 import { formatDate, formatKc, formatPercent } from "@/lib/format";
 
-/** Výsledek kalkulačky jako účtenka: vklady, náklady podle TER (s pruhy ve stejném měřítku), rozdíl ESMA. */
+/**
+ * Výsledek kalkulačky jako účtenka: nahoře rozdíl ESMA, pod účtenkou místo pro formulář (children),
+ * aby bylo číslo i pole pro e-mail vidět na jedné obrazovce. Rozpis (vklady, náklady podle TER
+ * s pruhy ve stejném měřítku) je na mobilu sbalený. Předpoklady výpočtu jsou vidět vždy.
+ */
 export function FeeReceipt({
   result,
   years,
   annualReturn,
+  children,
 }: {
   result: FeeResult;
   years: number;
   annualReturn: number;
+  children?: ReactNode;
 }) {
+  const [open, setOpen] = useState(false);
+  const breakdownId = useId();
   const maxCost = Math.max(...result.rows.map((r) => r.cost), 1);
   const etf = result.rows.find((r) => r.id === "esma_passive_equity_etf")!;
   const active = result.rows.find((r) => r.id === "esma_active_equity_fund")!;
@@ -18,41 +29,13 @@ export function FeeReceipt({
 
   return (
     <div className="mt-8">
-      <div className="receipt bg-card px-4 text-[15px]" aria-live="polite" data-testid="receipt">
+      <div className="receipt bg-card px-4 text-[15px]" data-testid="receipt">
         <p className="text-center text-[13px] tracking-widest text-muted uppercase">Výpočet poplatků</p>
 
-        <dl className="mt-3">
-          <Line label="Vklady celkem" value={formatKc(result.deposits)} />
-          <Line label={`Modelová hodnota bez poplatků (${annualReturn} %)`} value={formatKc(result.grossValue)} />
-        </dl>
-
-        <p className="mt-5 text-[13px] tracking-wide text-muted uppercase">
-          Náklady za {years}&nbsp;let · TER ročně
-        </p>
-        <ul className="mt-1">
-          {result.rows.map((row) => (
-            <li key={row.id} className="dotted py-2.5">
-              <div className="flex items-baseline justify-between gap-3">
-                <span>
-                  <span className={row.kind === "fund" ? "num font-semibold" : ""}>{row.label}</span>{" "}
-                  <span className="num whitespace-nowrap text-muted">{formatPercent(row.ter)}</span>
-                </span>
-                <span className="num font-semibold whitespace-nowrap text-loss">−{formatKc(row.cost)}</span>
-              </div>
-              <div aria-hidden className="mt-1.5 h-1.5 bg-paper">
-                <div
-                  className={row.kind === "fund" ? "h-full bg-keep" : "h-full bg-loss"}
-                  style={{ width: `${Math.max((row.cost / maxCost) * 100, 0.8)}%` }}
-                />
-              </div>
-            </li>
-          ))}
-        </ul>
-
-        <div className="mt-4 border-t-2 border-ink pt-3">
+        <div className="mt-3 border-b-2 border-ink pb-3" aria-live="polite">
           <div className="flex items-baseline justify-between gap-3">
             <span className="font-semibold">
-              Rozdíl {formatPercent(etf.ter)} vs. {formatPercent(active.ter)}
+              Rozdíl {formatPercent(etf.ter)} vs. {formatPercent(active.ter)} za {years}&nbsp;let
             </span>
             <span className="num text-xl font-semibold text-loss" data-testid="calc-gap">
               {formatKc(result.esmaGap)}
@@ -62,7 +45,49 @@ export function FeeReceipt({
             O tolik víc stojí průměrný aktivní akciový fond v&nbsp;EU než průměrný ETF (ESMA).
           </p>
         </div>
+
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls={breakdownId}
+          onClick={() => setOpen(!open)}
+          className="flex h-11 items-center font-semibold underline underline-offset-4 sm:hidden"
+        >
+          {open ? "Skrýt rozpis" : "Zobrazit rozpis"}
+        </button>
+
+        <div id={breakdownId} className={open ? "" : "hidden sm:block"} data-testid="receipt-breakdown">
+          <dl className="mt-2">
+            <Line label="Vklady celkem" value={formatKc(result.deposits)} />
+            <Line label={`Modelová hodnota bez poplatků (${annualReturn} %)`} value={formatKc(result.grossValue)} />
+          </dl>
+
+          <p className="mt-5 text-[13px] tracking-wide text-muted uppercase">
+            Náklady za {years}&nbsp;let · TER ročně
+          </p>
+          <ul className="mt-1">
+            {result.rows.map((row) => (
+              <li key={row.id} className="dotted py-2.5">
+                <div className="flex items-baseline justify-between gap-3">
+                  <span>
+                    <span className={row.kind === "fund" ? "num font-semibold" : ""}>{row.label}</span>{" "}
+                    <span className="num whitespace-nowrap text-muted">{formatPercent(row.ter)}</span>
+                  </span>
+                  <span className="num font-semibold whitespace-nowrap text-loss">−{formatKc(row.cost)}</span>
+                </div>
+                <div aria-hidden className="mt-1.5 h-1.5 bg-paper">
+                  <div
+                    className={row.kind === "fund" ? "h-full bg-keep" : "h-full bg-loss"}
+                    style={{ width: `${Math.max((row.cost / maxCost) * 100, 0.8)}%` }}
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
+
+      {children}
 
       <div className="mt-4 space-y-2 text-[13px] leading-5 text-muted">
         <p>
