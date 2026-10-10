@@ -82,10 +82,10 @@ Změřeno 2026-10-10 na produkčním buildu s testovacími proměnnými. Porovn�
 
 Podle designové revize. Čísla, právní texty, eventy ani chování formulářů se nezměnily.
 
-- **Barvy s jedním významem.** Kobaltová `#1D4ED8` jen pro primární tlačítka, aktivní stav přepínačů a odkazy-výzvy. Oranžovočervená jen pro ztrátu (náklady), zelená jen pro levnější variantu. Tokeny a kontrasty jsou v [`app/globals.css`](app/globals.css).
+- **Barvy s jedním významem.** Kobaltová `#1D4ED8` jen pro primární tlačítka, aktivní stav přepínačů a odkazy-výzvy. Oranžovočervená jen pro ztrátu (náklady), zelená jen pro levnější variantu (v kroku 8c zrušeno, viz níže). Tokeny a kontrasty jsou v [`app/globals.css`](app/globals.css).
 - **Písma.** Text i čísla v Atkinson Hyperlegible Next (latin-ext, tabulkové číslice). Nula je přeškrtnutá, takže „VOO“ se nesplete s „V00“. Nadpisy ve Fraunces s pevnou optickou velikostí `opsz 48`, takže nadpis A i B (stránka i reklamy) má stejný řez. Pole formulářů mají aspoň 16 px, menší písmo by iOS při focusu přiblížilo. Hlídá to E2E test.
 - **Hierarchie.** Nadpis hero 36 px, číslo v hero 56 px, rozdíl v účtence 40 px. Vedlejší text (`.fine`, 13 px) je v užším sloupci (52 znaků). Zdroje, metodika a údaje o datech jsou ve sbalených `<details>`. Rizikové upozornění a podmínky u čísel jsou vidět vždy (rozhodnutí 49).
-- **Děkovací stav vybočí:** tmavý blok s ikonou a nadpisem „Hotovo.“, plné srovnání pod ním.
+- **Děkovací stav vybočí:** tmavý blok s ikonou (od kroku 8c razítkem) a nadpisem „Hotovo.“, plné srovnání pod ním.
 - **Mikrointerakce:** stisk tlačítek, plynulá změna čísla v účtence (300 ms) a „Ukládáme adresu…“ po odeslání. Při `prefers-reduced-motion` se nic nehýbe, hlídají to dva E2E testy.
 
 | Kontrast (WCAG) | Poměr |
@@ -122,6 +122,27 @@ U děkovacího stavu skript zadrží odeslání v prohlížeči, aby se nic neul
 | Hero B | 2 592 → 708 ms | 0 → 0 |
 
 Hero B měl před krokem 8b LCP 2,6 s. Příčinu jsme nezkoumali. Po změně písma je LCP u obou variant pod 0,75 s. Lokální měření nenahrazuje Lighthouse na nasazené stránce (15. 10.).
+
+### Krok 8c: klidnější barvy, velká čísla, razítko, animace
+
+Podle designové revize 8b: kobaltová vedle oranžovočervené působila křiklavě a přeškrtnutá nula ve velkých částkách rušila. Čísla, právní texty, eventy ani chování formulářů se nezměnily.
+
+- **Ztráta už není barva.** Oranžovočervená a zelená zmizely ze stránky i z reklam. Částky a rozdíly jsou v inkoustu (15,5 : 1), důraz nese velikost a tloušťka. Pruhy v rozpisu účtenky i v reklamě A rozlišuje tvar: dražší srovnání (průměrný aktivní fond) plný pruh, ostatní řádky obrys. V reklamě B je „bez KID“ tlumeně (muted, 6,5 : 1 na kartě) a „s KID“ tučně v inkoustu, bez symbolů podobných zaškrtávátkům. Kobalt je jediný výrazný akcent. Červená `#B03A0A` (5,3 : 1) zůstala jen pro chybový stav: validaci formuláře a varování na `/zasady` (rozhodnutí 53 a 54).
+- **Velká čísla ve Fraunces.** Atkinson Hyperlegible Next obyčejnou nulu nemá (rozhodnutí 52). Samostatná velká čísla (hero A, rozdíl v účtence, číslo v reklamě A) jsou proto v nadpisovém písmu Fraunces s obyčejnou nulou a proporcionálními číslicemi. Text, tabulky, data, tickery a ISIN zůstávají v Atkinson s tabulkovými číslicemi. Animovaný rozdíl v účtence má pevnou šířku podle výsledné hodnoty, takže se při animaci nerozskakuje (E2E test).
+- **Razítko.** Děkovací blok má místo ikony razítko „ODESLÁNO“ (na `/potvrzeni` „POTVRZENO“): dvojitý světlý obrys, pootočení −6°, otisk 320 ms. Jen ozdoba (`aria-hidden`), stav nese nadpis.
+- **Plné srovnání s přepínačem.** Místo 5 karet pod sebou přepínač SPY / VOO / IVV / VTI / VT (výchozí VOO) a jedna karta na světlém podkladu. Všech 5 dvojic zůstává v HTML.
+- **Animace:** spodní lišta přijede a odjede (200 ms). Při odjezdu je `inert`, nedá se na ni klepnout ani se na ni dostat tabulátorem. Sekce pod první obrazovkou se při posunu objeví (opacity a posun o 12 px, 400 ms). Skrývá se až po načtení JavaScriptu a jen to, co je celé pod obrazovkou, takže bez JS se nic neskryje. Rozbalovací pole se otevírají plynule v prohlížečích s `interpolate-size` (Chrome), jinde bez animace. Animuje se jen `transform`, `opacity` a výška obsahu `details` po kliknutí, CLS zůstává 0. Při `prefers-reduced-motion` se nic z toho nehýbe (E2E test).
+
+**LCP a CLS po kroku 8c.** Skript z 8b se nezachoval (byl jen v dočasné složce). Nový [`scripts/vitals.mjs`](scripts/vitals.mjs) má stejné nastavení jako výše a navíc průchod stránkou po 300 px až na konec (po odmítnutí cookies, tedy i se spodní lištou a objevováním sekcí). Pro férové srovnání jsme stejným skriptem změřili znovu i commit 8b (`c0fcfcb`):
+
+| | LCP 8b → 8c (medián z 5) | CLS načtení | CLS průchod stránkou (nejhorší běh) |
+| --- | --- | --- | --- |
+| Hero A | 720 → 720 ms | 0 → 0 | 0 → 0 |
+| Hero B | 720 → 720 ms | 0 → 0 | 0 → 0 |
+
+Nový skript měří u stejného kódu o 12–24 ms víc než ten původní (696 / 708 ms výše). Rozdíl je v měření, ne v kódu.
+
+**Snímky po** ve stejné tabulce výše ([`docs/screens/po/`](docs/screens/po/)) jsou po kroku 8c. **Záznam animací** na 375 × 812: [`docs/screens/animace.webm`](docs/screens/animace.webm) (posun a objevení sekcí, spodní lišta, plynulé číslo, „Jak počítáme“, razítko; skript [`scripts/record-animations.mjs`](scripts/record-animations.mjs)). GIF není: Playwright nahrává jen webm a ffmpeg v systému nebyl.
 
 ## Očekávaná konverze
 
@@ -442,7 +463,9 @@ Na https://etf-srovnani.vercel.app. Vyplní se na konci projektu, po úpravě te
     - V hero A je zdroj (ESMA, data za rok 2024) přímo v podmínce u čísla. Rozbalovací pole by na 375 × 667 posunulo CTA pod cookie lištu. Datum stažení je v „Jak počítáme“ u kalkulačky.
 50. **Tlačítka cookie lišty zůstávají neutrální.** Kobaltová „Povolit měření“ by byla dark pattern a porušila by pravidlo „odmítnout stejně snadno jako přijmout“. Neutrální jsou i tlačítka kvalifikační otázky a „Odhlásit se“, protože nejsou výzvou ke konverzi.
 51. **Fraunces s pevnou optickou velikostí `opsz 48`.** Automatická optická velikost volila u 104 px kontrastnější řez než u 34 px. Pevná hodnota sjednotí nadpisy hero A, B a reklam.
-52. **Tabulkové číslice i za cenu přeškrtnuté nuly.** Atkinson Hyperlegible Next má ve výchozím stavu přeškrtnutou nulu. Obyčejnou nulu dává funkce `salt`, ale jen u proporcionálních číslic: s `tnum` zůstává přeškrtnutá (ověřeno renderem). Zadání chce tabulkové číslice, takže je necháváme. **K rozhodnutí designera:** ve velkých částkách („44 200 Kč“) může přeškrtnutá nula působit rušivě. Alternativa: proporcionální číslice se `salt` jen pro samostatná velká čísla (hero, reklamy), tabulkové v tabulkách.
+52. **Velká čísla ve Fraunces, ostatní čísla v Atkinson s přeškrtnutou nulou** (krok 8c, rozhodl člověk). Ve velkých částkách („44 200 Kč“) přeškrtnutá nula ruší. Atkinson Hyperlegible Next ale obyčejnou nulu nemá. Tvrzení z 8b, že ji dává funkce `salt`, bylo chybné (`docs/ai-chyby.md`). Pixelově jsme porovnali písmo z buildu, z Google Fonts i plné písmo z repozitáře autorů a nulu nemění `salt`, `zero`, `ss01–20` ani `cv01–20`. Samostatná velká čísla (hero A, rozdíl v účtence, reklama A) jsou proto ve Fraunces: obyčejná nula, proporcionální číslice, stejné písmo jako nadpisy, takže žádný soubor písma navíc. V textu a tabulkách zůstává Atkinson s tabulkovými číslicemi. U tickerů a ISIN je přeškrtnutá nula výhoda: „VOO“ se nesplete s „V00“. Zamítnuto: číslice z třetího písma přes `unicode-range` (další soubor písma a dvě písma v jednom čísle).
+53. **Červená zůstává jen pro chybu.** Validace formuláře a varování na `/zasady` jsou chybový stav, ne „ztráta“. Bez barvy by chyba ve formuláři byla méně nápadná, a to je přístupnostní riziko. Stejná hodnota `#B03A0A` (5,3 : 1), nový token `error`.
+54. **Tvar místo zelené.** Levnější a dražší řádek v účtence a v reklamě A rozlišuje plný pruh vs. obrys, ne barva. Rozdíl je vidět i bez rozlišování barev a zelená by „levnější variantu“ vizuálně doporučovala (rozhodnutí 5). Plný pruh má jen průměrný aktivní fond, tedy dražší strana srovnání.
 
 ## Co chybí a proč
 
@@ -519,6 +542,9 @@ node scripts/sample-size.mjs   # vzorek pro A/B test (README, Hypotézy)
 npx playwright install --with-deps chromium   # jednou
 npm run e2e          # Playwright, mobil 375 px (ostré služby nevolá, viz e2e/test-env.mjs; port 3100 musí být volný)
 node scripts/page-height.mjs   # výška stránky na 375 px (vlastní testovací server na portu 3101)
+node scripts/screens.mjs po    # snímky klíčových stavů do docs/screens/po (port 3102)
+node scripts/vitals.mjs        # LCP a CLS, medián z 5 (port 3103)
+node scripts/record-animations.mjs   # záznam animací do docs/screens/animace.webm (port 3104)
 ```
 
 ### Nastavení služeb
