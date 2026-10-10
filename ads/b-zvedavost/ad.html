@@ -12,6 +12,8 @@
   .lead { font-size: 40px; line-height: 1.3; margin-top: 28px; }
   .receipt { margin-top: 56px; }
   .tick { font-family: var(--mono); font-weight: 600; white-space: nowrap; }
+  /* Ticker bezpatkově: v IBM Plex Mono vypadá písmeno O jako nula */
+  .ticker { font-weight: 600; }
   .no { color: var(--loss); }
   .yes { color: var(--keep); }
   .f-1x1 h1 { font-size: 88px; margin-top: 24px; }
@@ -27,7 +29,7 @@
   <p class="lead">A&nbsp;jaké alternativy jsou v&nbsp;ČR dostupné.</p>
   <div class="receipt">
     <div class="row">
-      <span><span class="num">VOO</span> · NYSE Arca<span class="sub">fond z&nbsp;USA</span></span>
+      <span><span class="ticker" data-ticker>VOO</span> · NYSE Arca<span class="sub">fond z&nbsp;USA</span></span>
       <span class="tick no">bez KID</span>
     </div>
     <div class="row">

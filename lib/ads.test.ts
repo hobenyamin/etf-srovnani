@@ -3,6 +3,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { fundPairs } from "./etfs";
 import { ESMA, FEE_ROWS } from "./fee-rows";
 import { computeFees, HERO_INPUT } from "./fees";
 import { formatInteger, formatKc, formatPercent } from "./format";
@@ -111,6 +112,19 @@ describe("reklama B sedí s hero B", () => {
     const ucitsTickers = FEE_ROWS.flatMap((r) => r.tickers);
     const all = `${c.primary_text.join(" ")} ${c.headline} ${c.description} ${html}`;
     for (const ticker of ucitsTickers) expect(all).not.toMatch(new RegExp(`\\b${ticker}\\b`));
+  });
+
+  it("ticker a burza ve vizuálu odpovídají data/etfs.json (VOO s písmenem O, ne V00)", () => {
+    const voo = fundPairs().find((p) => p.us.id === "VOO")!.us;
+    const match = html.match(/<span class="ticker" data-ticker>([^<]+)<\/span> · ([^<]+)<span/);
+    expect(match).not.toBeNull();
+    expect(match![1]).toBe(voo.ticker.value);
+    expect(match![2]).toBe(voo.exchange.value);
+    expect(`${html} ${c.primary_text.join(" ")} ${c.headline}`).not.toMatch(/V00/);
+  });
+
+  it("ticker není v monospace (.num), kde „O“ vypadá jako nula", () => {
+    expect(html).not.toMatch(/class="num">VOO</);
   });
 
   it("vizuál má upozornění", () => {
