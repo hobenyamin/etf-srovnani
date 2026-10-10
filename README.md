@@ -9,15 +9,39 @@ Praktický úkol do výběrového řízení Clientelo Czech s.r.o. Hodnoticí ot
 
 ## Cílová skupina
 
-TODO – kdo přichází, z jaké reklamy, s jakou bolestí.
+- **Kdo:** Česko, 25–45 let, na mobilu, přichází z reklamy na Facebooku nebo Instagramu (reklama A nebo B). Persona je pracovní předpoklad ze zadání, ne změřená data.
+- **Co ví:** začíná investovat, nebo je mírně pokročilý. Slyšel o S&P 500 a o VOO, nerozumí poplatkům (TER), měně a tomu, co si v ČR skutečně koupí.
+- **Bolest:** „Chci investovat do amerického indexu, ale nevím, který fond a proč mi ho broker nenabízí.“
+- **Čas:** stránce dává pár sekund. Proto první obrazovka nese jedno číslo nebo jednu otázku z reklamy a jedno tlačítko.
+- **Pozor u cílení:** v reklamě na Meta nejde věk 25–45 nastavit (speciální kategorie, rozhodnutí 42). Personu zasáhnou zájmy a kreativa, reklamu uvidí i lidé 18–65+.
 
 ## Výměna hodnoty
 
-TODO – co návštěvník dostane zdarma, co za e-mail, co hned po odeslání a v kterém okamžiku o kontakt žádáme.
+| Kdy | Co návštěvník dostane | Za co |
+| --- | --- | --- |
+| Hned, bez e-mailu | Kalkulačka dopadu poplatků v Kč (vlastní částka, horizont, modelový výnos). Ukázka srovnání 3 dvojic NYSE ↔ UCITS se stejným indexem, se zdrojem a datem | nic |
+| Po zadání e-mailu, **hned na stránce** | Plné srovnání všech 5 dvojic: TER, měna, akumulace, burza, velikost fondu, registrace v ČR, ISIN | e-mail (+ nepovinný souhlas s novinkami) |
+| Po odeslání | Děkovací obrazovka se srovnáním (nečeká se na e-mail), jedna nepovinná otázka „Máte už účet u brokera?“ | – |
+| E-mailem | Potvrzovací e-mail (double opt-in), tlačítko „Potvrdit a otevřít srovnání“ | potvrzení adresy |
+
+**Kdy žádáme o kontakt:** až když návštěvník vidí svůj výsledek z kalkulačky (rozhodnutí 4). Nabídka plného srovnání se v kalkulačce objeví až po první změně vstupu. Formulář je až za ukázkou srovnání. V hero žádné pole ani zmínka o e-mailu není (hlídá E2E test) a spodní lepicí lišta vede jen na kalkulačku, nikdy na formulář.
+
+Daňový tahák (W-8BEN) stránka zatím neslibuje, protože neexistuje (Co chybí).
 
 ## Struktura stránky a pořadí sekcí
 
-TODO – sekce v pořadí a proč právě toto pořadí.
+Pořadí v kódu: [`components/Landing.tsx`](components/Landing.tsx).
+
+| # | Sekce | Úkol | Proč právě tady |
+| --- | --- | --- | --- |
+| 1 | **Hero** | Navázat na slib reklamy: A číslo 44 200 Kč, B otázka „Proč si v Česku nekoupíte VOO?“ a odpověď (chybí KID). Jedno tlačítko | Návštěvník z reklamy během pár sekund kontroluje, jestli je na správném místě. Hero opakuje slib reklamy doslova, jinak odchází. O kontakt v tuhle chvíli nežádáme, protože zatím nic nedostal |
+| 2 | **Kalkulačka** | Z obecného čísla udělat jeho číslo v Kč | Nejsilnější hodnota zdarma a jediná osobní. Kdo zadá vlastní částku, investoval čas a má konkrétní důvod pokračovat. Tlačítko hero A sem vede přímo |
+| 3 | **Ukázka srovnání** | Ukázat, že plná verze má skutečný obsah (3 dvojice se zdrojem a datem) | Důkaz kvality před žádostí o e-mail. Vysvětluje i „proč ne VOO“ (PRIIPs/KID), takže sem vede tlačítko hero B |
+| 4 | **Formulář** | E-mail za plné srovnání (5 dvojic, víc parametrů) | Teprve teď návštěvník ví, co dostane, a viděl kousek zdarma. Jedno pole, výsledek hned na stránce |
+| 5 | **Důvěra** | Kdo za stránkou stojí, odkud jsou data, rizikové upozornění | Pro ty, kdo váhají: hledají to až při rozhodování o e-mailu, ne před ním. Rizikové upozornění tu je celé, krátká upozornění jsou i u čísel výše |
+| 6 | **Patička** | Provozovatel, zásady ochrany údajů, nastavení cookies | Povinné údaje. Nastavení cookies jde kdykoli změnit |
+
+Hero B vede rovnou na srovnání (3), ne na kalkulačku. Kdo přišel s otázkou „proč ne VOO“, chce nejdřív odpověď. Kalkulačku přeskočí, ale formulář (4) má hned pod srovnáním.
 
 ## Očekávaná konverze
 
