@@ -47,7 +47,7 @@ Spodní lišta na mobilu se řídí tím, kde návštěvník je. Před výsledke
 
 ### Výška stránky na 375 px
 
-Změřeno 2026-10-10 skriptem [`scripts/page-height.mjs`](scripts/page-height.mjs) (375 × 812, produkční build, cookie lišta odmítnutá). Zopakovat: `npm run build && npx next start -p 3100`, pak `node scripts/page-height.mjs`.
+Změřeno 2026-10-10 skriptem [`scripts/page-height.mjs`](scripts/page-height.mjs) (375 × 812, produkční build, cookie lišta odmítnutá). Zopakovat: `node scripts/page-height.mjs`. Skript si sám sestaví a spustí server na portu 3101 se stejnými testovacími proměnnými jako E2E ([`e2e/test-env.mjs`](e2e/test-env.mjs)), nikdy s `.env.local`.
 
 | Stav | Stránka před | Stránka po | `#srovnani` před | `#srovnani` po |
 | --- | --- | --- | --- | --- |
@@ -56,6 +56,23 @@ Změřeno 2026-10-10 skriptem [`scripts/page-height.mjs`](scripts/page-height.mj
 | hero B po načtení | 5 613 px | 4 343 px (−23 %) | 1 755 px | 880 px |
 
 Kalkulačka je po načtení nižší (1 562 → 1 167 px), protože rozpis účtenky je na mobilu sbalený. Po výsledku je vyšší (1 696 → 1 712 px), protože obsahuje formulář. Spodní sekce formuláře se po výsledku zmenší na tlačítko (684 → 388 px). Před: commit `375dfdf`, po: krok 8a.
+
+### Velikost HTML: plné srovnání je ve stránce dvakrát
+
+Plné srovnání (5 dvojic, obsah za e-mail) dostávají jako hotový obsah ze serveru obě místa formuláře: pod kalkulačkou i dole (rozhodnutí 47). Vidět je nejvýš jednou, ale data pro React (RSC payload) jdou v HTML dvakrát.
+
+Změřeno 2026-10-10 na produkčním buildu s testovacími proměnnými. Porovnání: stejný kód, jen kalkulačka dostala `fullComparison={null}`. gzip = stažené HTML zkomprimované lokálně (`gzip -c`).
+
+| Stránka | Jedno vykreslení | Dvě vykreslení (dnes) | Rozdíl |
+| --- | --- | --- | --- |
+| `/` (hero A), nekomprimované | 110,3 kB | 156,2 kB | +45,9 kB (+42 %) |
+| `/` (hero A), gzip | 13,2 kB | 14,6 kB | +1,4 kB (+11 %) |
+| hero B, nekomprimované | 112,2 kB | 158,0 kB | +45,8 kB (+41 %) |
+| hero B, gzip | 13,3 kB | 16,7 kB | +3,4 kB (+25 %) |
+
+- **Přenos:** po síti jde HTML komprimované, takže navíc je 1,4–3,4 kB. Na 4G jsou to jednotky milisekund. Rozdíl mezi A a B je nejspíš v tom, jak daleko od sebe obě kopie v HTML leží a jestli je gzip najde v okně 32 kB. Neověřovali jsme to.
+- **Vliv na LCP:** prohlížeč musí rozbalit a zpracovat o 46 kB víc dat pro React. Na LCP jsme to neměřili, Lighthouse je v plánu na 15. 10.
+- **Jak to odstranit, pokud to vadí:** předat plné srovnání jen jednou, např. jeden serverový slot v `Landing`, který se po odeslání zobrazí v místě odeslání. Druhá možnost je načíst ho až po odeslání ze Server Action. Zatím ne: rozdíl po kompresi je malý a druhé řešení by porušilo slib „zobrazí se hned“ při výpadku sítě.
 
 ## Očekávaná konverze
 
@@ -443,7 +460,8 @@ npm run check-data   # kontrola zdrojů v data/
 npm run render-ads   # vizuály reklam ads/*/ad.html → PNG (potřebuje síť kvůli fontům)
 node scripts/sample-size.mjs   # vzorek pro A/B test (README, Hypotézy)
 npx playwright install --with-deps chromium   # jednou
-npm run e2e          # Playwright, mobil 375 px (ostré služby nevolá, viz playwright.config.ts)
+npm run e2e          # Playwright, mobil 375 px (ostré služby nevolá, viz e2e/test-env.mjs; port 3100 musí být volný)
+node scripts/page-height.mjs   # výška stránky na 375 px (vlastní testovací server na portu 3101)
 ```
 
 ### Nastavení služeb
