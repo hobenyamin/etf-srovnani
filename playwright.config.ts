@@ -1,4 +1,8 @@
 import { defineConfig } from "@playwright/test";
+import { assertSafeTestEnv, TEST_ENV } from "./e2e/test-env.mjs";
+
+// Pojistka před během: server dostane jen testovací proměnné, jinak testy vůbec nezačnou.
+assertSafeTestEnv({ ...process.env, ...TEST_ENV });
 
 // Mobile first: všechny testy na šířce 375 px (iPhone SE / mini) proti produkčnímu buildu.
 export default defineConfig({
@@ -17,21 +21,10 @@ export default defineConfig({
   webServer: {
     command: "npm run build && npx next start -p 3100",
     url: "http://localhost:3100",
-    reuseExistingServer: !process.env.CI,
+    // Nikdy cizí server: ten na portu 3100 mohl běžet s .env.local (ostrá Supabase a Resend).
+    // Když je port obsazený, Playwright skončí chybou ještě před prvním testem.
+    reuseExistingServer: false,
     timeout: 180_000,
-    // Proměnné z procesu mají přednost před .env.local – testy nikdy nesáhnou na ostré služby.
-    // Supabase míří na nedostupnou adresu: ověřujeme, že návštěvník srovnání dostane i bez databáze.
-    env: {
-      SUPABASE_URL: "http://127.0.0.1:9",
-      SUPABASE_SECRET_KEY: "e2e-not-a-key",
-      LEAD_TOKEN_SECRET: "e2e-secret",
-      // Resend nikdy ostře: neplatný klíč (k odeslání beztak nedojde, databáze je nedostupná)
-      RESEND_API_KEY: "re_e2e_invalid",
-      EMAIL_FROM: "E2E <e2e@example.invalid>",
-      SITE_URL: "http://localhost:3100",
-      // PostHog: falešný klíč a host, požadavky zachytává page.route v testech (ostrý projekt nikdy)
-      NEXT_PUBLIC_POSTHOG_KEY: "phc_e2e_test",
-      NEXT_PUBLIC_POSTHOG_HOST: "https://posthog.e2e.test",
-    },
+    env: TEST_ENV,
   },
 });
