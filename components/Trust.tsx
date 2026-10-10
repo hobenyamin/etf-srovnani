@@ -6,7 +6,7 @@ import { OPERATOR, RISK_WARNINGS } from "@/lib/site";
 
 export function Trust() {
   return (
-    <section aria-labelledby="duvera-h" className="border-t border-rule px-4 py-12 text-[15px] leading-6">
+    <section data-reveal aria-labelledby="duvera-h" className="border-t border-rule px-4 py-12 text-[15px] leading-6">
       <h2 id="duvera-h" className="font-display text-[28px] leading-9 font-semibold">
         Odkud data jsou a&nbsp;kdo za stránkou stojí
       </h2>

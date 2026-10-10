@@ -31,7 +31,7 @@ const button =
 export function LeadForm({ fullComparison }: { fullComparison: ReactNode }) {
   const flow = useLeadFlow();
   return (
-    <section id="formular" aria-labelledby="formular-h" className="scroll-mt-4 border-t border-rule px-4 py-12">
+    <section id="formular" data-reveal aria-labelledby="formular-h" className="scroll-mt-4 border-t border-rule px-4 py-12">
       {flow.submittedAt === "bottom" ? (
         <ThankYou delivery={flow.delivery} leadRef={flow.leadRef}>
           {fullComparison}

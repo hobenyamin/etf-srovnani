@@ -144,8 +144,41 @@ body {
     transition-timing-function: ease-in;
   }
 
+  /* Sekce při posunu (Reveal.tsx přidá .reveal jen sekcím pod obrazovkou, .is-in při příchodu) */
+  .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .reveal.is-in {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 400ms ease-out,
+      transform 400ms ease-out;
+  }
+
   .pulse-dot {
     animation: pulse-dot 900ms ease-in-out infinite alternate;
+  }
+}
+
+/* Plynulé rozbalení <details> (zdroje, metodika). Kde interpolate-size chybí (Safari, Firefox), otevře se
+   bez animace. OpenSourceOnJump proto posouvá na zdroj až po přechodu. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (interpolate-size: allow-keywords) {
+    details {
+      interpolate-size: allow-keywords;
+    }
+    details::details-content {
+      block-size: 0;
+      overflow: hidden;
+      transition:
+        block-size 200ms ease-out,
+        content-visibility 200ms allow-discrete;
+    }
+    details[open]::details-content {
+      block-size: auto;
+    }
   }
 }
 

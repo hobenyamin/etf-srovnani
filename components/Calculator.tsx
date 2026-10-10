@@ -56,7 +56,7 @@ export function Calculator({ rows, fullComparison }: { rows: FeeRow[]; fullCompa
   const ids = { monthly: useId(), initial: useId(), years: useId(), ret: useId() };
 
   return (
-    <section id="kalkulacka" aria-labelledby="kalkulacka-h" className="scroll-mt-4 border-t border-rule px-4 py-12">
+    <section id="kalkulacka" data-reveal aria-labelledby="kalkulacka-h" className="scroll-mt-4 border-t border-rule px-4 py-12">
       <h2 id="kalkulacka-h" className="font-display text-[28px] leading-9 font-semibold">
         Kolik vás budou stát poplatky
       </h2>

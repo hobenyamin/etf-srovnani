@@ -418,6 +418,46 @@ test("lišta při odchodu zůstane chvíli v DOM jako inert, pak zmizí", async 
   expect(await page.evaluate(() => (window as unknown as { stickyInert: boolean }).stickyInert)).toBe(true);
 });
 
+const revealState = (page: Page) =>
+  page.locator("[data-reveal]").evaluateAll((els) =>
+    els.map((el) => ({
+      id: el.id || el.tagName,
+      reveal: el.classList.contains("reveal"),
+      top: el.getBoundingClientRect().top,
+      opacity: getComputedStyle(el).opacity,
+    })),
+  );
+
+test("sekce se objeví při posunu: skryté jen ty pod obrazovkou, po příchodu vidět", async ({ page }) => {
+  await page.goto("/");
+  await declineCookies(page);
+  const state = await revealState(page);
+  expect(state).toHaveLength(5);
+  // co je vidět v první obrazovce (začátek kalkulačky), se neskrývá
+  for (const s of state) expect(s.reveal).toBe(s.top >= 812);
+  expect(state.filter((s) => s.reveal).length).toBeGreaterThan(0);
+
+  await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" }));
+  await expect(page.locator("footer")).toHaveClass(/is-in/);
+  await expect.poll(async () => (await page.locator("footer").evaluate((el) => getComputedStyle(el).opacity))).toBe("1");
+  // details se rozbalují plynule (protějšek kontroly v testu „omezení pohybu“)
+  const details = page.locator("details").first();
+  expect(await details.evaluate((el) => getComputedStyle(el, "::details-content").transitionDuration)).not.toBe("0s");
+});
+
+test.describe("bez JavaScriptu", () => {
+  test.use({ javaScriptEnabled: false });
+  test("žádná sekce není skrytá", async ({ page }) => {
+    await page.goto("/");
+    const state = await revealState(page);
+    expect(state).toHaveLength(5);
+    for (const s of state) {
+      expect(s.reveal).toBe(false);
+      expect(s.opacity).toBe("1");
+    }
+  });
+});
+
 /** Hodnoty, které číslo v účtence projde po klepnutí na předvolbu 5 000 Kč (mezistavy animace). */
 async function gapValuesAfterPreset(page: Page) {
   const gap = page.getByTestId("calc-gap");
@@ -477,6 +517,10 @@ test("omezení pohybu: tlačítka a lišta bez přechodu, číslo skočí rovnou
   const sticky = page.getByTestId("sticky-cta");
   await expect(sticky).toBeVisible();
   expect(await sticky.evaluate((el) => getComputedStyle(el).transitionDuration)).toBe("0s");
+  // sekce se neskrývají, details se otevřou bez přechodu
+  expect((await revealState(page)).filter((s) => s.reveal)).toHaveLength(0);
+  const details = page.locator("details").first();
+  expect(await details.evaluate((el) => getComputedStyle(el, "::details-content").transitionDuration)).toBe("0s");
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
 
   expect(await gapValuesAfterPreset(page)).toHaveLength(1);
