@@ -1,22 +1,27 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState } from "react";
+import { type ReactNode, useEffect, useId, useMemo, useState } from "react";
 import { FeeReceipt } from "@/components/FeeReceipt";
+import { LeadFormFields, SUBMIT_CTA } from "@/components/LeadForm";
+import { ThankYou } from "@/components/ThankYou";
+import { TrackView } from "@/components/TrackView";
 import { clampInput, DEFAULT_INPUT, LIMITS, RETURN_OPTIONS } from "@/lib/calc";
 import { computeFees, type FeeRow } from "@/lib/fees";
 import { formatInteger, parseAmount } from "@/lib/format";
+import { calcResultShown, FORM_ANCHOR } from "@/lib/lead-flow";
 import { trackOnce } from "@/lib/track";
+import { useLeadFlow } from "@/lib/use-lead-flow";
 import { setCalcInput } from "@/lib/visit";
 
 const MONTHLY_PRESETS = [1000, 2000, 5000];
 
-export function Calculator({ rows }: { rows: FeeRow[] }) {
+export function Calculator({ rows, fullComparison }: { rows: FeeRow[]; fullComparison: ReactNode }) {
   const [monthlyText, setMonthlyText] = useState(formatInteger(DEFAULT_INPUT.monthly));
   const [initialText, setInitialText] = useState(formatInteger(DEFAULT_INPUT.initial));
   const [years, setYears] = useState(DEFAULT_INPUT.years);
   const [annualReturn, setAnnualReturn] = useState(DEFAULT_INPUT.annualReturn);
   const [interacted, setInteracted] = useState(false);
-  const [resultShown, setResultShown] = useState(false);
+  const flow = useLeadFlow();
 
   const input = useMemo(
     () =>
@@ -43,7 +48,7 @@ export function Calculator({ rows }: { rows: FeeRow[] }) {
     const timer = setTimeout(() => {
       setCalcInput(input);
       trackOnce("calc_result", { calc_input: input, calc_result: { esma_gap: Math.round(gap) } });
-      setResultShown(true);
+      calcResultShown();
     }, 800);
     return () => clearTimeout(timer);
   }, [interacted, input, gap]);
@@ -161,21 +166,51 @@ export function Calculator({ rows }: { rows: FeeRow[] }) {
         </fieldset>
       </div>
 
-      <FeeReceipt result={result} years={input.years} annualReturn={input.annualReturn} />
-
-      {resultShown && (
-        <a
-          href="#formular"
-          data-testid="lead-offer"
-          className="mt-6 block rounded-sm border-2 border-ink bg-card p-4 outline-offset-4 focus-visible:outline-2"
-        >
-          <span className="block font-semibold">
-            Chcete kompletní srovnání všech 5&nbsp;dvojic fondů NYSE ↔ UCITS?
-          </span>
-          <span className="mt-1 block text-[15px] text-muted">Zobrazí se hned po zadání e-mailu →</span>
-        </a>
-      )}
+      <FeeReceipt result={result} years={input.years} annualReturn={input.annualReturn}>
+        <CalcLead flow={flow} fullComparison={fullComparison} />
+      </FeeReceipt>
     </section>
+  );
+}
+
+/**
+ * Formulář hned pod výsledkem: okamžik největšího zájmu (rozhodnutí 4). Objeví se po calc_result,
+ * pokud návštěvník nemá rozepsaný formulář dole. Po odeslání tady rovnou plné srovnání.
+ */
+function CalcLead({ flow, fullComparison }: { flow: ReturnType<typeof useLeadFlow>; fullComparison: ReactNode }) {
+  if (flow.submittedAt === "calc") {
+    return (
+      <div id={FORM_ANCHOR.calc} className="mt-8 scroll-mt-4">
+        <ThankYou delivery={flow.delivery} leadRef={flow.leadRef} headingId={`${FORM_ANCHOR.calc}-h`}>
+          {fullComparison}
+        </ThankYou>
+      </div>
+    );
+  }
+  if (!flow.calcDone) return null;
+  if (flow.submittedAt === "bottom") {
+    return (
+      <p className="mt-6 font-semibold" data-testid="lead-done">
+        Plné srovnání už máte.{" "}
+        <a href="#formular" className="underline underline-offset-4">
+          Zobrazit ↓
+        </a>
+      </p>
+    );
+  }
+  if (flow.activeForm !== "calc") return null;
+  return (
+    <div
+      id={FORM_ANCHOR.calc}
+      data-testid="lead-inline"
+      className="mt-6 scroll-mt-4 rounded-sm border-2 border-ink bg-card p-4"
+    >
+      <TrackView event="form_view" props={{ form_location: "calc" }}>
+        <p className="font-semibold">Chcete kompletní srovnání všech 5&nbsp;dvojic fondů NYSE ↔ UCITS?</p>
+        <p className="mt-1 text-[15px] text-muted">Zobrazí se hned po odeslání, kopii pošleme e-mailem.</p>
+        <LeadFormFields location="calc" submitLabel={SUBMIT_CTA} className="mt-4" />
+      </TrackView>
+    </div>
   );
 }
 

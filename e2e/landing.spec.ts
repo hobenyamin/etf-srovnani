@@ -3,6 +3,18 @@ import { expect, type Page, test } from "@playwright/test";
 const events = (page: Page) =>
   page.evaluate(() => (window.dataLayer ?? []).map((e) => e.event as string));
 
+const entry = (page: Page, event: string) =>
+  page.evaluate((name) => window.dataLayer?.find((e) => e.event === name), event);
+
+const declineCookies = (page: Page) =>
+  page.getByTestId("cookie-banner").getByRole("button", { name: "Odmítnout" }).click();
+
+/** Vyplní kalkulačku a počká na ustálený výsledek (calc_result). */
+async function calcResult(page: Page, monthly = "3000") {
+  await page.getByLabel("Měsíčně investuji").fill(monthly);
+  await expect.poll(() => events(page)).toContain("calc_result");
+}
+
 test("hero A: slib, číslo a CTA nad ohybem, bez e-mailu", async ({ page }) => {
   await page.goto("/?utm_source=meta&utm_content=a-uspora");
   const h1 = page.getByRole("heading", { level: 1 });
@@ -25,18 +37,93 @@ test("hero B podle utm_content", async ({ page }) => {
   await expect.poll(() => page.evaluate(() => window.dataLayer?.[0]?.ad_variant)).toBe("b");
 });
 
-test("kalkulačka: CTA, změna vstupu, účtenka v Kč a nabídka plné verze", async ({ page }) => {
+test("kalkulačka: CTA, změna vstupu, účtenka v Kč a formulář pod výsledkem", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("link", { name: "Spočítat pro mě" }).click();
   await expect(page.locator("#kalkulacka")).toBeInViewport();
-  await expect(page.getByTestId("lead-offer")).toHaveCount(0);
+  await expect(page.getByTestId("lead-inline")).toHaveCount(0);
 
-  const monthly = page.getByLabel("Měsíčně investuji");
-  await monthly.fill("3000");
-  await expect(page.getByTestId("receipt")).toContainText("720 000 Kč");
-  await expect(page.getByTestId("calc-gap")).toHaveText(/^\d[\d ]* Kč$/);
-  await expect(page.getByTestId("lead-offer")).toBeVisible();
-  await expect(page.getByTestId("lead-offer")).toHaveAttribute("href", "#formular");
+  await page.getByLabel("Měsíčně investuji").fill("3000");
+  await expect(page.getByTestId("calc-gap")).toHaveText(/^\d[\d\s]*\sKč$/);
+  const inline = page.getByTestId("lead-inline");
+  await expect(inline).toBeVisible();
+  await expect(inline.getByRole("textbox", { name: "E-mail" })).toBeVisible();
+  await expect(inline.getByRole("button", { name: "Poslat mi srovnání" })).toBeVisible();
+  // jen jeden aktivní formulář: dole zůstane tlačítko, které vede sem
+  await expect(page.getByRole("textbox", { name: "E-mail" })).toHaveCount(1);
+  await expect(page.locator("#formular").getByTestId("lead-pointer")).toHaveText("Poslat mi srovnání");
+});
+
+test("rozpis účtenky je na mobilu sbalený a jde rozbalit", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Měsíčně investuji").fill("3000");
+  const toggle = page.getByRole("button", { name: "Zobrazit rozpis" });
+  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await expect(page.getByTestId("receipt-breakdown")).toBeHidden();
+  await toggle.click();
+  await expect(page.getByRole("button", { name: "Skrýt rozpis" })).toHaveAttribute("aria-expanded", "true");
+  const breakdown = page.getByTestId("receipt-breakdown");
+  await expect(breakdown).toBeVisible();
+  await expect(breakdown).toContainText("Vklady celkem");
+  await expect(breakdown).toContainText("720 000 Kč");
+  // předpoklady výpočtu jsou vidět vždy, nejsou v rozpisu
+  await expect(page.locator("#kalkulacka").getByText(/Nezahrnuje měnové riziko/)).toBeVisible();
+});
+
+for (const height of [812, 667]) {
+  test(`po výsledku je rozdíl i pole pro e-mail na jedné obrazovce (375 × ${height})`, async ({ page }) => {
+    await page.setViewportSize({ width: 375, height });
+    await page.goto("/");
+    await declineCookies(page);
+    await calcResult(page);
+    const inline = page.getByTestId("lead-inline");
+    await expect(inline).toBeVisible();
+    await page.getByTestId("receipt").evaluate((el) => el.scrollIntoView({ block: "start", behavior: "instant" }));
+    for (const el of [page.getByTestId("calc-gap"), inline.getByRole("textbox", { name: "E-mail" })]) {
+      const box = (await el.boundingBox())!;
+      expect(box.y).toBeGreaterThanOrEqual(0);
+      expect(box.y + box.height).toBeLessThanOrEqual(height);
+    }
+  });
+}
+
+test("formulář pod výsledkem: po odeslání jsou obě místa v děkovacím stavu", async ({ page }) => {
+  await page.goto("/");
+  await calcResult(page);
+  const inline = page.getByTestId("lead-inline");
+  await inline.scrollIntoViewIfNeeded();
+  await inline.getByRole("textbox", { name: "E-mail" }).fill("ivana@example.cz");
+  await inline.getByRole("button", { name: "Poslat mi srovnání" }).click();
+
+  const thanks = page.locator("#kalkulacka").getByTestId("thank-you");
+  await expect(thanks).toBeVisible();
+  await expect(thanks.getByTestId("pair")).toHaveCount(5);
+  await expect(page.locator("#formular").getByTestId("lead-done")).toBeVisible();
+  await expect(page.getByRole("textbox", { name: "E-mail" })).toHaveCount(0);
+  await expect(page.getByTestId("thank-you")).toHaveCount(1);
+  expect(await entry(page, "form_view")).toMatchObject({ form_location: "calc" });
+  expect(await entry(page, "form_submit")).toMatchObject({ form_location: "calc" });
+});
+
+test("spodní formulář: form_location bottom, po odeslání se u kalkulačky formulář neukáže", async ({ page }) => {
+  await page.goto("/#formular");
+  await page.getByRole("textbox", { name: "E-mail" }).fill("ota@example.cz");
+  await page.getByRole("button", { name: "Zobrazit plné srovnání" }).click();
+  await expect(page.locator("#formular").getByTestId("thank-you")).toBeVisible();
+  expect(await entry(page, "form_view")).toMatchObject({ form_location: "bottom" });
+  expect(await entry(page, "form_submit")).toMatchObject({ form_location: "bottom" });
+
+  await calcResult(page);
+  await expect(page.getByTestId("lead-inline")).toHaveCount(0);
+  await expect(page.locator("#kalkulacka").getByTestId("lead-done")).toBeVisible();
+});
+
+test("rozepsaný spodní formulář zůstane aktivní i po výsledku kalkulačky", async ({ page }) => {
+  await page.goto("/#formular");
+  await page.getByRole("textbox", { name: "E-mail" }).fill("rozepsano@example.cz");
+  await calcResult(page);
+  await expect(page.getByTestId("lead-inline")).toHaveCount(0);
+  await expect(page.locator("#formular").getByRole("textbox", { name: "E-mail" })).toHaveValue("rozepsano@example.cz");
 });
 
 test("kalkulačka při 2 000 Kč / 20 let / 0 % ukáže stejný rozdíl jako hero", async ({ page }) => {
@@ -114,28 +201,27 @@ test("375 px: žádný vodorovný scroll, pole mají popisky", async ({ page }) 
   }
 });
 
-// Varianta A: CTA vede na kalkulačku, takže pořadí odpovídá funnelu z CLAUDE.md.
-// (U varianty B vede CTA na srovnání a compare_view přijde před kalkulačkou – to je v pořádku.)
+// Varianta A, přirozená cesta: hero → kalkulačka → formulář pod výsledkem. compare_view není povinný
+// krok (formulář jde odeslat i bez srovnání), proto test hlídá jen pořadí povinných kroků.
 test("měření: celá cesta v pořadí funnelu s ad_variant a UTM", async ({ page }) => {
   await page.goto("/?utm_source=meta&utm_campaign=etf&utm_content=a-uspora");
   await expect.poll(() => events(page)).toContain("page_view");
   await page.getByRole("link", { name: "Spočítat pro mě" }).click();
   await page.locator("#kalkulacka").scrollIntoViewIfNeeded();
-  await page.getByLabel("Měsíčně investuji").fill("5000");
-  await expect(page.getByTestId("lead-offer")).toBeVisible();
-  await page.locator("#srovnani").getByTestId("pair").first().scrollIntoViewIfNeeded();
-  await expect.poll(() => events(page)).toContain("compare_view");
-  await page.getByTestId("lead-offer").click();
+  await calcResult(page, "5000");
+  const inline = page.getByTestId("lead-inline");
+  await inline.scrollIntoViewIfNeeded();
   await expect.poll(() => events(page)).toContain("form_view");
-  await page.getByRole("textbox", { name: "E-mail" }).fill("petr@example.cz");
-  await page.getByRole("button", { name: "Zobrazit plné srovnání" }).click();
+  await inline.getByRole("textbox", { name: "E-mail" }).fill("petr@example.cz");
+  await inline.getByRole("button", { name: "Poslat mi srovnání" }).click();
   await expect(page.getByTestId("thank-you")).toBeVisible();
 
-  const funnel = ["page_view", "hero_cta_click", "calc_start", "calc_result", "compare_view", "form_view", "form_submit"];
+  const funnel = ["page_view", "hero_cta_click", "calc_start", "calc_result", "form_view", "form_submit"];
   expect((await events(page)).filter((e) => funnel.includes(e))).toEqual(funnel);
+  expect(await entry(page, "form_submit")).toMatchObject({ form_location: "calc" });
   const layer = await page.evaluate(() => window.dataLayer!);
-  for (const entry of layer) {
-    expect(entry).toMatchObject({ ad_variant: "a", utm_source: "meta", utm_content: "a-uspora" });
+  for (const e of layer) {
+    expect(e).toMatchObject({ ad_variant: "a", utm_source: "meta", utm_content: "a-uspora" });
   }
 });
 

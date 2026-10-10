@@ -65,7 +65,7 @@ test("bez volby a po odmítnutí: žádný požadavek na PostHog, žádná cooki
 
   // návštěvník používá stránku bez volby
   await page.getByLabel("Měsíčně investuji").fill("3000");
-  await expect(page.getByTestId("lead-offer")).toBeVisible();
+  await expect(page.getByTestId("lead-inline")).toBeVisible();
   expect(ph.requests).toEqual([]);
   expect(await page.context().cookies()).toEqual([]);
   expect((await storageKeys(page)).local).toEqual([]);

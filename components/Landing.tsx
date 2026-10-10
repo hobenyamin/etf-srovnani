@@ -16,7 +16,7 @@ export function Landing({ variant }: { variant: AdVariant }) {
       <main className="mx-auto w-full max-w-xl flex-1">
         <PageView variant={variant} />
         <Hero variant={variant} />
-        <Calculator rows={FEE_ROWS} />
+        <Calculator rows={FEE_ROWS} fullComparison={<FullComparison />} />
         <Comparison />
         <LeadForm fullComparison={<FullComparison />} />
         <Trust />
