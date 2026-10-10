@@ -394,6 +394,30 @@ test("kontextová lišta: před výpočtem kalkulačka, po výsledku formulář,
   await expect(sticky).toHaveCount(0);
 });
 
+/** Posun kus pod začátek sekce, aby hero ani kalkulačka nebyly vidět (lišta nabídne kalkulačku). */
+const scrollPast = (page: Page, id: string) =>
+  page.locator(`#${id}`).evaluate((el) => window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + 200, behavior: "instant" }));
+
+test("lišta při odchodu zůstane chvíli v DOM jako inert, pak zmizí", async ({ page }) => {
+  await page.goto("/");
+  await declineCookies(page);
+  await scrollPast(page, "srovnani");
+  const sticky = page.getByTestId("sticky-cta");
+  await expect(sticky).toBeVisible();
+  await expect(sticky).not.toHaveAttribute("inert");
+  // zaznamenat, jestli lišta před odpojením dostala inert (okno 200 ms je na polling krátké)
+  await page.evaluate(() => {
+    const w = window as unknown as { stickyInert: boolean };
+    w.stickyInert = false;
+    new MutationObserver(() => {
+      if (document.querySelector('[data-testid="sticky-cta"][inert]')) w.stickyInert = true;
+    }).observe(document.body, { attributes: true, subtree: true, childList: true });
+  });
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+  await expect(sticky).toHaveCount(0);
+  expect(await page.evaluate(() => (window as unknown as { stickyInert: boolean }).stickyInert)).toBe(true);
+});
+
 /** Hodnoty, které číslo v účtence projde po klepnutí na předvolbu 5 000 Kč (mezistavy animace). */
 async function gapValuesAfterPreset(page: Page) {
   const gap = page.getByTestId("calc-gap");
@@ -442,12 +466,18 @@ test("šířka čísla v účtence se během animace nemění", async ({ page })
   expect(widths.length).toBeLessThanOrEqual(2);
 });
 
-test("omezení pohybu: tlačítka bez přechodu, číslo skočí rovnou, děkovací blok i razítko bez animace", async ({ page }) => {
+test("omezení pohybu: tlačítka a lišta bez přechodu, číslo skočí rovnou, děkovací blok i razítko bez animace", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   await declineCookies(page);
   const cta = page.getByRole("link", { name: "Spočítat pro mě" });
   expect(await cta.evaluate((el) => getComputedStyle(el).transitionDuration)).toBe("0s");
+
+  await scrollPast(page, "srovnani");
+  const sticky = page.getByTestId("sticky-cta");
+  await expect(sticky).toBeVisible();
+  expect(await sticky.evaluate((el) => getComputedStyle(el).transitionDuration)).toBe("0s");
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
 
   expect(await gapValuesAfterPreset(page)).toHaveLength(1);
 

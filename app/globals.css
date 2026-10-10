@@ -126,6 +126,24 @@ body {
     animation: stamp-in 320ms 120ms ease-out both;
   }
 
+  /* Spodní lišta: příjezd zdola (@starting-style), odjezd přes třídu leaving (StickyCta, usePresence) */
+  .sticky-bar {
+    transition:
+      transform 200ms ease-out,
+      opacity 200ms ease-out;
+  }
+  @starting-style {
+    .sticky-bar {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+  }
+  .sticky-bar.leaving {
+    transform: translateY(100%);
+    opacity: 0;
+    transition-timing-function: ease-in;
+  }
+
   .pulse-dot {
     animation: pulse-dot 900ms ease-in-out infinite alternate;
   }

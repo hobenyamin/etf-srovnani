@@ -7,7 +7,8 @@ import { FORM_ANCHOR } from "@/lib/lead-flow";
 import { useBannerVisible } from "@/lib/use-consent";
 import { useLeadFlow } from "@/lib/use-lead-flow";
 
-const bar = "fixed inset-x-0 bottom-0 z-10 border-t border-rule bg-paper/95 px-4 py-3 backdrop-blur-sm";
+const bar = "sticky-bar fixed inset-x-0 bottom-0 z-10 border-t border-rule bg-paper/95 px-4 py-3 backdrop-blur-sm";
+const LEAVE_MS = 200;
 const cta = "btn-primary mx-auto h-12 w-full max-w-xl";
 
 /**
@@ -16,6 +17,8 @@ const cta = "btn-primary mx-auto h-12 w-full max-w-xl";
  *   → srovnání). Kalkulačka začíná už v první obrazovce, „jednou viděná“ by lištu schovala hned po načtení,
  * - po výsledku „Poslat mi srovnání“ → pole pro e-mail. Schová se, když je formulář vidět, a po odeslání,
  * - nikdy současně s toutéž výzvou v patičce (FooterCta).
+ * Příchod animuje CSS (@starting-style), odchod usePresence: lišta zůstane 200 ms v DOM jako inert
+ * s posledním krokem. S omezením pohybu se odpojí hned.
  */
 export function StickyCta() {
   const [heroOut, setHeroOut] = useState(false);
@@ -63,11 +66,29 @@ export function StickyCta() {
     return () => observer.disconnect();
   }, [flow.calcDone, flow.activeForm]);
 
-  if (bannerVisible || footerInView || !step) return null;
-  if (step === "form" ? formVisible : !heroOut || calcInView) return null;
+  const hidden =
+    bannerVisible || footerInView || !step || (step === "form" ? formVisible : !heroOut || calcInView);
+  const presence = usePresence(hidden ? null : step, LEAVE_MS);
+  if (!presence) return null;
   return (
-    <div className={bar} data-testid="sticky-cta">
-      <NextStepCta step={step} cta="sticky" className={cta} />
+    <div className={presence.leaving ? `${bar} leaving` : bar} inert={presence.leaving} data-testid="sticky-cta">
+      <NextStepCta step={presence.value} cta="sticky" className={cta} />
     </div>
   );
+}
+
+/** Drží poslední hodnotu ještě `ms` po tom, co zmizí (animace odchodu). S omezením pohybu ji pustí hned. */
+function usePresence<T>(value: T | null, ms: number): { value: T; leaving: boolean } | null {
+  const [kept, setKept] = useState(value);
+  if (value !== null && value !== kept) setKept(value);
+
+  useEffect(() => {
+    if (value !== null || kept === null) return;
+    const delay = matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : ms;
+    const timer = setTimeout(() => setKept(null), delay);
+    return () => clearTimeout(timer);
+  }, [value, kept, ms]);
+
+  if (kept === null) return null;
+  return { value: value ?? kept, leaving: value === null };
 }
