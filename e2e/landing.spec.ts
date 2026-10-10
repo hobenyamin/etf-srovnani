@@ -413,6 +413,27 @@ test("číslo v účtence se mění plynule a skončí na přesné hodnotě", as
   await expect(page.locator("#kalkulacka .sr-only", { hasText: values.at(-1)! })).toHaveCount(1);
 });
 
+test("šířka čísla v účtence se během animace nemění", async ({ page }) => {
+  await page.goto("/");
+  await declineCookies(page);
+  const box = page.getByTestId("calc-gap").locator("..");
+  await box.evaluate((el) => {
+    const widths = new Set<number>();
+    (window as unknown as { gapWidths: Set<number> }).gapWidths = widths;
+    new MutationObserver(() => widths.add(el.getBoundingClientRect().width)).observe(el, {
+      characterData: true,
+      childList: true,
+      subtree: true,
+    });
+  });
+  await page.getByRole("button", { name: "5 000" }).click();
+  await page.waitForTimeout(600);
+  const widths = await page.evaluate(() => [...(window as unknown as { gapWidths: Set<number> }).gapWidths]);
+  // jedna změna šířky (nový výsledek), ne v každém snímku
+  expect(widths.length).toBeGreaterThan(0);
+  expect(widths.length).toBeLessThanOrEqual(2);
+});
+
 test("omezení pohybu: tlačítka bez přechodu, číslo skočí rovnou, děkovací blok bez animace", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");

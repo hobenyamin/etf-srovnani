@@ -30,9 +30,16 @@ body {
   color: var(--color-ink);
 }
 
-/* Čísla vždy v tabulkových číslicích, aby se řádky účtenky nerozskakovaly */
+/* Čísla v textu a tabulkách v tabulkových číslicích, aby se řádky účtenky nerozskakovaly. Atkinson Hyperlegible
+   Next má jen přeškrtnutou nulu (ověřeno renderem i u plného písma od autorů, salt/zero/ssXX ji nemění). */
 .num {
   font-variant-numeric: tabular-nums;
+}
+
+/* Samostatné velké číslo (hero A, rozdíl v účtence): Fraunces jako nadpisy, obyčejná nula, proporcionální
+   lining číslice. Použít s font-display (pevná optická velikost). */
+.figure {
+  font-variant-numeric: lining-nums proportional-nums;
 }
 
 /* Pole aspoň 16 px: menší písmo v poli iOS při focusu přiblíží celou stránku. V base vrstvě, aby šlo pole

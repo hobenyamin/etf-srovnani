@@ -39,9 +39,16 @@ export function FeeReceipt({
           <p className="font-semibold">
             Rozdíl {formatPercent(etf.ter)} vs. {formatPercent(active.ter)} za {years}&nbsp;let
           </p>
-          {/* Animované číslo čtečka nečte (hlásila by každý snímek), dostane jen výslednou hodnotu */}
-          <p aria-hidden className="num text-[40px] leading-[44px] font-bold tracking-tight" data-testid="calc-gap">
-            {formatKc(gap)}
+          {/* Animované číslo čtečka nečte (hlásila by každý snímek), dostane jen výslednou hodnotu.
+              Šířku drží neviditelná výsledná hodnota, animovaná leží přes ni: proporcionální číslice
+              by jinak měnily šířku v každém snímku, takto jen jednou při změně výsledku. */}
+          <p aria-hidden className="figure font-display text-[40px] leading-[44px] font-semibold tracking-tight">
+            <span className="relative inline-block">
+              <span className="invisible whitespace-nowrap">{formatKc(result.esmaGap)}</span>
+              <span className="absolute inset-y-0 left-0 whitespace-nowrap" data-testid="calc-gap">
+                {formatKc(gap)}
+              </span>
+            </span>
           </p>
           <p className="sr-only">{formatKc(result.esmaGap)}</p>
           <p className="fine mt-1">
