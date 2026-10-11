@@ -28,6 +28,7 @@ export function fakeStore(overrides: Partial<LeadStore> = {}) {
     setQualify: vi.fn(async () => {}),
     claimConfirmation: vi.fn(async () => true),
     confirm: vi.fn(async () => ({ status: "invalid" as const, adVariant: null, utm: {} })),
+    findByToken: vi.fn(async () => null),
     unsubscribe: vi.fn(async () => true),
     ...overrides,
   };

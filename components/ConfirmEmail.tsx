@@ -3,24 +3,41 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { type ReactNode, useEffect, useRef, useState } from "react";
-import { confirmLead } from "@/app/actions/lead";
+import { confirmLead, confirmStatus } from "@/app/actions/lead";
 import { DoneBanner } from "@/components/DoneBanner";
 import { CONFIRM_VALID_DAYS } from "@/lib/email-template";
 import { setAdVariant, track } from "@/lib/track";
 
-type State = "idle" | "working" | "confirmed" | "already" | "expired" | "invalid" | "error";
+type State = "checking" | "idle" | "working" | "confirmed" | "already" | "expired" | "invalid" | "error";
 
 const button =
   "btn-primary mt-6 h-14 w-full text-base";
 
-/** Potvrzení adresy tlačítkem. Po potvrzení hned plné srovnání a event lead_confirmed s atribucí leadu. */
+/**
+ * Potvrzení adresy tlačítkem. Po potvrzení hned plné srovnání a event lead_confirmed s atribucí leadu.
+ * Při načtení se jen zjistí stav odkazu (nic se nezapisuje): po obnovení stránky už potvrzená adresa
+ * rovnou vidí srovnání, neplatný nebo prošlý odkaz hlášku. Výpadek databáze = tlačítko jako dřív.
+ */
 export function ConfirmEmail({ fullComparison }: { fullComparison: ReactNode }) {
   const token = useSearchParams().get("t");
-  const [state, setState] = useState<State>(token ? "idle" : "invalid");
+  const [state, setState] = useState<State>(token ? "checking" : "invalid");
   const heading = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    if (state !== "idle" && state !== "working") heading.current?.focus();
+    if (!token) return;
+    let active = true;
+    confirmStatus(token)
+      .catch(() => "unknown" as const)
+      .then((status) => {
+        if (active) setState(status === "pending" || status === "unknown" ? "idle" : status);
+      });
+    return () => {
+      active = false;
+    };
+  }, [token]);
+
+  useEffect(() => {
+    if (state !== "checking" && state !== "idle" && state !== "working") heading.current?.focus();
   }, [state]);
 
   async function confirm() {
@@ -46,6 +63,18 @@ export function ConfirmEmail({ fullComparison }: { fullComparison: ReactNode }) 
         </DoneBanner>
         <div className="mt-8 space-y-8">{fullComparison}</div>
       </div>
+    );
+  }
+
+  if (state === "checking") {
+    return (
+      <>
+        <h1 className="mt-4 font-display text-[34px] leading-[38px] font-semibold">Potvrzení e-mailu</h1>
+        <p className="mt-3 text-[15px] leading-6" role="status">
+          <span aria-hidden className="pulse-dot mr-2" />
+          Ověřuji odkaz…
+        </p>
+      </>
     );
   }
 

@@ -4,12 +4,14 @@ import { confirmationEmail } from "./email-template";
 import { formatDate } from "./format";
 import {
   handleConfirm,
+  handleConfirmStatus,
   handleSubmit,
   handleUnsubscribe,
   hashToken,
   type LeadStore,
   sendConfirmation,
   signUnsubscribe,
+  tokenStatus,
 } from "./lead-server";
 import { sign } from "./sign";
 import { OPERATOR, RISK_WARNINGS } from "./site";
@@ -23,6 +25,7 @@ function store(overrides: Partial<LeadStore> = {}): LeadStore {
     setQualify: vi.fn(async () => {}),
     claimConfirmation: vi.fn(async () => true),
     confirm: vi.fn(async () => ({ status: "confirmed" as const, adVariant: "b" as const, utm: { utm_source: "meta" } })),
+    findByToken: vi.fn(async () => ({ doubleOptInAt: null, confirmSentAt: new Date().toISOString() })),
     unsubscribe: vi.fn(async () => true),
     ...overrides,
   };
@@ -140,6 +143,51 @@ describe("handleConfirm", () => {
   it("výpadek databáze se pozná (výjimka), není to „neplatný odkaz“", async () => {
     const s = store({ confirm: vi.fn().mockRejectedValue(new Error("down")) });
     await expect(handleConfirm("A".repeat(43), s)).rejects.toThrow();
+  });
+});
+
+describe("stav odkazu při načtení /potvrzeni (jen čtení)", () => {
+  const now = new Date("2026-10-11T12:00:00Z");
+  const daysAgo = (d: number) => new Date(now.getTime() - d * 24 * 60 * 60 * 1000).toISOString();
+
+  it("tokenStatus: stejné pořadí podmínek jako SQL confirm_lead", () => {
+    expect(tokenStatus(null, now)).toBe("invalid");
+    // potvrzená adresa je „already“ i s prošlým odkazem (jako v SQL)
+    expect(tokenStatus({ doubleOptInAt: daysAgo(1), confirmSentAt: daysAgo(30) }, now)).toBe("already");
+    expect(tokenStatus({ doubleOptInAt: null, confirmSentAt: null }, now)).toBe("expired");
+    expect(tokenStatus({ doubleOptInAt: null, confirmSentAt: daysAgo(14.001) }, now)).toBe("expired");
+    expect(tokenStatus({ doubleOptInAt: null, confirmSentAt: daysAgo(13.999) }, now)).toBe("pending");
+    expect(tokenStatus({ doubleOptInAt: null, confirmSentAt: daysAgo(0) }, now)).toBe("pending");
+  });
+
+  it("nesmyslný token do DB nejde", async () => {
+    const s = store();
+    for (const t of [null, "", "abc", "x".repeat(43) + "!", 42]) {
+      expect(await handleConfirmStatus(t, s)).toBe("invalid");
+    }
+    expect(s.findByToken).not.toHaveBeenCalled();
+    expect(await handleConfirmStatus("A".repeat(43), null)).toBe("invalid");
+  });
+
+  it("platný tvar → jen čtení podle hashe, potvrzení (confirm) se nevolá", async () => {
+    const token = "A".repeat(43);
+    const pending = store();
+    expect(await handleConfirmStatus(token, pending)).toBe("pending");
+    expect(pending.findByToken).toHaveBeenCalledWith(hashToken(token));
+    expect(pending.confirm).not.toHaveBeenCalled();
+
+    const already = store({ findByToken: vi.fn(async () => ({ doubleOptInAt: "2026-10-10T08:00:00Z", confirmSentAt: null })) });
+    expect(await handleConfirmStatus(token, already)).toBe("already");
+    expect(already.confirm).not.toHaveBeenCalled();
+
+    expect(await handleConfirmStatus(token, store({ findByToken: vi.fn(async () => null) }))).toBe("invalid");
+  });
+
+  it("výpadek databáze = unknown (stránka ukáže tlačítko), ne „neplatný odkaz“", async () => {
+    const s = store({ findByToken: vi.fn().mockRejectedValue(new Error("down")) });
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(await handleConfirmStatus("A".repeat(43), s)).toBe("unknown");
+    log.mockRestore();
   });
 });
 

@@ -36,6 +36,9 @@ export type StoredLead = { id: string; isNew: boolean; doubleOptInAt: string | n
 
 export type ConfirmStatus = "confirmed" | "already" | "expired" | "invalid";
 export type ConfirmOutcome = { status: ConfirmStatus; adVariant: AdVariant | null; utm: Utm };
+/** Stav odkazu při načtení /potvrzeni (jen čtení, viz handleConfirmStatus). */
+export type TokenStatus = "pending" | "already" | "expired" | "invalid";
+export type TokenRow = { doubleOptInAt: string | null; confirmSentAt: string | null };
 
 export type LeadStore = {
   upsert(params: UpsertLeadParams): Promise<StoredLead>;
@@ -43,6 +46,8 @@ export type LeadStore = {
   /** Zabere odeslání potvrzovacího e-mailu (cooldown + hodinový strop v DB). true = poslat. */
   claimConfirmation(id: string, tokenHash: string): Promise<boolean>;
   confirm(tokenHash: string): Promise<ConfirmOutcome>;
+  /** Jen čtení: stav leadu podle hashe tokenu, nic nezapisuje. null = token neexistuje. */
+  findByToken(tokenHash: string): Promise<TokenRow | null>;
   unsubscribe(id: string): Promise<boolean>;
 };
 
@@ -199,6 +204,30 @@ export async function handleConfirm(token: unknown, store: LeadStore | null): Pr
   }
 }
 
+/** Stejné pořadí podmínek jako SQL `confirm_lead`, jen bez zápisu. */
+export function tokenStatus(row: TokenRow | null, now: Date = new Date()): TokenStatus {
+  if (!row) return "invalid";
+  if (row.doubleOptInAt) return "already";
+  const validMs = CONFIRM_VALID_DAYS * 24 * 60 * 60 * 1000;
+  if (!row.confirmSentAt || Date.parse(row.confirmSentAt) < now.getTime() - validMs) return "expired";
+  return "pending";
+}
+
+/**
+ * Stav odkazu při načtení /potvrzeni, aby obnovená stránka nenabízela potvrzení znovu. Jen čte:
+ * potvrzuje dál výhradně tlačítko (handleConfirm), takže skener odkazů nic nepotvrdí.
+ * Vrací jen stav, žádnou atribuci. Výpadek databáze = `unknown` (stránka ukáže tlačítko jako dřív).
+ */
+export async function handleConfirmStatus(token: unknown, store: LeadStore | null): Promise<TokenStatus | "unknown"> {
+  if (typeof token !== "string" || !TOKEN.test(token) || !store) return "invalid";
+  try {
+    return tokenStatus(await store.findByToken(hashToken(token)));
+  } catch (error) {
+    console.error("[lead] kontrola odkazu selhala:", errorCode(error));
+    return "unknown";
+  }
+}
+
 export async function handleUnsubscribe(signed: unknown, store: LeadStore | null): Promise<boolean> {
   const value = verify(signed);
   if (!value?.startsWith(UNSUB_PREFIX) || !store) return false;
@@ -286,6 +315,18 @@ export function supabaseStore(client: SupabaseClient): LeadStore {
         adVariant: data.ad_variant === "a" || data.ad_variant === "b" ? data.ad_variant : null,
         utm,
       };
+    },
+    async findByToken(tokenHash) {
+      const { data, error } = await client
+        .from("leads")
+        .select("double_opt_in_at, confirm_sent_at")
+        .eq("confirm_token_hash", tokenHash)
+        .maybeSingle<{ double_opt_in_at: string | null; confirm_sent_at: string | null }>()
+        // GET by postgrest-js po výpadku opakoval (1 + 2 + 4 s). Návštěvník by čekal, přitom bez odpovědi
+        // stačí ukázat tlačítko jako dřív.
+        .retry(false);
+      if (error) throw error;
+      return data && { doubleOptInAt: data.double_opt_in_at, confirmSentAt: data.confirm_sent_at };
     },
     async unsubscribe(id) {
       const { data, error } = await client.rpc("unsubscribe_lead", { p_id: id });

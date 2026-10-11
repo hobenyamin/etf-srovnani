@@ -10,7 +10,8 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-// Statická stránka; token z odkazu (?t=…) čte až prohlížeč. Potvrzuje teprve tlačítko,
+// Statická stránka; token z odkazu (?t=…) čte až prohlížeč. Při načtení se stav odkazu jen přečte
+// (už potvrzeno → rovnou srovnání), potvrzuje teprve tlačítko,
 // takže bezpečnostní skenery odkazů v e-mailových schránkách adresu samy nepotvrdí.
 export default function Potvrzeni() {
   return (

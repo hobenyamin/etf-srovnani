@@ -6,11 +6,13 @@ import { resendMailer, siteUrl } from "@/lib/email";
 import {
   type ConfirmOutcome,
   handleConfirm,
+  handleConfirmStatus,
   handleQualify,
   handleSubmit,
   handleUnsubscribe,
   type SubmitResult,
   supabaseStore,
+  type TokenStatus,
 } from "@/lib/lead-server";
 import { supabaseAdmin } from "@/lib/supabase";
 
@@ -46,6 +48,11 @@ export async function confirmLead(token: unknown): Promise<ConfirmOutcome | { st
   } catch {
     return { status: "error" };
   }
+}
+
+/** Stav odkazu při načtení /potvrzeni. Jen čte, nic nepotvrzuje. */
+export async function confirmStatus(token: unknown): Promise<TokenStatus | "unknown"> {
+  return handleConfirmStatus(token, store());
 }
 
 /** Odhlášení tlačítkem na /odhlaseni. */

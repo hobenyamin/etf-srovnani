@@ -387,17 +387,18 @@ test.describe("double opt-in a odhlášení", () => {
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Tenhle odkaz nefunguje");
     await expect(page.getByTestId("pair")).toHaveCount(0);
 
+    // stav odkazu se zjistí už při načtení (jen čtení): nesmyslný token hned hláška, žádné tlačítko
     await page.goto("/potvrzeni?t=nesmysl");
-    // samotné otevření odkazu nic nepotvrdí – až tlačítko
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Potvrďte svůj e-mail");
-    await page.getByRole("button", { name: "Potvrdit e-mail" }).click();
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Tenhle odkaz nefunguje");
+    await expect(page.getByRole("button", { name: "Potvrdit e-mail" })).toHaveCount(0);
     await expect(page.getByTestId("pair")).toHaveCount(0);
     await expect(page.getByRole("link", { name: "Zadat e-mail znovu" })).toHaveAttribute("href", "/#formular");
   });
 
-  test("výpadek databáze při potvrzení: chyba s možností zkusit znovu, žádný lead_confirmed", async ({ page }) => {
+  test("výpadek databáze: při načtení tlačítko, po potvrzení chyba s možností zkusit znovu, žádný lead_confirmed", async ({ page }) => {
     await page.goto(`/potvrzeni?t=${"A".repeat(43)}`);
+    // kontrola stavu při načtení databázi nezastihne → tlačítko jako dřív, samo otevření nic nepotvrdí
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Potvrďte svůj e-mail");
     await page.getByRole("button", { name: "Potvrdit e-mail" }).click();
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Teď se to nepovedlo");
     await expect(page.getByRole("button", { name: "Zkusit znovu" })).toBeVisible();
