@@ -8,9 +8,9 @@ Texty jsou zdrojově v [`copy.json`](copy.json). Tady jsou stejné. Shodu hlíd�
 | --- | --- | --- | --- |
 | Primární text, 1. odstavec (vidět před „Zobrazit více“) | Proč si v Česku nekoupíte VOO? A jaké alternativy jsou v ČR dostupné. Vzdělávací srovnání, ne doporučení. | 105 | 125 |
 | Primární text, 2. odstavec | Fondy z USA nemají KID – dokument, který v EU musí drobný investor dostat před nákupem. Ukážeme fondy UCITS, které sledují stejný index jako VOO – s poplatky, zdrojem a datem dat. | | |
-| Primární text, 3. odstavec (rizika) | Hodnota investice může klesat. Fondy investují v USD, kurz USD/CZK může výsledek snížit i zvýšit. | | |
+| Primární text, 3. odstavec (rizika) | Hodnota investice může klesat i stoupat, můžete přijít o část vložených peněz. Fondy vedou hodnotu v USD a drží akcie v cizích měnách. Změna kurzu koruny může výnos v korunách snížit i zvýšit. | | |
 | Nadpis | Proč si v ČR nekoupíte VOO? | 27 | 40 (IG feed), 27 (FB feed) |
-| Popis | Srovnání ETF z NYSE a UCITS | 27 | Meta neuvádí |
+| Popis | Srovnání ETF z NYSE a z EU | 26 | Meta neuvádí |
 | Tlačítko | Zjistit víc | | |
 
 V reklamě není žádné číslo ani konkrétní UCITS fond. VUAA a jeho TER návštěvník uvidí až na stránce, aby reklama nepropagovala konkrétní nástroj. Nadpis má 27 znaků, takže ho feed Facebooku nezkrátí. Proti hero („Proč si v Česku nekoupíte VOO?“) je zkrácené jen „v Česku“ na „v ČR“, otázka zůstává stejná. Věta o KID ve 2. odstavci je doslova věta z hero B.

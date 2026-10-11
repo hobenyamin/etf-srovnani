@@ -4,10 +4,10 @@
   "primary_text": [
     "Proč si v Česku nekoupíte VOO? A jaké alternativy jsou v ČR dostupné. Vzdělávací srovnání, ne doporučení.",
     "Fondy z USA nemají KID – dokument, který v EU musí drobný investor dostat před nákupem. Ukážeme fondy UCITS, které sledují stejný index jako VOO – s poplatky, zdrojem a datem dat.",
-    "Hodnota investice může klesat. Fondy investují v USD, kurz USD/CZK může výsledek snížit i zvýšit."
+    "Hodnota investice může klesat i stoupat, můžete přijít o část vložených peněz. Fondy vedou hodnotu v USD a drží akcie v cizích měnách. Změna kurzu koruny může výnos v korunách snížit i zvýšit."
   ],
   "headline": "Proč si v ČR nekoupíte VOO?",
-  "description": "Srovnání ETF z NYSE a UCITS",
+  "description": "Srovnání ETF z NYSE a z EU",
   "cta": "Zjistit víc",
   "url": "https://etf-srovnani.vercel.app/?utm_source=meta&utm_medium=paid_social&utm_campaign=etf-srovnani-cz-2026-10&utm_content=b-zvedavost"
 }

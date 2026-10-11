@@ -8,7 +8,7 @@ Texty jsou zdrojově v [`copy.json`](copy.json). Tady jsou stejné. Shodu hlíd�
 | --- | --- | --- | --- |
 | Primární text, 1. odstavec (vidět před „Zobrazit více“) | Při 2 000 Kč měsíčně je rozdíl v poplatcích fondů za 20 let přes 40 000 Kč – i bez výnosu. Modelový výpočet, ne doporučení. | 123 | 125 |
 | Primární text, 2. odstavec | Spočítejte si to pro svou částku – výsledek v Kč, bez registrace. | | |
-| Primární text, 3. odstavec (disclaimer) | Průměrné průběžné náklady ETF (0,2 %) vs. aktivních akciových fondů v EU (1,2 %) podle ESMA (2026, data 2024), 2 000 Kč měsíčně po dobu 20 let, výnos 0 %: rozdíl 44 200 Kč. Hodnota investice může klesat. | | |
+| Primární text, 3. odstavec (disclaimer) | Průměrné průběžné náklady ETF (0,2 %) vs. aktivních akciových fondů v EU (1,2 %) podle ESMA (2026, data 2024), 2 000 Kč měsíčně po dobu 20 let, výnos 0 %: rozdíl 44 200 Kč. Hodnota investice může klesat i stoupat, můžete přijít o část vložených peněz. | | |
 | Nadpis | Rozdíl v poplatcích fondů | 25 | 40 (IG feed), 27 (FB feed) |
 | Popis | Kalkulačka poplatků v Kč | 24 | Meta neuvádí |
 | Tlačítko | Zjistit víc | | |

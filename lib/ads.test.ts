@@ -7,6 +7,7 @@ import { fundPairs } from "./etfs";
 import { ESMA, FEE_ROWS } from "./fee-rows";
 import { computeFees, HERO_INPUT } from "./fees";
 import { formatInteger, formatKc, formatPercent } from "./format";
+import { RISK_WARNINGS } from "./site";
 
 type Copy = {
   variant: "a" | "b";
@@ -43,6 +44,17 @@ describe.each(["a-uspora", "b-zvedavost"])("reklama %s", (dir) => {
 
   it("nadpis se vejde do limitu Meta", () => {
     expect(c.headline.length).toBeLessThanOrEqual(HEADLINE_MAX);
+  });
+
+  it("rizikové věty jsou doslova z RISK_WARNINGS (stejné znění jako stránka a e-mail)", () => {
+    const warnings = RISK_WARNINGS.map(plain);
+    const sentences = plain(c.primary_text.join(" ")).match(/[^.]+\./g)!.map((s) => s.trim());
+    const risky = sentences.filter((s) => /investice může|kurz|měn/i.test(s));
+    expect(risky.length).toBeGreaterThan(0);
+    // věta o měně je ve RISK_WARNINGS jako dvě věty v jedné položce: porovnává se po větách
+    const allowed = warnings.flatMap((w) => w.match(/[^.]+\./g)!.map((s) => s.trim()));
+    for (const s of risky) expect(allowed).toContain(s);
+    expect(sentences).toContain(warnings[0]);
   });
 
   it("utm_content vybere v proxy.ts hero stejné varianty", () => {
@@ -133,6 +145,10 @@ describe("reklama B sedí s hero B", () => {
     expect(match![1]).toBe(voo.ticker.value);
     expect(match![2]).toBe(voo.exchange.value);
     expect(`${html} ${c.primary_text.join(" ")} ${c.headline}`).not.toMatch(/V00/);
+  });
+
+  it("měnové riziko celou větou jako na stránce", () => {
+    expect(plain(c.primary_text.join(" "))).toContain(plain(RISK_WARNINGS[1]));
   });
 
   it("ticker není v monospace (.num), kde „O“ vypadá jako nula", () => {

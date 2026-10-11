@@ -73,7 +73,7 @@ Podle mantinelů v [`CLAUDE.md`](../CLAUDE.md). Toto není právní rada. Před 
 | Žádná výzva ke koupi konkrétního nástroje (MAR/ZPKT) | ✓ | ✓ VOO jen jako otázka, proč ho nekoupíte. UCITS fond se v reklamě nejmenuje |
 | Žádný slib výnosu (40/1995, 634/1992) | ✓ výpočet výslovně s výnosem 0 % | ✓ |
 | Zdroj a datum čísla | ✓ ESMA (2026, data 2024) | – |
-| Rizikové upozornění | ✓ „Hodnota investice může klesat“ | ✓ a měnové riziko USD/CZK |
+| Rizikové upozornění | ✓ v primárním textu doslova věta z `RISK_WARNINGS` (stránka a e-mail). Vizuál má kvůli místu zkrácené „Hodnota investice může klesat.“ | ✓ doslova věty z `RISK_WARNINGS` včetně měnového rizika (hlídá `lib/ads.test.ts`) |
 | Žádné personalizované doporučení (MiFID II) | ✓ | ✓ |
 | Netvrdíme, co není ověřené | ✓ | ✓ dostupnost konkrétního UCITS fondu v ČR (`registered_in_cz` u VUAA = null) reklama netvrdí |
 | Žádné fotky, loga emitentů ani vymyšlené značky | ✓ | ✓ |
@@ -117,7 +117,7 @@ Podmínka „při 2 000 Kč měsíčně“ je v textu nutná. Rozdíl roste s č
 
 Historie: (1) „Na poplatcích ETF můžete za 20 let ztratit desítky tisíc Kč“ – mezi ETF neplatí; (2) „Rozdíl v poplatcích fondů dělá za 20 let desítky tisíc Kč, i bez jakéhokoli výnosu“ – bez podmínky výše vkladu, při 500 Kč měsíčně neplatí (odhalila lidská revize); (3) text výše; (4) v reklamě (krok 7, 2026-10-10) „i bez výnosu“ místo „i bez jakéhokoli výnosu“ a hned za tím „Modelový výpočet, ne doporučení.“, aby podmínka i upozornění byly v prvních 125 znacích (před „Zobrazit více“). Věcně se nic nemění, v hero zůstává „I bez jakéhokoli výnosu“.
 
-Povinný disclaimer v reklamě (v reklamě A je „Modelový výpočet, ne doporučení.“ už v 1. odstavci, disclaimer pak končí „Hodnota investice může klesat.“):
+Povinný disclaimer v reklamě (v reklamě A je „Modelový výpočet, ne doporučení.“ už v 1. odstavci, disclaimer pak končí rizikovou větou ze stránky: „Hodnota investice může klesat i stoupat, můžete přijít o část vložených peněz.“):
 
 > Průměrné průběžné náklady ETF (0,2 %) vs. aktivních akciových fondů v EU (1,2 %) podle ESMA (2026, data 2024), 2 000 Kč měsíčně po dobu 20 let, výnos 0 %: rozdíl 44 200 Kč. Modelový výpočet, ne doporučení.
 
