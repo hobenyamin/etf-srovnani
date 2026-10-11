@@ -21,10 +21,10 @@ export function Comparison() {
       </h2>
       <p className="mt-3 text-[15px] leading-6">
         Fondy se sídlem v&nbsp;USA nemají{" "}
-        <Term term="KID">
+        <Term term="KID" suffix=",">
           Sdělení klíčových informací: krátký dokument o rizicích a nákladech fondu, nejvýš 3 strany A4.
-        </Term>
-        , který podle{" "}
+        </Term>{" "}
+        který podle{" "}
         <a className="underline" href={PRIIPS_URL}>
           nařízení PRIIPs
         </a>{" "}
