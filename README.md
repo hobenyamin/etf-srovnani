@@ -9,7 +9,7 @@ Praktický úkol do výběrového řízení Clientelo Czech s.r.o. Hodnoticí ot
 
 ## Dá se zítra spustit reklama?
 
-**Technicky ano.** Stránka běží na produkci. Ukládání leadů, double opt-in, odhlášení a měření prošly ručními testy proti skutečným službám (kroky 4a–4c), na produkci zatím jen část ([checklist produkce](#ruční-ověření-produkce-krok-6), body 4–8 zbývají). Před ostrou kampaní za klienta je potřeba ještě:
+**Technicky ano.** Stránka běží na produkci. Ukládání leadů, double opt-in, odhlášení a měření prošly ručními testy proti skutečným službám (kroky 4a–4c) a odeslání, e-mail i potvrzení i na produkci ([checklist produkce](#ruční-ověření-produkce-krok-6)). Zbývá tlačítko „Odhlásit“ v Gmailu, stav `marketing_audience` v DB a cookie lišta na produkci (body 7 a 8). Před ostrou kampaní za klienta je potřeba ještě:
 
 - **Správce osobních údajů:** v textech u formuláře, v zásadách a v patičce je teď autor projektu, ne klient (název, IČO, sídlo, kontakt).
 - **Vlastní doména:** stránka běží na `etf-srovnani.vercel.app`, e-maily chodí z domény autora. Kampaň za klienta potřebuje jeho doménu a placené plány (Vercel Pro, Supabase, Resend).
@@ -357,7 +357,7 @@ Stránku, data, testy, reklamy i tento README psala AI. Člověk zadával kroky,
 
 ### Kde se AI mýlila
 
-Úplný seznam s tím, jak se chyba zjistila a čím se opravila: [`docs/ai-chyby.md`](docs/ai-chyby.md) (29 záznamů z Claude Code, 3 z chatu). Nejzávažnější:
+Úplný seznam s tím, jak se chyba zjistila a čím se opravila: [`docs/ai-chyby.md`](docs/ai-chyby.md) (29 záznamů z Claude Code, 4 z chatu). Nejzávažnější:
 
 - **Testy zapisovaly do ostré databáze a odeslaly 3 skutečné e-maily** (port 3100 obsadil starý produkční server). Opatření: testovací adresy jen na rezervovaných doménách, `reuseExistingServer: false`, `assertSafeTestEnv`.
 - **Nepravdivé „ověřeno renderem“** u nuly v písmu Atkinson: měřicí skript zůstal jen v dočasné složce a tvrzení neplatilo. AI se pak zastavila a zeptala člověka. Měřicí skripty jsou teď v repozitáři.
@@ -442,10 +442,10 @@ Na https://etf-srovnani.vercel.app, vyplněno 2026-10-11. U každého výsledku 
 | 1 | Region funkcí | `curl -sI -X POST "https://etf-srovnani.vercel.app/api/odhlaseni?u=x"` → hlavička `x-vercel-id` končí na `fra1::…` (nebo Deployment → Functions) | ✓ AI přes `curl` 2026-10-11: `x-vercel-id: fra1::fra1::…` (odpověď 400, neplatný odkaz nic nezmění) |
 | 2 | noindex | `curl -s https://etf-srovnani.vercel.app/potvrzeni \| grep -o '<meta name="robots"[^>]*>'`, totéž pro `/odhlaseni`, `/zasady`, `/v/b`. `/` noindex mít nesmí | ✓ AI přes `curl` 2026-10-11: `/potvrzeni`, `/odhlaseni`, `/zasady` i `/v/b` mají `noindex`, `/` meta robots nemá |
 | 3 | Hero B | `/?utm_content=b-zvedavost` ukáže variantu B (proxy na Vercelu) | ✓ AI přes `curl` 2026-10-11: HTML s `utm_content=b-zvedavost` obsahuje otázku o VOO a větu o KID, s `a-uspora` nadpis hero A |
-| 4 | Odeslání formuláře | z mobilu s `?utm_source=test&utm_content=b-test`. V Supabase řádek s `ad_variant`, `utm_*`, `consent_text`, `calc_input`, `calc_result` | Neověřeno: odeslání na produkci s testovacím UTM a kontrolu řádku v Supabase zatím nikdo nezapsal |
-| 5 | E-mail a odkazy | dorazí do Gmailu. Odkazy na potvrzení a odhlášení vedou na `https://etf-srovnani.vercel.app`, ne na localhost | Částečně ✓ člověk 2026-10-11: e-mail dorazil do Gmailu (body 7 a 10). Že odkaz na potvrzení vede na produkční doménu, zapsané není |
-| 6 | Potvrzení | tlačítko na `/potvrzeni` vyplní `double_opt_in_at` | Neověřeno na produkci. Lokálně proti Supabase ✓ (krok 4b) |
-| 6b | Obnovení `/potvrzeni` | po potvrzení stránku obnovit → rovnou „Adresu už máte potvrzenou.“ a srovnání, bez tlačítka. `double_opt_in_at` se při obnovení nezmění. Nový odkaz (z čerstvého e-mailu) při otevření ukáže tlačítko a v DB zůstane nepotvrzený | Neověřeno na produkci. Logiku hlídají unit testy (`tokenStatus`, `handleConfirmStatus`) a E2E test bez databáze |
+| 4 | Odeslání formuláře | z mobilu s `?utm_source=test&utm_content=b-test`. V Supabase řádek s `ad_variant`, `utm_*`, `consent_text`, `calc_input`, `calc_result` | ✓ člověk 2026-10-10: odeslání formuláře na produkci funguje |
+| 5 | E-mail a odkazy | dorazí do Gmailu. Odkazy na potvrzení a odhlášení vedou na `https://etf-srovnani.vercel.app`, ne na localhost | ✓ člověk 2026-10-10: e-mail dorazil do Gmailu a odkazy v něm vedou na produkční doménu (2026-10-11 i DMARC PASS, bod 10) |
+| 6 | Potvrzení | tlačítko na `/potvrzeni` vyplní `double_opt_in_at` | ✓ člověk 2026-10-10: potvrzení leadu na produkci funguje |
+| 6b | Obnovení `/potvrzeni` | po potvrzení stránku obnovit → rovnou „Adresu už máte potvrzenou.“ a srovnání, bez tlačítka. `double_opt_in_at` se při obnovení nezmění. Nový odkaz (z čerstvého e-mailu) při otevření ukáže tlačítko a v DB zůstane nepotvrzený | ✓ člověk 2026-10-11: po obnovení stránky rovnou „Adresu už máte potvrzenou.“ a srovnání |
 | 7 | One-click odhlášení v Gmailu | tlačítko „Odhlásit“ u odesílatele. U nového odesílatele s malým objemem ho Gmail nemusí ukázat, záložně: „Zobrazit originál“ → URL z `List-Unsubscribe` → `curl -X POST "<URL>"` → „Odhlášeno.“. V DB je pak souhlas s novinkami odvolaný (zároveň ověří `marketing_audience`) | Částečně ✓ člověk 2026-10-11: hlavičky `List-Unsubscribe` i `List-Unsubscribe-Post` jsou v e-mailu („Zobrazit originál“), odkaz na odhlášení v patičce e-mailu funguje. Tlačítko „Odhlásit“ v Gmailu a stav v DB (`marketing_audience`) nezapsané |
 | 8 | Cookie lišta a `/ingest` | před volbou a po „Odmítnout“ žádný požadavek na `/ingest`. Po „Povolit měření“ `POST /ingest/e/` → 200 a event v PostHogu (Activity). Totéž ve Firefoxu v anonymním okně | Neověřeno na produkci. Lokálně ✓ včetně Firefoxu přes proxy `/ingest` (krok 4c) |
 | 9 | Poloha u eventu v PostHogu | `$geoip_country_code` / `$geoip_city_name` u eventu: ČR, poloha serveru Vercelu (Frankfurt/USA), nebo nic (kvůli „Discard client IP data“) | ✓ člověk 2026-10-11: u eventů v PostHogu země CZ |
@@ -549,7 +549,7 @@ Na https://etf-srovnani.vercel.app, vyplněno 2026-10-11. U každého výsledku 
 - **Právní kontrola lišty a měření** (§ 89 zákona 127/2005, GDPR) před spuštěním. Naše řešení je konzervativní, ale není to právní rada.
 - **Reklamní pixely a Conversions API** jsou jen navržené (sekce Měření) a čekají na schválení.
 - **DMARC je `p=none`** (PASS ověřen 2026-10-11). Před ostrým provozem zvážit přísnější politiku (`p=quarantine`, později `p=reject`) a reporty (`rua`). `p=none` jen sleduje, nic nechrání.
-- **Zbývající ruční testy na produkci:** odeslání formuláře a řádek v Supabase, potvrzení a obnovení `/potvrzeni`, cookie lišta s `/ingest`, tlačítko „Odhlásit“ v Gmailu a stav `marketing_audience` v DB (checklist produkce, body 4–8). Lokálně proti stejným službám prošly v krocích 4a–4c.
+- **Zbývající ruční testy na produkci:** cookie lišta s `/ingest`, tlačítko „Odhlásit“ v Gmailu a stav `marketing_audience` v DB (checklist produkce, body 7 a 8). Lokálně proti stejným službám prošly v krocích 4b a 4c.
 - **LCP 2,6 s v Lighthouse na mobilu** je těsně nad cílem 2,5 s (checklist produkce, bod 11). Úprava JavaScriptu je v backlogu.
 - **Bounce a stížnosti z Resend (webhooky)** zatím nezpracováváme. Nedoručitelné adresy zůstanou v DB jako nepotvrzené a po 30 dnech se smažou. Pro ostrý provoz napojit webhook a nedoručitelné adrese už nic neposílat.
 - **Kvóta free plánu Resend.** Free plán má denní i měsíční limit e-mailů. Před spuštěním kampaně ověřit v ceníku Resend a podle očekávaného počtu leadů přejít na placený plán. Strop 50 e-mailů za hodinu je ochrana proti zneužití, ne náhrada.

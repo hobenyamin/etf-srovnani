@@ -41,5 +41,6 @@ Plány a revize vznikaly i v samostatném chatu na claude.ai, mimo Claude Code. 
 | Co asistent tvrdil nebo radil | Jak se to zjistilo | Oprava |
 | --- | --- | --- |
 | Při křížové kontrole dat označil TER VWCE (0,14 %) a SXR4 (0,03 %) za chybu. Vycházel ze zastaralé znalosti (VWCE dřív 0,19 %) | Ověření u emitenta: TER VWCE klesl na 0,14 % od 28. 7. 2026, TER SXR4 uvádí iShares na stránce fondu i v KID | Hodnoty v datech zůstaly. Pravidlo: platí jen web a dokumenty emitenta, ne znalost modelu ani agregátor (README, Kontrola dat) |
-| V navrženém SQL dotazu použil špatný název sloupce (přesný název se nezachoval) | Opravil člověk | Dotazy v README se píšou podle schématu v `supabase/migrations/`, ne podle paměti |
+| V SQL dotazu na `marketing_audience` (ve schématu pohled nad tabulkou `leads`) použil špatný název sloupce | Člověk to zjistil podle chybové hlášky | Dotazy v README se píšou podle schématu v `supabase/migrations/`, ne podle paměti |
 | Původně radil DMARC záznam pro odesílací doménu nepřidávat | Gmail v ručním testu 4b ukázal DMARC FAIL kvůli chybějícímu záznamu | Člověk přidal `_dmarc.mail.hosek.cc` (`p=none`), 2026-10-11 DMARC PASS (README, checklist produkce, bod 10) |
+| V promptu pro krok 10 tvrdil, že `scripts/vitals.mjs` měří LCP 720 ms „bez škrcení“. Skript přitom škrtí síť (150 ms / 1,6 Mb/s) i CPU (4×) | Claude Code to odhalil kontrolou skriptu před zápisem do README | README popisuje skutečné nastavení skriptu a proč jeho čísla nejsou přímo srovnatelná s Lighthouse (checklist produkce, bod 11) |
