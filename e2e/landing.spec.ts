@@ -156,10 +156,19 @@ test("pojmy pro laika: „?“ u KID a UCITS se ovládá klávesnicí, řádky s
   const explanation = section.locator(`#${(await kid.getAttribute("aria-controls"))!.replace(/:/g, "\\:")}`);
   await expect(kid).toHaveAttribute("aria-expanded", "false");
   await expect(explanation).toBeHidden();
-  // vypadá jako text: pojem s otazníkem, tečkované podtržení (odkazy mají plné), zavřený v barvě textu
+  // vypadá jako text: pojem s otazníkem, zavřený v barvě textu. Tečkovaně podtržený (odkazy mají plné)
+  // je jen pojem: tlačítko samo podtržení nemá, takže se nepřenese na „?“ mimo span pojmu
   await expect(kid).toHaveText("KID?");
-  await expect(kid).toHaveCSS("text-decoration-style", "dotted");
+  await expect(kid).toHaveCSS("text-decoration-line", "none");
   await expect(kid).toHaveCSS("color", "rgb(22, 24, 29)");
+  const underlined = kid.locator("span");
+  await expect(underlined).toHaveText("KID");
+  await expect(underlined).toHaveCSS("text-decoration-line", "underline");
+  await expect(underlined).toHaveCSS("text-decoration-style", "dotted");
+  const mark = kid.locator("sup");
+  await expect(mark).toHaveText("?");
+  await expect(mark).toHaveCSS("text-decoration-line", "none");
+  expect(await mark.evaluate((el) => el.closest("span") === null)).toBe(true);
   // klepací plocha aspoň 24 × 24 px (WCAG 2.5.8): body 12 px od středu zasáhnou tlačítko
   await kid.scrollIntoViewIfNeeded();
   const hits = await kid.evaluate((el) => {
@@ -173,7 +182,10 @@ test("pojmy pro laika: „?“ u KID a UCITS se ovládá klávesnicí, řádky s
   await kid.focus();
   await page.keyboard.press("Enter");
   await expect(kid).toHaveAttribute("aria-expanded", "true");
-  await expect(kid).toHaveCSS("color", "rgb(29, 78, 216)"); // otevřený kobaltově
+  // otevřený kobaltově pojem i otazník
+  await expect(kid).toHaveCSS("color", "rgb(29, 78, 216)");
+  await expect(underlined).toHaveCSS("color", "rgb(29, 78, 216)");
+  await expect(mark).toHaveCSS("color", "rgb(29, 78, 216)");
   await expect(explanation).toContainText("nejvýš 3 strany A4");
   await page.keyboard.press("Space");
   await expect(explanation).toBeHidden();
