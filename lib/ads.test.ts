@@ -102,8 +102,19 @@ describe("reklama B sedí s hero B", () => {
   const c = copy("b-zvedavost");
   const html = plain(read("b-zvedavost", "ad.html"));
 
+  it("nadpis se nezkrátí ani ve feedu Facebooku a je to otázka o VOO", () => {
+    expect(c.headline.length).toBeLessThanOrEqual(HEADLINE_FB_FEED);
+    expect(c.headline).toMatch(/^Proč .*VOO\?$/);
+  });
+
+  it("věta o KID v primárním textu je doslova věta z hero B", () => {
+    const hero = plain(readFileSync(join(process.cwd(), "components", "Hero.tsx"), "utf8"));
+    const sentence = hero.match(/Fondy z USA [^<]*?\./)?.[0];
+    expect(sentence).toContain("KID");
+    expect(c.primary_text[1].startsWith(sentence!)).toBe(true);
+  });
+
   it("otázka a podnadpis doslova jako v hero", () => {
-    expect(c.headline).toBe("Proč si v Česku nekoupíte VOO?");
     expect(c.primary_text[0]).toMatch(/^Proč si v Česku nekoupíte VOO\? A jaké alternativy jsou v ČR dostupné\./);
     expect(html).toContain("Proč si v Česku nekoupíte VOO?");
     expect(html).toContain("A jaké alternativy jsou v ČR dostupné.");
