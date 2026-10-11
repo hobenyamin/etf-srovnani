@@ -156,9 +156,24 @@ test("pojmy pro laika: „?“ u KID a UCITS se ovládá klávesnicí, řádky s
   const explanation = section.locator(`#${(await kid.getAttribute("aria-controls"))!.replace(/:/g, "\\:")}`);
   await expect(kid).toHaveAttribute("aria-expanded", "false");
   await expect(explanation).toBeHidden();
+  // vypadá jako text: pojem s otazníkem, tečkované podtržení (odkazy mají plné), zavřený v barvě textu
+  await expect(kid).toHaveText("KID?");
+  await expect(kid).toHaveCSS("text-decoration-style", "dotted");
+  await expect(kid).toHaveCSS("color", "rgb(22, 24, 29)");
+  // klepací plocha aspoň 24 × 24 px (WCAG 2.5.8): body 12 px od středu zasáhnou tlačítko
+  await kid.scrollIntoViewIfNeeded();
+  const hits = await kid.evaluate((el) => {
+    const r = el.getBoundingClientRect();
+    const [x, y] = [r.left + r.width / 2, r.top + r.height / 2];
+    return [[x, y - 12], [x, y + 11.5], [x - 12, y], [x + 11.5, y]].map(
+      ([px, py]) => document.elementFromPoint(px, py)?.closest("button") === el,
+    );
+  });
+  expect(hits).toEqual([true, true, true, true]);
   await kid.focus();
   await page.keyboard.press("Enter");
   await expect(kid).toHaveAttribute("aria-expanded", "true");
+  await expect(kid).toHaveCSS("color", "rgb(29, 78, 216)"); // otevřený kobaltově
   await expect(explanation).toContainText("nejvýš 3 strany A4");
   await page.keyboard.press("Space");
   await expect(explanation).toBeHidden();

@@ -3,8 +3,10 @@
 import { useId, useState } from "react";
 
 /**
- * Odborný pojem s vysvětlením na klepnutí: tlačítko „?“ (aria-expanded) odkryje jednu větu hned
- * pod řádkem. Žádný tooltip na hover – na mobilu nefunguje. Ovládá se Enterem i mezerníkem.
+ * Odborný pojem s vysvětlením na klepnutí. Tlačítkem je celý pojem s otazníkem („KID?“), vypadá jako text
+ * s tečkovaným podtržením (odkazy mají plné). Otevřený stav kobaltově. Vysvětlení (jedna věta) se odkryje
+ * hned pod řádkem. Žádný tooltip na hover – na mobilu nefunguje. Ovládá se Enterem i mezerníkem.
+ * Klepací plochu na 24 px výšky (WCAG 2.5.8) rozšiřuje ::before, text se neposune.
  * Vysvětlení je <span class="block">, takže jde použít i uvnitř odstavce.
  * `name`: celý pojem pro přístupný název tlačítka, když `term` v textu je jen jeho část („aktivní“ → „aktivní fond“).
  * `suffix`: interpunkce za pojmem, aby po rozbalení nezačínal další řádek čárkou.
@@ -24,16 +26,18 @@ export function Term({
   const id = useId();
   return (
     <>
-      {term}
       <button
         type="button"
         aria-expanded={open}
         aria-controls={id}
         aria-label={`Co je ${name}?`}
         onClick={() => setOpen(!open)}
-        className="press mx-0.5 inline-flex size-6 items-center justify-center rounded-full border border-ink align-middle text-[13px] leading-none font-semibold outline-offset-2 focus-visible:outline-2 aria-expanded:bg-ink aria-expanded:text-paper"
+        className="relative cursor-pointer text-ink underline decoration-dotted decoration-[1.5px] underline-offset-4 outline-offset-2 before:absolute before:-inset-x-1 before:-inset-y-1.5 before:content-[''] focus-visible:rounded-sm focus-visible:outline-2 aria-expanded:text-action"
       >
-        ?
+        {term}
+        <sup aria-hidden className="ml-px text-[0.7em] font-semibold">
+          ?
+        </sup>
       </button>
       {suffix}
       <span id={id} hidden={!open} className="fine my-1 block border-l-2 border-rule pl-3">

@@ -85,6 +85,11 @@ try {
   await scrollTo(page, "#srovnani");
   await shot(page, "3-srovnani");
 
+  // vysvětlivka pojmu: zavřená je ve snímku 3, tady otevřená (kobaltový pojem, věta pod řádkem)
+  await page.getByRole("button", { name: "Co je KID?" }).click();
+  await shot(page, "6-vysvetlivka");
+  await page.getByRole("button", { name: "Co je KID?" }).click();
+
   const inline = page.getByTestId("lead-inline");
   await inline.getByRole("textbox", { name: "E-mail" }).fill("screens@example.com");
   await inline.getByRole("button", { name: "Poslat mi srovnání" }).click();
