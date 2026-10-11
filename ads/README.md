@@ -68,7 +68,7 @@ Podle mantinelů v [`CLAUDE.md`](../CLAUDE.md). Toto není právní rada. Před 
 
 | Pravidlo | A | B |
 | --- | --- | --- |
-| **Každé číslo v nadpisu, popisu i vizuálu má podmínku přímo u sebe** (částka, horizont, výnos 0 %, zdroj), nikdy jen v jiném poli | ✓ nadpis začíná „2 000 Kč/měs., 20 let:“. Vizuál má podmínku hned pod číslem | ✓ bez čísel |
+| **Každé číslo v nadpisu, popisu i vizuálu má podmínku přímo u sebe** (částka, horizont, výnos 0 %, zdroj), nikdy jen v jiném poli | ✓ nadpis bez čísla („Rozdíl v poplatcích fondů“, 25 znaků). Vizuál má podmínku hned pod číslem | ✓ bez čísel |
 | Podmínka a „ne doporučení“ v prvních 125 znacích primárního textu | ✓ 123 znaků | ✓ 105 znaků |
 | Žádná výzva ke koupi konkrétního nástroje (MAR/ZPKT) | ✓ | ✓ VOO jen jako otázka, proč ho nekoupíte. UCITS fond se v reklamě nejmenuje |
 | Žádný slib výnosu (40/1995, 634/1992) | ✓ výpočet výslovně s výnosem 0 % | ✓ |

@@ -21,6 +21,7 @@ type Copy = {
 const VISIBLE = 125;
 /** Nadpis: Meta Ads Guide, Instagram feed 40 znaků (Facebook feed doporučuje 27) */
 const HEADLINE_MAX = 40;
+const HEADLINE_FB_FEED = 27;
 
 const read = (...path: string[]) => readFileSync(join(process.cwd(), "ads", ...path), "utf8");
 const copy = (dir: string): Copy => JSON.parse(read(dir, "copy.json"));
@@ -72,11 +73,11 @@ describe("reklama A sedí s hero A", () => {
     expect(computeFees(HERO_INPUT, FEE_ROWS).esmaGap).toBeGreaterThan(40_000);
   });
 
-  it("nadpis: číslo z hero až po podmínce", () => {
-    const headline = plain(c.headline);
-    expect(headline).toContain(gap);
-    expect(headline.indexOf(monthly)).toBeLessThan(headline.indexOf(gap));
-    expect(headline).toContain(`${HERO_INPUT.years} let`);
+  it("nadpis se nezkrátí ani ve feedu Facebooku a nemá číslo (podmínka by se k němu nevešla)", () => {
+    expect(c.headline.length).toBeLessThanOrEqual(HEADLINE_FB_FEED);
+    expect(c.headline).not.toMatch(/\d/);
+    // stejná slova jako nadpis hero A: návaznost reklama → stránka
+    expect(c.headline).toBe("Rozdíl v poplatcích fondů");
   });
 
   it("disclaimer má číslo i průměry ESMA jako hero", () => {
