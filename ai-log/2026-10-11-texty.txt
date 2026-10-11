@@ -1,0 +1,3173 @@
+
+❯ /clear
+
+❯ Přečti CLAUDE.md, README.md a docs/backlog-texty-design.md. Commituj,
+  nepushuj.
+
+  Krok 9: texty a poslední body backlogu. V plan mode navrhni:
+
+  Texty pro laika. Cílovka slyšela o ETF, ale nezná pojmy. Projdi všechny texty
+  na stránce, v e-mailu a na /potvrzeni a najdi odborné výrazy (TER, UCITS,
+  KID, PRIIPs, akumulační/distribuční, domicil, ISIN, „náklad = …“ a další).
+  Navrhni:
+  kde pojem nahradit běžným slovem,
+  kde ho ponechat a přidat krátké vysvětlení (max. 1 věta) přes přístupný prvek
+  (např. details nebo tlačítko „?“ s popisem, ovladatelné klávesnicí a
+  čtečkou).
+  Každé vysvětlení musí být věcně správné. Daňové a právní tvrzení jen se
+  zdrojem, jinak je nepiš. Žádné doporučení ke koupi.
+  Výstup plánu: tabulka „místo / současný text / navržený text / proč“. Texty
+  schválím já, pak teprve implementuj.
+  /potvrzeni po obnovení stránky: při načtení jen zjistit stav tokenu (platný /
+  už potvrzený / neplatný) bez jakékoli změny v databázi. Pokud je adresa už
+  potvrzená, rovnou ukázat „Adresu už máte potvrzenou.“ a srovnání. Potvrzení
+  dál jen tlačítkem (kvůli skenerům odkazů). Testy.
+  Nadpis reklamy A (dnes 39 znaků, Facebook feed doporučuje 27): navrhni 3
+  varianty do 27 znaků. Pravidlo: číslo v nadpisu jen s podmínkou přímo u něj,
+  jinak nadpis bez čísla a podmínka ve vizuálu. Vyberu já.
+
+  Zastav se po plánu, nic neimplementuj.
+
+  Searched for 1 pattern, read 1 file, ran 3 shell commands (ctrl+o to expand)
+
+● Čtu podklady (README, backlog) a teď projdu všechny texty komponent, e-mailu a
+  /potvrzeni.
+
+  Read 2 files, ran 2 shell commands (ctrl+o to expand)
+
+● Teď serverovou logiku potvrzení, e-mail, texty v lib/site, data poznámky a
+  reklamu A.
+
+  Searched for 1 pattern, ran 5 shell commands (ctrl+o to expand)
+
+● Mám přehled o textech i logice potvrzení. Ještě ověřím test reklam a znění
+  článků PRIIPs, ať vysvětlení KID stojí na zdroji.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Fetch(https://eur-lex.europa.eu/legal-content/CS/TXT/?uri=CELEX:32014R1286)
+  ⎿  Received 0 bytes (202 Accepted)
+
+● Updated plan
+  ⎿  /plan to preview
+  ⎿  Error: The user doesn't want to proceed with this tool use. The tool use
+     was rejected (eg. if it was a file edit, the new_string was NOT written to
+     the file). The user provided the following reason for the rejection:  Plán
+     schvaluji. Texty #1–#30 schvaluji beze změny. Nadpis reklamy A: varianta A1
+     „Rozdíl v poplatcích fondů“.
+     Zdroje jsem ověřil ručně, zapiš je do README (Zdroje) s datem 2026-10-11:
+
+     PRIIPs 1286/2014 čl. 6 odst. 4: „a maximum of three sides of A4-sized paper
+     when printed“
+     PRIIPs čl. 13 odst. 1: KID „in good time“ před tím, než je investor „bound
+     by any contract or offer“
+     Český název ESMA podle ČNB: Evropský orgán pro cenné papíry a trhy,
+     nařízení 1095/2010
+     (https://www.cnb.cz/cs/dohled-financni-trh/mezinarodni-aktivity/esma/)
+     Směrnice 2009/65/ES (UCITS)
+     U #3 ověř na 375 × 667, že se řádek nezalomí a hero B nezajede pod cookie
+     lištu. Pokud ano, zkrať na „VUAA · fond z EU“.
+     Implementuj podle plánu, commituj po částech, nepushuj, po dokončení se
+     zastav.
+
+● Updated plan
+  ⎿  /plan to preview
+
+● User approved Claude's plan
+  ⎿  Plan saved to:
+     ~/.claude/plans/pasted-content-id-38aa-p-e-ti-claude-md-snuggly-panda.md ·
+     /plan to edit
+     Krok 9: texty pro laika, /potvrzeni po obnovení, nadpis reklamy A
+
+     Schváleno uživatelem (2026-10-11)
+
+     - Texty #1–#30 beze změny. Nadpis reklamy A: A1 „Rozdíl v poplatcích
+       fondů“.
+     - Zdroje ověřil uživatel ručně, zapsat do README (Zdroje) s datem
+       2026-10-11: PRIIPs 1286/2014 čl. 6 odst. 4 („a maximum of three sides of
+       A4-sized paper when printed“), čl. 13 odst. 1 (KID „in good time“ před
+       tím, než je investor „bound by any contract or offer“); ESMA = Evropský
+       orgán pro cenné papíry a trhy, nařízení 1095/2010
+       (https://www.cnb.cz/cs/dohled-financni-trh/mezinarodni-aktivity/esma/);
+       směrnice 2009/65/ES (UCITS).
+     - #3: ověřit na 375 × 667, že se řádek nezalomí a hero B nezajede pod
+       cookie lištu; jinak zkrátit na „VUAA · fond z EU“.
+     - Commitovat po částech, nepushovat, po dokončení zastavit.
+
+     Kontext
+
+     Poslední otevřené body z docs/backlog-texty-design.md: (1) stránka, e-mail
+     i /potvrzeni používají odborné pojmy (TER, UCITS, KID, PRIIPs, domicil,
+     akumulační…), kterým cílovka „slyšela o S&P 500“ nerozumí; (2) /potvrzeni
+     po obnovení znovu ukazuje „Potvrdit e-mail“, i když je adresa potvrzená;
+     (3) nadpis reklamy A má 39 znaků, feed Facebooku ho zkrátí na 27
+     („…rozd…“). Texty schvaluje uživatel, implementace až po schválení. Commit
+     ano, push ne.
+
+     Zásady pro všechna vysvětlení: max. 1 věta, věcně správně, žádné daňové
+     tvrzení (žádné nepřidáváme), právní tvrzení jen se zdrojem, žádná výzva ke
+     koupi.
+
+     ---
+
+     Část 1: Texty pro laika
+
+     Jak budou vysvětlivky fungovat (přístupnost)
+
+     - V běžném textu: nový komponent components/Term.tsx = pojem + malé
+       tlačítko „?“ (min. 24 × 24 px, WCAG 2.5.8). <button type="button"
+       aria-expanded aria-controls> s přístupným názvem „Co je KID?“. Po
+       klepnutí se hned pod odstavcem ukáže jedna věta (<span class="block
+       fine">, hidden když zavřeno). Ovládá se Enterem i mezerníkem, čtečka
+       oznámí sbaleno/rozbaleno. Žádný hover tooltip (na mobilu nefunguje).
+     - V tabulce srovnání: plain popisky řádků + pod tabulkou <More summary="Co
+       znamenají řádky"> (existující components/More.tsx, nativní <details>).
+       Tlačítka „?“ do 30% sloupce na 375 px by tabulku rozbila.
+     - Hero A a B bez „?“: hero B má rezervu 3,5 px nad cookie lištou, hero A
+       5,5 px. Texty v hero jen zkracujeme, nic nepřidáváme.
+
+     Tabulka návrhů
+
+     Legenda „proč“: N = nahradit běžným slovem, V = ponechat pojem +
+     vysvětlivka, P = ponechat beze změny, F = oprava věcné chyby.
+
+     Hero (components/Hero.tsx)
+
+     #: 1
+     Místo: Hero B, věta pod nadpisem
+     Současný text: Fondům z USA chybí KID, který nařízení PRIIPs vyžaduje pro
+     prodej drobným investorům v EU.
+     Navržený text: Fondy z USA nemají KID – dokument, který v EU musí drobný
+     investor dostat před nákupem.
+     Proč: N: PRIIPs pryč (vysvětleno ve srovnání), KID vysvětlen v rámci věty.
+     Kratší než dnes (≈ 85 vs. 90 znaků), řádek navíc nevznikne. Zdroj: PRIIPs
+     čl.
+      13 odst. 1 (viz Zdroje)
+     ────────────────────────────────────────
+     #: 2
+     Místo: Hero B, účtenka, pravý sloupec
+     Současný text: TER 0,03 %
+     Navržený text: 0,03 % ročně
+     Proč: N: „TER“ laik nezná, „ročně“ říká, že jde o roční poplatek. Stejná
+     šířka
+     ────────────────────────────────────────
+     #: 3
+     Místo: Hero B, účtenka, řádek UCITS
+     Současný text: VUAA · UCITS, Irsko
+     Navržený text: VUAA · fond z EU (Irsko)
+     Proč: N: UCITS se vysvětluje ve srovnání. Ověřit, že se na 375 px nezalomí
+     ────────────────────────────────────────
+     #: 4
+     Místo: Hero A, drobný text
+     Současný text: …podle ESMA, data za rok 2024…
+     Navržený text: beze změny
+     Proč: P: místo v hero není, ESMA vysvětlen v „Odkud jsou data“ (#21)
+
+     Kalkulačka a výsledek (components/FeeReceipt.tsx,
+     components/Calculator.tsx)
+
+     #: 5
+     Místo: Účtenka, řádek nad číslem
+     Současný text: Rozdíl 0,2 % vs. 1,2 % za 20 let
+     Navržený text: Rozdíl za 20 let: poplatek 0,2 % vs. 1,2 % ročně
+     Proč: N: bez slova „poplatek“ nejsou procenta čitelná
+     ────────────────────────────────────────
+     #: 6
+     Místo: Účtenka, věta pod číslem
+     Současný text: O tolik víc stojí průměrný aktivní akciový fond v EU než
+     průměrný ETF (ESMA).
+     Navržený text: O tolik víc stojí průměrný aktivní akciový fond v EU než
+     průměrný ETF (ESMA). + Term „aktivní fond“: „Aktivní fond: akcie vybírá
+     správce fondu, místo aby jen kopíroval index jako ETF.“
+     Proč: V: „aktivní fond“ je jádro sdělení. ESMA číslo 0,2 % je pro pasivní
+     akciová ETF, takže „kopíruje index“ odpovídá zdroji
+     ────────────────────────────────────────
+     #: 7
+     Místo: Rozpis
+     Současný text: Modelová hodnota bez poplatků (7 %)
+     Navržený text: Kolik by investice měla bez poplatků (7 % ročně)
+     Proč: N
+     ────────────────────────────────────────
+     #: 8
+     Místo: Rozpis, nadpis
+     Současný text: Náklady za 20 let · TER ročně
+     Navržený text: Náklady za 20 let · roční poplatek fondu
+     Proč: N
+     ────────────────────────────────────────
+     #: 9
+     Místo: Podmínky pod výsledkem
+     Současný text: Nezahrnuje měnové riziko USD/CZK, poplatky brokera, směnu
+     měn,
+     spread ani daně.
+     Navržený text: Nezahrnuje změny kurzu koruny, poplatky brokera, směnu měn,
+     rozdíl mezi nákupní a prodejní cenou ani daně.
+     Proč: N: „spread“ a „měnové riziko USD/CZK“ (u VWCE nejde jen o USD, viz
+     #24)
+     ────────────────────────────────────────
+     #: 10
+     Místo: „Jak počítáme“
+     Současný text: Náklad = zaplacené poplatky + výnos, o který kvůli nim
+     přijdete,
+     proti fondu bez nákladů.
+     Navržený text: Do nákladů počítáme zaplacené poplatky i výnos, který by
+     tyto
+     peníze vydělaly, kdyby zůstaly investované.
+     Proč: N: vzorec „=“ nahrazen větou. Věcně totéž (rozdíl proti fondu bez
+     nákladů)
+     ────────────────────────────────────────
+     #: 11
+     Místo: „Jak počítáme“
+     Současný text: TER fondů od emitentů k … Průměry ESMA za rok 2024 (…):
+     průběžné
+     náklady bez vstupních poplatků.
+     Navržený text: Roční poplatky (TER) fondů od jejich správců k … Průměry
+     ESMA za
+     rok 2024 (…): jen roční poplatky, bez vstupních poplatků.
+     Proč: N + zkratka TER zůstane v závorce (najde ji u brokera)
+     ────────────────────────────────────────
+     #: 12
+     Místo: Výnos, nadpis pole
+     Současný text: Modelový roční výnos před poplatky
+     Navržený text: beze změny
+     Proč: P: srozumitelné, poznámka pod polem to vysvětluje
+     ────────────────────────────────────────
+     #: 13
+     Místo: Formulář u výsledku
+     Současný text: Chcete kompletní srovnání všech 5 dvojic fondů NYSE ↔ UCITS?
+     Navržený text: Chcete srovnání všech 5 amerických fondů s evropskými
+     variantami?
+     Proč: N: šipka a UCITS pryč. Délka stejná (≈ 65 znaků), výška se nezmění
+
+     Srovnání (components/Comparison.tsx, components/PairCard.tsx)
+
+     #: 14
+     Místo: Úvod sekce
+     Současný text: Fondy domicilované v USA nemají sdělení klíčových informací
+     (KID), které pro prodej drobným investorům v EU vyžaduje nařízení PRIIPs.
+     Brokeři je proto drobným investorům v Česku běžně nenabízejí. Stejný index
+     sledují fondy UCITS z Irska. Srovnání je informativní, nejde o doporučení.
+     Navržený text: Fondy se sídlem v USA nemají KID[?], který podle nařízení
+     PRIIPs
+     (odkaz zůstává) musí drobný investor v EU dostat před nákupem. Brokeři je
+     proto v Česku drobným investorům běžně nenabízejí. Stejný index sledují
+     evropské fondy UCITS[?] se sídlem v Irsku. Srovnání je informativní, nejde
+     o
+     doporučení.
+     Proč: N („domicilované“) + V (KID, UCITS)
+     ────────────────────────────────────────
+     #: 15
+     Místo: Term „KID“
+     Současný text: –
+     Navržený text: „Sdělení klíčových informací: krátký dokument o rizicích a
+     nákladech fondu, nejvýš 3 strany A4.“
+     Proč: V. Zdroj: PRIIPs čl. 6 odst. 4 (rozsah), čl. 8 (obsah)
+     ────────────────────────────────────────
+     #: 16
+     Místo: Term „UCITS“
+     Současný text: –
+     Navržený text: „Fond podle evropské směrnice UCITS, která stanoví pravidla
+     pro
+     rozložení rizika a ochranu investorů.“
+     Proč: V. Zdroj: směrnice 2009/65/ES (EUR-Lex), přidat do Zdrojů v README
+     ────────────────────────────────────────
+     #: 17
+     Místo: Tabulka, řádek
+     Současný text: Domicil
+     Navržený text: Sídlo fondu
+     Proč: N
+     ────────────────────────────────────────
+     #: 18
+     Místo: Tabulka, řádek
+     Současný text: TER ročně
+     Navržený text: Poplatek ročně
+     Proč: N (vysvětlivka #23 uvede zkratku TER)
+     ────────────────────────────────────────
+     #: 19
+     Místo: Tabulka, hodnoty „Dividendy“
+     Současný text: akumulační / distribuční
+     Navržený text: reinvestuje (akumulační) / vyplácí (distribuční)
+     Proč: N + pojem v závorce, protože pod ním broker fond vede
+     ────────────────────────────────────────
+     #: 20
+     Místo: Tabulka, řádek „Měna“ + hodnota
+     Současný text: Měna: USD / EUR, fond v USD
+     Navržený text: Měna nákupu: USD / EUR (fond vede hodnotu v USD)
+     Proč: N: „fond v USD“ je nejasné
+     ────────────────────────────────────────
+     #: 23
+     Místo: Nové <More summary="Co znamenají řádky"> pod tabulkou (ukázka i plná
+
+     verze)
+     Současný text: –
+     Navržený text: Burza: kde se fond obchoduje; NYSE Arca patří skupině NYSE,
+     Xetra je německá burza. Sídlo fondu: země, podle jejíchž pravidel fond
+     vznikl. Poplatek ročně (TER): kolik fond ročně strhne z vaší investice,
+     platíte ho průběžně v ceně fondu. Dividendy: zda fond výplatu firem znovu
+     investuje (akumulační), nebo vám ji posílá (distribuční). Měna nákupu: v
+     jaké
+      měně fond na burze koupíte; měnové riziko to neodstraní, fond drží akcie v
+
+     cizích měnách. Jen v plné verzi: Velikost fondu: kolik peněz fond spravuje.
+
+     Registrace v ČR: zda emitent uvádí Česko mezi zeměmi registrace; v registru
+
+     ČNB jsme to neověřovali. ISIN: mezinárodní kód fondu, podle kterého ho
+     najdete u brokera.
+     Proč: V. Každá definice 1 věta. „Registrace“ bez právního tvrzení, jen co
+     říká
+     emitent (README, Co chybí)
+     ────────────────────────────────────────
+     #: 22
+     Místo: Hlavička sloupce, štítek dvojice
+     Současný text: NYSE, USA / Dostupná v ČR; „Stejný index: S&P 500“
+     Navržený text: beze změny
+     Proč: P
+
+     Důvěra, rizika (components/Trust.tsx, lib/site.ts)
+
+     #: 21
+     Místo: Odkud jsou data
+     Současný text: Údaje o fondech pochází přímo od emitentů (…), z prospektů
+     na
+     SEC EDGAR, z KID… Průměrné náklady fondů v EU z tržní zprávy ESMA
+     Navržený text: Údaje o fondech pochází přímo od jejich správců (…), z
+     prospektů
+     na SEC EDGAR (databáze amerického dozoru), z KID… Průměrné náklady fondů v
+     EU
+      ze zprávy ESMA (Evropský orgán pro cenné papíry a trhy)
+     Proč: N: „emitent“, „SEC EDGAR“, „ESMA“. Oficiální český název ESMA je z
+     nařízení 1095/2010
+     ────────────────────────────────────────
+     #: 24
+     Místo: Riziko, 2. bod (stránka i e-mail)
+     Současný text: Fondy investují v USD. Změna kurzu USD/CZK může výnos v
+     korunách
+     snížit i zvýšit.
+     Navržený text: Fondy vedou hodnotu v USD a drží akcie v cizích měnách.
+     Změna
+     kurzu koruny může výnos v korunách snížit i zvýšit.
+     Proč: F: VT/VWCE drží akcie z celého světa, ne jen v USD. Zapsat do
+     docs/ai-chyby.md
+
+     Formulář, patička, metadata (components/LeadForm.tsx,
+     components/FooterCta.tsx, app/layout.tsx)
+
+     #: 25
+     Místo: Spodní formulář, 1. bod
+     Současný text: VOO, SPY, IVV, VTI a VT vedle UCITS fondů, které jsou v ČR
+     dostupné
+     Navržený text: VOO, SPY, IVV, VTI a VT vedle evropských fondů, které jsou v
+     ČR
+     dostupné
+     Proč: N
+     ────────────────────────────────────────
+     #: 26
+     Místo: Spodní formulář, 2. bod
+     Současný text: TER, měna, akumulace, burza, velikost fondu, registrace v
+     ČR,
+     ISIN
+     Navržený text: Roční poplatek, měna, co fond dělá s dividendami, burza,
+     velikost fondu, registrace v ČR a kód ISIN pro vyhledání u brokera
+     Proč: N + říká, k čemu je ISIN dobrý (hodnota za e-mail)
+     ────────────────────────────────────────
+     #: 27
+     Místo: Meta description
+     Současný text: Porovnání ETF z NYSE s evropskými UCITS alternativami…
+     Navržený text: Porovnání ETF z NYSE s evropskými alternativami dostupnými v
+     ČR…
+     Proč: N
+
+     E-mail (lib/email-template.ts)
+
+     #: 28
+     Místo: Předmět
+     Současný text: Potvrďte e-mail: srovnání ETF z NYSE a UCITS
+     Navržený text: Potvrďte e-mail: srovnání ETF z NYSE
+     Proč: N, kratší předmět se v mobilu nezkrátí
+     ────────────────────────────────────────
+     #: 29
+     Místo: Úvod
+     Současný text: …plné srovnání 5 dvojic fondů: ETF z NYSE vedle UCITS fondů,
+
+     které jsou v ČR dostupné.
+     Navržený text: …plné srovnání 5 dvojic fondů: ETF z NYSE vedle evropských
+     fondů, které jsou v ČR dostupné.
+     Proč: N
+     ────────────────────────────────────────
+     #: 30
+     Místo: Rizika
+     Současný text: (RISK_WARNINGS)
+     Navržený text: přebírá #24
+     Proč: F
+
+     /potvrzeni (components/ConfirmEmail.tsx)
+
+     Odborné pojmy tu nejsou („Potvrďte svůj e-mail“, „Tady je plné srovnání
+     všech 5 dvojic.“). Mění se jen chování (Část 2) a přibude stav načítání
+     „Ověřuji odkaz…“.
+
+     Ponecháno beze změny (vědomě)
+
+     „ETF“, „S&P 500“, „broker“, „index“ (cílovka zná), tickery, „NYSE“ v
+     nadhlavích, právní text formuláře a cookie lišty (už bez žargonu), /zasady
+     (právní dokument). Žádné daňové informace nepřidáváme (W-8BEN zůstává v „Co
+     chybí“).
+
+     Zdroje, které musí člověk ověřit před commitem textů
+
+     EUR-Lex se nástrojem načíst nepodařilo (prázdná stránka), čísla článků jsou
+     z mé znalosti a musí se ověřit ručně:
+     - PRIIPs 1286/2014: čl. 13 odst. 1 (KID poskytnout drobnému investorovi
+       včas před uzavřením smlouvy), čl. 6 odst. 4 (nejvýš 3 strany A4) – #1,
+       #14, #15.
+     - Směrnice 2009/65/ES (UCITS) – #16.
+     - Nařízení 1095/2010, český název ESMA – #21.
+       Když se některé tvrzení potvrdit nepodaří, vysvětlivku vynechám, nebudu
+       ji přepisovat odhadem.
+
+     ---
+
+     Část 2: /potvrzeni po obnovení stránky
+
+     Dnes: ConfirmEmail.tsx startuje ve stavu idle a vždy ukáže tlačítko. Stav
+     „already“ se zjistí až po klepnutí (confirm_lead v
+     supabase/migrations/20261009_leads_double_opt_in.sql).
+
+     Návrh (bez nové migrace, žádný zápis):
+     1. lib/lead-server.ts
+        - Čistá funkce tokenStatus(row: {doubleOptInAt, confirmSentAt} | null,
+          now: Date): "invalid" | "already" | "expired" | "pending" – stejné
+          pořadí podmínek jako SQL confirm_lead (nenalezen → invalid, potvrzeno
+          → already, confirm_sent_at null nebo starší než CONFIRM_VALID_DAYS →
+          expired, jinak pending).
+        - LeadStore.findByToken(tokenHash) – v supabaseStore jen
+          client.from("leads").select("double_opt_in_at,
+          confirm_sent_at").eq("confirm_token_hash", hash).maybeSingle(). Jen
+          SELECT, takže z principu nic nemění.
+        - handleConfirmStatus(token, store): špatný formát tokenu nebo chybí
+          store → invalid bez dotazu; chyba DB → "unknown" (stránka ukáže
+          tlačítko jako dnes, potvrzení pak samo nahlásí chybu). Vrací jen stav,
+          žádné UTM ani variantu.
+     2. app/actions/lead.ts: server action confirmStatus(token).
+     3. ConfirmEmail.tsx: s tokenem nový výchozí stav checking („Ověřuji odkaz…“
+        s pulse-dot, nadpis „Potvrzení e-mailu“), v useEffect zavolá
+        confirmStatus:
+        - already → rovnou DoneBanner „Adresu už máte potvrzenou.“ + plné
+          srovnání, bez lead_confirmed,
+        - pending / unknown → dnešní obrazovka s tlačítkem „Potvrdit e-mail“
+          (potvrzuje dál jen tlačítko, kvůli skenerům odkazů),
+        - expired / invalid → dnešní hlášky.
+          Komentář v app/potvrzeni/page.tsx doplnit (načtení jen čte stav).
+
+     Testy
+     - Vitest (lib/double-opt-in.test.ts): tokenStatus pro všechny 4 stavy
+       včetně hranice 14 dní a confirmSentAt = null; handleConfirmStatus –
+       špatný token nevolá store, správný volá findByToken(hashToken(token)) a
+       nikdy confirm, výjimka DB → unknown.
+     - E2E (e2e/landing.spec.ts, DB je v testech nedostupná):
+       - /potvrzeni?t=nesmysl → hned „Tenhle odkaz nefunguje“ bez klepnutí
+         (změna dnešního testu: formát se kontroluje už při načtení),
+       - token správného formátu → po ověření (DB nedostupná) tlačítko „Potvrdit
+         e-mail“, klepnutí → „Teď se to nepovedlo“ (dnešní test zůstává),
+       - „already“ v E2E bez DB nasimulovat nejde → ruční ověření na produkci
+         (obnovit /potvrzeni po potvrzení), zapsat do README do tabulky ručních
+         ověření.
+
+     ---
+
+     Část 3: Nadpis reklamy A (max. 27 znaků)
+
+     Pravidlo: číslo v nadpisu jen s podmínkou přímo u něj, jinak bez čísla a
+     podmínka ve vizuálu. Vizuál už má „44 200 Kč / rozdíl při 2 000 Kč měsíčně
+     za 20 let, výnos 0 %“ a zdroj ESMA, takže se nemění.
+
+     ┌─────────────────┬───────┬────────────────────────────────────────────────
+     ┐
+     │    Varianta     │ Znaků │                    Poznámka
+     │
+     ├─────────────────┼───────┼────────────────────────────────────────────────
+     ┤
+     │ A1: Rozdíl v    │       │ Bez čísla. Stejná slova jako nadpis vizuálu i
+     │
+     │ poplatcích      │ 25    │ hero A („Kolik dělá rozdíl v poplatcích fondů
+     │
+     │ fondů           │       │ za 20 let?“) → nejsilnější návaznost reklama →
+     │
+     │                 │       │  stránka. Doporučuji
+     │
+     ├─────────────────┼───────┼────────────────────────────────────────────────
+     ┤
+     │ A2: Rozdíl při  │       │ Nese jen podmínku (vstup, ne výsledek),
+     │
+     │ 2 000 Kč/měs.   │ 24    │ výsledek 44 200 Kč je ve vizuálu. Bez
+     │
+     │                 │       │ horizontu „20 let“, ten je ve vizuálu
+     │
+     ├─────────────────┼───────┼────────────────────────────────────────────────
+     ┤
+     │ A3: Spočítejte  │       │ Bez čísla, výzva ke kalkulačce. Překrývá se s
+     │
+     │ si poplatky v   │ 27    │ popisem „Kalkulačka poplatků v Kč“ – popis by
+     │
+     │ Kč              │       │ se změnil na „Modelový výpočet, ne doporučení“
+     │
+     └─────────────────┴───────┴────────────────────────────────────────────────
+     ┘
+
+     Po výběru: ads/a-uspora/copy.json, tabulka a odstavec v
+     ads/a-uspora/README.md, řádek pravidel v ads/README.md (ř. 71), test
+     „nadpis: číslo z hero až po podmínce“ v lib/ads.test.ts nahradit testem
+     „nadpis ≤ 27 znaků a bez čísla“ (A1/A3) nebo „bez výsledku, jen podmínka“
+     (A2). Vizuály se nepřerenderují (nadpis reklamy v nich není).
+
+     ---
+
+     Postup implementace (po schválení textů), commity česky
+
+     1. Term komponent + texty stránky (#1–#27) → commit „Texty pro laika:
+        vysvětlivky KID, UCITS a řádků srovnání“.
+     2. Oprava rizika #24 (stránka + e-mail), e-mail #28–#29 → commit; zápis do
+        docs/ai-chyby.md.
+     3. /potvrzeni stav tokenu + testy → commit.
+     4. Nadpis reklamy A + test → commit.
+     5. Backlog odškrtnout s commity, README: Rozhodnutí (vysvětlivky místo
+        tooltipů, žádné „?“ v hero kvůli výšce, read-only kontrola tokenu bez
+        migrace, nadpis reklamy A), Zdroje (směrnice UCITS, PRIIPs články),
+        ruční ověření /potvrzeni. Připomenout /export do ai-log/.
+
+     Ověření
+
+     - npm run build, npx vitest run, npx playwright test (mobil 375 px; hlídat
+       test „lišta nezakryje CTA“ u hero A/B a scripts/page-height.mjs – hero B
+       má rezervu 3,5 px).
+     - Ručně v prohlížeči na 375 px: „?“ u KID/UCITS klávesnicí (Tab, Enter,
+       mezerník) a se čtečkou (aria-expanded), „Co znamenají řádky“ v ukázce i
+       plné verzi, hero B se nezalomí.
+     - /potvrzeni na produkci: potvrdit, obnovit → „Adresu už máte potvrzenou.“
+       + srovnání; v Supabase se double_opt_in_at při obnovení nezmění.
+     - Žádný push.
+
+● Implementuji. Nejdřív komponent Term a texty stránky.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Write(components/Term.tsx)
+  ⎿  Wrote 31 lines to components/Term.tsx
+       1 "use client";
+       3 import { useId, useState } from "react";
+       4
+       5 /**
+         xpanded) odkryje jednu větu hned
+       7  * pod řádkem. Žádný tooltip na hover – na mobilu nefunguje. Ovl
+       8  * Vysvětlení je <span class="block">, takže jde použít i uvnitř
+          odstavce.
+       9  */
+         n: string }) {
+     … +29 lines (ctrl+o to expand)
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● I'll use the Edit tool directly — cleaner than escaping JSX in JSON.
+
+● Update(components/Hero.tsx)
+  ⎿  Added 1 line, removed 1 line
+      60        </h1>
+      61        <p className="mt-3 text-[17px] leading-7">A&nbsp;jaké alt
+          ernativy jsou v&nbsp;ČR dostupné.</p>
+      62        <p className="mt-2 text-[15px] leading-6">
+      63 -        Fondům z&nbsp;USA chybí KID, který nařízení PRIIPs vyža
+         -duje pro prodej drobným investorům v&nbsp;EU.                  
+      63 +        Fondy z&nbsp;USA nemají KID – dokument, který v&nbsp;EU
+         + musí drobný investor dostat před nákupem.                     
+      64        </p>
+      65        <dl className="receipt mt-5 bg-card px-4 text-[15px]">
+      66          <div className="dotted flex items-baseline justify-betw
+          een py-2">
+
+● Update(components/Hero.tsx)
+  ⎿  Added 1 line, removed 1 line
+      68              <span className="num font-semibold">{pair.us.ticker
+          .value}</span>{" "}
+      69              <span className="text-muted">· {pair.us.exchange.va
+          lue}</span>
+      70            </dt>
+      71 -          <dd className="num">TER {formatPercent(pair.us.ter.va
+         -lue)}</dd>                                                     
+      71 +          <dd className="num">{formatPercent(pair.us.ter.value)
+         +} ročně</dd>                                                   
+      72          </div>
+      73          <div className="flex items-baseline justify-between py-
+          2">
+      74            <dt>
+
+● Update(components/Hero.tsx)
+  ⎿  Added 2 lines, removed 2 lines
+      73          <div className="flex items-baseline justify-between py-
+          2">
+      74            <dt>
+      75              <span className="num font-semibold">{pair.ucits.tic
+          ker.value}</span>{" "}
+      76 -            <span className="text-muted">· UCITS, {pair.ucits.d
+         -omicile.value}</span>                                          
+      76 +            <span className="text-muted">· fond z&nbsp;EU ({pai
+         +r.ucits.domicile.value})</span>                                
+      77            </dt>
+      78 -          <dd className="num">TER {formatPercent(pair.ucits.ter
+         -.value)}</dd>                                                  
+      78 +          <dd className="num">{formatPercent(pair.ucits.ter.val
+         +ue)} ročně</dd>                                                
+      79          </div>
+      80          <p className="fine pt-1">
+      81            Stejný index {pair.us.index.value}. Data emitentů k&n
+          bsp;{formatDate(pair.us.ter.retrieved_at)}.
+
+● Update(components/FeeReceipt.tsx)
+  ⎿  Added 1 line, removed 1 line
+      37  
+      38          <div className="mt-3 border-b-2 border-ink pb-3" aria-l
+          ive="polite">
+      39            <p className="font-semibold">
+      40 -            Rozdíl {formatPercent(etf.ter)} vs. {formatPercent(
+         -active.ter)} za {years}&nbsp;let                               
+      40 +            Rozdíl za {years}&nbsp;let: poplatek {formatPercent
+         +(etf.ter)} vs. {formatPercent(active.ter)} ročně               
+      41            </p>
+      42            {/* Animované číslo čtečka nečte (hlásila by každý sn
+          ímek), dostane jen výslednou hodnotu.
+      43                Šířku drží neviditelná výsledná hodnota, animovan
+          á leží přes ni: proporcionální číslice
+
+● Update(components/FeeReceipt.tsx)
+  ⎿  Added 3 lines, removed 1 line
+      52            </p>
+      53            <p className="sr-only">{formatKc(result.esmaGap)}</p>
+      54            <p className="fine mt-1">
+      55 -            O tolik víc stojí průměrný aktivní akciový fond v&n
+         -bsp;EU než průměrný ETF (ESMA).                                
+      55 +            O tolik víc stojí průměrný{" "}                    
+      56 +            <Term term="aktivní">Aktivní fond: akcie vybírá spr
+         +ávce fondu, místo aby jen kopíroval index jako ETF.</Term>{" "}
+      57 +            akciový fond v&nbsp;EU než průměrný ETF (ESMA).    
+      58            </p>
+      59          </div>
+      60  
+
+● Update(components/FeeReceipt.tsx)  ⎿  Added 1 line, removed 1 line
+      71          <div id={breakdownId} className={open ? "" : "hidden sm
+          :block"} data-testid="receipt-breakdown">
+      72            <dl className="mt-2">
+      73              <Line label="Vklady celkem" value={formatKc(result.
+          deposits)} />
+      74 -            <Line label={`Modelová hodnota bez poplatků (${annu
+         -alReturn} %)`} value={formatKc(result.grossValue)} />          
+      74 +            <Line label={`Kolik by investice měla bez poplatků 
+         +(${annualReturn} % ročně)`} value={formatKc(result.grossValue)}
+         + />                                                            
+      75            </dl>
+      76  
+      77            <p className="mt-5 text-[13px] tracking-wide text-mut
+          ed uppercase">
+
+● Update(components/FeeReceipt.tsx)
+  ⎿  Added 1 line, removed 1 line
+      75            </dl>
+      76  
+      77            <p className="mt-5 text-[13px] tracking-wide text-mut
+          ed uppercase">
+      78 -            Náklady za {years}&nbsp;let · TER ročně            
+      78 +            Náklady za {years}&nbsp;let · roční poplatek fondu 
+      79            </p>
+      80            <ul className="mt-1">
+      81              {result.rows.map((row) => (
+
+● Update(components/FeeReceipt.tsx)
+  ⎿  Added 4 lines, removed 1 line
+      107          <p>Kalkulačka počítá náklady, nedoporučuje žádný fond.
+           </p>
+      108          <ul className="list-disc space-y-1 pl-5">
+      109            <li>Modelový výpočet v&nbsp;Kč. Výnos {annualReturn}
+           &nbsp;% je zvolený příklad, ne odhad ani slib.</li>
+      110 -          <li>Nezahrnuje měnové riziko USD/CZK, poplatky broke
+          -ra, směnu měn, spread ani daně.</li>                          
+      110 +          <li>                                                
+      111 +            Nezahrnuje změny kurzu koruny, poplatky brokera, s
+          +měnu měn, rozdíl mezi nákupní a&nbsp;prodejní cenou ani       
+      112 +            daně.                                             
+      113 +          </li>                                               
+      114          </ul>
+      115          <More summary="Jak počítáme">
+      116            <p>
+
+● Update(components/FeeReceipt.tsx)
+  ⎿  Added 3 lines, removed 3 lines
+      114          </ul>
+      115          <More summary="Jak počítáme">
+      116            <p>
+      117 -            <strong className="font-semibold text-ink">Náklad<
+          -/strong> = zaplacené poplatky + výnos, o&nbsp;který kvůli     
+      118 -            nim přijdete, proti fondu bez nákladů.            
+      117 +            Do <strong className="font-semibold text-ink">nákl
+          +adů</strong> počítáme zaplacené poplatky i&nbsp;výnos, který  
+      118 +            by tyto peníze vydělaly, kdyby zůstaly investované
+          +.                                                             
+      119            </p>
+      120            <p className="mt-1">
+      121 -            TER fondů od emitentů k&nbsp;{formatDate(fundSourc
+          -e.retrievedAt)} (zdroje u&nbsp;srovnání níže). Průměry{" "}   
+      121 +            Roční poplatky (TER) fondů od jejich správců k&nbs
+          +p;{formatDate(fundSource.retrievedAt)} (zdroje u&nbsp;srovnání
+          + níže). Průměry{" "}                                          
+      122              <a className="underline" href={active.sourceUrl}>
+      123                ESMA
+      124              </a>{" "}
+
+● Update(components/FeeReceipt.tsx)
+  ⎿  Added 1 line, removed 1 line
+      122              <a className="underline" href={active.sourceUrl}>
+      123                ESMA
+      124              </a>{" "}
+      125 -            za rok 2024 (staženo {formatDate(active.retrievedA
+          -t)}): průběžné náklady bez vstupních poplatků.                
+      125 +            za rok 2024 (staženo {formatDate(active.retrievedA
+          +t)}): jen roční poplatky, bez vstupních poplatků.             
+      126            </p>
+      127          </More>
+      128        </div>
+
+● Update(components/FeeReceipt.tsx)
+  ⎿  Added 1 line
+      2  
+      3  import { type ReactNode, useId, useState } from "react";
+      4  import { More } from "@/components/More";
+      5 +import { Term } from "@/components/Term";                       
+      6  import type { FeeResult } from "@/lib/fees";
+      7  import { formatDate, formatKc, formatPercent } from "@/lib/forma
+         t";
+      8  import { useTween } from "@/lib/use-tween";
+
+● Update(components/Calculator.tsx)
+  ⎿  Added 1 line, removed 1 line
+      206        className="mt-6 scroll-mt-4 rounded-sm border-2 border-i
+           nk bg-card p-4"
+      207      >
+      208        <TrackView event="form_view" props={{ form_location: "ca
+           lc" }}>
+      209 -        <p className="font-semibold">Chcete kompletní srovnání
+          - všech 5&nbsp;dvojic fondů NYSE ↔ UCITS?</p>                  
+      209 +        <p className="font-semibold">Chcete srovnání všech 5&n
+          +bsp;amerických fondů s&nbsp;evropskými variantami?</p>        
+      210          <p className="mt-1 text-[15px] leading-6 text-muted">Z
+           obrazí se hned po odeslání, kopii pošleme e-mailem.</p>
+      211          <LeadFormFields location="calc" submitLabel={SUBMIT_CT
+           A} className="mt-4" />
+      212        </TrackView>
+
+● Bash(sed -i 's|export function Term({ term, children }: { term: string;
+      children: string }) {|/** `name`: celý pojem pro přístupný název tlačítka,
+      když `term` v text…)
+  ⎿  Updated components/FeeReceipt.tsx (+1 -1)
+      54            <p className="sr-only">{formatKc(result.esmaGap)}</p>
+      55            <p className="fine mt-1">
+      56              O tolik víc stojí průměrný{" "}
+      57 -            <Term term="aktivní">Aktivní fond: akcie vybírá spr
+         -ávce fondu, místo aby jen kopíroval index jako ETF.</Term>{" "}
+      57 +            <Term term="aktivní" name="aktivní fond">Aktivní fo
+         +nd: akcie vybírá správce fondu, místo aby jen kopíroval index j
+         +ako ETF.</Term>{" "}                                           
+      58              akciový fond v&nbsp;EU než průměrný ETF (ESMA).
+      59            </p>
+      60          </div>
+  ⎿  Updated components/Term.tsx (+3 -2)
+       7   * pod řádkem. Žádný tooltip na hover – na mobilu nefunguje. Ov
+          ládá se Enterem i mezerníkem.
+       8   * Vysvětlení je <span class="block">, takže jde použít i uvnit
+          ř odstavce.
+       9   */
+      10 -export function Term({ term, children }: { term: string; childr
+         -en: string }) {                                                
+      10 +/** `name`: celý pojem pro přístupný název tlačítka, když `term
+         +` v textu je jen jeho část („aktivní“ → „aktivní fond“) */     
+      11 +export function Term({ term, name = term, children }: { term: s
+         +tring; name?: string; children: string }) {                    
+      12    const [open, setOpen] = useState(false);
+      13    const id = useId();
+      14    return (
+     ...
+      18          type="button"
+      19          aria-expanded={open}
+      20          aria-controls={id}
+      20 -        aria-label={`Co je ${term}?`}                          
+      21 +        aria-label={`Co je ${name}?`}                          
+      22          onClick={() => setOpen(!open)}
+      23          className="press mx-0.5 inline-flex size-6 items-center
+           justify-center rounded-full border border-ink align-middle tex
+          t-[13px] leading-none font-semibold outline-offset-2 focus-visi
+          ble:outline-2 aria-expanded:bg-ink aria-expanded:text-paper"
+      24        >
+
+● Update(components/Term.tsx)
+  ⎿  Added 1 line, removed 1 line
+       6   * Odborný pojem s vysvětlením na klepnutí: tlačítko „?“ (aria-
+          expanded) odkryje jednu větu hned
+       7   * pod řádkem. Žádný tooltip na hover – na mobilu nefunguje. Ov
+          ládá se Enterem i mezerníkem.
+       8   * Vysvětlení je <span class="block">, takže jde použít i uvnit
+          ř odstavce.
+       9 + * `name`: celý pojem pro přístupný název tlačítka, když `term`
+         + v textu je jen jeho část („aktivní“ → „aktivní fond“).        
+      10   */
+      10 -/** `name`: celý pojem pro přístupný název tlačítka, když `term
+         -` v textu je jen jeho část („aktivní“ → „aktivní fond“) */     
+      11  export function Term({ term, name = term, children }: { term: s
+          tring; name?: string; children: string }) {
+      12    const [open, setOpen] = useState(false);
+      13    const id = useId();
+
+● Update(components/Comparison.tsx)
+  ⎿  Added 12 lines, removed 5 lines
+      19          Fondy z&nbsp;NYSE a&nbsp;jejich evropské varianty
+      20        </h2>
+      21        <p className="mt-3 text-[15px] leading-6">
+      22 -        Fondy domicilované v&nbsp;USA nemají sdělení klíčových 
+         -informací (KID), které pro prodej drobným investorům           
+      23 -        v&nbsp;EU vyžaduje{" "}                                
+      22 +        Fondy se sídlem v&nbsp;USA nemají{" "}                 
+      23 +        <Term term="KID">                                      
+      24 +          Sdělení klíčových informací: krátký dokument o rizicí
+         +ch a nákladech fondu, nejvýš 3 strany A4.                      
+      25 +        </Term>                                                
+      26 +        , který podle{" "}                                     
+      27          <a className="underline" href={PRIIPS_URL}>
+      28            nařízení PRIIPs
+      26 -        </a>                                                   
+      27 -        . Brokeři je proto drobným investorům v&nbsp;Česku běžn
+         -ě nenabízejí. Stejný index sledují fondy UCITS                 
+      28 -        z&nbsp;Irska. Srovnání je informativní, nejde o&nbsp;do
+         -poručení.                                                      
+      29 +        </a>{" "}                                              
+      30 +        musí drobný investor v&nbsp;EU dostat před nákupem. Bro
+         +keři je proto v&nbsp;Česku drobným investorům běžně            
+      31 +        nenabízejí. Stejný index sledují evropské fondy{" "}   
+      32 +        <Term term="UCITS">                                    
+      33 +          Fond podle evropské směrnice UCITS, která stanoví pra
+         +vidla pro rozložení rizika a ochranu investorů.                
+      34 +        </Term>{" "}                                           
+      35 +        se sídlem v&nbsp;Irsku. Srovnání je informativní, nejde
+         + o&nbsp;doporučení.                                            
+      36        </p>
+      37  
+      38        <div className="mt-6">
+
+● Update(components/Comparison.tsx)
+  ⎿  Added 1 line
+      1  import { LeadFormLink } from "@/components/LeadFormLink";
+      2  import { PairCard } from "@/components/PairCard";
+      3  import { PairTabs } from "@/components/PairTabs";
+      4 +import { Term } from "@/components/Term";                       
+      5  import { TrackView } from "@/components/TrackView";
+      6  import { lockedPairs, previewPairs } from "@/lib/etfs";
+      7  
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Bash(f=components/PairCard.tsx && sed -i \
+       -e 's|const DISTRIBUTION = { accumulating: "akumulační", distributing:
+      "distribuční" } as const;|const DISTRIBUTION = { a…)
+  ⎿  Updated components/PairCard.tsx (+5 -5)
+      2  import type { Fund, FundPair, Sourced } from "@/lib/etfs";
+      3  import { formatBillions, formatDate, formatPercent } from "@/lib
+         /format";
+      4  
+      5 -const DISTRIBUTION = { accumulating: "akumulační", distributing:
+        - "distribuční" } as const;                                      
+      5 +const DISTRIBUTION = { accumulating: "reinvestuje (akumulační)",
+        + distributing: "vyplácí (distribuční)" } as const;              
+      6  
+      7  type Cell = { text: string; field: Sourced<unknown> | null };
+      8  /** code: kód (ISIN), který se nesmí zalomit – menší písmo, celý
+          na jednom řádku */
+     ...
+      19    const { us, ucits } = pair;
+      20    const base: Row[] = [
+      21      { label: "Burza", us: cell(us.exchange, us.exchange.value),
+           ucits: cell(ucits.exchange, ucits.exchange.value) },
+      22 -    { label: "Domicil", us: cell(us.domicile, us.domicile.value
+         -), ucits: cell(ucits.domicile, `${ucits.domicile.value} (UCITS)
+         -`) },                                                          
+      23 -    { label: "TER ročně", us: cell(us.ter, formatPercent(us.ter
+         -.value)), ucits: cell(ucits.ter, formatPercent(ucits.ter.value)
+         -) },                                                           
+      22 +    { label: "Sídlo fondu", us: cell(us.domicile, us.domicile.v
+         +alue), ucits: cell(ucits.domicile, `${ucits.domicile.value} (UC
+         +ITS)`) },                                                      
+      23 +    { label: "Poplatek ročně", us: cell(us.ter, formatPercent(u
+         +s.ter.value)), ucits: cell(ucits.ter, formatPercent(ucits.ter.v
+         +alue)) },                                                      
+      24      {
+      25        label: "Dividendy",
+      26        us: cell(us.distribution, DISTRIBUTION[us.distribution.va
+          lue]),
+      27        ucits: cell(ucits.distribution, DISTRIBUTION[ucits.distri
+          bution.value]),
+      28      },
+      29      {
+      30 -      label: "Měna",                                           
+      30 +      label: "Měna nákupu",                                    
+      31        us: cell(us.currency, us.currency.value),
+      32 -      ucits: cell(ucits.currency, `${ucits.currency.value}, fon
+         -d v ${ucits.base_currency.value}`),                            
+      32 +      ucits: cell(ucits.currency, `${ucits.currency.value} (fon
+         +d vede hodnotu v ${ucits.base_currency.value})`),              
+      33      },
+      34    ];
+      35    if (!full) return base;
+
+● Teď vysvětlivky řádků pod tabulkou.
+
+● Update(components/PairCard.tsx)
+  ⎿  Added 22 lines
+      48    ];
+      49  }
+      50  
+      51 +/** Vysvětlivky řádků pro laika, každá jedna věta. `full`: řádk
+         +y jen v plném srovnání. */                                     
+      52 +const GLOSSARY: { term: string; text: string; full?: boolean }[
+         +] = [                                                          
+      53 +  { term: "Burza", text: "kde se fond obchoduje; NYSE Arca patř
+         +í skupině NYSE, Xetra je německá burza." },                    
+      54 +  { term: "Sídlo fondu", text: "země, podle jejíchž pravidel fo
+         +nd vznikl." },                                                 
+      55 +  { term: "Poplatek ročně (TER)", text: "kolik fond ročně strhn
+         +e z vaší investice, platíte ho průběžně v ceně fondu." },      
+      56 +  {                                                            
+      57 +    term: "Dividendy",                                         
+      58 +    text: "zda fond výplatu firem znovu investuje (akumulační),
+         + nebo vám ji posílá (distribuční).",                           
+      59 +  },                                                           
+      60 +  {                                                            
+      61 +    term: "Měna nákupu",                                       
+      62 +    text: "v jaké měně fond na burze koupíte; měnové riziko to 
+         +neodstraní, fond drží akcie v cizích měnách.",                 
+      63 +  },                                                           
+      64 +  { term: "Velikost fondu", text: "kolik peněz fond spravuje.",
+         + full: true },                                                 
+      65 +  {                                                            
+      66 +    term: "Registrace v ČR",                                   
+      67 +    text: "zda emitent uvádí Česko mezi zeměmi registrace; v re
+         +gistru ČNB jsme to neověřovali.",                              
+      68 +    full: true,                                                
+      69 +  },                                                           
+      70 +  { term: "ISIN", text: "mezinárodní kód fondu, podle kterého h
+         +o najdete u brokera.", full: true },                           
+      71 +];                                                             
+      72 +                                                               
+      73  /** Dvojice NYSE ETF ↔ UCITS: hodnoty z dat, u každé číslo zdro
+          je s odkazem a datem stažení. */
+      74  export function PairCard({ pair, full = false }: { pair: FundPa
+          ir; full?: boolean }) {
+      75    const table = rows(pair, full);
+
+● Update(components/PairCard.tsx)
+  ⎿  Added 10 lines, removed 1 line
+      135          </tbody>
+      136        </table>
+      137        {(full || !same) && <p className="fine mt-2">{pair.us.uc
+           its_equivalent!.public_note}</p>}
+      138 -      <More summary={`Zdroje a data (${sources.length})`} clas
+          -sName="mt-1">                                                 
+      138 +      <More summary="Co znamenají řádky" className="mt-1">    
+      139 +        <dl className="space-y-1">                            
+      140 +          {GLOSSARY.filter((g) => full || !g.full).map((g) => 
+          +(                                                             
+      141 +            <div key={g.term}>                                
+      142 +              <dt className="inline font-semibold text-ink">{g
+          +.term}:</dt> <dd className="inline">{g.text}</dd>             
+      143 +            </div>                                            
+      144 +          ))}                                                 
+      145 +        </dl>                                                 
+      146 +      </More>                                                 
+      147 +      <More summary={`Zdroje a data (${sources.length})`}>    
+      148          <ol className="space-y-0.5">
+      149            {sources.map((s, i) => (
+      150              <li key={s.url} id={`src-${id}-${i + 1}`}>
+
+● Update(components/Trust.tsx)
+  ⎿  Added 5 lines, removed 5 lines
+      13  
+      14        <More summary="Odkud jsou data" className="mt-4">
+      15          <p>
+      16 -          Údaje o&nbsp;fondech pochází přímo od emitentů (Vangu
+         -ard, iShares, State Street SPDR), z&nbsp;prospektů na SEC      
+      17 -          EDGAR, z&nbsp;KID a&nbsp;z&nbsp;adresáře NYSE, stažen
+         -o {formatDate(DATA_RETRIEVED_AT)}. Průměrné náklady fondů      
+      18 -          v&nbsp;EU z&nbsp;                                    
+      16 +          Údaje o&nbsp;fondech pochází přímo od jejich správců 
+         +(Vanguard, iShares, State Street SPDR), z&nbsp;prospektů       
+      17 +          na SEC EDGAR (databáze amerického dozoru), z&nbsp;KID
+         + a&nbsp;z&nbsp;adresáře NYSE, staženo{" "}                     
+      18 +          {formatDate(DATA_RETRIEVED_AT)}. Průměrné náklady fon
+         +dů v&nbsp;EU ze&nbsp;                                          
+      19            <a href={ESMA.sourceUrl} className="underline">
+      20 -            tržní zprávy ESMA                                  
+      20 +            zprávy ESMA                                        
+      21            </a>{" "}
+      22 -          (data za rok 2024). U&nbsp;každé hodnoty ve srovnání 
+         -je odkaz na zdroj.                                             
+      22 +          (Evropský orgán pro cenné papíry a&nbsp;trhy, data za
+         + rok 2024). U&nbsp;každé hodnoty ve srovnání je odkaz na zdroj.
+      23          </p>
+      24        </More>
+      25  
+
+● Update(components/LeadForm.tsx)
+  ⎿  Added 5 lines, removed 2 lines
+      53            </h2>
+      54            <ul className="mt-4 space-y-2 text-[15px] leading-6">
+      55              <li className="dotted pb-2">
+      56 -              VOO, SPY, IVV, VTI a&nbsp;VT vedle UCITS fondů, k
+         -teré jsou v&nbsp;ČR dostupné                                   
+      56 +              VOO, SPY, IVV, VTI a&nbsp;VT vedle evropských fon
+         +dů, které jsou v&nbsp;ČR dostupné                              
+      57              </li>
+      58 -            <li className="dotted pb-2">TER, měna, akumulace, b
+         -urza, velikost fondu, registrace v&nbsp;ČR, ISIN</li>          
+      58 +            <li className="dotted pb-2">                       
+      59 +              Roční poplatek, měna, co fond dělá s&nbsp;dividen
+         +dami, burza, velikost fondu, registrace v&nbsp;ČR a&nbsp;kód   
+      60 +              ISIN pro vyhledání u&nbsp;brokera                
+      61 +            </li>                                              
+      62            </ul>
+      63            <p className="mt-3 text-[15px] font-semibold">Zobrazí
+           se hned po odeslání, kopii pošleme e-mailem.</p>
+      64            {flow.activeForm === "bottom" ? (
+
+● Update(app/layout.tsx)
+  ⎿  Added 1 line, removed 1 line
+      18  export const metadata: Metadata = {
+      19    title: "ETF z NYSE – srovnání pro českého investora",
+      20    description:
+      21 -    "Porovnání ETF z NYSE s evropskými UCITS alternativami a ka
+         -lkulačka dopadu poplatků v Kč.",                               
+      21 +    "Porovnání ETF z NYSE s evropskými alternativami dostupnými
+         + v ČR a kalkulačka dopadu poplatků v Kč.",                     
+      22  };
+      23  
+      24  export default function RootLayout({ children }: LayoutProps<"/
+          ">) {
+
+● Texty stránky jsou hotové. Kontroluji, jestli testy nehledají staré texty.
+
+  Searched for 1 pattern, ran 1 shell command (ctrl+o to expand)
+
+● Bash(sed -i 's|toContainText(/chybí KID, který nařízení PRIIPs
+      vyžaduje/)|toContainText(/nemají KID – dokument, který v\\s+EU musí drobný
+      investor dostat před nákupe…)
+  ⎿  Updated e2e/landing.spec.ts (+1 -1)
+      39    await expect(page.getByRole("heading", { level: 1 })).toHaveT
+          ext(/Proč si v\s+Česku nekoupíte VOO\?/);
+      40    await expect(page.getByText(/jaké alternativy jsou v\s+ČR dos
+          tupné/)).toBeVisible();
+      41    // Reklama B vysvětluje „proč“ – hero musí totéž říct hned, n
+          e až ve srovnání
+      42 -  await expect(page.locator("#hero")).toContainText(/chybí KID,
+         - který nařízení PRIIPs vyžaduje/);                             
+      42 +  await expect(page.locator("#hero")).toContainText(/nemají KID
+         + – dokument, který v\s+EU musí drobný investor dostat před náku
+         +pem/);                                                         
+      43    await expect(page.getByRole("link", { name: "Ukázat srovnání"
+           })).toBeInViewport();
+      44    expect(new URL(page.url()).pathname).toBe("/");
+      45    await expect.poll(() => page.evaluate(() => window.dataLayer?
+          .[0]?.ad_variant)).toBe("b");
+
+  Ran 1 shell command (ctrl+o to expand)
+● Typecheck i lint prošly. Spouštím E2E (včetně testu „lišta nezakryje CTA“ pro
+  hero B).
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Bash(sed -i 's|getByText(/Nezahrnuje měnové riziko/)|getByText(/Nezahrnuje
+      změny kurzu koruny/)|' e2e/landing.spec.ts && sed -n 147,175p
+      e2e/landing.spec.ts)
+  ⎿  Updated e2e/landing.spec.ts (+1 -1)
+      75    await expect(breakdown).toContainText("Vklady celkem");
+      76    await expect(breakdown).toContainText("720 000 Kč");
+      77    // předpoklady výpočtu jsou vidět vždy, nejsou v rozpisu
+      78 -  await expect(page.locator("#kalkulacka").getByText(/Nezahrnuj
+         -e měnové riziko/)).toBeVisible();                              
+      78 +  await expect(page.locator("#kalkulacka").getByText(/Nezahrnuj
+         +e změny kurzu koruny/)).toBeVisible();                         
+      79  });
+      80  
+      81  for (const height of [812, 667]) {
+
+● Bash(node - <<'EOF'
+      const fs=require("fs");const f="e2e/landing.spec.ts";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated e2e/landing.spec.ts (+26 -1)
+      144    await expect(page.getByTestId("calc-gap")).toHaveText(hero!)
+           ;
+      145  });
+      146  
+      147 +test("pojmy pro laika: „?“ u KID a UCITS se ovládá klávesnicí,
+          + řádky srovnání mají vysvětlivky", async ({ page }) => {      
+      148 +  await page.goto("/");                                       
+      149 +  const section = page.locator("#srovnani");                  
+      150 +  const kid = section.getByRole("button", { name: "Co je KID?"
+          + });                                                          
+      151 +  const explanation = section.locator(`#${(await kid.getAttrib
+          +ute("aria-controls"))!.replace(/:/g, "\\:")}`);               
+      152 +  await expect(kid).toHaveAttribute("aria-expanded", "false");
+      153 +  await expect(explanation).toBeHidden();                     
+      154 +  await kid.focus();                                          
+      155 +  await page.keyboard.press("Enter");                         
+      156 +  await expect(kid).toHaveAttribute("aria-expanded", "true"); 
+      157 +  await expect(explanation).toContainText("nejvýš 3 strany A4"
+          +);                                                            
+      158 +  await page.keyboard.press("Space");                         
+      159 +  await expect(explanation).toBeHidden();                     
+      160 +  await expect(section.getByRole("button", { name: "Co je UCIT
+          +S?" })).toBeVisible();                                        
+      161 +                                                              
+      162 +  // ukázka: vysvětlivky jen k řádkům, které má (bez ISIN), sb
+          +alené                                                         
+      163 +  const panel = section.getByRole("tabpanel");                
+      164 +  const glossary = panel.locator("details").filter({ hasText: 
+          +/^Co znamenají řádky/ });                                     
+      165 +  await expect(glossary).not.toHaveAttribute("open");         
+      166 +  await glossary.getByText("Co znamenají řádky").click();     
+      167 +  await expect(glossary).toContainText("Poplatek ročně (TER):"
+          +);                                                            
+      168 +  await expect(glossary).not.toContainText("ISIN");           
+      169 +  await expect(panel.getByRole("rowheader")).toHaveText(["Burz
+          +a", "Sídlo fondu", "Poplatek ročně", "Dividendy", "Měna nákupu
+          +"]);                                                          
+      170 +});                                                           
+      171 +                                                              
+      172  test("porovnání: přepínač 3 dvojic, vybraná VOO se zdroji, zam
+           čené na jednom řádku", async ({ page }) => {
+      173    await page.goto("/");
+      174    const section = page.locator("#srovnani");
+     ...
+      181    await expect(visible).toHaveCount(1);
+      182    await expect(visible.getByTestId("pair")).toContainText("VUA
+           A");
+      183    // zdroje jsou ve sbaleném „Zdroje a data“, horní index u ho
+           dnoty ho rozbalí
+      159 -  const sources = visible.locator("details");                 
+      184 +  const sources = visible.locator("details").filter({ hasText:
+          + /^Zdroje a data/ });                                         
+      185    await expect(sources).not.toHaveAttribute("open");
+      186    await visible.locator('sup a[href^="#src-"]').first().click(
+           );
+      187    await expect(sources).toHaveAttribute("open");
+  ⎿  (timeout 5m)
+
+● Ověřuji bod #3: řádek „VUAA · fond z EU (Irsko)“ na 375 px. Přidám to rovnou
+  do testu hero B.
+
+● Bash(node - <<'EOF'
+      const fs=require("fs");const f="e2e/landing.spec.ts";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated e2e/landing.spec.ts (+5 -0)
+      40    await expect(page.getByText(/jaké alternativy jsou v\s+ČR dos
+          tupné/)).toBeVisible();
+      41    // Reklama B vysvětluje „proč“ – hero musí totéž říct hned, n
+          e až ve srovnání
+      42    await expect(page.locator("#hero")).toContainText(/nemají KID
+           – dokument, který v\s+EU musí drobný investor dostat před náku
+          pem/);
+      43 +  // řádek evropského fondu („VUAA · fond z EU (Irsko)“) se nez
+         +alomí: stejně vysoký jako řádek VOO                            
+      44 +  const rows = page.locator("#hero dl > div");                 
+      45 +  await expect(rows.nth(1)).toContainText(/fond z\s+EU \(Irsko\
+         +)/);                                                           
+      46 +  const [us, eu] = await Promise.all([0, 1].map(async (i) => (a
+         +wait rows.nth(i).boundingBox())!.height));                     
+      47 +  expect(Math.abs(eu - us)).toBeLessThan(2);                   
+      48    await expect(page.getByRole("link", { name: "Ukázat srovnání"
+           })).toBeInViewport();
+      49    expect(new URL(page.url()).pathname).toBe("/");
+      50    await expect.poll(() => page.evaluate(() => window.dataLayer?
+          .[0]?.ad_variant)).toBe("b");
+  ⎿  (timeout 6m 40s)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Hero B se nezalomí a CTA zůstává nad cookie lištou na 375 × 667 i 812. Pouštím
+  celou sadu před prvním commitem.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Část 2: oprava rizika (stránka + e-mail) a texty e-mailu.
+
+● Bash(sed -i 's|  "Fondy investují v USD. Změna kurzu USD/CZK může výnos v
+      korunách snížit i zvýšit.",|  "Fondy vedou hodnotu v USD a drží akcie v
+      cizích měnách. Změn…)
+  ⎿  Updated lib/email-template.ts (+2 -2)
+      32  }
+      33  
+      34  export function confirmationEmail({ confirmUrl, unsubscribeUrl,
+           dataDate }: ConfirmationEmailInput): RenderedEmail {
+      35 -  const subject = "Potvrďte e-mail: srovnání ETF z NYSE a UCITS
+         -";                                                             
+      35 +  const subject = "Potvrďte e-mail: srovnání ETF z NYSE";      
+      36    const preheader = "Jedním klepnutím potvrdíte adresu a otevře
+          te plné srovnání 5 dvojic fondů.";
+      37    const intro =
+      38 -    "na stránce se srovnáním ETF jste zadali tuto adresu a požá
+         -dali o plné srovnání 5 dvojic fondů: ETF z NYSE vedle UCITS fon
+         -dů, které jsou v ČR dostupné.";                                
+      38 +    "na stránce se srovnáním ETF jste zadali tuto adresu a požá
+         +dali o plné srovnání 5 dvojic fondů: ETF z NYSE vedle evropskýc
+         +h fondů, které jsou v ČR dostupné.";                           
+      39    const validity = `Odkaz platí ${CONFIRM_VALID_DAYS} dní. Poku
+          d jste o srovnání nežádali, e-mail ignorujte – nepotvrzenou adr
+          esu do ${RETENTION.unconfirmedDays} dnů smažeme.`;
+      40    const dataLine = `Data ve srovnání jsou ke dni ${formatDate(d
+          ataDate)}.`;
+      41    const sender = `Odesílá ${operatorLine()}. ${OPERATOR.about}`
+          ;
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Řetězec používá pevné mezery za jednopísmennými předložkami. Zachovám tu
+  konvenci.
+
+● Bash(node -e '
+      const fs=require("fs");const f="lib/site.ts";let
+      s=fs.readFileSync(f,"utf8");const n=" ";…)
+  ⎿  Updated lib/site.ts (+1 -1)
+      47  /** Upozornění na rizika – stejné znění na stránce (Trust) i v 
+          e-mailu. */
+      48  export const RISK_WARNINGS = [
+      49    "Hodnota investice může klesat i stoupat, můžete přijít o čás
+          t vložených peněz.",
+      50 -  "Fondy investují v USD. Změna kurzu USD/CZK může výnos v koru
+         -nách snížit i zvýšit.",                                        
+      50 +  "Fondy vedou hodnotu v USD a drží akcie v cizích měnách. Změn
+         +a kurzu koruny může výnos v korunách snížit i zvýšit.",        
+      51    "Minulé ani modelové výnosy nezaručují výnosy budoucí.",
+      52    "Údaje platí k datu uvedenému u zdroje a mohou se změnit.",
+      53    "Stránka je vzdělávací srovnání s daty, ne investiční doporuč
+          ení ani nabídka produktu.",
+
+● Bash(cat >> docs/ai-chyby.md <<'EOF'
+      | 2026-10-11 | Rizikové upozornění na stránce i v e-mailu tvrdilo „Fondy
+      investují v USD“. Neplatí pro VT a VWCE: vedou hodnotu…)
+  ⎿  Updated docs/ai-chyby.md (+1 -0)
+      31  | 2026-10-10 | V kroku 8b jsem napsala do README (rozhodnutí 52
+          ) i do plánu 8c, že obyčejnou nulu v Atkinson Hyperlegible Next
+           dává funkce `salt` u proporcionálních číslic („ověřeno rendere
+          m“). Neplatí: písmo obyčejnou nulu vůbec nemá. Skript, kterým j
+          sem to „ověřila“, zůstal jen v dočasné složce session, takže ne
+          šlo zpětně zjistit, co vlastně měřil | Pixelové porovnání každé
+          ho znaku s a bez `salt` před implementací 8c (písmo z buildu, z
+           Google Fonts i plné písmo z repozitáře autorů; vyzkoušeny i `z
+          ero`, `ss01–20`, `cv01–20`). Nulu nemění nic | Zastavila jsem s
+          e a zeptala člověka. Velká samostatná čísla (hero A, rozdíl v ú
+          čtence, reklama A) jsou ve Fraunces s obyčejnou nulou, zbytek b
+          eze změny. Rozhodnutí 52 přepsáno. Měřicí skripty patří do `scr
+          ipts/`, ne do dočasné složky |
+      32  | 2026-10-10 | Skript na LCP a CLS z kroku 8b byl jen v dočasné
+           složce session a ztratil se. Nový skript podle popisu v README
+           naměřil u stejného kódu (8b) 720 / 720 ms místo 696 / 708 ms v
+           README. Bez původního skriptu nejde říct, který detail nastave
+          ní se liší | Kontrolní měření commitu 8b novým skriptem v samos
+          tatném `git worktree` | `scripts/vitals.mjs` v repu. README por
+          ovnává 8b a 8c stejným skriptem, starší čísla nechává jako tehd
+          ejší měření |
+      33  | 2026-10-10 | Plné srovnání v kartě s vnitřním okrajem (krok 8
+          c) zúžilo sloupce a ISIN se zalomil uprostřed kódu („IE00BFMXXD
+          5 / 4“). E2E testy to nepoznají, text je celý | Kontrola snímku
+           děkovacího stavu | ISIN menším písmem bez zalomení (příznak `c
+          ode` v řádku `PairCard`), panel s menším okrajem po stranách |
+      34 +| 2026-10-11 | Rizikové upozornění na stránce i v e-mailu tvrdi
+         +lo „Fondy investují v USD“. Neplatí pro VT a VWCE: vedou hodnot
+         +u v USD, ale drží akcie z celého světa v mnoha měnách. Text vzn
+         +ikl v kroku 4 a prošel několika revizemi, protože u fondů na S&
+         +P 500 sedí | Revize textů pro laika (krok 9), kontrola každého 
+         +tvrzení proti datům (`base_currency` ≠ měna akcií) | „Fondy ved
+         +ou hodnotu v USD a drží akcie v cizích měnách. Změna kurzu koru
+         +ny může výnos v korunách snížit i zvýšit.“ Stejné znění na strá
+         +nce i v e-mailu (`RISK_WARNINGS`) |                            
+  ⎿  (timeout 10m)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Část 3: read-only kontrola tokenu na /potvrzeni.
+
+  Searched for 1 pattern, ran 1 shell command (ctrl+o to expand)
+
+● Select má service_role povolený, migrace není potřeba. Píšu serverovou část.
+
+● Update(lib/lead-server.ts)
+  ⎿  Added 3 lines
+      36  
+      37  export type ConfirmStatus = "confirmed" | "already" | "expired"
+           | "invalid";
+      38  export type ConfirmOutcome = { status: ConfirmStatus; adVariant
+          : AdVariant | null; utm: Utm };
+      39 +/** Stav odkazu při načtení /potvrzeni (jen čtení). `unknown` =
+         + databáze neodpověděla. */                                     
+      40 +export type TokenStatus = "pending" | "already" | "expired" | "
+         +invalid";                                                      
+      41 +export type TokenRow = { doubleOptInAt: string | null; confirmS
+         +entAt: string | null };                                        
+      42  
+      43  export type LeadStore = {
+      44    upsert(params: UpsertLeadParams): Promise<StoredLead>;
+
+● Update(lib/lead-server.ts)
+  ⎿  Added 2 lines
+      46    /** Zabere odeslání potvrzovacího e-mailu (cooldown + hodinov
+          ý strop v DB). true = poslat. */
+      47    claimConfirmation(id: string, tokenHash: string): Promise<boo
+          lean>;
+      48    confirm(tokenHash: string): Promise<ConfirmOutcome>;
+      49 +  /** Jen čtení: stav leadu podle hashe tokenu, nic nezapisuje.
+         + null = token neexistuje. */                                   
+      50 +  findByToken(tokenHash: string): Promise<TokenRow | null>;    
+      51    unsubscribe(id: string): Promise<boolean>;
+      52  };
+      53  
+
+● Update(lib/lead-server.ts)
+  ⎿  Added 24 lines
+      204    }
+      205  }
+      206  
+      207 +/** Stejné pořadí podmínek jako SQL `confirm_lead`, jen bez zá
+          +pisu. */                                                      
+      208 +export function tokenStatus(row: TokenRow | null, now: Date = 
+          +new Date()): TokenStatus {                                    
+      209 +  if (!row) return "invalid";                                 
+      210 +  if (row.doubleOptInAt) return "already";                    
+      211 +  const validMs = CONFIRM_VALID_DAYS * 24 * 60 * 60 * 1000;   
+      212 +  if (!row.confirmSentAt || Date.parse(row.confirmSentAt) < no
+          +w.getTime() - validMs) return "expired";                      
+      213 +  return "pending";                                           
+      214 +}                                                             
+      215 +                                                              
+      216 +/**                                                           
+      217 + * Stav odkazu při načtení /potvrzeni, aby obnovená stránka ne
+          +nabízela potvrzení znovu. Jen čte:                            
+      218 + * potvrzuje dál výhradně tlačítko (handleConfirm), takže sken
+          +er odkazů nic nepotvrdí.                                      
+      219 + * Vrací jen stav, žádnou atribuci. Výpadek databáze = `unknow
+          +n` (stránka ukáže tlačítko jako dřív).                        
+      220 + */                                                           
+      221 +export async function handleConfirmStatus(token: unknown, stor
+          +e: LeadStore | null): Promise<TokenStatus | "unknown"> {      
+      222 +  if (typeof token !== "string" || !TOKEN.test(token) || !stor
+          +e) return "invalid";                                          
+      223 +  try {                                                       
+      224 +    return tokenStatus(await store.findByToken(hashToken(token
+          +)));                                                          
+      225 +  } catch (error) {                                           
+      226 +    console.error("[lead] kontrola odkazu selhala:", errorCode
+          +(error));                                                     
+      227 +    return "unknown";                                         
+      228 +  }                                                           
+      229 +}                                                             
+      230 +                                                              
+      231  export async function handleUnsubscribe(signed: unknown, store
+           : LeadStore | null): Promise<boolean> {
+      232    const value = verify(signed);
+      233    if (!value?.startsWith(UNSUB_PREFIX) || !store) return false
+           ;
+
+● Update(lib/lead-server.ts)
+  ⎿  Added 9 lines
+      316          utm,
+      317        };
+      318      },
+      319 +    async findByToken(tokenHash) {                            
+      320 +      const { data, error } = await client                    
+      321 +        .from("leads")                                        
+      322 +        .select("double_opt_in_at, confirm_sent_at")          
+      323 +        .eq("confirm_token_hash", tokenHash)                  
+      324 +        .maybeSingle<{ double_opt_in_at: string | null; confir
+          +m_sent_at: string | null }>();                                
+      325 +      if (error) throw error;                                 
+      326 +      return data && { doubleOptInAt: data.double_opt_in_at, c
+          +onfirmSentAt: data.confirm_sent_at };                         
+      327 +    },                                                        
+      328      async unsubscribe(id) {
+      329        const { data, error } = await client.rpc("unsubscribe_le
+           ad", { p_id: id });
+      330        if (error) throw error;
+
+● Bash(sed -i 's|/\*\* Stav odkazu při načtení /potvrzeni (jen čtení). `unknown`
+      = databáze neodpověděla. \*/|/** Stav odkazu při načtení /potvrzeni (jen
+      čtení, viz ha…)
+  ⎿  Updated lib/lead-server.ts (+1 -1)
+      36  
+      37  export type ConfirmStatus = "confirmed" | "already" | "expired"
+           | "invalid";
+      38  export type ConfirmOutcome = { status: ConfirmStatus; adVariant
+          : AdVariant | null; utm: Utm };
+      39 -/** Stav odkazu při načtení /potvrzeni (jen čtení). `unknown` =
+         - databáze neodpověděla. */                                     
+      39 +/** Stav odkazu při načtení /potvrzeni (jen čtení, viz handleCo
+         +nfirmStatus). */                                               
+      40  export type TokenStatus = "pending" | "already" | "expired" | "
+          invalid";
+      41  export type TokenRow = { doubleOptInAt: string | null; confirmS
+          entAt: string | null };
+      42  
+
+● Server action a klient:
+
+● Update(app/actions/lead.ts)
+  ⎿  Added 5 lines
+      48    }
+      49  }
+      50  
+      51 +/** Stav odkazu při načtení /potvrzeni. Jen čte, nic nepotvrzuj
+         +e. */                                                          
+      52 +export async function confirmStatus(token: unknown): Promise<To
+         +kenStatus | "unknown"> {                                       
+      53 +  return handleConfirmStatus(token, store());                  
+      54 +}                                                              
+      55 +                                                               
+      56  /** Odhlášení tlačítkem na /odhlaseni. */
+      57  export async function unsubscribeLead(signed: unknown): Promise
+          <boolean> {
+      58    return handleUnsubscribe(signed, store());
+
+● Update(app/actions/lead.ts)
+  ⎿  Added 1 line
+       6  import {
+       7    type ConfirmOutcome,
+       8    handleConfirm,
+       9 +  handleConfirmStatus,                                         
+      10    handleQualify,
+      11    handleSubmit,
+      12    handleUnsubscribe,
+● Update(app/actions/lead.ts)
+  ⎿  Added 1 line
+      12    handleUnsubscribe,
+      13    type SubmitResult,
+      14    supabaseStore,
+      15 +  type TokenStatus,                                            
+      16  } from "@/lib/lead-server";
+      17  import { supabaseAdmin } from "@/lib/supabase";
+      18  
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Bash(sed -i 's|    confirm: vi.fn(async () => ({ status: "invalid" as const,
+      adVariant: null, utm: {} })),|&\n    findByToken: vi.fn(async () =>
+      null),|' lib/lead.te…)
+  ⎿  Updated lib/double-opt-in.test.ts (+1 -0)
+      23      setQualify: vi.fn(async () => {}),
+      24      claimConfirmation: vi.fn(async () => true),
+      25      confirm: vi.fn(async () => ({ status: "confirmed" as const,
+           adVariant: "b" as const, utm: { utm_source: "meta" } })),
+      26 +    findByToken: vi.fn(async () => ({ doubleOptInAt: null, conf
+         +irmSentAt: new Date().toISOString() })),                       
+      27      unsubscribe: vi.fn(async () => true),
+      28      ...overrides,
+      29    };
+  ⎿  Updated lib/lead.test.ts (+1 -0)
+      28      setQualify: vi.fn(async () => {}),
+      29      claimConfirmation: vi.fn(async () => true),
+      30      confirm: vi.fn(async () => ({ status: "invalid" as const, a
+          dVariant: null, utm: {} })),
+      31 +    findByToken: vi.fn(async () => null),                      
+      32      unsubscribe: vi.fn(async () => true),
+      33      ...overrides,
+      34    };
+
+● Unit testy pro tokenStatus a handleConfirmStatus:
+
+● Bash(node - <<'EOF'
+      const fs=require("fs");const f="lib/double-opt-in.test.ts";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated lib/double-opt-in.test.ts (+47 -0)
+       4  import { formatDate } from "./format";
+       5  import {
+       6    handleConfirm,
+       7 +  handleConfirmStatus,                                         
+       8    handleSubmit,
+       9    handleUnsubscribe,
+      10    hashToken,
+      11    type LeadStore,
+      12    sendConfirmation,
+      13    signUnsubscribe,
+      14 +  tokenStatus,                                                 
+      15  } from "./lead-server";
+      16  import { sign } from "./sign";
+      17  import { OPERATOR, RISK_WARNINGS } from "./site";
+     ...
+      146    });
+      147  });
+      148  
+      149 +describe("stav odkazu při načtení /potvrzeni (jen čtení)", () 
+          +=> {                                                          
+      150 +  const now = new Date("2026-10-11T12:00:00Z");               
+      151 +  const daysAgo = (d: number) => new Date(now.getTime() - d * 
+          +24 * 60 * 60 * 1000).toISOString();                           
+      152 +                                                              
+      153 +  it("tokenStatus: stejné pořadí podmínek jako SQL confirm_lea
+          +d", () => {                                                   
+      154 +    expect(tokenStatus(null, now)).toBe("invalid");           
+      155 +    // potvrzená adresa je „already“ i s prošlým odkazem (jako
+          + v SQL)                                                       
+      156 +    expect(tokenStatus({ doubleOptInAt: daysAgo(1), confirmSen
+          +tAt: daysAgo(30) }, now)).toBe("already");                    
+      157 +    expect(tokenStatus({ doubleOptInAt: null, confirmSentAt: n
+          +ull }, now)).toBe("expired");                                 
+      158 +    expect(tokenStatus({ doubleOptInAt: null, confirmSentAt: d
+          +aysAgo(14.001) }, now)).toBe("expired");                      
+      159 +    expect(tokenStatus({ doubleOptInAt: null, confirmSentAt: d
+          +aysAgo(13.999) }, now)).toBe("pending");                      
+      160 +    expect(tokenStatus({ doubleOptInAt: null, confirmSentAt: d
+          +aysAgo(0) }, now)).toBe("pending");                           
+      161 +  });                                                         
+      162 +                                                              
+      163 +  it("nesmyslný token do DB nejde", async () => {             
+      164 +    const s = store();                                        
+      165 +    for (const t of [null, "", "abc", "x".repeat(43) + "!", 42
+          +]) {                                                          
+      166 +      expect(await handleConfirmStatus(t, s)).toBe("invalid");
+      167 +    }                                                         
+      168 +    expect(s.findByToken).not.toHaveBeenCalled();             
+      169 +    expect(await handleConfirmStatus("A".repeat(43), null)).to
+          +Be("invalid");                                                
+      170 +  });                                                         
+      171 +                                                              
+     … 25 more lines (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs=require("fs");const f="e2e/landing.spec.ts";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated e2e/landing.spec.ts (+5 -4)
+      387      await expect(page.getByRole("heading", { level: 1 })).toHa
+           veText("Tenhle odkaz nefunguje");
+      388      await expect(page.getByTestId("pair")).toHaveCount(0);
+      389  
+      390 +    // stav odkazu se zjistí už při načtení (jen čtení): nesmy
+          +slný token hned hláška, žádné tlačítko                        
+      391      await page.goto("/potvrzeni?t=nesmysl");
+      391 -    // samotné otevření odkazu nic nepotvrdí – až tlačítko    
+      392 -    await expect(page.getByRole("heading", { level: 1 })).toHa
+          -veText("Potvrďte svůj e-mail");                               
+      393 -    await page.getByRole("button", { name: "Potvrdit e-mail" }
+          -).click();                                                    
+      392      await expect(page.getByRole("heading", { level: 1 })).toHa
+           veText("Tenhle odkaz nefunguje");
+      393 +    await expect(page.getByRole("button", { name: "Potvrdit e-
+          +mail" })).toHaveCount(0);                                     
+      394      await expect(page.getByTestId("pair")).toHaveCount(0);
+      395      await expect(page.getByRole("link", { name: "Zadat e-mail 
+           znovu" })).toHaveAttribute("href", "/#formular");
+      396    });
+      397  
+      399 -  test("výpadek databáze při potvrzení: chyba s možností zkusi
+          -t znovu, žádný lead_confirmed", async ({ page }) => {         
+      398 +  test("výpadek databáze: při načtení tlačítko, po potvrzení c
+          +hyba s možností zkusit znovu, žádný lead_confirmed", async ({ 
+          +page }) => {                                                  
+      399      await page.goto(`/potvrzeni?t=${"A".repeat(43)}`);
+      400 +    // kontrola stavu při načtení databázi nezastihne → tlačít
+          +ko jako dřív, samo otevření nic nepotvrdí                     
+      401 +    await expect(page.getByRole("heading", { level: 1 })).toHa
+          +veText("Potvrďte svůj e-mail");                               
+      402      await page.getByRole("button", { name: "Potvrdit e-mail" }
+           ).click();
+      403      await expect(page.getByRole("heading", { level: 1 })).toHa
+           veText("Teď se to nepovedlo");
+      404      await expect(page.getByRole("button", { name: "Zkusit znov
+           u" })).toBeVisible();
+  ⎿  (timeout 10m)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Kontrola stavu visí přes 5 s. Podezírám automatické opakování GET požadavků v
+  postgrest-js — ověřím.
+
+  Searched for 1 pattern, listed 1 directory (ctrl+o to expand)
+
+● postgrest-js 2.117 opakuje GET po síťové chybě (1 + 2 + 4 s). Pro kontrolu
+  stavu chci rychlý návrat k tlačítku, takže opakování vypnu .retry(false).
+
+● Bash(node - <<'EOF'
+      const fs=require("fs");const f="lib/lead-server.ts";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated lib/lead-server.ts (+4 -1)
+      321          .from("leads")
+      322          .select("double_opt_in_at, confirm_sent_at")
+      323          .eq("confirm_token_hash", tokenHash)
+      324 -        .maybeSingle<{ double_opt_in_at: string | null; confir
+          -m_sent_at: string | null }>();                                
+      324 +        .maybeSingle<{ double_opt_in_at: string | null; confir
+          +m_sent_at: string | null }>()                                 
+      325 +        // GET by postgrest-js po výpadku opakoval (1 + 2 + 4 
+          +s). Návštěvník by čekal, přitom bez odpovědi                  
+      326 +        // stačí ukázat tlačítko jako dřív.                   
+      327 +        .retry(false);                                        
+      328        if (error) throw error;
+      329        return data && { doubleOptInAt: data.double_opt_in_at, c
+           onfirmSentAt: data.confirm_sent_at };
+      330      },
+  ⎿  (timeout 10m)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Část 4: nadpis reklamy A.
+
+  Searched for 1 pattern, ran 1 shell command (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs=require("fs");…)
+  ⎿  Updated ads/README.md (+1 -1)
+      68  
+      69  | Pravidlo | A | B |
+      70  | --- | --- | --- |
+      71 -| **Každé číslo v nadpisu, popisu i vizuálu má podmínku přímo u
+         - sebe** (částka, horizont, výnos 0 %, zdroj), nikdy jen v jiném
+         - poli | ✓ nadpis začíná „2 000 Kč/měs., 20 let:“. Vizuál má pod
+         -mínku hned pod číslem | ✓ bez čísel |                          
+      71 +| **Každé číslo v nadpisu, popisu i vizuálu má podmínku přímo u
+         + sebe** (částka, horizont, výnos 0 %, zdroj), nikdy jen v jiném
+         + poli | ✓ nadpis bez čísla („Rozdíl v poplatcích fondů“, 25 zna
+         +ků). Vizuál má podmínku hned pod číslem | ✓ bez čísel |        
+      72  | Podmínka a „ne doporučení“ v prvních 125 znacích primárního t
+          extu | ✓ 123 znaků | ✓ 105 znaků |
+      73  | Žádná výzva ke koupi konkrétního nástroje (MAR/ZPKT) | ✓ | ✓ 
+          VOO jen jako otázka, proč ho nekoupíte. UCITS fond se v reklamě
+           nejmenuje |
+      74  | Žádný slib výnosu (40/1995, 634/1992) | ✓ výpočet výslovně s 
+          výnosem 0 % | ✓ |
+  ⎿  Updated ads/a-uspora/README.md (+3 -3)
+       9  | Primární text, 1. odstavec (vidět před „Zobrazit více“) | Při
+           2 000 Kč měsíčně je rozdíl v poplatcích fondů za 20 let přes 4
+          0 000 Kč – i bez výnosu. Modelový výpočet, ne doporučení. | 123
+           | 125 |
+      10  | Primární text, 2. odstavec | Spočítejte si to pro svou částku
+           – výsledek v Kč, bez registrace. | | |
+      11  | Primární text, 3. odstavec (disclaimer) | Průměrné průběžné n
+          áklady ETF (0,2 %) vs. aktivních akciových fondů v EU (1,2 %) p
+          odle ESMA (2026, data 2024), 2 000 Kč měsíčně po dobu 20 let, v
+          ýnos 0 %: rozdíl 44 200 Kč. Hodnota investice může klesat. | | 
+          |
+      12 -| Nadpis | 2 000 Kč/měs., 20 let: rozdíl 44 200 Kč | 39 | 40 (I
+         -G feed), 27 (FB feed) |                                        
+      12 +| Nadpis | Rozdíl v poplatcích fondů | 25 | 40 (IG feed), 27 (F
+         +B feed) |                                                      
+      13  | Popis | Kalkulačka poplatků v Kč | 24 | Meta neuvádí |
+      14  | Tlačítko | Zjistit víc | | |
+      15  
+      16 -Nadpis začíná podmínkou. Feed na Facebooku ho může zkrátit na 2
+         -7 znaků („2 000 Kč/měs., 20 let: rozd…“), ale číslo 44 200 Kč n
+         -ikdy nezůstane bez podmínky.                                   
+      16 +Nadpis je bez čísla a vejde se i do 27 znaků feedu na Facebooku
+         +, takže se nezkrátí. Číslo 44 200 Kč nese vizuál s podmínkou hn
+         +ed pod ním (2 000 Kč měsíčně, 20 let, výnos 0 %, ESMA) a 1. ods
+         +tavec primárního textu. Pravidlo: číslo v nadpisu jen s podmínk
+         +ou přímo u něj. Podmínka se do 27 znaků s číslem nevejde, proto
+         + nadpis číslo nemá. Do 2026-10-11 zněl nadpis „2 000 Kč/měs., 2
+         +0 let: rozdíl 44 200 Kč“ (39 znaků, ve feedu FB zkrácený na „…r
+         +ozd…“).                                                        
+      17  
+      18  ## Cílová URL
+      19  
+     ...
+      30  | 44 200 Kč (v textu „přes 40 000 Kč“) | Velké číslo „44 200 Kč
+          “, počítané živě funkcí `computeFees(HERO_INPUT)` stejně jako k
+          alkulačka |
+      31  | Při 2 000 Kč měsíčně, 20 let | „za 20 let při 2 000 Kč měsíčn
+          ě“ |
+      32  | I bez výnosu | „I bez jakéhokoli výnosu:“ |
+      33 -| Rozdíl v poplatcích fondů | Nadpis „Kolik dělá rozdíl v popla
+         -tcích fondů za 20 let?“ |                                      
+      33 +| Rozdíl v poplatcích fondů (nadpis reklamy) | Nadpis „Kolik dě
+         +lá rozdíl v poplatcích fondů za 20 let?“ |                     
+      34  | ESMA, ETF 0,2 % vs. aktivní fond 1,2 %, data 2024 | Poznámka 
+          pod číslem s odkazem na ESMA a datem stažení |
+      35  | Modelový výpočet, ne doporučení | Stejná věta v poznámce |
+      36  | Spočítejte si to | Tlačítko „Spočítat pro mě“ vede na kalkula
+          čku |
+  ⎿  Updated ads/a-uspora/copy.json (+1 -1)
+       6      "Spočítejte si to pro svou částku – výsledek v Kč, bez regi
+          strace.",
+       7      "Průměrné průběžné náklady ETF (0,2 %) vs. aktivních akciov
+          ých fondů v EU (1,2 %) podle ESMA (2026, data 2024), 2 000 Kč m
+          ěsíčně po dobu 20 let, výnos 0 %: rozdíl 44 200 Kč. Hodnota inv
+          estice může klesat."
+       8    ],
+       9 -  "headline": "2 000 Kč/měs., 20 let: rozdíl 44 200 Kč",       
+       9 +  "headline": "Rozdíl v poplatcích fondů",                     
+      10    "description": "Kalkulačka poplatků v Kč",
+      11    "cta": "Zjistit víc",
+      12    "url": "https://etf-srovnani.vercel.app/?utm_source=meta&utm_
+          medium=paid_social&utm_campaign=etf-srovnani-cz-2026-10&utm_con
+          tent=a-uspora"
+  ⎿  Updated lib/ads.test.ts (+6 -5)
+      21  const VISIBLE = 125;
+      22  /** Nadpis: Meta Ads Guide, Instagram feed 40 znaků (Facebook f
+          eed doporučuje 27) */
+      23  const HEADLINE_MAX = 40;
+      24 +const HEADLINE_FB_FEED = 27;                                   
+      25  
+      26  const read = (...path: string[]) => readFileSync(join(process.c
+          wd(), "ads", ...path), "utf8");
+      27  const copy = (dir: string): Copy => JSON.parse(read(dir, "copy.
+          json"));
+     ...
+      73      expect(computeFees(HERO_INPUT, FEE_ROWS).esmaGap).toBeGreat
+          erThan(40_000);
+      74    });
+      75  
+      75 -  it("nadpis: číslo z hero až po podmínce", () => {            
+      76 -    const headline = plain(c.headline);                        
+      77 -    expect(headline).toContain(gap);                           
+      78 -    expect(headline.indexOf(monthly)).toBeLessThan(headline.ind
+         -exOf(gap));                                                    
+      79 -    expect(headline).toContain(`${HERO_INPUT.years} let`);     
+      76 +  it("nadpis se nezkrátí ani ve feedu Facebooku a nemá číslo (p
+         +odmínka by se k němu nevešla)", () => {                        
+      77 +    expect(c.headline.length).toBeLessThanOrEqual(HEADLINE_FB_F
+         +EED);                                                          
+      78 +    expect(c.headline).not.toMatch(/\d/);                      
+      79 +    // stejná slova jako nadpis hero A: návaznost reklama → str
+         +ánka                                                           
+      80 +    expect(c.headline).toBe("Rozdíl v poplatcích fondů");      
+      81    });
+      82  
+      83    it("disclaimer má číslo i průměry ESMA jako hero", () => {
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Poslední část: backlog, README (rozhodnutí, zdroje, ruční ověření).
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Doplňuji README (rozhodnutí 56–59, zdroje, ruční ověření) a odškrtávám
+  backlog.
+
+● Bash(node - <<'EOF'
+      const fs=require("fs");const f="README.md";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated README.md (+10 -1)
+      385  | 4 | Odeslání formuláře | z mobilu s `?utm_source=test&utm_co
+           ntent=b-test`. V Supabase řádek s `ad_variant`, `utm_*`, `cons
+           ent_text`, `calc_input`, `calc_result` | |
+      386  | 5 | E-mail a odkazy | dorazí do Gmailu. Odkazy na potvrzení 
+           a odhlášení vedou na `https://etf-srovnani.vercel.app`, ne na 
+           localhost | |
+      387  | 6 | Potvrzení | tlačítko na `/potvrzeni` vyplní `double_opt_
+           in_at` | |
+      388 +| 6b | Obnovení `/potvrzeni` | po potvrzení stránku obnovit → 
+          +rovnou „Adresu už máte potvrzenou.“ a srovnání, bez tlačítka. 
+          +`double_opt_in_at` se při obnovení nezmění. Nový odkaz (z čers
+          +tvého e-mailu) při otevření ukáže tlačítko a v DB zůstane nepo
+          +tvrzený | |                                                   
+      389  | 7 | One-click odhlášení v Gmailu | tlačítko „Odhlásit“ u ode
+           sílatele. U nového odesílatele s malým objemem ho Gmail nemusí
+            ukázat, záložně: „Zobrazit originál“ → URL z `List-Unsubscrib
+           e` → `curl -X POST "<URL>"` → „Odhlášeno.“. V DB je pak souhla
+           s s novinkami odvolaný (zároveň ověří `marketing_audience`) | 
+           |
+      390  | 8 | Cookie lišta a `/ingest` | před volbou a po „Odmítnout“ 
+           žádný požadavek na `/ingest`. Po „Povolit měření“ `POST /inges
+           t/e/` → 200 a event v PostHogu (Activity). Totéž ve Firefoxu v
+            anonymním okně | |
+      391  | 9 | Poloha u eventu v PostHogu | `$geoip_country_code` / `$g
+           eoip_city_name` u eventu: ČR, poloha serveru Vercelu (Frankfur
+           t/USA), nebo nic (kvůli „Discard client IP data“) | |
+     ...
+      460  49. **Do rozbalovacích polí jde vše kromě rizik a podmínek u č
+           ísel, se třemi výjimkami.** Zdroje u srovnání, metodika kalkul
+           ačky a odstavce „Odkud jsou data“ a „Kdo za stránkou stojí“ js
+           ou sbalené. Horní index u hodnoty zdroj rozbalí. Vidět zůstáva
+           jí:
+      461      - **první vrstva informace o GDPR u formuláře** (vrstvená 
+           informace podle čl. 13 GDPR, upraveno po kontrole na telefonu 
+           2026-10-11): u obou formulářů je vidět jeden řádek „Správce: N
+           ikolas Hošek. E-mail použijeme k zaslání srovnání.“ a formulář
+            na něj odkazuje přes `aria-describedby`. Hned pod ním je rozb
+           alovací pole „Podrobnosti“ (druhá vrstva): právní základ, doba
+            uložení, práva a kontakt, odkaz na `/zasady`. Dřív byl celý o
+           dstavec vidět a pod tlačítkem zabíral nejvíc místa. K leadu se
+            ukládá znění obou vrstev (`notice_text`). Text u checkboxu so
+           uhlasu s novinkami se nesbaluje: souhlas musí být informovaný.
+            Že právní základ nemusí být v první vrstvě, je náš výklad, pa
+           tří do právní kontroly,
+      462      - **údaje o provozovateli v patičce:** povinné,
+      462 -    - **odstavec o PRIIPs/KID ve srovnání:** je to odpověď, kt
+          -erou slibuje reklama B. Nechali jsme ho beze změny, protože jd
+          -e o právní tvrzení.                                           
+      463 +    - **odstavec o PRIIPs/KID ve srovnání:** je to odpověď, kt
+          +erou slibuje reklama B. V kroku 9 jen přepsaný pro laika (rozh
+          +odnutí 56), tvrzení opřené o PRIIPs čl. 13 odst. 1.           
+      464      - V hero A je zdroj (ESMA, data za rok 2024) přímo v podmí
+           nce u čísla. Rozbalovací pole by na 375 × 667 posunulo CTA pod
+            cookie lištu. Datum stažení je v „Jak počítáme“ u kalkulačky.
+      465  50. **Tlačítka cookie lišty zůstávají neutrální.** Kobaltová „
+           Povolit měření“ by byla dark pattern a porušila by pravidlo „o
+           dmítnout stejně snadno jako přijmout“. Neutrální jsou i tlačít
+           ka kvalifikační otázky a „Odhlásit se“, protože nejsou výzvou 
+           ke konverzi.
+      466  51. **Fraunces s pevnou optickou velikostí `opsz 48`.** Automa
+           tická optická velikost volila u 104 px kontrastnější řez než u
+            34 px. Pevná hodnota sjednotí nadpisy hero A, B a reklam.
+     ...
+      468  53. **Červená zůstává jen pro chybu.** Validace formuláře a va
+           rování na `/zasady` jsou chybový stav, ne „ztráta“. Bez barvy 
+           by chyba ve formuláři byla méně nápadná, a to je přístupnostní
+            riziko. Stejná hodnota `#B03A0A` (5,3 : 1), nový token `error
+           `.
+      469  54. **Tvar místo zelené.** Levnější a dražší řádek v účtence a
+            v reklamě A rozlišuje plný pruh vs. obrys, ne barva. Rozdíl j
+           e vidět i bez rozlišování barev a zelená by „levnější variantu
+           “ vizuálně doporučovala (rozhodnutí 5). Plný pruh má jen průmě
+           rný aktivní fond, tedy dražší strana srovnání.
+      470  55. **Spodní lišta a patička vedou vždy k e-mailu** (2026-10-1
+           1, rozhodl člověk). Dřív před výsledkem kalkulačky nabízely „S
+           počítat své poplatky“. Kontakt je ale hlavní cíl stránky a pře
+           d výsledkem se lišta ukazuje, až když návštěvník přeskočil her
+           o i kalkulačku (typicky hero B → srovnání). V tu chvíli hodnot
+           u už viděl (srovnání, číslo v hero), takže výzva k e-mailu nep
+           řichází dřív, než něco dostal (rozhodnutí 4). Kalkulačku má ná
+           vštěvník pořád nad sebou a tlačítko v hero na ni vede dál. Bez
+            výsledku vede lišta ke spodnímu formuláři, po výsledku k poli
+            u výpočtu (`focusLeadForm`). Riziko: méně lidí projde kalkula
+           čkou. Podíl `calc_start` sledovat v PostHogu.
+      471 +56. **Odborné pojmy: nahradit, kde to jde, jinak „?“ s jednou 
+          +větou** (krok 9, texty schválil člověk). Cílová skupina „slyše
+          +la o S&P 500“, ale TER, domicil nebo akumulační fond jí nic ne
+          +řeknou. Běžným slovem jsme nahradili TER („roční poplatek“, zk
+          +ratka zůstává v závorce, protože ji uvádí broker), domicil („s
+          +ídlo fondu“), akumulační/distribuční („reinvestuje“/„vyplácí“,
+          + pojem v závorce) a spread. KID, UCITS a „aktivní fond“ zůstal
+          +y, protože je návštěvník potká u brokera, a mají tlačítko „?“ 
+          +(komponent `Term`): `aria-expanded`, ovládání Enterem i mezern
+          +íkem, vysvětlení se odkryje pod řádkem. Tooltip na hover jsme 
+          +nepoužili, na mobilu nefunguje. Řádky srovnání vysvětluje rozb
+          +alovací „Co znamenají řádky“ pod tabulkou, protože „?“ by se d
+          +o 30% sloupce na 375 px nevešlo. Právní tvrzení ve vysvětlivká
+          +ch jen se zdrojem (PRIIPs, směrnice UCITS, nařízení o ESMA v s
+          +ekci Zdroje), daňová žádná. „Registrace v ČR“ záměrně bez práv
+          +ního výkladu: jen co uvádí emitent.                           
+      472 +57. **Hero A a B bez „?“.** Hero B má nad cookie lištou na 375
+          + × 667 rezervu jen pár pixelů. Texty v hero jsme proto jen zkr
+          +átili a přepsali (věta o KID je kratší než dřív), vysvětlivky 
+          +jsou až ve srovnání. Že se řádek „VUAA · fond z EU (Irsko)“ ne
+          +zalomí, hlídá E2E test hero B.                                
+      473 +58. **`/potvrzeni` při načtení jen čte stav odkazu** (krok 9).
+          + Po obnovení stránky dřív znovu svítilo „Potvrdit e-mail“, i k
+          +dyž adresa byla potvrzená. Server action `confirmStatus` teď p
+          +ři načtení jen přečte řádek podle hashe tokenu (SELECT, bez no
+          +vé migrace) a vrátí `pending` / `already` / `expired` / `inval
+          +id`. Potvrzená adresa rovnou vidí srovnání, neplatný nebo proš
+          +lý odkaz hlášku. Potvrzuje dál jen tlačítko, takže skenery odk
+          +azů v e-mailových schránkách nic nepotvrdí. Logika stavu (`tok
+          +enStatus`) kopíruje pořadí podmínek SQL funkce `confirm_lead`,
+          + shodu hlídají unit testy. Výpadek databáze = tlačítko jako dř
+          +ív. postgrest-js u GET po síťové chybě sám opakuje (1 + 2 + 4 
+          +s), pro tuhle kontrolu je opakování vypnuté, aby návštěvník př
+          +i výpadku nečekal.                                            
+      474 +59. **Nadpis reklamy A bez čísla: „Rozdíl v poplatcích fondů“*
+          +* (25 znaků, vybral člověk ze tří variant). Původní nadpis (39
+          + znaků) feed Facebooku zkrátí na 27. Číslo s podmínkou (částka
+          +, horizont, výnos 0 %) se do 27 znaků nevejde, takže je jen ve
+          + vizuálu a v primárním textu. Nadpis opakuje slova hero A. Nad
+          +pis reklamy B („Proč si v Česku nekoupíte VOO?“) má 30 znaků a
+          + ve feedu Facebooku se také zkrátí (viz Co chybí).            
+      475  
+      476  ## Co chybí a proč
+      477  
+     ...
+      497  - **Migrace se spouští ručně** v SQL editoru Supabase (bez Sup
+           abase CLI). Logika SQL funkcí byla během vývoje ověřena v PGli
+           te (Postgres ve WASM): upsert, práva rolí, mazání po 30 dnech,
+            opakované spuštění.
+      498  - **Zásady Meta pro finanční produkty** jsme nenačetli (stránk
+           a se nástrojem nenačte). Před spuštěním kampaně je musí přečís
+           t člověk, včetně ověření inzerenta.
+      499  - **Kampaň na Meta optimalizuje na prokliky, ne na leady.** Be
+           z pixelu a Conversions API (navržené, neimplementované) Meta n
+           eví, kdo odeslal formulář. Leady podle varianty počítáme v Sup
+           abase.
+      500 +- **Nadpis reklamy B má 30 znaků** (Facebook feed doporučuje 2
+          +7, zkrátí ho na „Proč si v Česku nekoupíte V…“). Nadpis je dos
+          +lova otázka z hero B, zkrácení je proto rozhodnutí o textu rek
+          +lamy i hero. Zatím neřešeno.                                  
+      501  - **Daňový tahák (W-8BEN, časový test).** Zatím neexistuje, pr
+           oto ho stránka neslibuje – ani ve formuláři, ani na děkovací o
+           brazovce. Vrátí se, až bude text se zdroji hotový a zkontrolov
+           aný.
+      502  
+      503  ## Zdroje dat
+     ...
+      518  | Pokrytí indexu MSCI USA | MSCI – factsheet indexu | [msci.co
+           m](https://www.msci.com/documents/10199/255599/msci-usa-index-
+           net.pdf) | 2026-10-09 |
+      519  | Průměrné náklady ETF a aktivních fondů v EU | ESMA – Costs a
+           nd Performance of EU Retail Investment Products 2025 (data 202
+           4) | [esma.europa.eu](https://www.esma.europa.eu/sites/default
+           /files/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_an
+           d_Performance_of_EU_Retail_Investment_Products.pdf) | 2026-10-
+           09 |
+      520  | KID jako podmínka prodeje drobným investorům | Nařízení (EU)
+            č. 1286/2014 (PRIIPs) | [eur-lex.europa.eu](https://eur-lex.e
+           uropa.eu/eli/reg/2014/1286/oj) | – |
+      521 +| KID nejvýš 3 strany A4, investor ho dostane před nákupem (vy
+          +světlivky „KID“, hero B) | Nařízení (EU) č. 1286/2014 (PRIIPs)
+          +, čl. 6 odst. 4: „a maximum of three sides of A4-sized paper w
+          +hen printed“; čl. 13 odst. 1: KID „in good time“ před tím, než
+          + je investor „bound by any contract or offer“. Ověřil člověk |
+          + [eur-lex.europa.eu](https://eur-lex.europa.eu/eli/reg/2014/12
+          +86/oj) | 2026-10-11 |                                         
+      522 +| Fond UCITS (vysvětlivka „UCITS“) | Směrnice Evropského parla
+          +mentu a Rady 2009/65/ES (UCITS). Ověřil člověk | [eur-lex.euro
+          +pa.eu](https://eur-lex.europa.eu/eli/dir/2009/65/oj) | 2026-10
+          +-11 |                                                         
+      523 +| Český název ESMA (Evropský orgán pro cenné papíry a trhy) | 
+          +ČNB – ESMA; nařízení (EU) č. 1095/2010. Ověřil člověk | [cnb.c
+          +z](https://www.cnb.cz/cs/dohled-financni-trh/mezinarodni-aktiv
+          +ity/esma/) | 2026-10-11 |                                     
+      524  | Regiony funkcí, limit Hobby = 1 region, middleware ve všech 
+           regionech | Vercel Docs – Configuring regions for Vercel Funct
+           ions | [vercel.com](https://vercel.com/docs/functions/configur
+           ing-functions/region) | 2026-10-10 |
+      525  | Hobby jen pro nekomerční užití | Vercel Docs – Fair Use Guid
+           elines, Commercial usage | [vercel.com](https://vercel.com/doc
+           s/limits/fair-use-guidelines#commercial-usage) | 2026-10-10 |
+     … 1 more lines (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs=require("fs");const f="docs/backlog-texty-design.md";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated docs/backlog-texty-design.md (+4 -4)
+       6  | --- | --- | --- | --- |
+       7  | ✓ | **Nadpis hero A musí mluvit o rozdílu.** Zněl „Kolik vás 
+          za 20 let stojí poplatky fondu?“, ale číslo pod ním (44 200 Kč)
+           je rozdíl nákladů průměrného aktivního fondu a průměrného ETF 
+          (ESMA), ne celkové poplatky. | Nadpis a číslo si odporují. Návš
+          těvník si může myslet, že 44 200 Kč zaplatí na poplatcích jakéh
+          okoli fondu. | Revize 2026-10-09. Vyřízeno v kroku 7: „Kolik dě
+          lá rozdíl v poplatcích fondů za 20 let?“ |
+       8  | ✓ | **Fonty a celkový vizuál dořeší designer.** Současný směr
+           „Výpis z účtu“ (Fraunces + IBM Plex, papírová paleta, účtenka)
+           je funkční návrh, ne finální design. | Projekt nesmí působit j
+          ako výchozí výstup AI, rozhodnout musí člověk s okem pro design
+          . | Revize 2026-10-09. Vyřízeno v kroku 8b podle designové revi
+          ze („Výpis z účtu 2.0“): commity `9ee0078` až `5fe9ee2`. Otevře
+          né pro designera: přeškrtnutá nula ve velkých částkách (README,
+           rozhodnutí 52) |
+       9 -| ☐ | **Projít texty s ohledem na srozumitelnost pro laika.** N
+         -apříklad TER, UCITS, KID, PRIIPs, akumulační/distribuční, domic
+         -il, „náklad = poplatky + ušlý výnos“. | Cílová skupina „slyšela
+         - o S&P 500“, ale nerozumí poplatkům, měně a dostupnosti v ČR. |
+         - Revize 2026-10-09 |                                           
+      10 -| ☐ | **`/potvrzeni` po obnovení stránky znovu ukazuje tlačítko
+         - „Potvrdit e-mail“**, i když je adresa už potvrzená. Mate to ná
+         -vštěvníka i testera. Návrh: při načtení zavolat read-only kontr
+         -olu stavu tokenu (`invalid` / `expired` / `pending` / `already`
+         -), která nic nezapisuje. Skenerům odkazů tedy nevadí, potvrzuje
+         - dál jen tlačítko. Potvrzenému rovnou ukázat srovnání, neplatné
+         -mu nebo prošlému hlášku. | Zbytečné klepnutí a dojem, že potvrz
+         -ení „nedrželo“. | Ruční test 4b, 2026-10-09 |                  
+      11 -| ☐ | **Hero B na 375 × 667 má rezervu jen ~3,5 px** mezi CTA a
+         - cookie lištou (po přidání věty o KID, krok 7). Při úpravě písm
+         -a nebo mezer v hero B hlídá E2E test „lišta nezakryje CTA“. Po 
+         -kroku 8b znovu změřeno: hero A 5,5 px, hero B 3,5 px. | Každý ř
+         -ádek navíc schová CTA pod lištu na menších telefonech. | E2E te
+         -st, 2026-10-10 |                                               
+       9 +| ✓ | **Projít texty s ohledem na srozumitelnost pro laika.** N
+         +apříklad TER, UCITS, KID, PRIIPs, akumulační/distribuční, domic
+         +il, „náklad = poplatky + ušlý výnos“. | Cílová skupina „slyšela
+         + o S&P 500“, ale nerozumí poplatkům, měně a dostupnosti v ČR. |
+         + Revize 2026-10-09. Vyřízeno v kroku 9 (`c2e9c94`, `be24b1d`): 
+         +běžná slova, „?“ u KID, UCITS a aktivního fondu, „Co znamenají 
+         +řádky“ u srovnání, oprava rizika měny (README, rozhodnutí 56–57
+         +) |                                                            
+      10 +| ✓ | **`/potvrzeni` po obnovení stránky znovu ukazuje tlačítko
+         + „Potvrdit e-mail“**, i když je adresa už potvrzená. Mate to ná
+         +vštěvníka i testera. Návrh: při načtení zavolat read-only kontr
+         +olu stavu tokenu (`invalid` / `expired` / `pending` / `already`
+         +), která nic nezapisuje. Skenerům odkazů tedy nevadí, potvrzuje
+         + dál jen tlačítko. Potvrzenému rovnou ukázat srovnání, neplatné
+         +mu nebo prošlému hlášku. | Zbytečné klepnutí a dojem, že potvrz
+         +ení „nedrželo“. | Ruční test 4b, 2026-10-09. Vyřízeno v `3d7a5b
+         +b` (README, rozhodnutí 58). Ruční ověření na produkci: README, 
+         +checklist produkce bod 6b |                                    
+      11 +| ☐ | **Hero B na 375 × 667 má rezervu jen ~3,5 px** mezi CTA a
+         + cookie lištou (po přidání věty o KID, krok 7). Při úpravě písm
+         +a nebo mezer v hero B hlídá E2E test „lišta nezakryje CTA“. Po 
+         +kroku 8b znovu změřeno: hero A 5,5 px, hero B 3,5 px. Krok 9 he
+         +ro B jen zkrátil (věta o KID), test prochází na 375 × 667 i 812
+         +. | Každý řádek navíc schová CTA pod lištu na menších telefonec
+         +h. | E2E test, 2026-10-10 |                                    
+      12  | ✓ | **Reklamy: prázdná spodní třetina ve formátech 1:1 a 4:5.
+          ** Obsah je nahoře a pod účtenkou zůstává volná plocha až k dro
+          bnému textu. | Ve feedu je plocha drahá. Volné místo by šlo vyu
+          žít pro větší číslo nebo účtenku. | Kontrola reklam, 2026-10-10
+          . Vyřízeno v `33b194c`: větší číslo a účtenka (A s pruhy), pozv
+          ánka typografickým řádkem |
+      13  | ✓ | **Reklamy: nadpis B má jiný řez písma než A.** Fraunces m
+          á osu optické velikosti (`opsz`) a při 104 px (B) vybere kontra
+          stnější display řez než při 68 px (A). Sjednotit pevným `font-v
+          ariation-settings: "opsz" …` nebo podobnou velikostí. | Obě var
+          ianty mají působit jako jedna značka. | Kontrola reklam, 2026-1
+          0-10. Vyřízeno v `9ee0078` (stránka) a `33b194c` (reklamy): pev
+          né `opsz 48` |
+      14 -| ☐ | **Nadpis reklamy A se ve feedu Facebooku zkrátí:** 39 zna
+         -ků, Meta Ads Guide doporučuje 27 (Instagram 40). Podmínka je na
+         - začátku, takže číslo bez ní nezůstane, ale zkrácený nadpis kon
+         -čí „rozd…“. Zvážit kratší nadpis s podmínkou a podmínku ve vizu
+         -álu, např. aby nadpis nesl jen podmínku a číslo bylo ve vizuálu
+         -. Pravidlo z právní kontroly platí dál: každé číslo má podmínku
+         - přímo u sebe. | Zkrácený nadpis nic neříká. | Kontrola reklam,
+         - 2026-10-10 |                                                  
+      14 +| ✓ | **Nadpis reklamy A se ve feedu Facebooku zkrátí:** 39 zna
+         +ků, Meta Ads Guide doporučuje 27 (Instagram 40). Podmínka je na
+         + začátku, takže číslo bez ní nezůstane, ale zkrácený nadpis kon
+         +čí „rozd…“. Zvážit kratší nadpis s podmínkou a podmínku ve vizu
+         +álu, např. aby nadpis nesl jen podmínku a číslo bylo ve vizuálu
+         +. Pravidlo z právní kontroly platí dál: každé číslo má podmínku
+         + přímo u sebe. | Zkrácený nadpis nic neříká. | Kontrola reklam,
+         + 2026-10-10. Vyřízeno v `8aa5a3a`: „Rozdíl v poplatcích fondů“ 
+         +(25 znaků, bez čísla). Nadpis B má 30 znaků, otevřené (README, 
+         +Co chybí) |                                                    
+      15  | ✓ | **Tickery na stránce jsou v IBM Plex Mono (`.num`),** kde
+           písmeno O vypadá jako nula („VOO“ jako „V00“), hlavně v hero B
+           a ve srovnání. Ve vizuálu reklamy B už je ticker bezpatkově. Z
+          vážit totéž na stránce (čísla v mono nechat). | Ticker je klíčo
+          vá informace. Záměna O/0 působí jako chyba v datech. | Kontrola
+           reklam, 2026-10-10. Vyřízeno v `9ee0078`: IBM Plex Mono pryč, 
+          Atkinson Hyperlegible Next má nulu s lomítkem, O a 0 se nepleto
+          u |
+
+● Před commitem dokumentace si ještě prohlédnu změněná místa na 375 px
+  (screenshoty).
+
+  Read 3 files, ran 3 shell commands (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs=require("fs");…)
+  ⎿  Updated components/Comparison.tsx (+3 -3)
+      21        </h2>
+      22        <p className="mt-3 text-[15px] leading-6">
+      23          Fondy se sídlem v&nbsp;USA nemají{" "}
+      24 -        <Term term="KID">                                      
+      24 +        <Term term="KID" suffix=",">                           
+      25            Sdělení klíčových informací: krátký dokument o rizicí
+          ch a nákladech fondu, nejvýš 3 strany A4.
+      26 -        </Term>                                                
+      27 -        , který podle{" "}                                     
+      26 +        </Term>{" "}                                           
+      27 +        který podle{" "}                                       
+      28          <a className="underline" href={PRIIPS_URL}>
+      29            nařízení PRIIPs
+      30          </a>{" "}
+  ⎿  Updated components/Term.tsx (+13 -1)
+       7   * pod řádkem. Žádný tooltip na hover – na mobilu nefunguje. Ov
+          ládá se Enterem i mezerníkem.
+       8   * Vysvětlení je <span class="block">, takže jde použít i uvnit
+          ř odstavce.
+       9   * `name`: celý pojem pro přístupný název tlačítka, když `term`
+           v textu je jen jeho část („aktivní“ → „aktivní fond“).
+      10 + * `suffix`: interpunkce za pojmem, aby po rozbalení nezačínal 
+         +další řádek čárkou.                                            
+      11   */
+      11 -export function Term({ term, name = term, children }: { term: s
+         -tring; name?: string; children: string }) {                    
+      12 +export function Term({                                         
+      13 +  term,                                                        
+      14 +  name = term,                                                 
+      15 +  suffix = "",                                                 
+      16 +  children,                                                    
+      17 +}: {                                                           
+      18 +  term: string;                                                
+      19 +  name?: string;                                               
+      20 +  suffix?: string;                                             
+      21 +  children: string;                                            
+      22 +}) {                                                           
+      23    const [open, setOpen] = useState(false);
+      24    const id = useId();
+      25    return (
+     ...
+      35        >
+      36          ?
+      37        </button>
+      38 +      {suffix}                                                 
+      39        <span id={id} hidden={!open} className="fine my-1 block b
+          order-l-2 border-rule pl-3">
+      40          {children}
+      41        </span>
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Všechny testy prošly. Commituji opravu interpunkce a pak dokumentaci.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Krok 9 je hotový v šesti commitech. Nic jsem nepushnul. Prošly unit testy (74)
+  i E2E testy na mobilu (43).
+
+  ┌─────────┬────────────────────────────────────────────────────────────────┐
+  │ Commit  │                               Co                               │
+  ├─────────┼────────────────────────────────────────────────────────────────┤
+  │         │ Texty pro laika #1–#27. Nový komponent Term.tsx: tlačítko „?“  │
+  │ c2e9c94 │ ovladatelné klávesnicí, které čtečka ohlásí jako               │
+  │         │ rozbalené/sbalené. Má ho KID, UCITS a „aktivní fond“. Pod      │
+  │         │ tabulkou srovnání je „Co znamenají řádky“.                     │
+  ├─────────┼────────────────────────────────────────────────────────────────┤
+  │ be24b1d │ Oprava rizikového upozornění na stránce i v e-mailu, předmět a │
+  │         │  úvod e-mailu                                                  │
+  ├─────────┼────────────────────────────────────────────────────────────────┤
+  │ 3d7a5bb │ /potvrzeni při načtení stav odkazu jen přečte, nic nezapisuje  │
+  ├─────────┼────────────────────────────────────────────────────────────────┤
+  │ 8aa5a3a │ Nadpis reklamy A „Rozdíl v poplatcích fondů“ (25 znaků)        │
+  ├─────────┼────────────────────────────────────────────────────────────────┤
+  │ 56f56e8 │ Po rozbalení „?“ u KID už další řádek nezačíná čárkou          │
+  ├─────────┼────────────────────────────────────────────────────────────────┤
+  │ c86c82c │ README: rozhodnutí 56–59, zdroje s datem 2026-10-11, bod 6b v  │
+  │         │ kontrolním seznamu pro produkci. Odškrtnutý backlog.           │
+  └─────────┴────────────────────────────────────────────────────────────────┘
+
+  #3: „VUAA · fond z EU (Irsko)“ se na 375 px nezalomí a tlačítko v hero B
+  zůstává nad cookie lištou na 375 × 667 i 375 × 812. Zkrácení na „fond z EU“
+  proto nebylo potřeba. Hlídá to nový E2E test.
+
+  /potvrzeni: stav odkazu se jen přečte z databáze, nová migrace není potřeba.
+  Už potvrzená adresa rovnou uvidí srovnání, nesmyslný odkaz hned hlášku.
+  Potvrdit jde dál jen tlačítkem. Když databáze neodpoví, ukáže se tlačítko jako
+  dřív. Knihovna Supabase při výpadku sama opakuje dotaz a návštěvník by čekal
+  asi 7 s, proto jsem pro tuhle kontrolu opakování vypnul. Stav „už potvrzeno“
+  jde ověřit jen proti ostré databázi, proto je v kontrolním seznamu jako bod
+  6b.
+
+  Mimo plán, ale věcná chyba: upozornění „Fondy investují v USD“ neplatilo pro
+  VT a VWCE, protože drží akcie z celého světa. Opraveno podle schváleného textu
+  #24 a zapsáno do docs/ai-chyby.md.
+
+  Otevřené body, které jsem neměnil (nebyly ve schváleném rozsahu):
+  - Nadpis reklamy B „Proč si v Česku nekoupíte VOO?“ má 30 znaků, takže ho feed
+    Facebooku taky zkrátí. Zapsal jsem to do README do „Co chybí“.
+  - Primární text reklamy B dál cituje starou větu z hero B („Fondům z USA chybí
+    KID, který nařízení PRIIPs vyžaduje…“). Věcně platí, jen už hero neopakuje
+    doslova. Test reklam hlídá jen otázku v nadpisu.
+  - Účtenka: řádek „Rozdíl za 20 let: poplatek 0,2 % vs. 1,2 % ročně“ se na 375
+    px zalomí do dvou řádků. Výsledek kalkulačky je tím o řádek vyšší. Testy
+    prošly.
+  - SXR4 v účtence: stojí v jednom řádku se SPYL, protože oba mají v datech TER
+    0,03 %. Účtenka tak řádky seskupuje záměrně, jen na to upozorňuji, protože
+    to na první pohled vypadá jako překlep.
+
+  Nezapomeňte na /export do ai-log/.
+
+❯ !usage
+
+● Zpráva !usage ke mně přišla jako text, žádný příkaz se nespustil. Čerpání
+  limitu ukazuje příkaz /usage (s lomítkem), zadejte ho přímo do pole Claude
+  Code. Já ho za vás spustit neumím.
+
+  Pokud jste mysleli něco jiného, napište co.
+
+❯ Dvě drobnosti k reklamě B:
+
+  Nadpis „Proč si v ČR nekoupíte VOO?“ (27 znaků). Test v lib/ads.test.ts
+  uprav: nadpis ≤ 27 znaků a obsahuje otázku o VOO.
+  Primární text reklamy B ať převezme novou větu z hero B („Fondy z USA nemají
+  KID – dokument, který v EU musí drobný investor dostat před nákupem.“). Ověř,
+  že podmínka a „ne doporučení“ jsou dál v prvních ~125 znacích. Přidej test,
+  že věta v reklamě B je shodná s hero B.
+  Odstraň bod z „Co chybí“. Commituj, nepushuj, zastav se.
+  Ran 3 shell commands (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs=require("fs");…)
+  ⎿  Updated README.md (+1 -2)
+      471  56. **Odborné pojmy: nahradit, kde to jde, jinak „?“ s jednou 
+           větou** (krok 9, texty schválil člověk). Cílová skupina „slyše
+           la o S&P 500“, ale TER, domicil nebo akumulační fond jí nic ne
+           řeknou. Běžným slovem jsme nahradili TER („roční poplatek“, zk
+           ratka zůstává v závorce, protože ji uvádí broker), domicil („s
+           ídlo fondu“), akumulační/distribuční („reinvestuje“/„vyplácí“,
+            pojem v závorce) a spread. KID, UCITS a „aktivní fond“ zůstal
+           y, protože je návštěvník potká u brokera, a mají tlačítko „?“ 
+           (komponent `Term`): `aria-expanded`, ovládání Enterem i mezern
+           íkem, vysvětlení se odkryje pod řádkem. Tooltip na hover jsme 
+           nepoužili, na mobilu nefunguje. Řádky srovnání vysvětluje rozb
+           alovací „Co znamenají řádky“ pod tabulkou, protože „?“ by se d
+           o 30% sloupce na 375 px nevešlo. Právní tvrzení ve vysvětlivká
+           ch jen se zdrojem (PRIIPs, směrnice UCITS, nařízení o ESMA v s
+           ekci Zdroje), daňová žádná. „Registrace v ČR“ záměrně bez práv
+           ního výkladu: jen co uvádí emitent.
+      472  57. **Hero A a B bez „?“.** Hero B má nad cookie lištou na 375
+            × 667 rezervu jen pár pixelů. Texty v hero jsme proto jen zkr
+           átili a přepsali (věta o KID je kratší než dřív), vysvětlivky 
+           jsou až ve srovnání. Že se řádek „VUAA · fond z EU (Irsko)“ ne
+           zalomí, hlídá E2E test hero B.
+      473  58. **`/potvrzeni` při načtení jen čte stav odkazu** (krok 9).
+            Po obnovení stránky dřív znovu svítilo „Potvrdit e-mail“, i k
+           dyž adresa byla potvrzená. Server action `confirmStatus` teď p
+           ři načtení jen přečte řádek podle hashe tokenu (SELECT, bez no
+           vé migrace) a vrátí `pending` / `already` / `expired` / `inval
+           id`. Potvrzená adresa rovnou vidí srovnání, neplatný nebo proš
+           lý odkaz hlášku. Potvrzuje dál jen tlačítko, takže skenery odk
+           azů v e-mailových schránkách nic nepotvrdí. Logika stavu (`tok
+           enStatus`) kopíruje pořadí podmínek SQL funkce `confirm_lead`,
+            shodu hlídají unit testy. Výpadek databáze = tlačítko jako dř
+           ív. postgrest-js u GET po síťové chybě sám opakuje (1 + 2 + 4 
+           s), pro tuhle kontrolu je opakování vypnuté, aby návštěvník př
+           i výpadku nečekal.
+      474 -59. **Nadpis reklamy A bez čísla: „Rozdíl v poplatcích fondů“*
+          -* (25 znaků, vybral člověk ze tří variant). Původní nadpis (39
+          - znaků) feed Facebooku zkrátí na 27. Číslo s podmínkou (částka
+          -, horizont, výnos 0 %) se do 27 znaků nevejde, takže je jen ve
+          - vizuálu a v primárním textu. Nadpis opakuje slova hero A. Nad
+          -pis reklamy B („Proč si v Česku nekoupíte VOO?“) má 30 znaků a
+          - ve feedu Facebooku se také zkrátí (viz Co chybí).            
+      474 +59. **Nadpis reklamy A bez čísla: „Rozdíl v poplatcích fondů“*
+          +* (25 znaků, vybral člověk ze tří variant). Původní nadpis (39
+          + znaků) feed Facebooku zkrátí na 27. Číslo s podmínkou (částka
+          +, horizont, výnos 0 %) se do 27 znaků nevejde, takže je jen ve
+          + vizuálu a v primárním textu. Nadpis opakuje slova hero A. Nad
+          +pis reklamy B zkrácen z „Proč si v Česku nekoupíte VOO?“ (30 z
+          +naků) na „Proč si v ČR nekoupíte VOO?“ (27 znaků), otázka v he
+          +ro B zůstává. Primární text reklamy B přebírá doslova větu o K
+          +ID z hero B.                                                  
+      475  
+      476  ## Co chybí a proč
+      477  
+     ...
+      497  - **Migrace se spouští ručně** v SQL editoru Supabase (bez Sup
+           abase CLI). Logika SQL funkcí byla během vývoje ověřena v PGli
+           te (Postgres ve WASM): upsert, práva rolí, mazání po 30 dnech,
+            opakované spuštění.
+      498  - **Zásady Meta pro finanční produkty** jsme nenačetli (stránk
+           a se nástrojem nenačte). Před spuštěním kampaně je musí přečís
+           t člověk, včetně ověření inzerenta.
+      499  - **Kampaň na Meta optimalizuje na prokliky, ne na leady.** Be
+           z pixelu a Conversions API (navržené, neimplementované) Meta n
+           eví, kdo odeslal formulář. Leady podle varianty počítáme v Sup
+           abase.
+      500 -- **Nadpis reklamy B má 30 znaků** (Facebook feed doporučuje 2
+          -7, zkrátí ho na „Proč si v Česku nekoupíte V…“). Nadpis je dos
+          -lova otázka z hero B, zkrácení je proto rozhodnutí o textu rek
+          -lamy i hero. Zatím neřešeno.                                  
+      500  - **Daňový tahák (W-8BEN, časový test).** Zatím neexistuje, pr
+           oto ho stránka neslibuje – ani ve formuláři, ani na děkovací o
+           brazovce. Vrátí se, až bude text se zdroji hotový a zkontrolov
+           aný.
+      501  
+      502  ## Zdroje dat
+  ⎿  Updated ads/b-zvedavost/README.md (+4 -4)
+       7  | Pole | Text | Znaků | Doporučení Meta |
+       8  | --- | --- | --- | --- |
+       9  | Primární text, 1. odstavec (vidět před „Zobrazit více“) | Pro
+          č si v Česku nekoupíte VOO? A jaké alternativy jsou v ČR dostup
+          né. Vzdělávací srovnání, ne doporučení. | 105 | 125 |
+      10 -| Primární text, 2. odstavec | Fondům z USA chybí KID, který na
+         -řízení PRIIPs vyžaduje pro prodej drobným investorům v EU. Ukáž
+         -eme fondy UCITS, které sledují stejný index jako VOO – s poplat
+         -ky, zdrojem a datem dat. | | |                                 
+      10 +| Primární text, 2. odstavec | Fondy z USA nemají KID – dokumen
+         +t, který v EU musí drobný investor dostat před nákupem. Ukážeme
+         + fondy UCITS, které sledují stejný index jako VOO – s poplatky,
+         + zdrojem a datem dat. | | |                                    
+      11  | Primární text, 3. odstavec (rizika) | Hodnota investice může 
+          klesat. Fondy investují v USD, kurz USD/CZK může výsledek sníži
+          t i zvýšit. | | |
+      12 -| Nadpis | Proč si v Česku nekoupíte VOO? | 30 | 40 (IG feed), 
+         -27 (FB feed) |                                                 
+      12 +| Nadpis | Proč si v ČR nekoupíte VOO? | 27 | 40 (IG feed), 27 
+         +(FB feed) |                                                    
+      13  | Popis | Srovnání ETF z NYSE a UCITS | 27 | Meta neuvádí |
+      14  | Tlačítko | Zjistit víc | | |
+      15  
+      16 -V reklamě není žádné číslo ani konkrétní UCITS fond. VUAA a jeh
+         -o TER návštěvník uvidí až na stránce, aby reklama nepropagovala
+         - konkrétní nástroj. Feed na Facebooku může nadpis zkrátit na 27
+         - znaků. Otázka bez čísla tím nezačne klamat.                   
+      16 +V reklamě není žádné číslo ani konkrétní UCITS fond. VUAA a jeh
+         +o TER návštěvník uvidí až na stránce, aby reklama nepropagovala
+         + konkrétní nástroj. Nadpis má 27 znaků, takže ho feed Facebooku
+         + nezkrátí. Proti hero („Proč si v Česku nekoupíte VOO?“) je zkr
+         +ácené jen „v Česku“ na „v ČR“, otázka zůstává stejná. Věta o KI
+         +D ve 2. odstavci je doslova věta z hero B.                     
+      17  
+      18  ## Cílová URL
+      19  
+     ...
+      27  
+      28  | Tvrzení v reklamě | Kde to návštěvník uvidí v hero |
+      29  | --- | --- |
+      30 -| Proč si v Česku nekoupíte VOO? | Nadpis, doslova |           
+      30 +| Proč si v ČR nekoupíte VOO? | Nadpis „Proč si v Česku nekoupí
+         +te VOO?“ (v reklamě zkrácené na 27 znaků) |                    
+      31  | A jaké alternativy jsou v ČR dostupné | Podnadpis, doslova |
+      32  | Fondům z USA chybí KID (PRIIPs) | Věta pod podnadpisem, stejn
+          é znění |
+      33  | Fondy UCITS na stejný index jako VOO | Účtenka VOO ↔ VUAA, „S
+          tejný index S&P 500“, TER obou z dat emitentů s datem |
+  ⎿  Updated ads/b-zvedavost/copy.json (+2 -2)
+       3    "name": "B – zvědavost",
+       4    "primary_text": [
+       5      "Proč si v Česku nekoupíte VOO? A jaké alternativy jsou v Č
+          R dostupné. Vzdělávací srovnání, ne doporučení.",
+       6 -    "Fondům z USA chybí KID, který nařízení PRIIPs vyžaduje pro
+         - prodej drobným investorům v EU. Ukážeme fondy UCITS, které sle
+         -dují stejný index jako VOO – s poplatky, zdrojem a datem dat.",
+       6 +    "Fondy z USA nemají KID – dokument, který v EU musí drobný 
+         +investor dostat před nákupem. Ukážeme fondy UCITS, které sleduj
+         +í stejný index jako VOO – s poplatky, zdrojem a datem dat.",   
+       7      "Hodnota investice může klesat. Fondy investují v USD, kurz
+           USD/CZK může výsledek snížit i zvýšit."
+       8    ],
+       9 -  "headline": "Proč si v Česku nekoupíte VOO?",                
+       9 +  "headline": "Proč si v ČR nekoupíte VOO?",                   
+      10    "description": "Srovnání ETF z NYSE a UCITS",
+      11    "cta": "Zjistit víc",
+      12    "url": "https://etf-srovnani.vercel.app/?utm_source=meta&utm_
+          medium=paid_social&utm_campaign=etf-srovnani-cz-2026-10&utm_con
+          tent=b-zvedavost"
+  ⎿  Updated docs/backlog-texty-design.md (+1 -1)
+      11  | ☐ | **Hero B na 375 × 667 má rezervu jen ~3,5 px** mezi CTA a
+           cookie lištou (po přidání věty o KID, krok 7). Při úpravě písm
+          a nebo mezer v hero B hlídá E2E test „lišta nezakryje CTA“. Po 
+          kroku 8b znovu změřeno: hero A 5,5 px, hero B 3,5 px. Krok 9 he
+          ro B jen zkrátil (věta o KID), test prochází na 375 × 667 i 812
+          . | Každý řádek navíc schová CTA pod lištu na menších telefonec
+          h. | E2E test, 2026-10-10 |
+      12  | ✓ | **Reklamy: prázdná spodní třetina ve formátech 1:1 a 4:5.
+          ** Obsah je nahoře a pod účtenkou zůstává volná plocha až k dro
+          bnému textu. | Ve feedu je plocha drahá. Volné místo by šlo vyu
+          žít pro větší číslo nebo účtenku. | Kontrola reklam, 2026-10-10
+          . Vyřízeno v `33b194c`: větší číslo a účtenka (A s pruhy), pozv
+          ánka typografickým řádkem |
+      13  | ✓ | **Reklamy: nadpis B má jiný řez písma než A.** Fraunces m
+          á osu optické velikosti (`opsz`) a při 104 px (B) vybere kontra
+          stnější display řez než při 68 px (A). Sjednotit pevným `font-v
+          ariation-settings: "opsz" …` nebo podobnou velikostí. | Obě var
+          ianty mají působit jako jedna značka. | Kontrola reklam, 2026-1
+          0-10. Vyřízeno v `9ee0078` (stránka) a `33b194c` (reklamy): pev
+          né `opsz 48` |
+      14 -| ✓ | **Nadpis reklamy A se ve feedu Facebooku zkrátí:** 39 zna
+         -ků, Meta Ads Guide doporučuje 27 (Instagram 40). Podmínka je na
+         - začátku, takže číslo bez ní nezůstane, ale zkrácený nadpis kon
+         -čí „rozd…“. Zvážit kratší nadpis s podmínkou a podmínku ve vizu
+         -álu, např. aby nadpis nesl jen podmínku a číslo bylo ve vizuálu
+         -. Pravidlo z právní kontroly platí dál: každé číslo má podmínku
+         - přímo u sebe. | Zkrácený nadpis nic neříká. | Kontrola reklam,
+         - 2026-10-10. Vyřízeno v `8aa5a3a`: „Rozdíl v poplatcích fondů“ 
+         -(25 znaků, bez čísla). Nadpis B má 30 znaků, otevřené (README, 
+         -Co chybí) |                                                    
+      14 +| ✓ | **Nadpis reklamy A se ve feedu Facebooku zkrátí:** 39 zna
+         +ků, Meta Ads Guide doporučuje 27 (Instagram 40). Podmínka je na
+         + začátku, takže číslo bez ní nezůstane, ale zkrácený nadpis kon
+         +čí „rozd…“. Zvážit kratší nadpis s podmínkou a podmínku ve vizu
+         +álu, např. aby nadpis nesl jen podmínku a číslo bylo ve vizuálu
+         +. Pravidlo z právní kontroly platí dál: každé číslo má podmínku
+         + přímo u sebe. | Zkrácený nadpis nic neříká. | Kontrola reklam,
+         + 2026-10-10. Vyřízeno v `8aa5a3a`: „Rozdíl v poplatcích fondů“ 
+         +(25 znaků, bez čísla). Nadpis B zkrácen na „Proč si v ČR nekoup
+         +íte VOO?“ (27 znaků) |                                         
+      15  | ✓ | **Tickery na stránce jsou v IBM Plex Mono (`.num`),** kde
+           písmeno O vypadá jako nula („VOO“ jako „V00“), hlavně v hero B
+           a ve srovnání. Ve vizuálu reklamy B už je ticker bezpatkově. Z
+          vážit totéž na stránce (čísla v mono nechat). | Ticker je klíčo
+          vá informace. Záměna O/0 působí jako chyba v datech. | Kontrola
+           reklam, 2026-10-10. Vyřízeno v `9ee0078`: IBM Plex Mono pryč, 
+          Atkinson Hyperlegible Next má nulu s lomítkem, O a 0 se nepleto
+          u |
+  ⎿  Updated lib/ads.test.ts (+12 -1)
+      102    const c = copy("b-zvedavost");
+      103    const html = plain(read("b-zvedavost", "ad.html"));
+      104  
+      105 +  it("nadpis se nezkrátí ani ve feedu Facebooku a je to otázka
+          + o VOO", () => {                                              
+      106 +    expect(c.headline.length).toBeLessThanOrEqual(HEADLINE_FB_
+          +FEED);                                                        
+      107 +    expect(c.headline).toMatch(/^Proč .*VOO\?$/);             
+      108 +  });                                                         
+      109 +                                                              
+      110 +  it("věta o KID v primárním textu je doslova věta z hero B", 
+          +() => {                                                       
+      111 +    const hero = plain(readFileSync(join(process.cwd(), "compo
+          +nents", "Hero.tsx"), "utf8"));                                
+      112 +    const sentence = hero.match(/Fondy z USA [^<]*?\./)?.[0]; 
+      113 +    expect(sentence).toContain("KID");                        
+      114 +    expect(c.primary_text[1].startsWith(sentence!)).toBe(true)
+          +;                                                             
+      115 +  });                                                         
+      116 +                                                              
+      117    it("otázka a podnadpis doslova jako v hero", () => {
+      106 -    expect(c.headline).toBe("Proč si v Česku nekoupíte VOO?");
+      118      expect(c.primary_text[0]).toMatch(/^Proč si v Česku nekoup
+           íte VOO\? A jaké alternativy jsou v ČR dostupné\./);
+      119      expect(html).toContain("Proč si v Česku nekoupíte VOO?");
+      120      expect(html).toContain("A jaké alternativy jsou v ČR dostu
+           pné.");
+
+● Testy prošly (76). Commituji.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Obě úpravy reklamy B jsou v commitu 425548d. Nepushnuto, unit testy prošly
+  (76).
+
+  - Nadpis: „Proč si v ČR nekoupíte VOO?“ má 27 znaků, takže ho feed Facebooku
+    nezkrátí. Test v lib/ads.test.ts hlídá délku do 27 znaků a že jde o otázku o
+    VOO. Hero B má dál „v Česku“, v README reklamy B je ten rozdíl popsaný.
+  - Primární text: druhý odstavec teď začíná novou větou z hero B. Nový test
+    bere tu větu přímo z Hero.tsx a kontroluje, že ji reklama obsahuje doslova.
+    Když se hero změní, test spadne.
+  - Prvních 125 znaků: první odstavec se nezměnil. Má pořád 105 znaků a obsahuje
+    otázku i „ne doporučení“, což hlídá i stávající test.
+  - „Co chybí“: bod o nadpisu B je pryč. Upravil jsem i rozhodnutí 59 v README a
+    záznam v backlogu.
+
+  Třetí odstavec reklamy B má pořád „Fondy investují v USD“, tedy stejné znění,
+  jaké jsem opravil na stránce. Reklama B mluví o VOO a fondech na S&P 500,
+  takže tam tvrzení platí, a proto jsem ho nechal. Popis reklamy „Srovnání ETF z
+  NYSE a UCITS“ má dál zkratku UCITS. Obojí můžu sjednotit se stránkou, pokud
+  chcete.
+
+❯ Sjednoť obojí:
+
+  Rizikové upozornění v reklamě B ať používá stejné znění jako stránka a e-mail
+  (opravený bod #24). Přidej test, že rizikové věty v obou reklamách
+  odpovídají RISK_WARNINGS.
+  Popis reklamy B: „Srovnání ETF z NYSE a z EU“ (případně jiná varianta do
+  limitu bez zkratky UCITS).
+  Commituj, nepushuj.
+
+  Searched for 1 pattern, ran 1 shell command (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs=require("fs");…)
+  ⎿  Updated ads/README.md (+2 -2)
+      73  | Žádná výzva ke koupi konkrétního nástroje (MAR/ZPKT) | ✓ | ✓ 
+          VOO jen jako otázka, proč ho nekoupíte. UCITS fond se v reklamě
+           nejmenuje |
+      74  | Žádný slib výnosu (40/1995, 634/1992) | ✓ výpočet výslovně s 
+          výnosem 0 % | ✓ |
+      75  | Zdroj a datum čísla | ✓ ESMA (2026, data 2024) | – |
+      76 -| Rizikové upozornění | ✓ „Hodnota investice může klesat“ | ✓ a
+         - měnové riziko USD/CZK |                                       
+      76 +| Rizikové upozornění | ✓ v primárním textu doslova věta z `RIS
+         +K_WARNINGS` (stránka a e-mail). Vizuál má kvůli místu zkrácené 
+         +„Hodnota investice může klesat.“ | ✓ doslova věty z `RISK_WARNI
+         +NGS` včetně měnového rizika (hlídá `lib/ads.test.ts`) |        
+      77  | Žádné personalizované doporučení (MiFID II) | ✓ | ✓ |
+      78  | Netvrdíme, co není ověřené | ✓ | ✓ dostupnost konkrétního UCI
+          TS fondu v ČR (`registered_in_cz` u VUAA = null) reklama netvrd
+          í |
+      79  | Žádné fotky, loga emitentů ani vymyšlené značky | ✓ | ✓ |
+     ...
+      117  
+      118  Historie: (1) „Na poplatcích ETF můžete za 20 let ztratit desí
+           tky tisíc Kč“ – mezi ETF neplatí; (2) „Rozdíl v poplatcích fon
+           dů dělá za 20 let desítky tisíc Kč, i bez jakéhokoli výnosu“ –
+            bez podmínky výše vkladu, při 500 Kč měsíčně neplatí (odhalil
+           a lidská revize); (3) text výše; (4) v reklamě (krok 7, 2026-1
+           0-10) „i bez výnosu“ místo „i bez jakéhokoli výnosu“ a hned za
+            tím „Modelový výpočet, ne doporučení.“, aby podmínka i upozor
+           nění byly v prvních 125 znacích (před „Zobrazit více“). Věcně 
+           se nic nemění, v hero zůstává „I bez jakéhokoli výnosu“.
+      119  
+      120 -Povinný disclaimer v reklamě (v reklamě A je „Modelový výpočet
+          -, ne doporučení.“ už v 1. odstavci, disclaimer pak končí „Hodn
+          -ota investice může klesat.“):                                 
+      120 +Povinný disclaimer v reklamě (v reklamě A je „Modelový výpočet
+          +, ne doporučení.“ už v 1. odstavci, disclaimer pak končí rizik
+          +ovou větou ze stránky: „Hodnota investice může klesat i stoupa
+          +t, můžete přijít o část vložených peněz.“):                   
+      121  
+      122  > Průměrné průběžné náklady ETF (0,2 %) vs. aktivních akciovýc
+           h fondů v EU (1,2 %) podle ESMA (2026, data 2024), 2 000 Kč mě
+           síčně po dobu 20 let, výnos 0 %: rozdíl 44 200 Kč. Modelový vý
+           počet, ne doporučení.
+      123  
+  ⎿  Updated ads/a-uspora/README.md (+1 -1)
+       8  | --- | --- | --- | --- |
+       9  | Primární text, 1. odstavec (vidět před „Zobrazit více“) | Při
+           2 000 Kč měsíčně je rozdíl v poplatcích fondů za 20 let přes 4
+          0 000 Kč – i bez výnosu. Modelový výpočet, ne doporučení. | 123
+           | 125 |
+      10  | Primární text, 2. odstavec | Spočítejte si to pro svou částku
+           – výsledek v Kč, bez registrace. | | |
+      11 -| Primární text, 3. odstavec (disclaimer) | Průměrné průběžné n
+         -áklady ETF (0,2 %) vs. aktivních akciových fondů v EU (1,2 %) p
+         -odle ESMA (2026, data 2024), 2 000 Kč měsíčně po dobu 20 let, v
+         -ýnos 0 %: rozdíl 44 200 Kč. Hodnota investice může klesat. | | 
+         -|                                                              
+      11 +| Primární text, 3. odstavec (disclaimer) | Průměrné průběžné n
+         +áklady ETF (0,2 %) vs. aktivních akciových fondů v EU (1,2 %) p
+         +odle ESMA (2026, data 2024), 2 000 Kč měsíčně po dobu 20 let, v
+         +ýnos 0 %: rozdíl 44 200 Kč. Hodnota investice může klesat i sto
+         +upat, můžete přijít o část vložených peněz. | | |              
+      12  | Nadpis | Rozdíl v poplatcích fondů | 25 | 40 (IG feed), 27 (F
+          B feed) |
+      13  | Popis | Kalkulačka poplatků v Kč | 24 | Meta neuvádí |
+      14  | Tlačítko | Zjistit víc | | |
+  ⎿  Updated ads/a-uspora/copy.json (+1 -1)
+       4    "primary_text": [
+       5      "Při 2 000 Kč měsíčně je rozdíl v poplatcích fondů za 20 le
+          t přes 40 000 Kč – i bez výnosu. Modelový výpočet, ne doporučen
+          í.",
+       6      "Spočítejte si to pro svou částku – výsledek v Kč, bez regi
+          strace.",
+       7 -    "Průměrné průběžné náklady ETF (0,2 %) vs. aktivních akciov
+         -ých fondů v EU (1,2 %) podle ESMA (2026, data 2024), 2 000 Kč m
+         -ěsíčně po dobu 20 let, výnos 0 %: rozdíl 44 200 Kč. Hodnota inv
+         -estice může klesat."                                           
+       7 +    "Průměrné průběžné náklady ETF (0,2 %) vs. aktivních akciov
+         +ých fondů v EU (1,2 %) podle ESMA (2026, data 2024), 2 000 Kč m
+         +ěsíčně po dobu 20 let, výnos 0 %: rozdíl 44 200 Kč. Hodnota inv
+         +estice může klesat i stoupat, můžete přijít o část vložených pe
+         +něz."                                                          
+       8    ],
+       9    "headline": "Rozdíl v poplatcích fondů",
+      10    "description": "Kalkulačka poplatků v Kč",
+  ⎿  Updated ads/b-zvedavost/README.md (+2 -2)
+       8  | --- | --- | --- | --- |
+       9  | Primární text, 1. odstavec (vidět před „Zobrazit více“) | Pro
+          č si v Česku nekoupíte VOO? A jaké alternativy jsou v ČR dostup
+          né. Vzdělávací srovnání, ne doporučení. | 105 | 125 |
+      10  | Primární text, 2. odstavec | Fondy z USA nemají KID – dokumen
+          t, který v EU musí drobný investor dostat před nákupem. Ukážeme
+           fondy UCITS, které sledují stejný index jako VOO – s poplatky,
+           zdrojem a datem dat. | | |
+      11 -| Primární text, 3. odstavec (rizika) | Hodnota investice může 
+         -klesat. Fondy investují v USD, kurz USD/CZK může výsledek sníži
+         -t i zvýšit. | | |                                              
+      11 +| Primární text, 3. odstavec (rizika) | Hodnota investice může 
+         +klesat i stoupat, můžete přijít o část vložených peněz. Fondy v
+         +edou hodnotu v USD a drží akcie v cizích měnách. Změna kurzu ko
+         +runy může výnos v korunách snížit i zvýšit. | | |              
+      12  | Nadpis | Proč si v ČR nekoupíte VOO? | 27 | 40 (IG feed), 27 
+          (FB feed) |
+      13 -| Popis | Srovnání ETF z NYSE a UCITS | 27 | Meta neuvádí |    
+      13 +| Popis | Srovnání ETF z NYSE a z EU | 26 | Meta neuvádí |     
+      14  | Tlačítko | Zjistit víc | | |
+      15  
+      16  V reklamě není žádné číslo ani konkrétní UCITS fond. VUAA a jeh
+          o TER návštěvník uvidí až na stránce, aby reklama nepropagovala
+           konkrétní nástroj. Nadpis má 27 znaků, takže ho feed Facebooku
+           nezkrátí. Proti hero („Proč si v Česku nekoupíte VOO?“) je zkr
+          ácené jen „v Česku“ na „v ČR“, otázka zůstává stejná. Věta o KI
+          D ve 2. odstavci je doslova věta z hero B.
+  ⎿  Updated ads/b-zvedavost/copy.json (+2 -2)
+       4    "primary_text": [
+       5      "Proč si v Česku nekoupíte VOO? A jaké alternativy jsou v Č
+          R dostupné. Vzdělávací srovnání, ne doporučení.",
+       6      "Fondy z USA nemají KID – dokument, který v EU musí drobný 
+          investor dostat před nákupem. Ukážeme fondy UCITS, které sleduj
+          í stejný index jako VOO – s poplatky, zdrojem a datem dat.",
+       7 -    "Hodnota investice může klesat. Fondy investují v USD, kurz
+         - USD/CZK může výsledek snížit i zvýšit."                       
+       7 +    "Hodnota investice může klesat i stoupat, můžete přijít o č
+         +ást vložených peněz. Fondy vedou hodnotu v USD a drží akcie v c
+         +izích měnách. Změna kurzu koruny může výnos v korunách snížit i
+         + zvýšit."                                                      
+       8    ],
+       9    "headline": "Proč si v ČR nekoupíte VOO?",
+      10 -  "description": "Srovnání ETF z NYSE a UCITS",                
+      10 +  "description": "Srovnání ETF z NYSE a z EU",                 
+      11    "cta": "Zjistit víc",
+      12    "url": "https://etf-srovnani.vercel.app/?utm_source=meta&utm_
+          medium=paid_social&utm_campaign=etf-srovnani-cz-2026-10&utm_con
+          tent=b-zvedavost"
+      13  }
+  ⎿  … 1 more file changed
+
+● Testy prošly (79). Commituji.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Obojí je sjednocené v commitu 9caa2ec. Nepushnuto, unit testy prošly (79).
+
+  - Riziko v reklamě B: třetí odstavec teď obsahuje první dvě věty ze stránky a
+    e-mailu: „Hodnota investice může klesat i stoupat, můžete přijít o část
+    vložených peněz. Fondy vedou hodnotu v USD a drží akcie v cizích měnách.
+    Změna kurzu koruny může výnos v korunách snížit i zvýšit.“
+  - Riziko v reklamě A: aby test platil pro obě reklamy, musel jsem upravit i A.
+    Disclaimer končil zkráceným „Hodnota investice může klesat.“, teď končí
+    celou větou ze stránky.
+  - Testy v lib/ads.test.ts: u obou reklam musí každá riziková věta v primárním
+    textu doslova odpovídat některé větě z RISK_WARNINGS. Věta „Hodnota
+    investice může klesat i stoupat…“ musí být přítomná vždy, u reklamy B navíc
+    celé měnové riziko.
+  - Popis reklamy B: „Srovnání ETF z NYSE a z EU“ (26 znaků).
+  - Upravil jsem i README obou reklam a tabulku pravidel v ads/README.md.
+
+  Vizuál reklamy A má kvůli místu pořád krátké „Hodnota investice může klesat.“.
+  Test hlídá jen primární text a PNG jsem nepřerenderoval. Je to poznamenané v
+  ads/README.md. Jestli chcete celé znění i ve vizuálu, musel by se upravit
+  ad.html a vizuály přerenderovat. Zkontroloval bych pak, že se text vejde do
+  ochranné zóny Stories.
+
+❯ Úprava vzhledu vysvětlivek (Term.tsx):
+
+  Pryč s kulatým tlačítkem „?“. Klikatelný je celý pojem včetně „?“ (jedno
+  tlačítko, např. „KID?“), vizuálně jako text, ne jako tlačítko.
+  Pojem je podtržený tečkovaně (text-decoration-style: dotted, odlišit od plně
+  podtržených odkazů). Otazník je hned za pojmem, menší nebo horním indexem.
+  Zavřený stav: barva textu jako dnes (ink). Otevřený stav: pojem i otazník v
+  akční modré (kobalt), podtržení také.
+  Přístupnost beze změny: button, aria-expanded, aria-controls, přístupný název
+  „Co je KID?“, ovládání Enterem i mezerníkem, viditelný focus. Klepací plocha
+  aspoň 24 × 24 px (WCAG 2.5.8), případně rozšířit přes padding nebo
+  pseudo-element bez posunu textu.
+  Ověř, že se hero B ani text na 375 px kvůli změně nezalomí jinak. Uprav testy
+  a snímky po/.
+  Commituj, nepushuj, zastav se.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Write(components/Term.tsx)
+  ⎿  Added 9 lines, removed 5 lines
+       3  import { useId, useState } from "react";
+       4  
+       5  /**
+       6 - * Odborný pojem s vysvětlením na klepnutí: tlačítko „?“ (aria-
+         -expanded) odkryje jednu větu hned                              
+       7 - * pod řádkem. Žádný tooltip na hover – na mobilu nefunguje. Ov
+         -ládá se Enterem i mezerníkem.                                  
+       6 + * Odborný pojem s vysvětlením na klepnutí. Tlačítkem je celý p
+         +ojem s otazníkem („KID?“), vypadá jako text                    
+       7 + * s tečkovaným podtržením (odkazy mají plné). Otevřený stav ko
+         +baltově. Vysvětlení (jedna věta) se odkryje                    
+       8 + * hned pod řádkem. Žádný tooltip na hover – na mobilu nefunguj
+         +e. Ovládá se Enterem i mezerníkem.                             
+       9 + * Klepací plochu na 24 px výšky (WCAG 2.5.8) rozšiřuje ::befor
+         +e, text se neposune.                                           
+      10   * Vysvětlení je <span class="block">, takže jde použít i uvnit
+          ř odstavce.
+      11   * `name`: celý pojem pro přístupný název tlačítka, když `term`
+           v textu je jen jeho část („aktivní“ → „aktivní fond“).
+      12   * `suffix`: interpunkce za pojmem, aby po rozbalení nezačínal 
+          další řádek čárkou.
+     ...
+      26    const id = useId();
+      27    return (
+      28      <>
+      27 -      {term}                                                   
+      29        <button
+      30          type="button"
+      31          aria-expanded={open}
+      32          aria-controls={id}
+      33          aria-label={`Co je ${name}?`}
+      34          onClick={() => setOpen(!open)}
+      34 -        className="press mx-0.5 inline-flex size-6 items-center
+         - justify-center rounded-full border border-ink align-middle tex
+         -t-[13px] leading-none font-semibold outline-offset-2 focus-visi
+         -ble:outline-2 aria-expanded:bg-ink aria-expanded:text-paper"   
+      35 +        className="relative cursor-pointer text-ink underline d
+         +ecoration-dotted decoration-[1.5px] underline-offset-4 outline-
+         +offset-2 before:absolute before:-inset-x-1 before:-inset-y-1.5 
+         +before:content-[''] focus-visible:rounded-sm focus-visible:outl
+         +ine-2 aria-expanded:text-action"                               
+      36        >
+      36 -        ?                                                      
+      37 +        {term}                                                 
+      38 +        <sup aria-hidden className="ml-px text-[0.7em] font-sem
+         +ibold">                                                        
+      39 +          ?                                                    
+      40 +        </sup>                                                 
+      41        </button>
+      42        {suffix}
+      43        <span id={id} hidden={!open} className="fine my-1 block b
+          order-l-2 border-rule pl-3">
+
+● Hero B žádný Term nemá, takže ho změna nezasáhne. Zalomení ověřím porovnáním
+  výšek sekcí s měřením před změnou (srovnání 932 px, kalkulačka 1232/1741 px).
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Výšky klesly jen o 2–4 px. Kulaté tlačítko dřív zvětšovalo svůj řádek, počet
+  řádků je stejný a hero se nezměnilo. Upravuji E2E test.
+
+● Bash(node - <<'EOF'
+      const fs=require("fs");const f="e2e/landing.spec.ts";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated e2e/landing.spec.ts (+15 -0)
+      156    const explanation = section.locator(`#${(await kid.getAttrib
+           ute("aria-controls"))!.replace(/:/g, "\\:")}`);
+      157    await expect(kid).toHaveAttribute("aria-expanded", "false");
+      158    await expect(explanation).toBeHidden();
+      159 +  // vypadá jako text: pojem s otazníkem, tečkované podtržení 
+          +(odkazy mají plné), zavřený v barvě textu                     
+      160 +  await expect(kid).toHaveText("KID?");                       
+      161 +  await expect(kid).toHaveCSS("text-decoration-style", "dotted
+          +");                                                           
+      162 +  await expect(kid).toHaveCSS("color", "rgb(22, 24, 29)");    
+      163 +  // klepací plocha aspoň 24 × 24 px (WCAG 2.5.8): body 12 px 
+          +od středu zasáhnou tlačítko                                   
+      164 +  await kid.scrollIntoViewIfNeeded();                         
+      165 +  const hits = await kid.evaluate((el) => {                   
+      166 +    const r = el.getBoundingClientRect();                     
+      167 +    const [x, y] = [r.left + r.width / 2, r.top + r.height / 2
+          +];                                                            
+      168 +    return [[x, y - 12], [x, y + 11.5], [x - 12, y], [x + 11.5
+          +, y]].map(                                                    
+      169 +      ([px, py]) => document.elementFromPoint(px, py)?.closest
+          +("button") === el,                                            
+      170 +    );                                                        
+      171 +  });                                                         
+      172 +  expect(hits).toEqual([true, true, true, true]);             
+      173    await kid.focus();
+      174    await page.keyboard.press("Enter");
+      175    await expect(kid).toHaveAttribute("aria-expanded", "true");
+      176 +  await expect(kid).toHaveCSS("color", "rgb(29, 78, 216)"); //
+          + otevřený kobaltově                                           
+      177    await expect(explanation).toContainText("nejvýš 3 strany A4"
+           );
+      178    await page.keyboard.press("Space");
+      179    await expect(explanation).toBeHidden();
+  ⎿  (timeout 5m)
+
+● Test prošel. Doplňuji do skriptu snímek otevřené vysvětlivky a přegeneruji
+  docs/screens/po/.
+
+● Bash(node - <<'EOF'
+      const fs=require("fs");const f="scripts/screens.mjs";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated scripts/screens.mjs (+5 -0)
+      85    await scrollTo(page, "#srovnani");
+      86    await shot(page, "3-srovnani");
+      87  
+      88 +  // vysvětlivka pojmu: zavřená je ve snímku 3, tady otevřená (
+         +kobaltový pojem, věta pod řádkem)                              
+      89 +  await page.getByRole("button", { name: "Co je KID?" }).click(
+         +);                                                             
+      90 +  await shot(page, "6-vysvetlivka");                           
+      91 +  await page.getByRole("button", { name: "Co je KID?" }).click(
+         +);                                                             
+      92 +                                                               
+      93    const inline = page.getByTestId("lead-inline");
+      94    await inline.getByRole("textbox", { name: "E-mail" }).fill("s
+          creens@example.com");
+      95    await inline.getByRole("button", { name: "Poslat mi srovnání"
+           }).click();
+  ⎿  … 5 more files changed
+  ⎿  (timeout 5m)
+
+  Searched for 1 pattern, read 2 files (ctrl+o to expand)
+
+● Snímky vypadají správně: pojem je tečkovaně podtržený, otevřený je kobaltový a
+  otazník je v horním indexu. Doplňuji README a spouštím celou sadu testů.
+
+● Bash(node - <<'EOF'
+      const fs=require("fs");const f="README.md";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated README.md (+3 -2)
+      104  | Srovnání | [pred/3-srovnani.png](docs/screens/pred/3-srovnan
+           i.png) | [po/3-srovnani.png](docs/screens/po/3-srovnani.png) |
+      105  | Děkovací stav | [pred/4-dekovaci-stav.png](docs/screens/pred
+           /4-dekovaci-stav.png) | [po/4-dekovaci-stav.png](docs/screens/
+           po/4-dekovaci-stav.png) |
+      106  | Hero B | [pred/5-hero-b.png](docs/screens/pred/5-hero-b.png)
+            | [po/5-hero-b.png](docs/screens/po/5-hero-b.png) |
+      107 +| Vysvětlivka pojmu (otevřená, krok 9) | – | [po/6-vysvetlivka
+          +.png](docs/screens/po/6-vysvetlivka.png) |                    
+      108  
+      109  U děkovacího stavu skript zadrží odeslání v prohlížeči, aby se
+            nic neuložilo. Snímek „po“ proto ukazuje stav načítání („Uklá
+           dáme adresu…“), snímek „před“ text, který se dřív ukazoval hne
+           d.
+      110  
+     ...
+      143  
+      144  Nový skript měří u stejného kódu o 12–24 ms víc než ten původn
+           í (696 / 708 ms výše). Rozdíl je v měření, ne v kódu.
+      145  
+      145 -**Snímky po** ve stejné tabulce výše ([`docs/screens/po/`](doc
+          -s/screens/po/)) jsou po kroku 8c. **Záznam animací** na 375 × 
+          -812: [`docs/screens/animace.webm`](docs/screens/animace.webm) 
+          -(posun a objevení sekcí, spodní lišta, plynulé číslo, „Jak poč
+          -ítáme“, děkovací blok; skript [`scripts/record-animations.mjs`
+          -](scripts/record-animations.mjs)). GIF není: Playwright nahráv
+          -á jen webm a ffmpeg v systému nebyl.                          
+      146 +**Snímky po** ve stejné tabulce výše ([`docs/screens/po/`](doc
+          +s/screens/po/)) jsou po kroku 9 (texty pro laika, vysvětlivky 
+          +pojmů). **Záznam animací** na 375 × 812: [`docs/screens/animac
+          +e.webm`](docs/screens/animace.webm) (posun a objevení sekcí, s
+          +podní lišta, plynulé číslo, „Jak počítáme“, děkovací blok; skr
+          +ipt [`scripts/record-animations.mjs`](scripts/record-animation
+          +s.mjs)). GIF není: Playwright nahrává jen webm a ffmpeg v syst
+          +ému nebyl.                                                    
+      147  
+      148  ## Očekávaná konverze
+      149  
+     ...
+      469  53. **Červená zůstává jen pro chybu.** Validace formuláře a va
+           rování na `/zasady` jsou chybový stav, ne „ztráta“. Bez barvy 
+           by chyba ve formuláři byla méně nápadná, a to je přístupnostní
+            riziko. Stejná hodnota `#B03A0A` (5,3 : 1), nový token `error
+           `.
+      470  54. **Tvar místo zelené.** Levnější a dražší řádek v účtence a
+            v reklamě A rozlišuje plný pruh vs. obrys, ne barva. Rozdíl j
+           e vidět i bez rozlišování barev a zelená by „levnější variantu
+           “ vizuálně doporučovala (rozhodnutí 5). Plný pruh má jen průmě
+           rný aktivní fond, tedy dražší strana srovnání.
+      471  55. **Spodní lišta a patička vedou vždy k e-mailu** (2026-10-1
+           1, rozhodl člověk). Dřív před výsledkem kalkulačky nabízely „S
+           počítat své poplatky“. Kontakt je ale hlavní cíl stránky a pře
+           d výsledkem se lišta ukazuje, až když návštěvník přeskočil her
+           o i kalkulačku (typicky hero B → srovnání). V tu chvíli hodnot
+           u už viděl (srovnání, číslo v hero), takže výzva k e-mailu nep
+           řichází dřív, než něco dostal (rozhodnutí 4). Kalkulačku má ná
+           vštěvník pořád nad sebou a tlačítko v hero na ni vede dál. Bez
+            výsledku vede lišta ke spodnímu formuláři, po výsledku k poli
+            u výpočtu (`focusLeadForm`). Riziko: méně lidí projde kalkula
+           čkou. Podíl `calc_start` sledovat v PostHogu.
+      471 -56. **Odborné pojmy: nahradit, kde to jde, jinak „?“ s jednou 
+          -větou** (krok 9, texty schválil člověk). Cílová skupina „slyše
+          -la o S&P 500“, ale TER, domicil nebo akumulační fond jí nic ne
+          -řeknou. Běžným slovem jsme nahradili TER („roční poplatek“, zk
+          -ratka zůstává v závorce, protože ji uvádí broker), domicil („s
+          -ídlo fondu“), akumulační/distribuční („reinvestuje“/„vyplácí“,
+          - pojem v závorce) a spread. KID, UCITS a „aktivní fond“ zůstal
+          -y, protože je návštěvník potká u brokera, a mají tlačítko „?“ 
+          -(komponent `Term`): `aria-expanded`, ovládání Enterem i mezern
+          -íkem, vysvětlení se odkryje pod řádkem. Tooltip na hover jsme 
+          -nepoužili, na mobilu nefunguje. Řádky srovnání vysvětluje rozb
+          -alovací „Co znamenají řádky“ pod tabulkou, protože „?“ by se d
+          -o 30% sloupce na 375 px nevešlo. Právní tvrzení ve vysvětlivká
+          -ch jen se zdrojem (PRIIPs, směrnice UCITS, nařízení o ESMA v s
+          -ekci Zdroje), daňová žádná. „Registrace v ČR“ záměrně bez práv
+          -ního výkladu: jen co uvádí emitent.                           
+      472 +56. **Odborné pojmy: nahradit, kde to jde, jinak „?“ s jednou 
+          +větou** (krok 9, texty schválil člověk). Cílová skupina „slyše
+          +la o S&P 500“, ale TER, domicil nebo akumulační fond jí nic ne
+          +řeknou. Běžným slovem jsme nahradili TER („roční poplatek“, zk
+          +ratka zůstává v závorce, protože ji uvádí broker), domicil („s
+          +ídlo fondu“), akumulační/distribuční („reinvestuje“/„vyplácí“,
+          + pojem v závorce) a spread. KID, UCITS a „aktivní fond“ zůstal
+          +y, protože je návštěvník potká u brokera, a jsou samy tlačítke
+          +m s otazníkem („KID?“, komponent `Term`): vypadají jako text s
+          + tečkovaným podtržením (odkazy mají plné), otevřený pojem je k
+          +obaltový. `aria-expanded`, přístupný název „Co je KID?“, ovlád
+          +ání Enterem i mezerníkem, klepací plocha aspoň 24 × 24 px přes
+          + `::before` bez posunu textu. Vysvětlení se odkryje pod řádkem
+          +. Kulaté tlačítko „?“ z první verze zvětšovalo výšku řádku a v
+          + textu působilo jako ovládací prvek navíc. Tooltip na hover js
+          +me nepoužili, na mobilu nefunguje. Řádky srovnání vysvětluje r
+          +ozbalovací „Co znamenají řádky“ pod tabulkou, protože „?“ by s
+          +e do 30% sloupce na 375 px nevešlo. Právní tvrzení ve vysvětli
+          +vkách jen se zdrojem (PRIIPs, směrnice UCITS, nařízení o ESMA 
+          +v sekci Zdroje), daňová žádná. „Registrace v ČR“ záměrně bez p
+          +rávního výkladu: jen co uvádí emitent.                        
+      473  57. **Hero A a B bez „?“.** Hero B má nad cookie lištou na 375
+            × 667 rezervu jen pár pixelů. Texty v hero jsme proto jen zkr
+           átili a přepsali (věta o KID je kratší než dřív), vysvětlivky 
+           jsou až ve srovnání. Že se řádek „VUAA · fond z EU (Irsko)“ ne
+           zalomí, hlídá E2E test hero B.
+      474  58. **`/potvrzeni` při načtení jen čte stav odkazu** (krok 9).
+            Po obnovení stránky dřív znovu svítilo „Potvrdit e-mail“, i k
+           dyž adresa byla potvrzená. Server action `confirmStatus` teď p
+           ři načtení jen přečte řádek podle hashe tokenu (SELECT, bez no
+           vé migrace) a vrátí `pending` / `already` / `expired` / `inval
+           id`. Potvrzená adresa rovnou vidí srovnání, neplatný nebo proš
+           lý odkaz hlášku. Potvrzuje dál jen tlačítko, takže skenery odk
+           azů v e-mailových schránkách nic nepotvrdí. Logika stavu (`tok
+           enStatus`) kopíruje pořadí podmínek SQL funkce `confirm_lead`,
+            shodu hlídají unit testy. Výpadek databáze = tlačítko jako dř
+           ív. postgrest-js u GET po síťové chybě sám opakuje (1 + 2 + 4 
+           s), pro tuhle kontrolu je opakování vypnuté, aby návštěvník př
+           i výpadku nečekal.
+      475  59. **Nadpis reklamy A bez čísla: „Rozdíl v poplatcích fondů“*
+           * (25 znaků, vybral člověk ze tří variant). Původní nadpis (39
+            znaků) feed Facebooku zkrátí na 27. Číslo s podmínkou (částka
+           , horizont, výnos 0 %) se do 27 znaků nevejde, takže je jen ve
+            vizuálu a v primárním textu. Nadpis opakuje slova hero A. Nad
+           pis reklamy B zkrácen z „Proč si v Česku nekoupíte VOO?“ (30 z
+           naků) na „Proč si v ČR nekoupíte VOO?“ (27 znaků), otázka v he
+           ro B zůstává. Primární text reklamy B přebírá doslova větu o K
+           ID z hero B.
+  ⎿  (timeout 10m)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Vysvětlivky mají nový vzhled v commitu 0e3ffd2. Nepushnuto. Prošly unit testy
+  (79) i E2E na mobilu (43).
+
+  Vzhled (Term.tsx)
+  - Tlačítkem je celý pojem s otazníkem v horním indexu („KID?“), vypadá jako
+    text.
+  - Pojem je podtržený tečkovaně, odkazy mají dál plné podtržení.
+  - Zavřený je v barvě textu (ink). Otevřený je kobaltový včetně otazníku i
+    podtržení.
+
+  Přístupnost: zůstává tlačítko s aria-expanded, aria-controls a názvem „Co je
+  KID?“. Ovládá se Enterem i mezerníkem a při ovládání klávesnicí má viditelný
+  focus. Klepací plocha je aspoň 24 × 24 px. Rozšiřuje ji neviditelný
+  pseudo-element, text se tím neposune.
+
+  Zalomení na 375 px: sekce srovnání je o 2 px nižší, kalkulačka o 4 px. Kulaté
+  tlačítko dřív zvětšovalo výšku svého řádku, počet řádků se nezměnil. Hero B
+  vysvětlivky nemá, takže se nezměnilo, a test „lišta nezakryje CTA“ prošel.
+
+  Testy: E2E test teď kontroluje i text „KID?“, tečkované podtržení, barvu
+  zavřeného a otevřeného pojmu a klepací plochu. Plochu měří body 12 px od
+  středu, které musí zasáhnout tlačítko.
+
+  Snímky: přegeneroval jsem docs/screens/po/. Přibyl snímek 6-vysvetlivka.png s
+  otevřenou vysvětlivkou KID, přidal jsem ho do skriptu scripts/screens.mjs i do
+  tabulky v README. Snímky 2–5 se změnily, protože obsahují nové texty z kroku
+  9. Hero A vyšel stejně.
+
+  Doporučuji /export do ai-log/.
+
+❯ Vysvětlivky: tečkované podtržení dej jen pod samotný text pojmu, ne pod ‚?‘.
+  Otazník zůstane bez podtržení, ale v otevřeném stavu bude taky kobaltový,
+  stejně jako pojem. Klikací plocha i přístupnost zůstanou beze změny: celé
+  tlačítko včetně ‚?‘, aria-expanded, aria-controls, název ‚Co je KID?‘ a hit
+  area 24×24 px. Uprav E2E test tak, aby ověřoval, že podtržený je jen text
+  pojmu, a přegeneruj docs/screens/po/6-vysvetlivka.png. Pusť unit i E2E testy
+  (jen s testovacími env, ne .env.local). Commituj, nepushuj.“
+
+● Bash(node - <<'EOF'
+      const fs=require("fs");…)
+  ⎿  Updated components/Term.tsx (+4 -4)
+       3  import { useId, useState } from "react";
+       4  
+       5  /**
+       6 - * Odborný pojem s vysvětlením na klepnutí. Tlačítkem je celý p
+         -ojem s otazníkem („KID?“), vypadá jako text                    
+       7 - * s tečkovaným podtržením (odkazy mají plné). Otevřený stav ko
+         -baltově. Vysvětlení (jedna věta) se odkryje                    
+       6 + * Odborný pojem s vysvětlením na klepnutí. Tlačítkem je celý p
+         +ojem s otazníkem („KID?“), vypadá jako text.                   
+       7 + * Tečkovaně podtržený je jen pojem (odkazy mají plné podtržení
+         +), otazník ne. Otevřený stav: pojem i otazník kobaltově. Vysvět
+         +lení (jedna věta) se odkryje                                   
+       8   * hned pod řádkem. Žádný tooltip na hover – na mobilu nefunguj
+          e. Ovládá se Enterem i mezerníkem.
+       9   * Klepací plochu na 24 px výšky (WCAG 2.5.8) rozšiřuje ::befor
+          e, text se neposune.
+      10   * Vysvětlení je <span class="block">, takže jde použít i uvnit
+          ř odstavce.
+     ...
+      32          aria-controls={id}
+      33          aria-label={`Co je ${name}?`}
+      34          onClick={() => setOpen(!open)}
+      35 -        className="relative cursor-pointer text-ink underline d
+         -ecoration-dotted decoration-[1.5px] underline-offset-4 outline-
+         -offset-2 before:absolute before:-inset-x-1 before:-inset-y-1.5 
+         -before:content-[''] focus-visible:rounded-sm focus-visible:outl
+         -ine-2 aria-expanded:text-action"                               
+      35 +        className="relative cursor-pointer text-ink outline-off
+         +set-2 before:absolute before:-inset-x-1 before:-inset-y-1.5 bef
+         +ore:content-[''] focus-visible:rounded-sm focus-visible:outline
+         +-2 aria-expanded:text-action"                                  
+      36        >
+      37 -        {term}                                                 
+      37 +        <span className="underline decoration-dotted decoration
+         +-[1.5px] underline-offset-4">{term}</span>                     
+      38          <sup aria-hidden className="ml-px text-[0.7em] font-sem
+          ibold">
+      39            ?
+      40          </sup>
+  ⎿  Updated e2e/landing.spec.ts (+15 -3)
+      156    const explanation = section.locator(`#${(await kid.getAttrib
+           ute("aria-controls"))!.replace(/:/g, "\\:")}`);
+      157    await expect(kid).toHaveAttribute("aria-expanded", "false");
+      158    await expect(explanation).toBeHidden();
+      159 -  // vypadá jako text: pojem s otazníkem, tečkované podtržení 
+          -(odkazy mají plné), zavřený v barvě textu                     
+      159 +  // vypadá jako text: pojem s otazníkem, zavřený v barvě text
+          +u. Tečkovaně podtržený (odkazy mají plné)                     
+      160 +  // je jen pojem: tlačítko samo podtržení nemá, takže se nepř
+          +enese na „?“ mimo span pojmu                                  
+      161    await expect(kid).toHaveText("KID?");
+      161 -  await expect(kid).toHaveCSS("text-decoration-style", "dotted
+          -");                                                           
+      162 +  await expect(kid).toHaveCSS("text-decoration-line", "none");
+      163    await expect(kid).toHaveCSS("color", "rgb(22, 24, 29)");
+      164 +  const underlined = kid.locator("span");                     
+      165 +  await expect(underlined).toHaveText("KID");                 
+      166 +  await expect(underlined).toHaveCSS("text-decoration-line", "
+          +underline");                                                  
+      167 +  await expect(underlined).toHaveCSS("text-decoration-style", 
+          +"dotted");                                                    
+      168 +  const mark = kid.locator("sup");                            
+      169 +  await expect(mark).toHaveText("?");                         
+      170 +  await expect(mark).toHaveCSS("text-decoration-line", "none")
+          +;                                                             
+      171 +  expect(await mark.evaluate((el) => el.closest("span") === nu
+          +ll)).toBe(true);                                              
+      172    // klepací plocha aspoň 24 × 24 px (WCAG 2.5.8): body 12 px 
+           od středu zasáhnou tlačítko
+      173    await kid.scrollIntoViewIfNeeded();
+      174    const hits = await kid.evaluate((el) => {
+     ...
+      182    await kid.focus();
+      183    await page.keyboard.press("Enter");
+      184    await expect(kid).toHaveAttribute("aria-expanded", "true");
+      176 -  await expect(kid).toHaveCSS("color", "rgb(29, 78, 216)"); //
+          - otevřený kobaltově                                           
+      185 +  // otevřený kobaltově pojem i otazník                       
+      186 +  await expect(kid).toHaveCSS("color", "rgb(29, 78, 216)");   
+      187 +  await expect(underlined).toHaveCSS("color", "rgb(29, 78, 216
+          +)");                                                          
+      188 +  await expect(mark).toHaveCSS("color", "rgb(29, 78, 216)");  
+      189    await expect(explanation).toContainText("nejvýš 3 strany A4"
+           );
+      190    await page.keyboard.press("Space");
+      191    await expect(explanation).toBeHidden();
+
+● Opravím zalomení komentáře a pustím testy.
+
+● Bash(node -e '
+      const fs=require("fs");const f="components/Term.tsx";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated components/Term.tsx (+2 -2)
+       4  
+       5  /**
+       6   * Odborný pojem s vysvětlením na klepnutí. Tlačítkem je celý p
+          ojem s otazníkem („KID?“), vypadá jako text.
+       7 - * Tečkovaně podtržený je jen pojem (odkazy mají plné podtržení
+         -), otazník ne. Otevřený stav: pojem i otazník kobaltově. Vysvět
+         -lení (jedna věta) se odkryje                                   
+       8 - * hned pod řádkem. Žádný tooltip na hover – na mobilu nefunguj
+         -e. Ovládá se Enterem i mezerníkem.                             
+       7 + * Tečkovaně podtržený je jen pojem (odkazy mají plné podtržení
+         +), otazník ne. Otevřený stav: pojem                            
+       8 + * i otazník kobaltově. Vysvětlení (jedna věta) se odkryje hned
+         + pod řádkem. Žádný tooltip na hover – na mobilu nefunguje. Ovlá
+         +dá se Enterem i mezerníkem.                                    
+       9   * Klepací plochu na 24 px výšky (WCAG 2.5.8) rozšiřuje ::befor
+          e, text se neposune.
+      10   * Vysvětlení je <span class="block">, takže jde použít i uvnit
+          ř odstavce.
+      11   * `name`: celý pojem pro přístupný název tlačítka, když `term`
+           v textu je jen jeho část („aktivní“ → „aktivní fond“).
+  ⎿  (timeout 10m)
+
+● Testy prošly (unit 79, E2E 43, testovací proměnné z e2e/test-env.mjs).
+  Přegeneruji snímky.
+
+● Bash(node scripts/screens.mjs po 2>&1 | tail -1; git status --short)
+  ⎿  3 files changed (binary, mode only or too large to show)
+  ⎿  (timeout 5m)
+  Read 1 file (ctrl+o to expand)
+
+● Na snímku je podtržený jen „KID“, otazník ne, a obojí je kobaltové. Doplním
+  větu v README a commitnu.
+
+● Bash(node -e '
+      const fs=require("fs");const f="README.md";let
+      s=fs.readFileSync(f,"utf8");…)
+  ⎿  Updated README.md (+1 -1)
+      469  53. **Červená zůstává jen pro chybu.** Validace formuláře a va
+           rování na `/zasady` jsou chybový stav, ne „ztráta“. Bez barvy 
+           by chyba ve formuláři byla méně nápadná, a to je přístupnostní
+            riziko. Stejná hodnota `#B03A0A` (5,3 : 1), nový token `error
+           `.
+      470  54. **Tvar místo zelené.** Levnější a dražší řádek v účtence a
+            v reklamě A rozlišuje plný pruh vs. obrys, ne barva. Rozdíl j
+           e vidět i bez rozlišování barev a zelená by „levnější variantu
+           “ vizuálně doporučovala (rozhodnutí 5). Plný pruh má jen průmě
+           rný aktivní fond, tedy dražší strana srovnání.
+      471  55. **Spodní lišta a patička vedou vždy k e-mailu** (2026-10-1
+           1, rozhodl člověk). Dřív před výsledkem kalkulačky nabízely „S
+           počítat své poplatky“. Kontakt je ale hlavní cíl stránky a pře
+           d výsledkem se lišta ukazuje, až když návštěvník přeskočil her
+           o i kalkulačku (typicky hero B → srovnání). V tu chvíli hodnot
+           u už viděl (srovnání, číslo v hero), takže výzva k e-mailu nep
+           řichází dřív, než něco dostal (rozhodnutí 4). Kalkulačku má ná
+           vštěvník pořád nad sebou a tlačítko v hero na ni vede dál. Bez
+            výsledku vede lišta ke spodnímu formuláři, po výsledku k poli
+            u výpočtu (`focusLeadForm`). Riziko: méně lidí projde kalkula
+           čkou. Podíl `calc_start` sledovat v PostHogu.
+      472 -56. **Odborné pojmy: nahradit, kde to jde, jinak „?“ s jednou 
+          -větou** (krok 9, texty schválil člověk). Cílová skupina „slyše
+          -la o S&P 500“, ale TER, domicil nebo akumulační fond jí nic ne
+          -řeknou. Běžným slovem jsme nahradili TER („roční poplatek“, zk
+          -ratka zůstává v závorce, protože ji uvádí broker), domicil („s
+          -ídlo fondu“), akumulační/distribuční („reinvestuje“/„vyplácí“,
+          - pojem v závorce) a spread. KID, UCITS a „aktivní fond“ zůstal
+          -y, protože je návštěvník potká u brokera, a jsou samy tlačítke
+          -m s otazníkem („KID?“, komponent `Term`): vypadají jako text s
+          - tečkovaným podtržením (odkazy mají plné), otevřený pojem je k
+          -obaltový. `aria-expanded`, přístupný název „Co je KID?“, ovlád
+          -ání Enterem i mezerníkem, klepací plocha aspoň 24 × 24 px přes
+          - `::before` bez posunu textu. Vysvětlení se odkryje pod řádkem
+          -. Kulaté tlačítko „?“ z první verze zvětšovalo výšku řádku a v
+          - textu působilo jako ovládací prvek navíc. Tooltip na hover js
+          -me nepoužili, na mobilu nefunguje. Řádky srovnání vysvětluje r
+          -ozbalovací „Co znamenají řádky“ pod tabulkou, protože „?“ by s
+          -e do 30% sloupce na 375 px nevešlo. Právní tvrzení ve vysvětli
+          -vkách jen se zdrojem (PRIIPs, směrnice UCITS, nařízení o ESMA 
+          -v sekci Zdroje), daňová žádná. „Registrace v ČR“ záměrně bez p
+          -rávního výkladu: jen co uvádí emitent.                        
+      472 +56. **Odborné pojmy: nahradit, kde to jde, jinak „?“ s jednou 
+          +větou** (krok 9, texty schválil člověk). Cílová skupina „slyše
+          +la o S&P 500“, ale TER, domicil nebo akumulační fond jí nic ne
+          +řeknou. Běžným slovem jsme nahradili TER („roční poplatek“, zk
+          +ratka zůstává v závorce, protože ji uvádí broker), domicil („s
+          +ídlo fondu“), akumulační/distribuční („reinvestuje“/„vyplácí“,
+          + pojem v závorce) a spread. KID, UCITS a „aktivní fond“ zůstal
+          +y, protože je návštěvník potká u brokera, a jsou samy tlačítke
+          +m s otazníkem („KID?“, komponent `Term`): vypadají jako text, 
+          +tečkovaně podtržený je jen pojem, otazník ne (odkazy mají plné
+          + podtržení). Otevřený pojem i otazník jsou kobaltové. `aria-ex
+          +panded`, přístupný název „Co je KID?“, ovládání Enterem i meze
+          +rníkem, klepací plocha aspoň 24 × 24 px přes `::before` bez po
+          +sunu textu. Vysvětlení se odkryje pod řádkem. Kulaté tlačítko 
+          +„?“ z první verze zvětšovalo výšku řádku a v textu působilo ja
+          +ko ovládací prvek navíc. Tooltip na hover jsme nepoužili, na m
+          +obilu nefunguje. Řádky srovnání vysvětluje rozbalovací „Co zna
+          +menají řádky“ pod tabulkou, protože „?“ by se do 30% sloupce n
+          +a 375 px nevešlo. Právní tvrzení ve vysvětlivkách jen se zdroj
+          +em (PRIIPs, směrnice UCITS, nařízení o ESMA v sekci Zdroje), d
+          +aňová žádná. „Registrace v ČR“ záměrně bez právního výkladu: j
+          +en co uvádí emitent.                                          
+      473  57. **Hero A a B bez „?“.** Hero B má nad cookie lištou na 375
+            × 667 rezervu jen pár pixelů. Texty v hero jsme proto jen zkr
+           átili a přepsali (věta o KID je kratší než dřív), vysvětlivky 
+           jsou až ve srovnání. Že se řádek „VUAA · fond z EU (Irsko)“ ne
+           zalomí, hlídá E2E test hero B.
+      474  58. **`/potvrzeni` při načtení jen čte stav odkazu** (krok 9).
+            Po obnovení stránky dřív znovu svítilo „Potvrdit e-mail“, i k
+           dyž adresa byla potvrzená. Server action `confirmStatus` teď p
+           ři načtení jen přečte řádek podle hashe tokenu (SELECT, bez no
+           vé migrace) a vrátí `pending` / `already` / `expired` / `inval
+           id`. Potvrzená adresa rovnou vidí srovnání, neplatný nebo proš
+           lý odkaz hlášku. Potvrzuje dál jen tlačítko, takže skenery odk
+           azů v e-mailových schránkách nic nepotvrdí. Logika stavu (`tok
+           enStatus`) kopíruje pořadí podmínek SQL funkce `confirm_lead`,
+            shodu hlídají unit testy. Výpadek databáze = tlačítko jako dř
+           ív. postgrest-js u GET po síťové chybě sám opakuje (1 + 2 + 4 
+           s), pro tuhle kontrolu je opakování vypnuté, aby návštěvník př
+           i výpadku nečekal.
+      475  59. **Nadpis reklamy A bez čísla: „Rozdíl v poplatcích fondů“*
+           * (25 znaků, vybral člověk ze tří variant). Původní nadpis (39
+            znaků) feed Facebooku zkrátí na 27. Číslo s podmínkou (částka
+           , horizont, výnos 0 %) se do 27 znaků nevejde, takže je jen ve
+            vizuálu a v primárním textu. Nadpis opakuje slova hero A. Nad
+           pis reklamy B zkrácen z „Proč si v Česku nekoupíte VOO?“ (30 z
+           naků) na „Proč si v ČR nekoupíte VOO?“ (27 znaků), otázka v he
+           ro B zůstává. Primární text reklamy B přebírá doslova větu o K
+           ID z hero B.
+
+● Tečkované podtržení je teď jen pod samotným pojmem, „?“ podtržení nemá. Commit
+  2b939b1, nepushnuto.
+
+  - Vzhled: podtržení má nový vnitřní <span> s textem pojmu, takže se nepřenese
+    na otazník. Barvu nese celé tlačítko, takže v otevřeném stavu je kobaltový
+    pojem i „?“.
+  - Klikací plocha a přístupnost: beze změny. Tlačítkem je dál celé „KID?“ s
+    aria-expanded, aria-controls, názvem „Co je KID?“ a plochou 24 × 24 px.
+  - E2E test: kontroluje, že tlačítko samo podtržení nemá, podtržený je jen text
+    „KID“ (tečkovaně) a „?“ leží mimo podtržený text. V otevřeném stavu musí
+    být kobaltový pojem i otazník.
+  - Testy: unit testy prošly (79) i E2E testy (43). E2E jely jen s testovacími
+    proměnnými z e2e/test-env.mjs, .env.local se nepoužil.
+  - Snímky: 6-vysvetlivka.png jsem přegeneroval a zkontroloval. Skript
+    přegeneruje všechny snímky najednou, takže se změnily i
+    2-vysledek-kalkulacky.png a 3-srovnani.png. I na nich je vysvětlivka
+    („aktivní?“, „KID?“, „UCITS?“), proto jsem je commitnul taky, aby snímky po
+    odpovídaly stránce.
+  - README: popis vysvětlivek v rozhodnutí 56 odpovídá novému vzhledu.
