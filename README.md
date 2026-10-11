@@ -368,7 +368,7 @@ Stránku, data, testy, reklamy i tento README psala AI. Člověk zadával kroky,
 
 ### Exporty konverzací
 
-Exporty z Claude Code (`/export`) v [`ai-log/`](ai-log/). Sessions 8c byly exportované průběžně třikrát, každý pozdější export obsahuje i ty předchozí.
+Exporty z Claude Code (`/export`) v [`ai-log/`](ai-log/). Krok 8c i kroky 9–10 byly exportované průběžně, každý pozdější export téže session obsahuje i ty předchozí.
 
 | Soubor | Obsah session |
 | --- | --- |
@@ -384,6 +384,7 @@ Exporty z Claude Code (`/export`) v [`ai-log/`](ai-log/). Sessions 8c byly expor
 | [`2026-10-11-zklidneni-animace-detaily.txt`](ai-log/2026-10-11-zklidneni-animace-detaily.txt) | Krok 8c, druhý export: úpravy po kontrole na telefonu (nadpis „Odesláno.“, vrstvená informace GDPR). |
 | [`2026-10-11-spodni-lista.txt`](ai-log/2026-10-11-spodni-lista.txt) | Krok 8c, třetí export: spodní lišta a patička vedou vždy k e-mailu. |
 | [`2026-10-11-texty.txt`](ai-log/2026-10-11-texty.txt) | Krok 9: texty pro laika s vysvětlivkami, `/potvrzeni` po obnovení, nadpisy a rizikové věty reklam. |
+| [`2026-10-11-dokumentace.txt`](ai-log/2026-10-11-dokumentace.txt) | Krok 10: výsledky produkčního checklistu a Lighthouse, sekce Práce s AI a „Dá se zítra spustit reklama?“, kontrola konzistence README. Obsahuje i celý krok 9 ze stejné session. |
 
 ### Kontrola dat: tři vrstvy
 
