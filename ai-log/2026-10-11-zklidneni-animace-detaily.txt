@@ -1,0 +1,2195 @@
+
+❯ /clear
+
+❯ Přečti CLAUDE.md, README.md a docs/plany/krok-8c.md. Je to plán, který jsem s
+  tebou připravil v minulé session a schválil ho. Ověř, že stále sedí s
+  aktuálním kódem (krok 8b je commitnutý), a vypiš případné rozdíly. Pokud
+  žádné nejsou, implementuj ho podle plánu. Po dokončení se zastav. Commituj,
+  nepushuj.
+
+  Searched for 2 patterns, read 2 files, listed 1 directory, ran 1 shell command (ctrl+o to expand)
+
+● Ověřuji plán proti kódu – zatím sedí barvy, Hero, účtenka i DoneBanner.
+  Pokračuji zbývajícími komponentami a testy.
+
+  Searched for 1 pattern, listed 1 directory, ran 2 shell commands (ctrl+o to expand)
+
+● Updated plan
+  ⎿  /plan to preview
+
+● User approved Claude's plan
+  ⎿  Plan saved to: ~/.claude/plans/p-e-ti-claude-md-readme-md-a-gentle-rabin.md
+     · /plan to edit
+     Krok 8c – kontrola plánu proti kódu a provedení
+
+     Context
+
+     Plán docs/plany/krok8c.md (schválený v minulé session) zklidňuje barvy
+     (ztráta už není barva), mění číslice (proporcionální + salt, tabulkové jen
+     ticker/ISIN), přidává razítko v děkovacím stavu, přepínač v plném srovnání
+     a jemné animace (sticky lišta, reveal sekcí, details). Ověřil jsem ho proti
+     kódu po commitu 8b. Plán sedí; níže drobné rozdíly a jak je vyřeším.
+     Postup, commity a ověření jsou beze změny podle docs/plany/krok8c.md (body
+     1–9, „Pořadí commitů“, „Ověření“).
+
+     Co sedí (ověřeno)
+
+     - --color-loss/--color-keep v app/globals.css; použití přesně tam, kde plán
+       počítá: Hero.tsx:31, FeeReceipt.tsx:43,79,83, LeadForm.tsx:155,158,
+       app/zasady/page.tsx:20, ads/_shared/ad.css, ads/a-uspora/ad.html (.gap,
+       .bar .loss/.keep), ads/b-zvedavost/ad.html (.no/.yes).
+     - .num = tabular-nums; tickery v Hero.tsx (B), PairCard.tsx (hlavička),
+       PairTabs.tsx (záložky), FeeReceipt.tsx (řádky kind === "fund") a .ticker
+       v reklamě B.
+     - DoneBanner.tsx s SVG ikonou a .done-icon; používá ho ThankYou.tsx i
+       ConfirmEmail.tsx; role="status" je v ThankYou, zůstane.
+     - FullComparison.tsx = 5 karet pod sebou; rendruje se v Calculator,
+       LeadForm a /potvrzeni. PairTabs má pevně grid-cols-3.
+     - StickyCta.tsx vrací null (testy s toHaveCount(0)), OpenSourceOnJump.tsx
+       scrolluje hned v requestAnimationFrame, Landing.tsx má sekce pro
+       data-reveal, Footer je mimo <main> (atribut dostane přímo).
+     - E2E: testy „5 dvojic“ (landing.spec.ts:100,225,299,310) a „omezení
+       pohybu“ (:416) existují; scripts/screens.mjs zadržuje odeslání,
+       scripts/test-server.mjs existuje.
+
+     Rozdíly a řešení
+
+     1. Název souboru plánu je docs/plany/krok8c.md (ne krok-8c.md) a je
+        necommitnutý → přidám ho do prvního commitu (barvy).
+     2. Skript vitals.mjs z 8b už neexistuje (scratchpad minulé session je
+        prázdný) → napíšu ho znovu podle metodiky v README (prod build s
+        TEST_ENV přes scripts/test-server.mjs, 375 × 812, síť 150 ms / 1,6 Mb/s,
+        CPU 4×, medián z 5, PerformanceObserver, cookie lišta zobrazená) +
+        průchod se scrollem. Uložím ho do scripts/vitals.mjs, aby šel měření
+        zopakovat (dosud chyběl v repu; README na něj odkáže).
+     3. Číslice v reklamách plán výslovně řeší jen u .ticker. Pro konzistenci se
+        stránkou dám do ads/_shared/ad.css totéž: salt na body, .num
+        proporcionální, .ticker tabulkové (nula v tickeru přeškrtnutá). Projde
+        přes lib/ads.test.ts a vizuální kontrolu PNG.
+     4. Reklama B symboly zaškrtávátek už dnes nemá (.tick je jen text) → mění
+        se jen barvy/tloušťka podle plánu.
+     5. Pruhy v účtence: dnes rozlišeny kind === "fund" (zelená) vs. ostatní
+        (červená). Plán: plný ink jen pro řádek esma_active_equity_fund, obrys
+        pro všechny ostatní (fondy i ESMA ETF) → podmínka podle row.id, ne kind.
+
+     Kritické soubory
+
+     app/globals.css,
+     components/{Hero,FeeReceipt,LeadForm,PairCard,PairTabs,FullComparison,DoneB
+     anner,ConfirmEmail,StickyCta,OpenSourceOnJump,Landing,Footer}.tsx, nový
+     components/Reveal.tsx, app/zasady/page.tsx, ads/_shared/ad.css,
+     ads/*/ad.html + PNG, e2e/landing.spec.ts, nové
+     scripts/record-animations.mjs a scripts/vitals.mjs, README.md,
+     docs/ai-chyby.md.
+
+     Ověření
+
+     npm run lint, npm test, npm run e2e (375 px, build s TEST_ENV), render celé
+     abecedy s/bez salt (pixelové porovnání – při jiné změně než nula se
+     zastavím), vizuální kontrola PNG reklam a docs/screens/po/, CLS 0 a LCP ≤
+     696/708 ms. Servery jen s TEST_ENV. Commity česky po krocích dle plánu, bez
+     push; na konci připomenu /export.
+
+● Plán je schválený. Začínám krokem 1: barvy na stránce.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● No python; I'll use Edit/sed.
+
+● Bash(sed -i 's/border-loss/border-error/g; s/text-loss/text-error/g'
+      components/LeadForm.tsx app/zasady/page.tsx && sed -i 's/ tracking-tight
+      text-loss" data-testid=…)
+  ⎿  Updated app/globals.css (+1 -2)
+      14    --color-ink-muted: #c9c2b3;
+      15    --color-muted: #5e5a52;
+      16    --color-rule: #c9c2b3;
+      17 -  --color-loss: #b03a0a;                                       
+      18 -  --color-keep: #2f6b4f;                                       
+      17 +  --color-error: #b03a0a;                                      
+      18    --color-action: #1d4ed8;
+      19    --color-action-press: #1e40af;
+      20  
+  ⎿  Updated app/zasady/page.tsx (+1 -1)
+      17          ← Zpět na srovnání
+      18        </Link>
+      19        <h1 className="mt-4 font-display text-[34px] leading-[38p
+          x] font-semibold">Zásady ochrany osobních údajů</h1>
+      20 -      <p className="mt-4 border-2 border-loss p-3 font-semibold
+         - text-loss">                                                   
+      20 +      <p className="mt-4 border-2 border-error p-3 font-semibol
+         +d text-error">                                                 
+      21          Koncept – plné znění doplní provozovatel a před spuštěn
+          ím projde právní kontrolou.
+      22        </p>
+      23  
+  ⎿  Updated components/FeeReceipt.tsx (+2 -2)
+      40              Rozdíl {formatPercent(etf.ter)} vs. {formatPercent(
+          active.ter)} za {years}&nbsp;let
+      41            </p>
+      42            {/* Animované číslo čtečka nečte (hlásila by každý sn
+          ímek), dostane jen výslednou hodnotu */}
+      43 -          <p aria-hidden className="num text-[40px] leading-[44
+         -px] font-bold tracking-tight text-loss" data-testid="calc-gap">
+      43 +          <p aria-hidden className="num text-[40px] leading-[44
+         +px] font-bold tracking-tight" data-testid="calc-gap">          
+      44              {formatKc(gap)}
+      45            </p>
+      46            <p className="sr-only">{formatKc(result.esmaGap)}</p>
+     ...
+      76                      <span className={row.kind === "fund" ? "num
+           font-semibold" : ""}>{row.label}</span>{" "}
+      77                      <span className="num whitespace-nowrap text
+          -muted">{formatPercent(row.ter)}</span>
+      78                    </span>
+      79 -                  <span className="num font-semibold whitespace
+         --nowrap text-loss">−{formatKc(row.cost)}</span>                
+      79 +                  <span className="num font-semibold whitespace
+         +-nowrap">−{formatKc(row.cost)}</span>                          
+      80                  </div>
+      81                  <div aria-hidden className="mt-1.5 h-1.5 bg-pap
+          er">
+      82                    <div
+  ⎿  Updated components/Hero.tsx (+1 -1)
+      28          Kolik dělá rozdíl v&nbsp;poplatcích fondů za 20&nbsp;le
+          t?
+      29        </h1>
+      30        <p className="mt-5 text-[15px] leading-6">I bez jakéhokol
+          i výnosu:</p>
+      31 -      <p className="num text-[56px] leading-[56px] font-bold tr
+         -acking-tight text-loss" data-testid="hero-gap">                
+      31 +      <p className="num text-[56px] leading-[56px] font-bold tr
+         +acking-tight" data-testid="hero-gap">                          
+      32          {formatKc(gap)}
+      33        </p>
+      34        <p className="mt-1 text-[15px] leading-6">
+  ⎿  Updated components/LeadForm.tsx (+2 -2)
+      152          }}
+      153          aria-invalid={error ? true : undefined}
+      154          aria-describedby={error ? ids.error : undefined}
+      155 -        className="mt-2 h-12 w-full rounded-sm border border-i
+          -nk bg-card px-3 text-lg aria-invalid:border-2 aria-invalid:bor
+          -der-loss"                                                     
+      155 +        className="mt-2 h-12 w-full rounded-sm border border-i
+          +nk bg-card px-3 text-lg aria-invalid:border-2 aria-invalid:bor
+          +der-error"                                                    
+      156        />
+      157        {error && (
+      158 -        <p id={ids.error} role="alert" className="mt-2 text-[1
+          -5px] font-semibold text-loss">                                
+      158 +        <p id={ids.error} role="alert" className="mt-2 text-[1
+          +5px] font-semibold text-error">                               
+      159            {error}
+      160          </p>
+      161        )}
+
+● Update(app/globals.css)
+  ⎿  Added 4 lines, removed 3 lines
+       1  @import "tailwindcss";
+       2  
+       3 -/* Směr „Výpis z účtu 2.0“: papír, inkoust a tři barvy, každá s
+         - jediným významem.                                             
+       3 +/* Směr „Výpis z účtu 2.0“: papír, inkoust a jediný výrazný akc
+         +ent.                                                           
+       4     - action (kobalt) jen pro primární tlačítka, aktivní stav př
+          epínačů a odkazy-výzvy
+       5 -   - loss jen pro „ztrátu“ (náklady), keep jen pro „levnější va
+         -riantu“                                                        
+       6 -   Kontrast (WCAG): ink na papíře 15,5:1, muted 6,0:1 (na kartě
+         - 6,5:1), loss 5,3:1, keep 5,5:1.                               
+       5 +   - error jen pro chybový stav (validace formuláře, varování n
+         +a /zasady), ne pro „ztrátu“.                                   
+       6 +     Částky nese ink, důraz velikost a tloušťka. Pruhy v účtenc
+         +e rozliší tvar (plný / obrys), ne barva.                       
+       7 +   Kontrast (WCAG): ink na papíře 15,5:1, muted 6,0:1 (na kartě
+         + 6,5:1), error 5,3:1.                                          
+       8     Papír na action 5,8:1 (text tlačítka), action na papíře 5,8:
+          1 (odkaz i hrana tlačítka, nutné 3:1),
+       9     action na kartě 6,4:1, action-press 7,6:1. ink-muted na ink 
+          10,0:1 (děkovací blok).
+      10     rule (#C9C2B3) má 1,5:1 – jen linky a oddělovače, nikdy text
+           na papíře. */
+
+● Update(components/FeeReceipt.tsx)
+  ⎿  Added 3 lines, removed 2 lines
+      78                    </span>
+      79                    <span className="num font-semibold whitespace
+          -nowrap">−{formatKc(row.cost)}</span>
+      80                  </div>
+      81 -                <div aria-hidden className="mt-1.5 h-1.5 bg-pap
+         -er">                                                           
+      81 +                {/* Dražší srovnání (průměrný aktivní fond) pln
+         +ý pruh, ostatní obrys: liší se tvarem, ne barvou */}           
+      82 +                <div aria-hidden className="mt-1.5 h-1.5">     
+      83                    <div
+      83 -                    className={row.kind === "fund" ? "h-full bg
+         --keep" : "h-full bg-loss"}                                     
+      84 +                    className={row.id === active.id ? "h-full b
+         +g-ink" : "h-full border-[1.5px] border-ink"}                   
+      85                      style={{ width: `${Math.max((row.cost / max
+          Cost) * 100, 0.8)}%` }}
+      86                    />
+      87                  </div>
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Krok 2: číslice. Nejdřív ověřím, že salt mění jen nulu.
+
+  Read 1 file, listed 2 directories, ran 3 shell commands (ctrl+o to expand)
+
+● Zatím ověřuji salt: s fontem z Google Fonts CSS se nula nemění. Zkusím soubor
+  písma, který stránka opravdu používá (z buildu next/font).
+
+  Searched for 1 pattern, read 1 file, listed 1 directory, ran 1 shell command (ctrl+o to expand)
+
+● Problém: salt v písmu, které stránka opravdu používá, nulu nemění (ani
+  proporcionální). Hledám, jaké funkce písmo má.
+
+  Listed 2 directories, ran 4 shell commands (ctrl+o to expand)
+
+● Hledám plnou verzi písma od autorů, jestli obyčejnou nulu (salt) obsahuje.
+
+  Read 1 file, ran 3 shell commands (ctrl+o to expand)
+
+● User answered Claude's questions:
+  ⎿  · Atkinson Hyperlegible Next nemá obyčejnou nulu. Co s číslicemi? → Velká
+     čísla ve Fraunces (Recommended)
+     · Mám mezitím pokračovat kroky 3–7 (razítko, přepínač, animace), které na
+     číslicích nezávisí? → Ano, pokračovat
+
+● Volba: velká čísla ve Fraunces, a mezitím pokračuji. Nejdřív se podívám, jak
+  vypadají číslice ve Fraunces.
+
+  Read 1 file, ran 2 shell commands (ctrl+o to expand)
+
+● Update(app/globals.css)
+  ⎿  Added 8 lines, removed 1 line
+      30    color: var(--color-ink);
+      31  }
+      32  
+      33 -/* Čísla vždy v tabulkových číslicích, aby se řádky účtenky ner
+         -ozskakovaly */                                                 
+      33 +/* Čísla v textu a tabulkách v tabulkových číslicích, aby se řá
+         +dky účtenky nerozskakovaly. Atkinson Hyperlegible              
+      34 +   Next má jen přeškrtnutou nulu (ověřeno renderem i u plného p
+         +ísma od autorů, salt/zero/ssXX ji nemění). */                  
+      35  .num {
+      36    font-variant-numeric: tabular-nums;
+      37  }
+      38  
+      39 +/* Samostatné velké číslo (hero A, rozdíl v účtence): Fraunces 
+         +jako nadpisy, obyčejná nula, proporcionální                    
+      40 +   lining číslice. Použít s font-display (pevná optická velikos
+         +t). */                                                         
+      41 +.figure {                                                      
+      42 +  font-variant-numeric: lining-nums proportional-nums;         
+      43 +}                                                              
+      44 +                                                               
+      45  /* Pole aspoň 16 px: menší písmo v poli iOS při focusu přiblíží
+           celou stránku. V base vrstvě, aby šlo pole
+      46     zvětšit utilitou (text-lg). Že žádné pole není menší, hlídá 
+          E2E test „375 px: … pole mají popisky“. */
+      47  @layer base {
+
+● Bash(sed -i 's/<p className="num text-\[56px\] leading-\[56px\] font-bold
+      tracking-tight" data-testid="hero-gap">/<p className="figure font-display
+      text-[56px] leadi…)
+  ⎿  Updated components/Hero.tsx (+1 -1)
+      28          Kolik dělá rozdíl v&nbsp;poplatcích fondů za 20&nbsp;le
+          t?
+      29        </h1>
+      30        <p className="mt-5 text-[15px] leading-6">I bez jakéhokol
+          i výnosu:</p>
+      31 -      <p className="num text-[56px] leading-[56px] font-bold tr
+         -acking-tight" data-testid="hero-gap">                          
+      31 +      <p className="figure font-display text-[56px] leading-[60
+         +px] font-semibold tracking-tight" data-testid="hero-gap">      
+      32          {formatKc(gap)}
+      33        </p>
+      34        <p className="mt-1 text-[15px] leading-6">
+
+● Update(components/Hero.tsx)  ⎿  Updated components/Hero.tsx (+1 -1)
+      28          Kolik dělá rozdíl v&nbsp;poplatcích fondů za 20&nbsp;le
+          t?
+      29        </h1>
+      30        <p className="mt-5 text-[15px] leading-6">I bez jakéhokol
+          i výnosu:</p>
+      31 -      <p className="figure font-display text-[56px] leading-[60
+         -px] font-semibold tracking-tight" data-testid="hero-gap">      
+      31 +      <p className="figure font-display text-[56px] leading-[56
+         +px] font-semibold tracking-tight" data-testid="hero-gap">      
+      32          {formatKc(gap)}
+      33        </p>
+      34        <p className="mt-1 text-[15px] leading-6">
+
+● Update(components/FeeReceipt.tsx)
+  ⎿  Added 10 lines, removed 3 lines
+      39            <p className="font-semibold">
+      40              Rozdíl {formatPercent(etf.ter)} vs. {formatPercent(
+          active.ter)} za {years}&nbsp;let
+      41            </p>
+      42 -          {/* Animované číslo čtečka nečte (hlásila by každý sn
+         -ímek), dostane jen výslednou hodnotu */}                       
+      43 -          <p aria-hidden className="num text-[40px] leading-[44
+         -px] font-bold tracking-tight" data-testid="calc-gap">          
+      44 -            {formatKc(gap)}                                    
+      42 +          {/* Animované číslo čtečka nečte (hlásila by každý sn
+         +ímek), dostane jen výslednou hodnotu.                          
+      43 +              Šířku drží neviditelná výsledná hodnota, animovan
+         +á leží přes ni: proporcionální číslice                         
+      44 +              by jinak měnily šířku v každém snímku, takto jen 
+         +jednou při změně výsledku. */}                                 
+      45 +          <p aria-hidden className="figure font-display text-[4
+         +0px] leading-[44px] font-semibold tracking-tight">             
+      46 +            <span className="relative inline-block">           
+      47 +              <span className="invisible whitespace-nowrap">{fo
+         +rmatKc(result.esmaGap)}</span>                                 
+      48 +              <span className="absolute inset-y-0 left-0 whites
+         +pace-nowrap" data-testid="calc-gap">                           
+      49 +                {formatKc(gap)}                                
+      50 +              </span>                                          
+      51 +            </span>                                            
+      52            </p>
+      53            <p className="sr-only">{formatKc(result.esmaGap)}</p>
+      54            <p className="fine mt-1">
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Upravuji E2E test pro pevnou šířku čísla v účtence.
+
+● Update(e2e/landing.spec.ts)
+  ⎿  Added 21 lines
+      413    await expect(page.locator("#kalkulacka .sr-only", { hasText:
+            values.at(-1)! })).toHaveCount(1);
+      414  });
+      415  
+      416 +test("šířka čísla v účtence se během animace nemění", async ({
+          + page }) => {                                                 
+      417 +  await page.goto("/");                                       
+      418 +  await declineCookies(page);                                 
+      419 +  const box = page.getByTestId("calc-gap").locator("..");     
+      420 +  await box.evaluate((el) => {                                
+      421 +    const widths = new Set<number>();                         
+      422 +    (window as unknown as { gapWidths: Set<number> }).gapWidth
+          +s = widths;                                                   
+      423 +    new MutationObserver(() => widths.add(el.getBoundingClient
+          +Rect().width)).observe(el, {                                  
+      424 +      characterData: true,                                    
+      425 +      childList: true,                                        
+      426 +      subtree: true,                                          
+      427 +    });                                                       
+      428 +  });                                                         
+      429 +  await page.getByRole("button", { name: "5 000" }).click();  
+      430 +  await page.waitForTimeout(600);                             
+      431 +  const widths = await page.evaluate(() => [...(window as unkn
+          +own as { gapWidths: Set<number> }).gapWidths]);               
+      432 +  // jedna změna šířky (nový výsledek), ne v každém snímku    
+      433 +  expect(widths.length).toBeGreaterThan(0);                   
+      434 +  expect(widths.length).toBeLessThanOrEqual(2);               
+      435 +});                                                           
+      436 +                                                              
+      437  test("omezení pohybu: tlačítka bez přechodu, číslo skočí rovno
+           u, děkovací blok bez animace", async ({ page }) => {
+      438    await page.emulateMedia({ reducedMotion: "reduce" });
+      439    await page.goto("/");
+
+  Searched for 1 pattern, ran 2 shell commands (ctrl+o to expand)
+
+● Krok 3: razítko v děkovacím bloku.
+
+● Bash(cat > components/DoneBanner.tsx <<'EOF'
+      import type { ReactNode, Ref } from "react";…)
+  ⎿  Updated components/ConfirmEmail.tsx (+1 -0)
+      39        <div data-testid="confirmed" className="mt-4">
+      40          <DoneBanner
+      41            title={state === "confirmed" ? "Hotovo, adresa je pot
+          vrzená." : "Adresu už máte potvrzenou."}
+      42 +          stamp="POTVRZENO"                                    
+      43            level={1}
+      44            headingRef={heading}
+      45          >
+  ⎿  Updated components/DoneBanner.tsx (+9 -7)
+       2  
+       3  /**
+       4   * Potvrzení po odeslání (a po potvrzení e-mailu): jediný tmavý
+           blok na stránce, aby bylo hned jasné,
+       5 - * že se něco stalo. Nadpis přebírá focus (ref), obsah za e-mai
+         -l je pod blokem na papíře.                                     
+       5 + * že se něco stalo. Razítko je jen ozdoba (aria-hidden), stav 
+         +nese nadpis. Nadpis přebírá focus (ref),                       
+       6 + * obsah za e-mail je pod blokem na papíře.                    
+       7   */
+       8  export function DoneBanner({
+       9    title,
+      10 +  stamp = "ODESLÁNO",                                          
+      11    level = 2,
+      12    headingId,
+      13    headingRef,
+      14    children,
+      15  }: {
+      16    title: string;
+      17 +  stamp?: string;                                              
+      18    level?: 1 | 2;
+      19    headingId?: string;
+      20    headingRef: Ref<HTMLHeadingElement>;
+     ...
+      22  }) {
+      23    const Heading = level === 1 ? "h1" : "h2";
+      24    return (
+      22 -    <div className="done-banner rounded-md bg-ink px-5 pt-5 pb-
+         -6 text-paper">                                                 
+      23 -      <svg aria-hidden viewBox="0 0 40 40" className="done-icon
+         - size-10" fill="none" stroke="currentColor" strokeWidth="2.5"> 
+      24 -        <circle cx="20" cy="20" r="18" />                      
+      25 -        <path d="m12 20.5 5.5 5.5L28.5 15" strokeLinecap="round
+         -" strokeLinejoin="round" />                                    
+      26 -      </svg>                                                   
+      25 +    <div className="done-banner rounded-md bg-ink px-5 pt-6 pb-
+         +6 text-paper">                                                 
+      26 +      <span aria-hidden className="stamp">                     
+      27 +        {stamp}                                                
+      28 +      </span>                                                  
+      29        <Heading
+      30          ref={headingRef}
+      31          tabIndex={-1}
+      32          id={headingId}
+      31 -        className="mt-3 font-display text-[36px] leading-[40px]
+         - font-semibold outline-none"                                   
+      33 +        className="mt-4 font-display text-[36px] leading-[40px]
+         + font-semibold outline-none"                                   
+      34        >
+      35          {title}
+     … 1 more lines (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs = require("fs");…)
+  ⎿  Updated app/globals.css (+30 -4)
+      122    .done-banner {
+      123      animation: done-in 280ms ease-out both;
+      124    }
+      125 -  .done-icon {                                                
+      126 -    animation: done-icon 420ms 120ms cubic-bezier(0.34, 1.56, 
+          -0.64, 1) both;                                                
+      125 +  .stamp {                                                    
+      126 +    animation: stamp-in 320ms 120ms ease-out both;            
+      127    }
+      128  
+      129    .pulse-dot {
+     ...
+      137      transform: translateY(8px);
+      138    }
+      139  }
+      140 -@keyframes done-icon {                                        
+      140 +/* Otisk razítka: shora větší a průhledné, lehký překmit pod k
+          +onečnou velikost, pak klid */                                 
+      141 +@keyframes stamp-in {                                         
+      142    from {
+      143      opacity: 0;
+      143 -    transform: scale(0.6);                                    
+      144 +    transform: rotate(-6deg) scale(1.6);                      
+      145 +  }                                                           
+      146 +  70% {                                                       
+      147 +    opacity: 1;                                               
+      148 +    transform: rotate(-6deg) scale(0.94);                     
+      149 +  }                                                           
+      150 +  to {                                                        
+      151 +    transform: rotate(-6deg) scale(1);                        
+      152    }
+      153  }
+      154  @keyframes pulse-dot {
+     ...
+      157    }
+      158  }
+      159  
+      160 +/* Razítko v děkovacím bloku (ODESLÁNO / POTVRZENO): světlý ob
+          +rys na tmavém bloku, druhá linka přes outline                 
+      161 +   jako dvojitá čára účtenky. Jen ozdoba, stav nese nadpis. */
+      162 +.stamp {                                                      
+      163 +  display: inline-block;                                      
+      164 +  padding: 4px 12px;                                          
+      165 +  border: 2.5px solid var(--color-paper);                     
+      166 +  border-radius: 2px;                                         
+     … 14 more lines (ctrl+o to expand)
+
+● Bash(sed -i '/^  transform-origin: left center;$/d' app/globals.css && node -
+      <<'EOF'
+      const fs = require("fs");…)
+  ⎿  Updated app/globals.css (+0 -1)
+      172    line-height: 20px;
+      173    text-transform: uppercase;
+      174    transform: rotate(-6deg);
+      175 -  transform-origin: left center;                              
+      175  }
+      176  
+      177  /* Stav načítání: bod vedle textu („Ukládáme adresu…“). Bez an
+           imace zůstane plný bod a text. */
+  ⎿  Updated e2e/landing.spec.ts (+2 -1)
+      434    expect(widths.length).toBeLessThanOrEqual(2);
+      435  });
+      436  
+      437 -test("omezení pohybu: tlačítka bez přechodu, číslo skočí rovno
+          -u, děkovací blok bez animace", async ({ page }) => {          
+      437 +test("omezení pohybu: tlačítka bez přechodu, číslo skočí rovno
+          +u, děkovací blok i razítko bez animace", async ({ page }) => {
+      438    await page.emulateMedia({ reducedMotion: "reduce" });
+      439    await page.goto("/");
+      440    await declineCookies(page);
+     ...
+      449    await inline.getByRole("button", { name: "Poslat mi srovnání
+           " }).click();
+      450    const banner = page.getByTestId("thank-you").locator(".done-
+           banner");
+      451    expect(await banner.evaluate((el) => getComputedStyle(el).an
+           imationName)).toBe("none");
+      452 +  expect(await banner.locator(".stamp").evaluate((el) => getCo
+          +mputedStyle(el).animationName)).toBe("none");                 
+      453  });
+      454  
+      455  test("CTA v patičce: před výsledkem kalkulačka, po výsledku fo
+           rmulář, po odeslání nic; s lištou se nepřekrývá", async ({ pag
+           e }) => {
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● Krok 4: plné srovnání s přepínačem pěti záložek.
+
+● Bash(node - <<'EOF'
+      const fs = require("fs");…)
+  ⎿  Updated components/FullComparison.tsx (+18 -5)
+       1  import { PairCard } from "@/components/PairCard";
+       2 +import { PairTabs } from "@/components/PairTabs";              
+       3  import { fundPairs } from "@/lib/etfs";
+       4  
+       4 -/** Všech 5 dvojic se všemi poli – obsah za e-mail. */         
+       5 +/**                                                            
+       6 + * Všech 5 dvojic se všemi poli – obsah za e-mail. Přepínač jak
+         +o v ukázce srovnání, výchozí VOO.                              
+       7 + * Všechny karty jsou v HTML (vykreslené na serveru), přepínač 
+         +jen skrývá.                                                    
+       8 + */                                                            
+       9  export function FullComparison() {
+      10 +  const pairs = fundPairs();                                   
+      11    return (
+       7 -    <>                                                         
+       8 -      {fundPairs().map((pair) => (                             
+       9 -        <PairCard key={pair.us.id} pair={pair} full />         
+      12 +    <PairTabs                                                  
+      13 +      label="Fond z NYSE, plné srovnání"                       
+      14 +      tabs={pairs.map((p) => ({ id: p.us.id, label: p.us.ticker
+         +.value }))}                                                    
+      15 +      panels={pairs.map((p) => (                               
+      16 +        <PairCard key={p.us.id} pair={p} full />               
+      17        ))}
+      11 -    </>                                                        
+      18 +      initial={Math.max(                                       
+      19 +        pairs.findIndex((p) => p.us.id === "VOO"),             
+      20 +        0,                                                     
+      21 +      )}                                                       
+      22 +      columns={5}                                              
+      23 +      panelClassName="rounded-sm bg-card p-4"                  
+      24 +    />                                                         
+      25    );
+      26  }
+  ⎿  Updated components/PairTabs.tsx (+6 -2)
+      11    tabs,
+      12    panels,
+      13    initial,
+      14 +  columns = 3,                                                 
+      15 +  panelClassName = "",                                         
+      16  }: {
+      17    label: string;
+      18    tabs: { id: string; label: string }[];
+      19    panels: ReactNode[];
+      20    initial: number;
+      21 +  columns?: 3 | 5;                                             
+      22 +  panelClassName?: string;                                     
+      23  }) {
+      24    const [selected, setSelected] = useState(initial);
+      25    const refs = useRef<(HTMLButtonElement | null)[]>([]);
+     ...
+      45  
+      46    return (
+      47      <>
+      44 -      <div role="tablist" aria-label={label} onKeyDown={onKeyDo
+         -wn} className="grid grid-cols-3 gap-2">                        
+      48 +      <div role="tablist" aria-label={label} onKeyDown={onKeyDo
+         +wn} className={`grid gap-2 ${columns === 5 ? "grid-cols-5" : "g
+         +rid-cols-3"}`}>                                                
+      49          {tabs.map((tab, i) => (
+      50            <button
+      51              key={tab.id}
+     ...
+      73            aria-labelledby={`${base}-tab-${tab.id}`}
+      74            tabIndex={0}
+      75            hidden={i !== selected}
+      72 -          className="mt-4 outline-offset-4 focus-visible:outlin
+         -e-2"                                                           
+      76 +          className={`mt-4 outline-offset-4 focus-visible:outli
+         +ne-2 ${panelClassName}`}                                       
+      77          >
+      78            {panels[i]}
+      79          </div>
+
+● Bash(node - <<'EOF'
+      const fs = require("fs");…)
+  ⎿  Updated components/FullComparison.tsx (+15 -13)
+       9  export function FullComparison() {
+      10    const pairs = fundPairs();
+      11    return (
+      12 -    <PairTabs                                                  
+      13 -      label="Fond z NYSE, plné srovnání"                       
+      14 -      tabs={pairs.map((p) => ({ id: p.us.id, label: p.us.ticker
+         -.value }))}                                                    
+      15 -      panels={pairs.map((p) => (                               
+      16 -        <PairCard key={p.us.id} pair={p} full />               
+      17 -      ))}                                                      
+      18 -      initial={Math.max(                                       
+      19 -        pairs.findIndex((p) => p.us.id === "VOO"),             
+      20 -        0,                                                     
+      21 -      )}                                                       
+      22 -      columns={5}                                              
+      23 -      panelClassName="rounded-sm bg-card p-4"                  
+      24 -    />                                                         
+      12 +    <div>                                                      
+      13 +      <PairTabs                                                
+      14 +        label="Fond z NYSE, plné srovnání"                     
+      15 +        tabs={pairs.map((p) => ({ id: p.us.id, label: p.us.tick
+         +er.value }))}                                                  
+      16 +        panels={pairs.map((p) => (                             
+      17 +          <PairCard key={p.us.id} pair={p} full />             
+      18 +        ))}                                                    
+      19 +        initial={Math.max(                                     
+      20 +          pairs.findIndex((p) => p.us.id === "VOO"),           
+      21 +          0,                                                   
+      22 +        )}                                                     
+      23 +        columns={5}                                            
+      24 +        panelClassName="rounded-sm bg-card p-4"                
+      25 +      />                                                       
+      26 +    </div>                                                     
+      27    );
+      28  }
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs = require("fs");…)
+  ⎿  Updated e2e/landing.spec.ts (+11 -3)
+      1 -import { expect, type Page, test } from "@playwright/test";     
+      1 +import { expect, type Locator, type Page, test } from "@playwrig
+        +ht/test";                                                       
+      2  
+      3  const events = (page: Page) =>
+      4    page.evaluate(() => (window.dataLayer ?? []).map((e) => e.even
+         t as string));
+     ...
+       9  const declineCookies = (page: Page) =>
+      10    page.getByTestId("cookie-banner").getByRole("button", { name:
+           "Odmítnout" }).click();
+      11  
+      12 +/** Plné srovnání: 5 dvojic v HTML, přepínač s 5 záložkami, vid
+         +ět je právě jedna (VOO). */                                    
+      13 +async function expectFullComparison(scope: Locator) {          
+      14 +  await expect(scope.getByTestId("pair")).toHaveCount(5);      
+      15 +  await expect(scope.getByRole("tab")).toHaveCount(5);         
+      16 +  await expect(scope.getByRole("tab", { selected: true })).toHa
+         +veText("VOO");                                                 
+      17 +  await expect(scope.getByRole("tabpanel")).toHaveCount(1);    
+      18 +}                                                              
+      19 +                                                               
+      20  /** Vyplní kalkulačku a počká na ustálený výsledek (calc_result
+          ). */
+      21  async function calcResult(page: Page, monthly = "3000") {
+      22    await page.getByLabel("Měsíčně investuji").fill(monthly);
+     ...
+      105  
+      106    const thanks = page.locator("#kalkulacka").getByTestId("than
+           k-you");
+      107    await expect(thanks).toBeVisible();
+      100 -  await expect(thanks.getByTestId("pair")).toHaveCount(5);    
+      108 +  await expectFullComparison(thanks);                         
+      109    await expect(page.locator("#formular").getByTestId("lead-don
+           e")).toBeVisible();
+      110    await expect(page.getByRole("textbox", { name: "E-mail" })).
+           toHaveCount(0);
+      111    await expect(page.getByTestId("thank-you")).toHaveCount(1);
+     ...
+      230    await page.getByRole("button", { name: "Zobrazit plné srovná
+           ní" }).click();
+      231    const thanks = page.getByTestId("thank-you");
+      232    await expect(thanks).toBeVisible();
+      225 -  await expect(thanks.getByTestId("pair")).toHaveCount(5);    
+      233 +  await expectFullComparison(thanks);                         
+      234    await expect(thanks).toContainText("ISIN");
+      235    // jen public_note – žádné interní poznámky z dat
+      236    await expect(thanks).not.toContainText(/tahák/i);
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Krok 5: příchod a odchod spodní lišty.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs = require("fs");…)
+  ⎿  Updated app/globals.css (+18 -0)
+      126      animation: stamp-in 320ms 120ms ease-out both;
+      127    }
+      128  
+      129 +  /* Spodní lišta: příjezd zdola (@starting-style), odjezd pře
+          +s třídu leaving (StickyCta, usePresence) */                   
+      130 +  .sticky-bar {                                               
+      131 +    transition:                                               
+      132 +      transform 200ms ease-out,                               
+      133 +      opacity 200ms ease-out;                                 
+      134 +  }                                                           
+      135 +  @starting-style {                                           
+      136 +    .sticky-bar {                                             
+      137 +      transform: translateY(100%);                            
+      138 +      opacity: 0;                                             
+      139 +    }                                                         
+      140 +  }                                                           
+      141 +  .sticky-bar.leaving {                                       
+      142 +    transform: translateY(100%);                              
+      143 +    opacity: 0;                                               
+      144 +    transition-timing-function: ease-in;                      
+      145 +  }                                                           
+      146 +                                                              
+      147    .pulse-dot {
+      148      animation: pulse-dot 900ms ease-in-out infinite alternate;
+      149    }
+  ⎿  Updated components/StickyCta.tsx (+26 -5)
+       7  import { useBannerVisible } from "@/lib/use-consent";
+       8  import { useLeadFlow } from "@/lib/use-lead-flow";
+       9  
+      10 -const bar = "fixed inset-x-0 bottom-0 z-10 border-t border-rule
+         - bg-paper/95 px-4 py-3 backdrop-blur-sm";                      
+      10 +const bar = "sticky-bar fixed inset-x-0 bottom-0 z-10 border-t 
+         +border-rule bg-paper/95 px-4 py-3 backdrop-blur-sm";           
+      11 +const LEAVE_MS = 200;                                          
+      12  const cta = "btn-primary mx-auto h-12 w-full max-w-xl";
+      13  
+      14  /**
+     ...
+      17   *   → srovnání). Kalkulačka začíná už v první obrazovce, „jedn
+          ou viděná“ by lištu schovala hned po načtení,
+      18   * - po výsledku „Poslat mi srovnání“ → pole pro e-mail. Schová
+           se, když je formulář vidět, a po odeslání,
+      19   * - nikdy současně s toutéž výzvou v patičce (FooterCta).
+      20 + * Příchod animuje CSS (@starting-style), odchod usePresence: l
+         +išta zůstane 200 ms v DOM jako inert                           
+      21 + * s posledním krokem. S omezením pohybu se odpojí hned.       
+      22   */
+      23  export function StickyCta() {
+      24    const [heroOut, setHeroOut] = useState(false);
+     ...
+      66      return () => observer.disconnect();
+      67    }, [flow.calcDone, flow.activeForm]);
+      68  
+      66 -  if (bannerVisible || footerInView || !step) return null;     
+      67 -  if (step === "form" ? formVisible : !heroOut || calcInView) r
+         -eturn null;                                                    
+      69 +  const hidden =                                               
+      70 +    bannerVisible || footerInView || !step || (step === "form" 
+         +? formVisible : !heroOut || calcInView);                       
+      71 +  const presence = usePresence(hidden ? null : step, LEAVE_MS);
+      72 +  if (!presence) return null;                                  
+      73    return (
+      69 -    <div className={bar} data-testid="sticky-cta">             
+      70 -      <NextStepCta step={step} cta="sticky" className={cta} /> 
+      74 +    <div className={presence.leaving ? `${bar} leaving` : bar} 
+         +inert={presence.leaving} data-testid="sticky-cta">             
+      75 +      <NextStepCta step={presence.value} cta="sticky" className
+         +={cta} />                                                      
+      76      </div>
+      77    );
+      78  }
+      79 +                                                               
+      80 +/** Drží poslední hodnotu ještě `ms` po tom, co zmizí (animace 
+         +odchodu). S omezením pohybu ji pustí hned. */                  
+      81 +function usePresence<T>(value: T | null, ms: number): { value: 
+         +T; leaving: boolean } | null {                                 
+      82 +  const [kept, setKept] = useState(value);                     
+      83 +  if (value !== null && value !== kept) setKept(value);        
+      84 +                                                               
+     … 10 more lines (ctrl+o to expand)
+
+● Update(e2e/landing.spec.ts)
+  ⎿  Added 24 lines
+      394    await expect(sticky).toHaveCount(0);
+      395  });
+      396  
+      397 +/** Posun kus pod začátek sekce, aby hero ani kalkulačka nebyl
+          +y vidět (lišta nabídne kalkulačku). */                        
+      398 +const scrollPast = (page: Page, id: string) =>                
+      399 +  page.locator(`#${id}`).evaluate((el) => window.scrollTo({ to
+          +p: el.getBoundingClientRect().top + window.scrollY + 200, beha
+          +vior: "instant" }));                                          
+      400 +                                                              
+      401 +test("lišta při odchodu zůstane chvíli v DOM jako inert, pak z
+          +mizí", async ({ page }) => {                                  
+      402 +  await page.goto("/");                                       
+      403 +  await declineCookies(page);                                 
+      404 +  await scrollPast(page, "srovnani");                         
+      405 +  const sticky = page.getByTestId("sticky-cta");              
+      406 +  await expect(sticky).toBeVisible();                         
+      407 +  await expect(sticky).not.toHaveAttribute("inert");          
+      408 +  // zaznamenat, jestli lišta před odpojením dostala inert (ok
+          +no 200 ms je na polling krátké)                               
+      409 +  await page.evaluate(() => {                                 
+      410 +    const w = window as unknown as { stickyInert: boolean };  
+      411 +    w.stickyInert = false;                                    
+      412 +    new MutationObserver(() => {                              
+      413 +      if (document.querySelector('[data-testid="sticky-cta"][i
+          +nert]')) w.stickyInert = true;                                
+      414 +    }).observe(document.body, { attributes: true, subtree: tru
+          +e, childList: true });                                        
+      415 +  });                                                         
+      416 +  await page.evaluate(() => window.scrollTo({ top: 0, behavior
+          +: "instant" }));                                              
+      417 +  await expect(sticky).toHaveCount(0);                        
+      418 +  expect(await page.evaluate(() => (window as unknown as { sti
+          +ckyInert: boolean }).stickyInert)).toBe(true);                
+      419 +});                                                           
+      420 +                                                              
+      421  /** Hodnoty, které číslo v účtence projde po klepnutí na předv
+           olbu 5 000 Kč (mezistavy animace). */
+      422  async function gapValuesAfterPreset(page: Page) {
+      423    const gap = page.getByTestId("calc-gap");
+
+● Update(e2e/landing.spec.ts)
+  ⎿  Added 6 lines
+      473    const cta = page.getByRole("link", { name: "Spočítat pro mě"
+            });
+      474    expect(await cta.evaluate((el) => getComputedStyle(el).trans
+           itionDuration)).toBe("0s");
+      475  
+      476 +  await scrollPast(page, "srovnani");                         
+      477 +  const sticky = page.getByTestId("sticky-cta");              
+      478 +  await expect(sticky).toBeVisible();                         
+      479 +  expect(await sticky.evaluate((el) => getComputedStyle(el).tr
+          +ansitionDuration)).toBe("0s");                                
+      480 +  await page.evaluate(() => window.scrollTo({ top: 0, behavior
+          +: "instant" }));                                              
+      481 +                                                              
+      482    expect(await gapValuesAfterPreset(page)).toHaveLength(1);
+      483  
+      484    await expect.poll(() => events(page)).toContain("calc_result
+           ");
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Bash(sed -i 's/omezení pohybu: tlačítka bez přechodu, číslo skočí rovnou,
+      děkovací blok i razítko bez animace/omezení pohybu: tlačítka a lišta bez
+      přechodu, číslo sk…)
+  ⎿  Updated e2e/landing.spec.ts (+1 -1)
+      466    expect(widths.length).toBeLessThanOrEqual(2);
+      467  });
+      468  
+      469 -test("omezení pohybu: tlačítka bez přechodu, číslo skočí rovno
+          -u, děkovací blok i razítko bez animace", async ({ page }) => {
+      469 +test("omezení pohybu: tlačítka a lišta bez přechodu, číslo sko
+          +čí rovnou, děkovací blok i razítko bez animace", async ({ page
+          + }) => {                                                      
+      470    await page.emulateMedia({ reducedMotion: "reduce" });
+      471    await page.goto("/");
+      472    await declineCookies(page);
+
+● Krok 6: animace sekcí při posunu a plynulé rozbalování details.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Bash(sed -i 's|<section id="srovnani" aria-labelledby="srovnani-h"|<section
+      id="srovnani" data-reveal aria-labelledby="srovnani-h"|'
+      components/Comparison.tsx && sed…)
+  ⎿  Updated app/globals.css (+33 -0)
+      144      transition-timing-function: ease-in;
+      145    }
+      146  
+      147 +  /* Sekce při posunu (Reveal.tsx přidá .reveal jen sekcím pod
+          + obrazovkou, .is-in při příchodu) */                          
+      148 +  .reveal {                                                   
+      149 +    opacity: 0;                                               
+      150 +    transform: translateY(12px);                              
+      151 +  }                                                           
+      152 +  .reveal.is-in {                                             
+      153 +    opacity: 1;                                               
+      154 +    transform: none;                                          
+      155 +    transition:                                               
+      156 +      opacity 400ms ease-out,                                 
+      157 +      transform 400ms ease-out;                               
+      158 +  }                                                           
+      159 +                                                              
+      160    .pulse-dot {
+      161      animation: pulse-dot 900ms ease-in-out infinite alternate;
+      162    }
+      163  }
+      164  
+      165 +/* Plynulé rozbalení <details> (zdroje, metodika). Kde interpo
+          +late-size chybí (Safari, Firefox), otevře se                  
+      166 +   bez animace. OpenSourceOnJump proto posouvá na zdroj až po 
+          +přechodu. */                                                  
+      167 +@media (prefers-reduced-motion: no-preference) {              
+      168 +  @supports (interpolate-size: allow-keywords) {              
+      169 +    details {                                                 
+      170 +      interpolate-size: allow-keywords;                       
+      171 +    }                                                         
+      172 +    details::details-content {                                
+      173 +      block-size: 0;                                          
+      174 +      overflow: hidden;                                       
+      175 +      transition:                                             
+      176 +        block-size 200ms ease-out,                            
+      177 +        content-visibility 200ms allow-discrete;              
+      178 +    }                                                         
+      179 +    details[open]::details-content {                          
+      180 +      block-size: auto;                                       
+      181 +    }                                                         
+      182 +  }                                                           
+      183 +}                                                             
+     … 4 more lines (ctrl+o to expand)
+  ⎿  Updated components/Calculator.tsx (+1 -1)
+      56    const ids = { monthly: useId(), initial: useId(), years: useI
+          d(), ret: useId() };
+      57  
+      58    return (
+      59 -    <section id="kalkulacka" aria-labelledby="kalkulacka-h" cla
+         -ssName="scroll-mt-4 border-t border-rule px-4 py-12">          
+      59 +    <section id="kalkulacka" data-reveal aria-labelledby="kalku
+         +lacka-h" className="scroll-mt-4 border-t border-rule px-4 py-12
+         +">                                                             
+      60        <h2 id="kalkulacka-h" className="font-display text-[28px]
+           leading-9 font-semibold">
+      61          Kolik vás budou stát poplatky
+      62        </h2>
+  ⎿  Updated components/Comparison.tsx (+1 -1)
+      14      0,
+      15    );
+      16    return (
+      17 -    <section id="srovnani" aria-labelledby="srovnani-h" classNa
+         -me="scroll-mt-4 border-t border-rule px-4 py-12">              
+      17 +    <section id="srovnani" data-reveal aria-labelledby="srovnan
+         +i-h" className="scroll-mt-4 border-t border-rule px-4 py-12">  
+      18        <h2 id="srovnani-h" className="font-display text-[28px] l
+          eading-9 font-semibold">
+      19          Fondy z&nbsp;NYSE a&nbsp;jejich evropské varianty
+      20        </h2>
+  ⎿  Updated components/Footer.tsx (+1 -1)
+       6  /** `cta`: výzva k dalšímu kroku nad údaji o provozovateli, jen
+           na landing page */
+       7  export function Footer({ cta = false }: { cta?: boolean }) {
+       8    return (
+       9 -    <footer className="mx-auto w-full max-w-xl border-t-2 borde
+         -r-ink px-4 pt-8 pb-24 text-[13px] leading-5 text-muted">       
+       9 +    <footer data-reveal className="mx-auto w-full max-w-xl bord
+         +er-t-2 border-ink px-4 pt-8 pb-24 text-[13px] leading-5 text-mu
+         +ted">                                                          
+      10        {cta && <FooterCta />}
+      11        <p className="font-semibold text-ink">{OPERATOR.about}</p
+          >
+      12        <p>Autor: {OPERATOR.name}</p>
+  ⎿  Updated components/Landing.tsx (+2 -0)
+       6  import { LeadForm } from "@/components/LeadForm";
+       7  import { OpenSourceOnJump } from "@/components/OpenSourceOnJump
+          ";
+       8  import { PageView } from "@/components/PageView";
+       9 +import { Reveal } from "@/components/Reveal";                  
+      10  import { StickyCta } from "@/components/StickyCta";
+      11  import { Trust } from "@/components/Trust";
+      12  import { FEE_ROWS } from "@/lib/fee-rows";
+     ...
+      18        <main className="mx-auto w-full max-w-xl flex-1">
+      19          <PageView variant={variant} />
+      20          <OpenSourceOnJump />
+      21 +        <Reveal />                                             
+      22          <Hero variant={variant} />
+      23          <Calculator rows={FEE_ROWS} fullComparison={<FullCompar
+          ison />} />
+      24          <Comparison />
+  ⎿  … 4 more files changed
+● Bash(node - <<'EOF'
+      const fs = require("fs");…)
+  ⎿  Updated components/OpenSourceOnJump.tsx (+2 -2)
+      16        const target = document.getElementById(id);
+      17        const details = target?.closest("details");
+      18        if (!target || !details) return;
+      19 -      const wasOpen = details.open;                            
+      19        details.open = true;
+      21 -      const delay = wasOpen || matchMedia("(prefers-reduced-mot
+         -ion: reduce)").matches ? 0 : OPEN_MS;                          
+      20 +      // Chrome otevře details při skoku sám, takže i „už otevř
+         +ené“ může být teprve v přechodu                                
+      21 +      const delay = matchMedia("(prefers-reduced-motion: reduce
+         +)").matches ? 0 : OPEN_MS;                                     
+      22        setTimeout(() => target.scrollIntoView({ block: "center" 
+          }), delay);
+      23      }
+      24      function onClick(e: MouseEvent) {
+
+● Teď E2E testy pro reveal a details.
+
+● Update(e2e/landing.spec.ts)
+  ⎿  Added 37 lines
+      418    expect(await page.evaluate(() => (window as unknown as { sti
+           ckyInert: boolean }).stickyInert)).toBe(true);
+      419  });
+      420  
+      421 +const revealState = (page: Page) =>                           
+      422 +  page.locator("[data-reveal]").evaluateAll((els) =>          
+      423 +    els.map((el) => ({                                        
+      424 +      id: el.id || el.tagName,                                
+      425 +      reveal: el.classList.contains("reveal"),                
+      426 +      top: el.getBoundingClientRect().top,                    
+      427 +      opacity: getComputedStyle(el).opacity,                  
+      428 +    })),                                                      
+      429 +  );                                                          
+      430 +                                                              
+      431 +test("sekce se objeví při posunu: skryté jen ty pod obrazovkou
+          +, po příchodu vidět", async ({ page }) => {                   
+      432 +  await page.goto("/");                                       
+      433 +  await declineCookies(page);                                 
+      434 +  const state = await revealState(page);                      
+      435 +  expect(state).toHaveLength(5);                              
+      436 +  // co je vidět v první obrazovce (začátek kalkulačky), se ne
+          +skrývá                                                        
+      437 +  for (const s of state) expect(s.reveal).toBe(s.top >= 812); 
+      438 +  expect(state.filter((s) => s.reveal).length).toBeGreaterThan
+          +(0);                                                          
+      439 +                                                              
+      440 +  await page.evaluate(() => window.scrollTo({ top: document.bo
+          +dy.scrollHeight, behavior: "instant" }));                     
+      441 +  await expect(page.locator("footer")).toHaveClass(/is-in/);  
+      442 +  await expect.poll(async () => (await page.locator("footer").
+          +evaluate((el) => getComputedStyle(el).opacity))).toBe("1");   
+      443 +});                                                           
+      444 +                                                              
+      445 +test.describe("bez JavaScriptu", () => {                      
+      446 +  test.use({ javaScriptEnabled: false });                     
+      447 +  test("žádná sekce není skrytá", async ({ page }) => {       
+      448 +    await page.goto("/");                                     
+      449 +    const state = await revealState(page);                    
+      450 +    expect(state).toHaveLength(5);                            
+      451 +    for (const s of state) {                                  
+      452 +      expect(s.reveal).toBe(false);                           
+      453 +      expect(s.opacity).toBe("1");                            
+      454 +    }                                                         
+      455 +  });                                                         
+      456 +});                                                           
+      457 +                                                              
+      458  /** Hodnoty, které číslo v účtence projde po klepnutí na předv
+           olbu 5 000 Kč (mezistavy animace). */
+      459  async function gapValuesAfterPreset(page: Page) {
+      460    const gap = page.getByTestId("calc-gap");
+
+● Update(e2e/landing.spec.ts)
+  ⎿  Added 4 lines
+      514    const sticky = page.getByTestId("sticky-cta");
+      515    await expect(sticky).toBeVisible();
+      516    expect(await sticky.evaluate((el) => getComputedStyle(el).tr
+           ansitionDuration)).toBe("0s");
+      517 +  // sekce se neskrývají, details se otevřou bez přechodu     
+      518 +  expect((await revealState(page)).filter((s) => s.reveal)).to
+          +HaveLength(0);                                                
+      519 +  const details = page.locator("details").first();            
+      520 +  expect(await details.evaluate((el) => getComputedStyle(el, "
+          +::details-content").transitionDuration)).toBe("0s");          
+      521    await page.evaluate(() => window.scrollTo({ top: 0, behavior
+           : "instant" }));
+      522  
+      523    expect(await gapValuesAfterPreset(page)).toHaveLength(1);
+
+● Bash(node - <<'EOF'
+      const fs = require("fs");…)
+  ⎿  Updated e2e/landing.spec.ts (+3 -0)
+      440    await page.evaluate(() => window.scrollTo({ top: document.bo
+           dy.scrollHeight, behavior: "instant" }));
+      441    await expect(page.locator("footer")).toHaveClass(/is-in/);
+      442    await expect.poll(async () => (await page.locator("footer").
+           evaluate((el) => getComputedStyle(el).opacity))).toBe("1");
+      443 +  // details se rozbalují plynule (protějšek kontroly v testu 
+          +„omezení pohybu“)                                             
+      444 +  const details = page.locator("details").first();            
+      445 +  expect(await details.evaluate((el) => getComputedStyle(el, "
+          +::details-content").transitionDuration)).not.toBe("0s");      
+      446  });
+      447  
+      448  test.describe("bez JavaScriptu", () => {
+
+● All 41 E2E tests pass. Committing step 6.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Krok 7: reklamy.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs = require("fs");…)
+  ⎿  Updated ads/_shared/ad.css (+0 -2)
+       6    --ink: #16181d;
+       7    --muted: #5e5a52;
+       8    --rule: #c9c2b3;
+       9 -  --loss: #b03a0a;                                             
+      10 -  --keep: #2f6b4f;                                             
+       9    --action: #1d4ed8;
+      10    --display: "Fraunces", Georgia, serif;
+      11    --sans: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  ⎿  Updated ads/a-uspora/ad.html (+9 -8)
+       8  <link rel="stylesheet" href="../_shared/ad.css">
+       9  <title>Reklama A – úspora</title>
+      10  <style>
+      11 -  .gap { font-size: 186px; font-weight: 700; line-height: 1; le
+         -tter-spacing: -0.02em; color: var(--loss); margin-top: 40px; } 
+      11 +  /* Velké číslo jako na stránce (.figure): Fraunces s obyčejno
+         +u nulou, v inkoustu – důraz nese velikost */                   
+      12 +  .gap { font-family: var(--display); font-variation-settings: 
+         +"opsz" 48; font-variant-numeric: lining-nums proportional-nums;
+         + font-size: 186px; font-weight: 600; line-height: 1; letter-spa
+         +cing: -0.02em; margin-top: 40px; }                             
+      13    .cond { font-size: 34px; line-height: 1.35; margin-top: 16px;
+           }
+      14    .receipt { margin-top: 56px; }
+      15    .row { flex-wrap: wrap; font-size: 34px; padding-block: 22px;
+           }
+      15 -  /* Pruh = roční náklad ve stejném měřítku (1,2 % : 0,2 %). Ze
+         -lená jen pro levnější variantu. */                             
+      16 -  .bar { flex-basis: 100%; height: 22px; margin-top: 14px; back
+         -ground: var(--paper); }                                        
+      16 +  /* Pruh = roční náklad ve stejném měřítku (1,2 % : 0,2 %). Li
+         +ší se tvarem jako v účtence: dražší plný, levnější obrys. */   
+      17 +  .bar { flex-basis: 100%; height: 22px; margin-top: 14px; }   
+      18    .bar i { display: block; height: 100%; }
+      18 -  .bar .loss { background: var(--loss); }                      
+      19 -  .bar .keep { background: var(--keep); }                      
+      19 +  .bar .full { background: var(--ink); }                       
+      20 +  .bar .outline { border: 4px solid var(--ink); }              
+      21    .f-1x1 h1 { font-size: 58px; margin-top: 20px; }
+      22    .f-1x1 .gap { font-size: 164px; margin-top: 24px; }
+      23    .f-1x1 .cond { font-size: 30px; margin-top: 10px; }
+     ...
+      38  <main class="frame">
+      39    <p class="label">Srovnání ETF z NYSE · pro investory v ČR</p>
+      40    <h1>Kolik dělá rozdíl v poplatcích fondů za 20 let?</h1>
+      40 -  <p class="gap num">44&nbsp;200&nbsp;Kč</p>                   
+      41 +  <p class="gap">44&nbsp;200&nbsp;Kč</p>                       
+      42    <p class="cond">rozdíl při 2&nbsp;000&nbsp;Kč měsíčně za 20&n
+          bsp;let, výnos 0&nbsp;%</p>
+      43    <div class="receipt">
+      43 -    <div class="row"><span>Průměrný aktivní akciový fond v&nbsp
+         -;EU</span><span class="num">1,2&nbsp;% ročně</span><span class=
+         -"bar"><i class="loss" style="width: 100%"></i></span></div>    
+      44 -    <div class="row"><span>Průměrný akciový ETF v&nbsp;EU</span
+         -><span class="num">0,2&nbsp;% ročně</span><span class="bar"><i 
+         -class="keep" style="width: 16.67%"></i></span></div>           
+      44 +    <div class="row"><span>Průměrný aktivní akciový fond v&nbsp
+         +;EU</span><span class="num">1,2&nbsp;% ročně</span><span class=
+         +"bar"><i class="full" style="width: 100%"></i></span></div>    
+      45 +    <div class="row"><span>Průměrný akciový ETF v&nbsp;EU</span
+         +><span class="num">0,2&nbsp;% ročně</span><span class="bar"><i 
+         +class="outline" style="width: 16.67%"></i></span></div>        
+      46    </div>
+      47    <div class="spacer"></div>
+      48    <p class="invite">Spočítejte si to pro svou částku →</p>
+  ⎿  Updated ads/b-zvedavost/ad.html (+4 -3)
+      13    .receipt { margin-top: 72px; padding-block: calc(var(--tooth)
+           + 32px); }
+      14    .row { font-size: 46px; padding-block: 34px; }
+      15    .row .sub { font-size: 30px; margin-top: 8px; }
+      16 -  .tick { font-weight: 700; white-space: nowrap; }             
+      16 +  .tick { white-space: nowrap; }                               
+      17    /* Ticker ve stejném písmu jako text: Atkinson Hyperlegible m
+          á nulu s lomítkem, O se s ní neplete */
+      18    .ticker { font-weight: 700; }
+      19 -  .no { color: var(--loss); }                                  
+      20 -  .yes { color: var(--keep); }                                 
+      19 +  /* Bez barev a bez symbolů (Meta: žádná falešná zaškrtávátka)
+         +: „bez KID“ tlumeně, „s KID“ tučně v inkoustu */               
+      20 +  .no { color: var(--muted); font-weight: 400; }               
+      21 +  .yes { font-weight: 700; }                                   
+      22    .f-1x1 h1 { font-size: 96px; margin-top: 24px; }
+      23    .f-1x1 .lead { font-size: 38px; margin-top: 20px; }
+      24    .f-1x1 .receipt { margin-top: 44px; padding-block: calc(var(-
+          -tooth) + 20px); }
+
+● Bash(npm test 2>&1 | tail -5 && npm run render-ads 2>&1 | tail -5)
+  ⎿  6 files changed (binary, mode only or too large to show)
+
+  Read 2 files (ctrl+o to expand)
+
+● Obě reklamy 4:5 vypadají v pořádku. Kontroluji ještě A ve formátu 1:1 a 9:16.
+
+  Searched for 1 pattern, read 2 files, ran 1 shell command (ctrl+o to expand)
+
+● Krok 9: měření. Píšu znovu skript scripts/vitals.mjs (LCP a CLS podle metodiky
+  z README) a přidávám průchod se scrollem.
+
+● Write(scripts/vitals.mjs)
+  ⎿  Wrote 87 lines to scripts/vitals.mjs
+       1 // LCP a CLS na mobilu (README, Vizuální systém). Spuštění: node
+       2 // Produkční build s testovacími proměnnými (scripts/test-server
+         .mjs), nikdy s .env.local. 375 × 812,
+       3 // síť 150 ms / 1,6 Mb/s, CPU 4× zpomalené, studená cache v každ
+       4 // PerformanceObserver (ne Lighthouse).
+       5 // - načtení: cookie lišta zobrazená, LCP a CLS 3 s po načtení,
+         tránky (objevení sekcí, spodní lišta), CLS celé návštěvy.
+       7 import { chromium } from "@playwright/test";
+       8 import { startTestServer } from "./test-server.mjs";
+      10 const RUNS = Number(process.argv[2] ?? 5);
+     … +89 lines (ctrl+o to expand)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Zatím: LCP 720 ms u obou variant a CLS 0 i při scrollu. Cílem bylo LCP ≤
+  696/708 ms z 8b. Skript je ale napsaný znovu, takže stejným skriptem změřím i
+  commit 8b a porovnám to férově.
+
+  Ran 4 shell commands (ctrl+o to expand)
+
+● Stejným skriptem vychází 8b i 8c na 720 / 720 ms, takže zhoršení nevzniklo.
+  Rozdíl proti 696/708 ms je jen v novém skriptu. Uklízím pracovní kopii a
+  pokračuji snímky.
+
+● Bash(git worktree remove --force /tmp/claude-1000/-home-snnikol-work-etf-srovn
+      ani/d6194364-45c4-4638-9efd-c36b4abf0a5d/scratchpad/wt8b && git worktree
+      list && node s…)
+  ⎿  3 files changed (binary, mode only or too large to show)
+
+  Read 3 files (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs = require("fs");…)
+  ⎿  Updated components/FullComparison.tsx (+1 -1)
+      21            0,
+      22          )}
+      23          columns={5}
+      24 -        panelClassName="rounded-sm bg-card p-4"                
+      24 +        panelClassName="rounded-sm bg-card px-3 py-4"          
+      25        />
+      26      </div>
+      27    );
+  ⎿  Updated components/PairCard.tsx (+4 -3)
+       5  const DISTRIBUTION = { accumulating: "akumulační", distributing
+          : "distribuční" } as const;
+       6  
+       7  type Cell = { text: string; field: Sourced<unknown> | null };
+       8 -type Row = { label: string; us: Cell; ucits: Cell };           
+       8 +/** code: kód (ISIN), který se nesmí zalomit – menší písmo, cel
+         +ý na jednom řádku */                                           
+       9 +type Row = { label: string; us: Cell; ucits: Cell; code?: boole
+         +an };                                                          
+      10  
+      11  const cell = (field: Sourced<unknown>, text: string): Cell => (
+          { text, field });
+      12  
+     ...
+      44        ),
+      45      },
+      46      { label: "Registrace v ČR", us: { text: "–", field: null },
+           ucits: registration(ucits) },
+      46 -    { label: "ISIN", us: cell(us.isin, us.isin.value), ucits: c
+         -ell(ucits.isin, ucits.isin.value) },                           
+      47 +    { label: "ISIN", us: cell(us.isin, us.isin.value), ucits: c
+         +ell(ucits.isin, ucits.isin.value), code: true },               
+      48    ];
+      49  }
+      50  
+     ...
+       97                  const n = ref(c.field);
+       98                  return (
+       99                    <td key={i} className="py-1.5 pr-2 break-wor
+           ds">
+       99 -                    {c.text}                                  
+      100 +                    {row.code ? <span className="text-[13px] t
+          +racking-tight whitespace-nowrap">{c.text}</span> : c.text}    
+      101                      {n && (
+      102                        <sup>
+      103                          <a href={`#src-${id}-${n}`} className=
+           "ml-0.5 text-muted" aria-label={`zdroj ${n}`}>
+  ⎿  … 1 more file changed
+
+  Read 1 file, ran 1 shell command (ctrl+o to expand)
+
+● ISIN je teď na jednom řádku. Píšu skript na natočení animací.
+
+● Write(scripts/record-animations.mjs)
+  ⎿  Wrote 102 lines to scripts/record-animations.mjs
+       1 // Záznam animací kroku 8c na 375 × 812 → docs/screens/animace.w
+         ebm (README, Vizuální systém).
+       3 // Server si sestaví a spustí sám s testovacími proměnnými (scri
+         pts/test-server.mjs), nikdy s .env.local.
+       4 // Odeslání formuláře se zadrží v prohlížeči jako ve screens.mjs
+       5 // Playwright nahrává jen webm (GIF by potřeboval ffmpeg).
+       6 import { mkdtempSync, renameSync, rmSync } from "node:fs";
+       7 import { tmpdir } from "node:os";
+       9 import { chromium } from "@playwright/test";
+      10 import { startTestServer } from "./test-server.mjs";
+     … +110 lines (ctrl+o to expand)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● EXDEV (tmp on another device) – copy instead of rename.
+
+● Bash(sed -i 's/import { mkdtempSync, renameSync, rmSync } from
+      "node:fs";/import { copyFileSync, mkdtempSync, rmSync } from "node:fs";/;
+      s/  renameSync(await video.p…)
+  ⎿  Updated scripts/record-animations.mjs (+2 -2)
+      3  // Server si sestaví a spustí sám s testovacími proměnnými (scri
+         pts/test-server.mjs), nikdy s .env.local.
+      4  // Odeslání formuláře se zadrží v prohlížeči jako ve screens.mjs
+         , takže se nic neuloží ani neodešle.
+      5  // Playwright nahrává jen webm (GIF by potřeboval ffmpeg).
+      6 -import { mkdtempSync, renameSync, rmSync } from "node:fs";      
+      6 +import { copyFileSync, mkdtempSync, rmSync } from "node:fs";    
+      7  import { tmpdir } from "node:os";
+      8  import { join } from "node:path";
+      9  import { chromium } from "@playwright/test";
+     ...
+      92  
+      93    for (const route of held) await route.abort();
+      94    await context.close();
+      95 -  renameSync(await video.path(), OUT);                         
+      95 +  copyFileSync(await video.path(), OUT);                       
+      96  } finally {
+      97    await browser.close();
+      98    stopServer();
+  ⎿  … 1 more file changed
+● Záznam má 2,9 MB. Pro kontrolu z něj vytáhnu několik snímků přes prohlížeč.
+
+  Read 1 file, ran 1 shell command (ctrl+o to expand)
+
+● Záznam ukazuje, co má: objevení sekce, lištu „Poslat mi srovnání“, účtenku a
+  razítko. Teď README a docs/ai-chyby.md.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Bash(cat >> docs/ai-chyby.md <<'EOF'
+      | 2026-10-10 | V kroku 8b jsem napsala do README (rozhodnutí 52) i do
+      plánu 8c, že obyčejnou nulu v Atkinson Hyperlegible Next d…)
+  ⎿  Updated docs/ai-chyby.md (+3 -0)
+      28  | 2026-10-10 | Sticky lišta „Spočítat své poplatky“ (krok 3) zm
+          izela natrvalo, jakmile byla kalkulačka jednou vidět. Kalkulačk
+          a ale začíná už v první obrazovce (521 px od vrchu na 375 × 667
+           i 812), takže se lišta nikdy neukázala. Test hlídal jen to, že
+           se neukáže s cookie lištou, ne že se vůbec ukáže | Nový E2E te
+          st kontextové lišty (krok 8a) | Lišta se ukáže, když není vidět
+           hero ani kalkulačka (typicky hero B → srovnání). E2E test hlíd
+          á oba stavy lišty |
+      29  | 2026-10-10 | Hero A jsem v kroku 8b zvětšila (nadpis 38 px, č
+          íslo 56 px, rozbalovací pole se zdrojem pod číslem). Na 375 × 6
+          67 tím CTA zajelo o 30 px pod cookie lištu | E2E test „lišta ne
+          zakryje CTA v hero ani na 375 × 667“ | Zdroj přímo v podmínce u
+           čísla místo rozbalovacího pole, nadpis 36 px. Rezerva 5,5 px |
+      30  | 2026-10-10 | První verze reklamy A ve formátu 9:16 měla číslo
+           200 px širší než rám („Kč“ uříznuté u okraje) a obě reklamy 9:
+          16 zajely do spodní ochranné zóny Stories. `render-ads` to pust
+          il, protože hlídal jen `scrollHeight`: přetečení na šířku ani o
+          bsah v paddingu rámu nepozná | Vlastní kontrola PNG | Render ko
+          ntroluje přetečení na šířku i spodní hranu obsahu proti vnitřní
+          mu okraji rámu. Velikosti pro 9:16 zvlášť |
+      31 +| 2026-10-10 | V kroku 8b jsem napsala do README (rozhodnutí 52
+         +) i do plánu 8c, že obyčejnou nulu v Atkinson Hyperlegible Next
+         + dává funkce `salt` u proporcionálních číslic („ověřeno rendere
+         +m“). Neplatí: písmo obyčejnou nulu vůbec nemá. Skript, kterým j
+         +sem to „ověřila“, zůstal jen v dočasné složce session, takže ne
+         +šlo zpětně zjistit, co vlastně měřil | Pixelové porovnání každé
+         +ho znaku s a bez `salt` před implementací 8c (písmo z buildu, z
+         + Google Fonts i plné písmo z repozitáře autorů; vyzkoušeny i `z
+         +ero`, `ss01–20`, `cv01–20`). Nulu nemění nic | Zastavila jsem s
+         +e a zeptala člověka. Velká samostatná čísla (hero A, rozdíl v ú
+         +čtence, reklama A) jsou ve Fraunces s obyčejnou nulou, zbytek b
+         +eze změny. Rozhodnutí 52 přepsáno. Měřicí skripty patří do `scr
+         +ipts/`, ne do dočasné složky |                                 
+      32 +| 2026-10-10 | Skript na LCP a CLS z kroku 8b byl jen v dočasné
+         + složce session a ztratil se. Nový skript podle popisu v README
+         + naměřil u stejného kódu (8b) 720 / 720 ms místo 696 / 708 ms v
+         + README. Bez původního skriptu nejde říct, který detail nastave
+         +ní se liší | Kontrolní měření commitu 8b novým skriptem v samos
+         +tatném `git worktree` | `scripts/vitals.mjs` v repu. README por
+         +ovnává 8b a 8c stejným skriptem, starší čísla nechává jako tehd
+         +ejší měření |                                                  
+      33 +| 2026-10-10 | Plné srovnání v kartě s vnitřním okrajem (krok 8
+         +c) zúžilo sloupce a ISIN se zalomil uprostřed kódu („IE00BFMXXD
+         +5 / 4“). E2E testy to nepoznají, text je celý | Kontrola snímku
+         + děkovacího stavu | ISIN menším písmem bez zalomení (příznak `c
+         +ode` v řádku `PairCard`), panel s menším okrajem po stranách | 
+
+● Update(README.md)
+  ⎿  Added 21 lines
+      123  
+      124  Hero B měl před krokem 8b LCP 2,6 s. Příčinu jsme nezkoumali. 
+           Po změně písma je LCP u obou variant pod 0,75 s. Lokální měřen
+           í nenahrazuje Lighthouse na nasazené stránce (15. 10.).
+      125  
+      126 +### Krok 8c: klidnější barvy, velká čísla, razítko, animace   
+      127 +                                                              
+      128 +Podle designové revize 8b: kobaltová vedle oranžovočervené půs
+          +obila křiklavě a přeškrtnutá nula ve velkých částkách rušila. 
+          +Čísla, právní texty, eventy ani chování formulářů se nezměnily
+          +.                                                             
+      129 +                                                              
+      130 +- **Ztráta už není barva.** Oranžovočervená a zelená zmizely z
+          +e stránky i z reklam. Částky a rozdíly jsou v inkoustu (15,5 :
+          + 1), důraz nese velikost a tloušťka. Pruhy v rozpisu účtenky i
+          + v reklamě A rozlišuje tvar: dražší srovnání (průměrný aktivní
+          + fond) plný pruh, ostatní řádky obrys. V reklamě B je „bez KID
+          +“ tlumeně (muted, 6,5 : 1 na kartě) a „s KID“ tučně v inkoustu
+          +, bez symbolů podobných zaškrtávátkům. Kobalt je jediný výrazn
+          +ý akcent. Červená `#B03A0A` (5,3 : 1) zůstala jen pro chybový 
+          +stav: validaci formuláře a varování na `/zasady` (rozhodnutí 5
+          +3 a 54).                                                      
+      131 +- **Velká čísla ve Fraunces.** Atkinson Hyperlegible Next obyč
+          +ejnou nulu nemá (rozhodnutí 52). Samostatná velká čísla (hero 
+          +A, rozdíl v účtence, číslo v reklamě A) jsou proto v nadpisové
+          +m písmu Fraunces s obyčejnou nulou a proporcionálními číslicem
+          +i. Text, tabulky, data, tickery a ISIN zůstávají v Atkinson s 
+          +tabulkovými číslicemi. Animovaný rozdíl v účtence má pevnou ší
+          +řku podle výsledné hodnoty, takže se při animaci nerozskakuje 
+          +(E2E test).                                                   
+      132 +- **Razítko.** Děkovací blok má místo ikony razítko „ODESLÁNO“
+          + (na `/potvrzeni` „POTVRZENO“): dvojitý světlý obrys, pootočen
+          +í −6°, otisk 320 ms. Jen ozdoba (`aria-hidden`), stav nese nad
+          +pis.                                                          
+      133 +- **Plné srovnání s přepínačem.** Místo 5 karet pod sebou přep
+          +ínač SPY / VOO / IVV / VTI / VT (výchozí VOO) a jedna karta na
+          + světlém podkladu. Všech 5 dvojic zůstává v HTML.             
+      134 +- **Animace:** spodní lišta přijede a odjede (200 ms). Při odj
+          +ezdu je `inert`, nedá se na ni klepnout ani se na ni dostat ta
+          +bulátorem. Sekce pod první obrazovkou se při posunu objeví (op
+          +acity a posun o 12 px, 400 ms). Skrývá se až po načtení JavaSc
+          +riptu a jen to, co je celé pod obrazovkou, takže bez JS se nic
+          + neskryje. Rozbalovací pole se otevírají plynule v prohlížečíc
+          +h s `interpolate-size` (Chrome), jinde bez animace. Animuje se
+          + jen `transform`, `opacity` a výška obsahu `details` po kliknu
+          +tí, CLS zůstává 0. Při `prefers-reduced-motion` se nic z toho 
+          +nehýbe (E2E test).                                            
+      135 +                                                              
+      136 +**LCP a CLS po kroku 8c.** Skript z 8b se nezachoval (byl jen 
+          +v dočasné složce). Nový [`scripts/vitals.mjs`](scripts/vitals.
+          +mjs) má stejné nastavení jako výše a navíc průchod stránkou po
+          + 300 px až na konec (po odmítnutí cookies, tedy i se spodní li
+          +štou a objevováním sekcí). Pro férové srovnání jsme stejným sk
+          +riptem změřili znovu i commit 8b (`c0fcfcb`):                 
+      137 +                                                              
+      138 +| | LCP 8b → 8c (medián z 5) | CLS načtení | CLS průchod strán
+          +kou (nejhorší běh) |                                          
+      139 +| --- | --- | --- | --- |                                     
+      140 +| Hero A | 720 → 720 ms | 0 → 0 | 0 → 0 |                     
+      141 +| Hero B | 720 → 720 ms | 0 → 0 | 0 → 0 |                     
+      142 +                                                              
+      143 +Nový skript měří u stejného kódu o 12–24 ms víc než ten původn
+          +í (696 / 708 ms výše). Rozdíl je v měření, ne v kódu.         
+      144 +                                                              
+      145 +**Snímky po** ve stejné tabulce výše ([`docs/screens/po/`](doc
+          +s/screens/po/)) jsou po kroku 8c. **Záznam animací** na 375 × 
+          +812: [`docs/screens/animace.webm`](docs/screens/animace.webm) 
+          +(posun a objevení sekcí, spodní lišta, plynulé číslo, „Jak poč
+          +ítáme“, razítko; skript [`scripts/record-animations.mjs`](scri
+          +pts/record-animations.mjs)). GIF není: Playwright nahrává jen 
+          +webm a ffmpeg v systému nebyl.                                
+      146 +                                                              
+      147  ## Očekávaná konverze
+      148  
+      149  **Odhad: 4 % zobrazení stránky skončí leadem a 2 % potvrzeným 
+           leadem.** Rozpětí: 2–6 % leadů. Kromě benchmarku níže jsou vše
+           chna čísla **vlastní předpoklad**. Ověřená data pro tento typ 
+           stránky a publika v ČR nemáme. Odhad nahradí čísla z prvního t
+           ýdne kampaně.
+
+● Update(README.md)
+  ⎿  Added 3 lines, removed 1 line
+      463      - V hero A je zdroj (ESMA, data za rok 2024) přímo v podmí
+           nce u čísla. Rozbalovací pole by na 375 × 667 posunulo CTA pod
+            cookie lištu. Datum stažení je v „Jak počítáme“ u kalkulačky.
+      464  50. **Tlačítka cookie lišty zůstávají neutrální.** Kobaltová „
+           Povolit měření“ by byla dark pattern a porušila by pravidlo „o
+           dmítnout stejně snadno jako přijmout“. Neutrální jsou i tlačít
+           ka kvalifikační otázky a „Odhlásit se“, protože nejsou výzvou 
+           ke konverzi.
+      465  51. **Fraunces s pevnou optickou velikostí `opsz 48`.** Automa
+           tická optická velikost volila u 104 px kontrastnější řez než u
+            34 px. Pevná hodnota sjednotí nadpisy hero A, B a reklam.
+      466 -52. **Tabulkové číslice i za cenu přeškrtnuté nuly.** Atkinson
+          - Hyperlegible Next má ve výchozím stavu přeškrtnutou nulu. Oby
+          -čejnou nulu dává funkce `salt`, ale jen u proporcionálních čís
+          -lic: s `tnum` zůstává přeškrtnutá (ověřeno renderem). Zadání c
+          -hce tabulkové číslice, takže je necháváme. **K rozhodnutí desi
+          -gnera:** ve velkých částkách („44 200 Kč“) může přeškrtnutá nu
+          -la působit rušivě. Alternativa: proporcionální číslice se `sal
+          -t` jen pro samostatná velká čísla (hero, reklamy), tabulkové v
+          - tabulkách.                                                   
+      466 +52. **Velká čísla ve Fraunces, ostatní čísla v Atkinson s přeš
+          +krtnutou nulou** (krok 8c, rozhodl člověk). Ve velkých částkác
+          +h („44 200 Kč“) přeškrtnutá nula ruší. Atkinson Hyperlegible N
+          +ext ale obyčejnou nulu nemá. Tvrzení z 8b, že ji dává funkce `
+          +salt`, bylo chybné (`docs/ai-chyby.md`). Pixelově jsme porovna
+          +li písmo z buildu, z Google Fonts i plné písmo z repozitáře au
+          +torů a nulu nemění `salt`, `zero`, `ss01–20` ani `cv01–20`. Sa
+          +mostatná velká čísla (hero A, rozdíl v účtence, reklama A) jso
+          +u proto ve Fraunces: obyčejná nula, proporcionální číslice, st
+          +ejné písmo jako nadpisy, takže žádný soubor písma navíc. V tex
+          +tu a tabulkách zůstává Atkinson s tabulkovými číslicemi. U tic
+          +kerů a ISIN je přeškrtnutá nula výhoda: „VOO“ se nesplete s „V
+          +00“. Zamítnuto: číslice z třetího písma přes `unicode-range` (
+          +další soubor písma a dvě písma v jednom čísle).               
+      467 +53. **Červená zůstává jen pro chybu.** Validace formuláře a va
+          +rování na `/zasady` jsou chybový stav, ne „ztráta“. Bez barvy 
+          +by chyba ve formuláři byla méně nápadná, a to je přístupnostní
+          + riziko. Stejná hodnota `#B03A0A` (5,3 : 1), nový token `error
+          +`.                                                            
+      468 +54. **Tvar místo zelené.** Levnější a dražší řádek v účtence a
+          + v reklamě A rozlišuje plný pruh vs. obrys, ne barva. Rozdíl j
+          +e vidět i bez rozlišování barev a zelená by „levnější variantu
+          +“ vizuálně doporučovala (rozhodnutí 5). Plný pruh má jen průmě
+          +rný aktivní fond, tedy dražší strana srovnání.                
+      469  
+      470  ## Co chybí a proč
+      471  
+
+● Update(README.md)
+  ⎿  Added 3 lines
+      542  npx playwright install --with-deps chromium   # jednou
+      543  npm run e2e          # Playwright, mobil 375 px (ostré služby 
+           nevolá, viz e2e/test-env.mjs; port 3100 musí být volný)
+      544  node scripts/page-height.mjs   # výška stránky na 375 px (vlas
+           tní testovací server na portu 3101)
+      545 +node scripts/screens.mjs po    # snímky klíčových stavů do doc
+          +s/screens/po (port 3102)                                      
+      546 +node scripts/vitals.mjs        # LCP a CLS, medián z 5 (port 3
+          +103)                                                          
+      547 +node scripts/record-animations.mjs   # záznam animací do docs/
+          +screens/animace.webm (port 3104)                              
+      548  ```
+      549  
+      550  ### Nastavení služeb
+
+● Bash(sed -i 's/Oranžovočervená jen pro ztrátu (náklady), zelená jen pro
+      levnější variantu\. Tokeny/Oranžovočervená jen pro ztrátu (náklady),
+      zelená jen pro levnější…)
+  ⎿  Updated README.md (+2 -2)
+      82  
+      83  Podle designové revize. Čísla, právní texty, eventy ani chování
+           formulářů se nezměnily.
+      84  
+      85 -- **Barvy s jedním významem.** Kobaltová `#1D4ED8` jen pro prim
+         -ární tlačítka, aktivní stav přepínačů a odkazy-výzvy. Oranžovoč
+         -ervená jen pro ztrátu (náklady), zelená jen pro levnější varian
+         -tu. Tokeny a kontrasty jsou v [`app/globals.css`](app/globals.c
+         -ss).                                                           
+      85 +- **Barvy s jedním významem.** Kobaltová `#1D4ED8` jen pro prim
+         +ární tlačítka, aktivní stav přepínačů a odkazy-výzvy. Oranžovoč
+         +ervená jen pro ztrátu (náklady), zelená jen pro levnější varian
+         +tu (v kroku 8c zrušeno, viz níže). Tokeny a kontrasty jsou v [`
+         +app/globals.css`](app/globals.css).                            
+      86  - **Písma.** Text i čísla v Atkinson Hyperlegible Next (latin-e
+          xt, tabulkové číslice). Nula je přeškrtnutá, takže „VOO“ se nes
+          plete s „V00“. Nadpisy ve Fraunces s pevnou optickou velikostí 
+          `opsz 48`, takže nadpis A i B (stránka i reklamy) má stejný řez
+          . Pole formulářů mají aspoň 16 px, menší písmo by iOS při focus
+          u přiblížilo. Hlídá to E2E test.
+      87  - **Hierarchie.** Nadpis hero 36 px, číslo v hero 56 px, rozdíl
+           v účtence 40 px. Vedlejší text (`.fine`, 13 px) je v užším slo
+          upci (52 znaků). Zdroje, metodika a údaje o datech jsou ve sbal
+          ených `<details>`. Rizikové upozornění a podmínky u čísel jsou 
+          vidět vždy (rozhodnutí 49).
+      88 -- **Děkovací stav vybočí:** tmavý blok s ikonou a nadpisem „Hot
+         -ovo.“, plné srovnání pod ním.                                  
+      88 +- **Děkovací stav vybočí:** tmavý blok s ikonou (od kroku 8c ra
+         +zítkem) a nadpisem „Hotovo.“, plné srovnání pod ním.           
+      89  - **Mikrointerakce:** stisk tlačítek, plynulá změna čísla v účt
+          ence (300 ms) a „Ukládáme adresu…“ po odeslání. Při `prefers-re
+          duced-motion` se nic nehýbe, hlídají to dva E2E testy.
+      90  
+      91  | Kontrast (WCAG) | Poměr |
+
+● Závěrečné ověření: lint, unit testy a celá sada E2E.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Krok 8c je hotový v 9 commitech, nic jsem nepushnul. Lint, unit testy (70),
+  všech 41 E2E testů na 375 px i kontrola dat prošly.
+
+  Hlavní odchylka od plánu: číslice. Při kontrole plánu proti kódu jsem našel
+  jen drobnosti. Zásadní se ukázal až test před krokem 2: Atkinson Hyperlegible
+  Next obyčejnou nulu vůbec nemá. Porovnal jsem pixel po pixelu každý znak v
+  písmu, které stránka používá, z Google Fonts i v plném písmu od autorů. salt
+  ani podobné funkce nulu nemění. Tvrzení z 8b (rozhodnutí 52) bylo chybné.
+  Podle tvé volby jsou teď samostatná velká čísla (hero A, rozdíl v účtence,
+  číslo v reklamě A) ve Fraunces s obyčejnou nulou. Tabulky, tickery a ISIN
+  zůstaly v Atkinson s přeškrtnutou nulou. Třída .code a salt proto nevznikly.
+
+  Co je hotové podle plánu:
+  - Barvy: částky jsou v inkoustu, pruhy v účtence se liší tvarem (plný / obrys)
+    a červená (token error) zůstala jen pro chyby. Reklamy jsou upravené stejně
+    a PNG jsem vyrenderoval znovu.
+  - Razítko: „ODESLÁNO“, na /potvrzeni „POTVRZENO“.
+  - Plné srovnání: přepínač pěti dvojic, výchozí VOO.
+  - Animace: příjezd a odjezd spodní lišty (při odjezdu je inert), objevování
+    sekcí při posunu, plynulé rozbalování details a posun na zdroj až po
+    rozbalení. Při omezení pohybu se nic nehýbe.
+
+  Co jsem našel a opravil navíc:
+  - V nové kartě plného srovnání se ISIN lámal uprostřed kódu („IE00BFMXXD5 /
+    4“). Teď je na jednom řádku a menším písmem.
+  - Skript na měření LCP z 8b se ztratil (byl jen v dočasné složce), tak jsem
+    napsal nový scripts/vitals.mjs. Plánovaný cíl LCP ≤ 696/708 ms jsem
+    nesplnil: nový skript ukazuje 720 ms u obou variant. Stejným skriptem jsem
+    ale změřil i commit 8b a vyšlo také 720 / 720 ms. Výkon se tedy nezhoršil,
+    rozdíl je jen v novém skriptu. CLS je 0 při načtení i při průchodu celou
+    stránkou.
+
+  Dokumentace: README má novou sekci ke kroku 8c, přepsané rozhodnutí 52 a nová
+  rozhodnutí 53 a 54. Do docs/ai-chyby.md jsem zapsal 3 nové chyby. Snímky „po“
+  jsou aktualizované a animace je natočená v docs/screens/animace.webm (bez
+  GIFu, protože chybí ffmpeg).
+
+  V historii je navíc commit da508df plany, který není ode mě. Asi ho mezitím
+  vytvořil ty.
+
+  Nezapomeň na /export do ai-log/.
+
+❯ <ide_opened_file>The user opened the file
+  /home/snnikol/work/etf-srovnani/components/Hero.tsx in the IDE. This may or
+  may not be related to the current task.</ide_opened_file>
+
+❯ Dvě úpravy po kontrole na telefonu:
+
+  Děkovací stav: odstraň razítko „ODESLÁNO“. Nadpis „Hotovo.“ nahraď
+  „Odesláno.“ Na /potvrzeni analogicky „Potvrzeno.“ místo razítka „POTVRZENO“.
+  Animace nadpisu stačí jemná (prolnutí), při omezeném pohybu žádná.
+  GDPR informace u obou formulářů jako vrstvená informace: vidět zůstane jeden
+  krátký řádek (správce + účel, např. „Správce: Nikolas Hošek. E-mail použijeme
+  k zaslání srovnání.“) a „Podrobnosti“ jako rozbalovací pole (právní základ,
+  doba uložení, práva, odkaz na /zasady). Text u checkboxu souhlasu s novinkami
+  zůstává celý vidět (informovaný souhlas). Uprav rozhodnutí 49 v README:
+  vrstvená informace podle čl. 13 GDPR, první vrstva viditelná u formuláře.
+  Uprav testy a snímky po/. Commituj, nepushuj, po dokončení se zastav.
+
+● Začínám s děkovacím stavem, pak GDPR text u formulářů. Nejdřív se podívám na
+  aktuální formulář a zásady.
+
+  Searched for 1 pattern, ran 2 shell commands (ctrl+o to expand)
+
+● Upravuji děkovací blok: bez razítka, nadpis „Odesláno.“ / „Potvrzeno.“ s
+  jemným prolnutím.
+
+● Bash(node - <<'EOF'
+      const fs = require("fs");…)
+  ⎿  Updated app/globals.css (+3 -29)
+      122    .done-banner {
+      123      animation: done-in 280ms ease-out both;
+      124    }
+      125 -  .stamp {                                                    
+      126 -    animation: stamp-in 320ms 120ms ease-out both;            
+      125 +  .done-title {                                               
+      126 +    animation: fade-in 320ms 120ms ease-out both;             
+      127    }
+      128  
+      129    /* Spodní lišta: příjezd zdola (@starting-style), odjezd pře
+           s třídu leaving (StickyCta, usePresence) */
+     ...
+      188      transform: translateY(8px);
+      189    }
+      190  }
+      191 -/* Otisk razítka: shora větší a průhledné, lehký překmit pod k
+          -onečnou velikost, pak klid */                                 
+      192 -@keyframes stamp-in {                                         
+      191 +@keyframes fade-in {                                          
+      192    from {
+      193      opacity: 0;
+      195 -    transform: rotate(-6deg) scale(1.6);                      
+      196 -  }                                                           
+      197 -  70% {                                                       
+      198 -    opacity: 1;                                               
+      199 -    transform: rotate(-6deg) scale(0.94);                     
+      200 -  }                                                           
+      201 -  to {                                                        
+      202 -    transform: rotate(-6deg) scale(1);                        
+      194    }
+      195  }
+      196  @keyframes pulse-dot {
+     ...
+      199    }
+      200  }
+      201  
+      211 -/* Razítko v děkovacím bloku (ODESLÁNO / POTVRZENO): světlý ob
+          -rys na tmavém bloku, druhá linka přes outline                 
+      212 -   jako dvojitá čára účtenky. Jen ozdoba, stav nese nadpis. */
+      213 -.stamp {                                                      
+      214 -  display: inline-block;                                      
+      215 -  padding: 4px 12px;                                          
+      216 -  border: 2.5px solid var(--color-paper);                     
+      217 -  border-radius: 2px;                                         
+      218 -  outline: 1px solid var(--color-paper);                      
+     … 12 more lines (ctrl+o to expand)
+  ⎿  Updated components/ConfirmEmail.tsx (+1 -2)
+      38      return (
+      39        <div data-testid="confirmed" className="mt-4">
+      40          <DoneBanner
+      41 -          title={state === "confirmed" ? "Hotovo, adresa je pot
+         -vrzená." : "Adresu už máte potvrzenou."}                       
+      42 -          stamp="POTVRZENO"                                    
+      41 +          title={state === "confirmed" ? "Potvrzeno." : "Adresu
+         + už máte potvrzenou."}                                         
+      42            level={1}
+      43            headingRef={heading}
+      44          >
+  ⎿  Updated components/DoneBanner.tsx (+4 -9)
+       2  
+       3  /**
+       4   * Potvrzení po odeslání (a po potvrzení e-mailu): jediný tmavý
+           blok na stránce, aby bylo hned jasné,
+       5 - * že se něco stalo. Razítko je jen ozdoba (aria-hidden), stav 
+         -nese nadpis. Nadpis přebírá focus (ref),                       
+       6 - * obsah za e-mail je pod blokem na papíře.                    
+       5 + * že se něco stalo. Stav nese nadpis („Odesláno.“, „Potvrzeno.
+         +“), který se jemně prolne a přebírá focus (ref).               
+       6 + * Obsah za e-mail je pod blokem na papíře.                    
+       7   */
+       8  export function DoneBanner({
+       9    title,
+      10 -  stamp = "ODESLÁNO",                                          
+      10    level = 2,
+      11    headingId,
+      12    headingRef,
+      13    children,
+      14  }: {
+      15    title: string;
+      17 -  stamp?: string;                                              
+      16    level?: 1 | 2;
+      17    headingId?: string;
+      18    headingRef: Ref<HTMLHeadingElement>;
+     ...
+      20  }) {
+      21    const Heading = level === 1 ? "h1" : "h2";
+      22    return (
+      25 -    <div className="done-banner rounded-md bg-ink px-5 pt-6 pb-
+         -6 text-paper">                                                 
+      26 -      <span aria-hidden className="stamp">                     
+      27 -        {stamp}                                                
+      28 -      </span>                                                  
+      23 +    <div className="done-banner rounded-md bg-ink px-5 pt-5 pb-
+         +6 text-paper">                                                 
+      24        <Heading
+      25          ref={headingRef}
+      26          tabIndex={-1}
+      27          id={headingId}
+      33 -        className="mt-4 font-display text-[36px] leading-[40px]
+         - font-semibold outline-none"                                   
+      28 +        className="done-title font-display text-[36px] leading-
+         +[40px] font-semibold outline-none"                             
+      29        >
+      30          {title}
+      31        </Heading>
+  ⎿  Updated components/ThankYou.tsx (+2 -2)
+      26    const questionId = useId();
+      27  
+      28    useEffect(() => {
+      29 -    // Focus na nadpis, posun na začátek bloku, aby byla vidět 
+         -i ikona nad nadpisem                                           
+      29 +    // Focus na nadpis, posun na začátek bloku                 
+      30      heading.current?.focus({ preventScroll: true });
+      31      root.current?.scrollIntoView({ block: "start" });
+      32    }, []);
+     ...
+      38  
+      39    return (
+      40      <div ref={root} data-testid="thank-you" className="scroll-m
+          t-4">
+      41 -      <DoneBanner title="Hotovo." headingId={headingId} heading
+         -Ref={heading}>                                                 
+      41 +      <DoneBanner title="Odesláno." headingId={headingId} headi
+         +ngRef={heading}>                                               
+      42          <p className="font-semibold text-paper">Plné srovnání m
+          áte hned pod tímto rámečkem.</p>
+      43          <p className="mt-1" role="status" data-testid="delivery
+          ">
+      44            {delivery === "pending" ? (
+  ⎿  Updated e2e/landing.spec.ts (+2 -2)
+      506    expect(widths.length).toBeLessThanOrEqual(2);
+      507  });
+      508  
+      509 -test("omezení pohybu: tlačítka a lišta bez přechodu, číslo sko
+          -čí rovnou, děkovací blok i razítko bez animace", async ({ page
+          - }) => {                                                      
+      509 +test("omezení pohybu: tlačítka a lišta bez přechodu, číslo sko
+          +čí rovnou, děkovací blok i nadpis bez animace", async ({ page 
+          +}) => {                                                       
+      510    await page.emulateMedia({ reducedMotion: "reduce" });
+      511    await page.goto("/");
+      512    await declineCookies(page);
+     ...
+      531    await inline.getByRole("button", { name: "Poslat mi srovnání
+           " }).click();
+      532    const banner = page.getByTestId("thank-you").locator(".done-
+           banner");
+      533    expect(await banner.evaluate((el) => getComputedStyle(el).an
+           imationName)).toBe("none");
+      534 -  expect(await banner.locator(".stamp").evaluate((el) => getCo
+          -mputedStyle(el).animationName)).toBe("none");                 
+      534 +  expect(await banner.locator(".done-title").evaluate((el) => 
+          +getComputedStyle(el).animationName)).toBe("none");            
+      535  });
+      536  
+      537  test("CTA v patičce: před výsledkem kalkulačka, po výsledku fo
+           rmulář, po odeslání nic; s lištou se nepřekrývá", async ({ pag
+           e }) => {
+
+  Searched for 1 pattern, ran 2 shell commands (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs = require("fs");…)
+  ⎿  Updated README.md (+4 -4)
+      85  - **Barvy s jedním významem.** Kobaltová `#1D4ED8` jen pro prim
+          ární tlačítka, aktivní stav přepínačů a odkazy-výzvy. Oranžovoč
+          ervená jen pro ztrátu (náklady), zelená jen pro levnější varian
+          tu (v kroku 8c zrušeno, viz níže). Tokeny a kontrasty jsou v [`
+          app/globals.css`](app/globals.css).
+      86  - **Písma.** Text i čísla v Atkinson Hyperlegible Next (latin-e
+          xt, tabulkové číslice). Nula je přeškrtnutá, takže „VOO“ se nes
+          plete s „V00“. Nadpisy ve Fraunces s pevnou optickou velikostí 
+          `opsz 48`, takže nadpis A i B (stránka i reklamy) má stejný řez
+          . Pole formulářů mají aspoň 16 px, menší písmo by iOS při focus
+          u přiblížilo. Hlídá to E2E test.
+      87  - **Hierarchie.** Nadpis hero 36 px, číslo v hero 56 px, rozdíl
+           v účtence 40 px. Vedlejší text (`.fine`, 13 px) je v užším slo
+          upci (52 znaků). Zdroje, metodika a údaje o datech jsou ve sbal
+          ených `<details>`. Rizikové upozornění a podmínky u čísel jsou 
+          vidět vždy (rozhodnutí 49).
+      88 -- **Děkovací stav vybočí:** tmavý blok s ikonou (od kroku 8c ra
+         -zítkem) a nadpisem „Hotovo.“, plné srovnání pod ním.           
+      88 +- **Děkovací stav vybočí:** tmavý blok s ikonou a nadpisem „Hot
+         +ovo.“, plné srovnání pod ním (od kroku 8c bez ikony, nadpis „Od
+         +esláno.“).                                                     
+      89  - **Mikrointerakce:** stisk tlačítek, plynulá změna čísla v účt
+          ence (300 ms) a „Ukládáme adresu…“ po odeslání. Při `prefers-re
+          duced-motion` se nic nehýbe, hlídají to dva E2E testy.
+      90  
+      91  | Kontrast (WCAG) | Poměr |
+     ...
+      123  
+      124  Hero B měl před krokem 8b LCP 2,6 s. Příčinu jsme nezkoumali. 
+           Po změně písma je LCP u obou variant pod 0,75 s. Lokální měřen
+           í nenahrazuje Lighthouse na nasazené stránce (15. 10.).
+      125  
+      126 -### Krok 8c: klidnější barvy, velká čísla, razítko, animace   
+      126 +### Krok 8c: klidnější barvy, velká čísla, děkovací blok, anim
+          +ace                                                           
+      127  
+      128  Podle designové revize 8b: kobaltová vedle oranžovočervené půs
+           obila křiklavě a přeškrtnutá nula ve velkých částkách rušila. 
+           Čísla, právní texty, eventy ani chování formulářů se nezměnily
+           .
+      129  
+      130  - **Ztráta už není barva.** Oranžovočervená a zelená zmizely z
+           e stránky i z reklam. Částky a rozdíly jsou v inkoustu (15,5 :
+            1), důraz nese velikost a tloušťka. Pruhy v rozpisu účtenky i
+            v reklamě A rozlišuje tvar: dražší srovnání (průměrný aktivní
+            fond) plný pruh, ostatní řádky obrys. V reklamě B je „bez KID
+           “ tlumeně (muted, 6,5 : 1 na kartě) a „s KID“ tučně v inkoustu
+           , bez symbolů podobných zaškrtávátkům. Kobalt je jediný výrazn
+           ý akcent. Červená `#B03A0A` (5,3 : 1) zůstala jen pro chybový 
+           stav: validaci formuláře a varování na `/zasady` (rozhodnutí 5
+           3 a 54).
+      131  - **Velká čísla ve Fraunces.** Atkinson Hyperlegible Next obyč
+           ejnou nulu nemá (rozhodnutí 52). Samostatná velká čísla (hero 
+           A, rozdíl v účtence, číslo v reklamě A) jsou proto v nadpisové
+           m písmu Fraunces s obyčejnou nulou a proporcionálními číslicem
+           i. Text, tabulky, data, tickery a ISIN zůstávají v Atkinson s 
+           tabulkovými číslicemi. Animovaný rozdíl v účtence má pevnou ší
+           řku podle výsledné hodnoty, takže se při animaci nerozskakuje 
+           (E2E test).
+      132 -- **Razítko.** Děkovací blok má místo ikony razítko „ODESLÁNO“
+          - (na `/potvrzeni` „POTVRZENO“): dvojitý světlý obrys, pootočen
+          -í −6°, otisk 320 ms. Jen ozdoba (`aria-hidden`), stav nese nad
+          -pis.                                                          
+      132 +- **Děkovací blok bez ozdob.** Místo ikony a „Hotovo.“ nese st
+          +av sám nadpis: „Odesláno.“, na `/potvrzeni` „Potvrzeno.“. Nadp
+          +is se jemně prolne (320 ms). Razítko „ODESLÁNO“ z první verze 
+          +8c jsme po kontrole na telefonu odstranili, nadpis říká totéž 
+          +bez ozdoby navíc.                                             
+      133  - **Plné srovnání s přepínačem.** Místo 5 karet pod sebou přep
+           ínač SPY / VOO / IVV / VTI / VT (výchozí VOO) a jedna karta na
+            světlém podkladu. Všech 5 dvojic zůstává v HTML.
+      134  - **Animace:** spodní lišta přijede a odjede (200 ms). Při odj
+           ezdu je `inert`, nedá se na ni klepnout ani se na ni dostat ta
+           bulátorem. Sekce pod první obrazovkou se při posunu objeví (op
+           acity a posun o 12 px, 400 ms). Skrývá se až po načtení JavaSc
+           riptu a jen to, co je celé pod obrazovkou, takže bez JS se nic
+            neskryje. Rozbalovací pole se otevírají plynule v prohlížečíc
+           h s `interpolate-size` (Chrome), jinde bez animace. Animuje se
+            jen `transform`, `opacity` a výška obsahu `details` po kliknu
+           tí, CLS zůstává 0. Při `prefers-reduced-motion` se nic z toho 
+           nehýbe (E2E test).
+      135  
+     ...
+      142  
+      143  Nový skript měří u stejného kódu o 12–24 ms víc než ten původn
+           í (696 / 708 ms výše). Rozdíl je v měření, ne v kódu.
+      144  
+      145 -**Snímky po** ve stejné tabulce výše ([`docs/screens/po/`](doc
+          -s/screens/po/)) jsou po kroku 8c. **Záznam animací** na 375 × 
+          -812: [`docs/screens/animace.webm`](docs/screens/animace.webm) 
+          -(posun a objevení sekcí, spodní lišta, plynulé číslo, „Jak poč
+          -ítáme“, razítko; skript [`scripts/record-animations.mjs`](scri
+          -pts/record-animations.mjs)). GIF není: Playwright nahrává jen 
+          -webm a ffmpeg v systému nebyl.                                
+      145 +**Snímky po** ve stejné tabulce výše ([`docs/screens/po/`](doc
+          +s/screens/po/)) jsou po kroku 8c. **Záznam animací** na 375 × 
+          +812: [`docs/screens/animace.webm`](docs/screens/animace.webm) 
+          +(posun a objevení sekcí, spodní lišta, plynulé číslo, „Jak poč
+          +ítáme“, děkovací blok; skript [`scripts/record-animations.mjs`
+          +](scripts/record-animations.mjs)). GIF není: Playwright nahráv
+          +á jen webm a ffmpeg v systému nebyl.                          
+      146  
+      147  ## Očekávaná konverze
+      148  
+  ⎿  (timeout 10m)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Teď vrstvená informace GDPR u formulářů.
+
+● Bash(node - <<'EOF'
+      const fs = require("fs");…)
+  ⎿  Updated components/LeadForm.tsx (+21 -7)
+      3  import Link from "next/link";
+      4  import { type FormEvent, type ReactNode, useEffect, useId, useRe
+         f, useState } from "react";
+      5  import { submitLead } from "@/app/actions/lead";
+      6 +import { More } from "@/components/More";                       
+      7  import { ThankYou } from "@/components/ThankYou";
+      8  import { TrackView } from "@/components/TrackView";
+      9  import { isValidEmail, type LeadPayload, normalizeEmail } from "
+         @/lib/lead";
+     ...
+      187          {submitLabel}
+      188        </button>
+      189  
+      189 -      <p id={ids.gdpr} className="fine mt-4">                 
+      190 -        {CONSENT.notice} Podrobnosti v{" "}                   
+      191 -        <Link href="/zasady" className="underline">           
+      192 -          zásadách ochrany osobních údajů                     
+      193 -        </Link>                                               
+      194 -        .                                                     
+      195 -      </p>                                                    
+      190 +      {/* Vrstvená informace (čl. 13 GDPR): správce a účel vid
+          +ět vždy, zbytek v „Podrobnosti“ */}                           
+      191 +      <div className="mt-4" data-testid="gdpr">               
+      192 +        <p id={ids.gdpr} className="fine">                    
+      193 +          {CONSENT.noticeShort}                               
+      194 +        </p>                                                  
+      195 +        <More summary="Podrobnosti">                          
+      196 +          <ul className="space-y-1">                          
+      197 +            {CONSENT.noticeDetails.map((line) => (            
+      198 +              <li key={line}>{line}</li>                      
+      199 +            ))}                                               
+      200 +          </ul>                                               
+      201 +          <p className="mt-1">                                
+      202 +            Celé znění v{" "}                                 
+      203 +            <Link href="/zasady" className="underline">       
+      204 +              zásadách ochrany osobních údajů                 
+      205 +            </Link>                                           
+      206 +            .                                                 
+      207 +          </p>                                                
+      208 +        </More>                                               
+      209 +      </div>                                                  
+      210      </form>
+      211    );
+      212  }
+  ⎿  Updated lib/site.ts (+19 -8)
+      17  const DELIVERY =
+      18    "E-mail použijeme k zaslání srovnání, o které žádáte (čl. 6 o
+          dst. 1 písm. b GDPR – vyřízení vaší žádosti).";
+      19  
+      20 +/** Doba uložení (zobrazuje se u formuláře a v zásadách, mazání
+         + zajišťuje pg_cron v supabase/migrations). */                  
+      21 +export const RETENTION = {                                     
+      22 +  unconfirmedDays: 30,                                         
+      23 +} as const;                                                    
+      24 +                                                               
+      25 +// Vrstvená informace podle čl. 13 GDPR: první vrstva (správce 
+         +a účel) je u formuláře vidět vždy,                             
+      26 +// druhá je v rozbalovacím poli „Podrobnosti“ hned pod ní, plné
+         + znění v /zasady.                                              
+      27 +const NOTICE_SHORT = `Správce: ${OPERATOR.name}. E-mail použije
+         +me k zaslání srovnání.`;                                       
+      28 +const NOTICE_DETAILS = [                                       
+      29 +  "Právní základ: vyřízení vaší žádosti (čl. 6 odst. 1 písm. b 
+         +GDPR). Novinky jen se souhlasem výše (čl. 6 odst. 1 písm. a GDP
+         +R).",                                                          
+      30 +  `Doba uložení: nepotvrzenou adresu mažeme po ${RETENTION.unco
+         +nfirmedDays} dnech, potvrzenou do odvolání souhlasu nebo žádost
+         +i o výmaz.`,                                                   
+      31 +  `Vaše práva: přístup, oprava, výmaz, odvolání souhlasu, námit
+         +ka a stížnost u Úřadu pro ochranu osobních údajů. Kontakt: ${OP
+         +ERATOR.email}.`,                                               
+      32 +] as const;                                                    
+      33 +                                                               
+      34  /**
+      21 - * Znění u formuláře. Ukládá se k leadu přesně tak, jak ho návš
+         -těvník viděl:                                                  
+      22 - * `notice` vždy, `marketing` jen se zaškrtnutým souhlasem (spo
+         -lu s časem). Doručení obsahu ≠ obchodní sdělení.               
+      35 + * Znění u formuláře. Ukládá se k leadu přesně tak, jak ho návš
+         +těvník dostal:                                                 
+      36 + * `notice` (obě vrstvy) vždy, `marketing` jen se zaškrtnutým s
+         +ouhlasem (spolu s časem). Doručení obsahu ≠ obchodní sdělení.  
+      37   */
+      38  export const CONSENT = {
+      39    delivery: DELIVERY,
+      40    marketing:
+      41      "Chci občas dostávat e-mailem novinky ke srovnání ETF. Souh
+          las můžu kdykoli odvolat odkazem v každém e-mailu.",
+      28 -  notice: `Správce: ${OPERATOR.name} (${OPERATOR.email}). ${DEL
+         -IVERY} Novinky posíláme jen se souhlasem výše (čl. 6 odst. 1 pí
+         -sm. a GDPR).`,                                                 
+      29 -} as const;                                                    
+      30 -                                                               
+      31 -/** Doba uložení (zobrazuje se v zásadách, mazání zajišťuje pg_
+         -cron v supabase/migrations). */                                
+      32 -export const RETENTION = {                                     
+      33 -  unconfirmedDays: 30,                                         
+      42 +  noticeShort: NOTICE_SHORT,                                   
+      43 +  noticeDetails: NOTICE_DETAILS,                               
+      44 +  notice: [NOTICE_SHORT, ...NOTICE_DETAILS].join(" "),         
+      45  } as const;
+      46  
+      47  /** Upozornění na rizika – stejné znění na stránce (Trust) i v 
+          e-mailu. */
+
+● Update(e2e/landing.spec.ts)
+  ⎿  Added 31 lines
+      240    expect(paragraphs.join(" ")).not.toContain("https://");
+      241  });
+      242  
+      243 +test("GDPR u obou formulářů: správce a účel vidět, podrobnosti
+          + rozbalitelné, souhlas s novinkami celý", async ({ page }) => 
+          +{                                                             
+      244 +  await page.goto("/");                                       
+      245 +  await declineCookies(page);                                 
+      246 +  await calcResult(page);                                     
+      247 +  // pod výsledkem aktivní formulář, dole jen tlačítko – spodn
+          +í formulář se zkontroluje na B (bez kalkulačky)               
+      248 +  for (const form of [page.getByTestId("lead-inline"), null]) 
+          +{                                                             
+      249 +    if (!form) {                                              
+      250 +      await page.goto("/?utm_content=b-zvedavost");           
+      251 +    }                                                         
+      252 +    const scope = form ?? page.locator("#formular");          
+      253 +    const gdpr = scope.getByTestId("gdpr");                   
+      254 +    await gdpr.scrollIntoViewIfNeeded();                      
+      255 +    await expect(gdpr.getByText("Správce: Nikolas Hošek. E-mai
+          +l použijeme k zaslání srovnání.")).toBeVisible();             
+      256 +    // formulář odkazuje na první vrstvu (aria-describedby)   
+      257 +    const describedBy = await scope.locator("form").getAttribu
+          +te("aria-describedby");                                       
+      258 +    await expect(page.locator(`[id="${describedBy}"]`)).toHave
+          +Text(/^Správce:/);                                            
+      259 +                                                              
+      260 +    const details = gdpr.getByText(/Právní základ/);          
+      261 +    await expect(details).toBeHidden();                       
+      262 +    await gdpr.getByText("Podrobnosti", { exact: true }).click
+          +();                                                           
+      263 +    await expect(details).toBeVisible();                      
+      264 +    await expect(details).toContainText("čl. 6 odst. 1 písm. b
+          + GDPR");                                                      
+      265 +    await expect(gdpr.getByText(/Doba uložení: nepotvrzenou ad
+          +resu mažeme po 30 dnech/)).toBeVisible();                     
+      266 +    await expect(gdpr.getByText(/Vaše práva/)).toBeVisible(); 
+      267 +    await expect(gdpr.getByRole("link", { name: "zásadách ochr
+          +any osobních údajů" })).toHaveAttribute("href", "/zasady");   
+      268 +                                                              
+      269 +    // informovaný souhlas: text u checkboxu je celý vidět, ni
+          +c z něj není sbalené                                          
+      270 +    await expect(scope.getByText(/Chci občas dostávat e-mailem
+          + novinky ke srovnání ETF\. Souhlas můžu kdykoli odvolat/)).toB
+          +eVisible();                                                   
+      271 +  }                                                           
+      272 +});                                                           
+      273 +                                                              
+      274  test("formulář jde odeslat jen klávesnicí", async ({ page }) =
+           > {
+      275    await page.goto("/#formular");
+      276    await page.getByRole("textbox", { name: "E-mail" }).focus();
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Všech 42 testů prošlo. Upravuji rozhodnutí 49 v README.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Bash(node - <<'EOF'
+      const fs = require("fs");…)
+  ⎿  Updated README.md (+1 -1)
+      457      - **Data zůstávají na serveru:** karty se vykreslují na se
+           rveru i se zdroji, přepínač je jen skrývá.
+      458      - **Zamčené dvojice VTI a VT** jsou na jednom řádku. Popis
+            plné verze je ve spodní sekci formuláře.
+      459  49. **Do rozbalovacích polí jde vše kromě rizik a podmínek u č
+           ísel, se třemi výjimkami.** Zdroje u srovnání, metodika kalkul
+           ačky a odstavce „Odkud jsou data“ a „Kdo za stránkou stojí“ js
+           ou sbalené. Horní index u hodnoty zdroj rozbalí. Vidět zůstáva
+           jí:
+      460 -    - **text o GDPR u formuláře:** správce, účel a právní zákl
+          -ad musí být u formuláře,                                      
+      460 +    - **první vrstva informace o GDPR u formuláře** (vrstvená 
+          +informace podle čl. 13 GDPR, upraveno po kontrole na telefonu 
+          +2026-10-11): u obou formulářů je vidět jeden řádek „Správce: N
+          +ikolas Hošek. E-mail použijeme k zaslání srovnání.“ a formulář
+          + na něj odkazuje přes `aria-describedby`. Hned pod ním je rozb
+          +alovací pole „Podrobnosti“ (druhá vrstva): právní základ, doba
+          + uložení, práva a kontakt, odkaz na `/zasady`. Dřív byl celý o
+          +dstavec vidět a pod tlačítkem zabíral nejvíc místa. K leadu se
+          + ukládá znění obou vrstev (`notice_text`). Text u checkboxu so
+          +uhlasu s novinkami se nesbaluje: souhlas musí být informovaný.
+          + Že právní základ nemusí být v první vrstvě, je náš výklad, pa
+          +tří do právní kontroly,                                       
+      461      - **údaje o provozovateli v patičce:** povinné,
+      462      - **odstavec o PRIIPs/KID ve srovnání:** je to odpověď, kt
+           erou slibuje reklama B. Nechali jsme ho beze změny, protože jd
+           e o právní tvrzení.
+      463      - V hero A je zdroj (ESMA, data za rok 2024) přímo v podmí
+           nce u čísla. Rozbalovací pole by na 375 × 667 posunulo CTA pod
+            cookie lištu. Datum stažení je v „Jak počítáme“ u kalkulačky.
+
+● Bash(git add lib/site.ts components/LeadForm.tsx e2e/landing.spec.ts README.md
+      && git commit -q -m "GDPR u formulářů jako vrstvená informace: správce a
+      účel vidět, p…)
+  ⎿  4 files changed (binary, mode only or too large to show)
+  ⎿  (timeout 10m)
+  Read 2 files (ctrl+o to expand)
+
+● Snímky sedí. Commituji snímky a nový záznam animací.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Obě úpravy jsou hotové ve 3 commitech, nic jsem nepushnul. Lint, unit testy
+  (70) i všech 42 E2E testů na 375 px prošly.
+
+  1. Děkovací stav
+  - Razítko je pryč. Nadpis po odeslání je „Odesláno.“, na /potvrzeni
+    „Potvrzeno.“.
+  - Nadpis se jen prolne (320 ms). Při omezeném pohybu se nehýbe, hlídá to E2E
+    test.
+  - Na /potvrzeni jsem nechal nadpis „Adresu už máte potvrzenou.“ pro případ, že
+    návštěvník otevře odkaz podruhé. Je to jiný stav než první potvrzení.
+
+  2. GDPR jako vrstvená informace u obou formulářů
+  - Vidět je jen řádek „Správce: Nikolas Hošek. E-mail použijeme k zaslání
+    srovnání.“ a formulář na něj odkazuje pro čtečky.
+  - Pod ním je rozbalovací pole „Podrobnosti“: právní základ, doba uložení
+    (nepotvrzené adresy 30 dní), práva, kontakt a odkaz na /zasady.
+  - Text u checkboxu souhlasu s novinkami zůstal celý vidět.
+  - K leadu se dál ukládá text, který návštěvník dostal, teď obě vrstvy
+    dohromady.
+  - U potvrzené adresy jsem uvedl dobu uložení „do odvolání souhlasu nebo
+    žádosti o výmaz“, bez maximální lhůty. Tu má doplnit provozovatel, /zasady
+    tam mají „[doplní provozovatel]“.
+  - Nový E2E test kontroluje oba formuláře: první řádek je vidět, podrobnosti
+    jdou rozbalit, odkaz vede na /zasady a text souhlasu je celý.
+
+  README: rozhodnutí 49 jsem přepsal na vrstvenou informaci podle čl. 13 GDPR.
+  Poznamenal jsem, že právní základ až ve druhé vrstvě je náš výklad a patří do
+  právní kontroly. Popis děkovacího bloku v sekci ke kroku 8c je také upravený.
+
+  Snímky: docs/screens/po/ jsou aktualizované. Znovu jsem natočil i
+  docs/screens/animace.webm, protože starý záznam ukazoval razítko.
+
+  Nezapomeň na /export do ai-log/.
