@@ -75,7 +75,7 @@ Změřeno 2026-10-10 na produkčním buildu s testovacími proměnnými. Porovn�
 | hero B, gzip | 13,3 kB | 16,7 kB | +3,4 kB (+25 %) |
 
 - **Přenos:** po síti jde HTML komprimované, takže navíc je 1,4–3,4 kB. Na 4G jsou to jednotky milisekund. Rozdíl mezi A a B je nejspíš v tom, jak daleko od sebe obě kopie v HTML leží a jestli je gzip najde v okně 32 kB. Neověřovali jsme to.
-- **Vliv na LCP:** prohlížeč musí rozbalit a zpracovat o 46 kB víc dat pro React. Na LCP jsme to neměřili, Lighthouse je v plánu na 15. 10.
+- **Vliv na LCP:** prohlížeč musí rozbalit a zpracovat o 46 kB víc dat pro React. Samostatně jsme to neměřili. Lighthouse na produkci (2026-10-11) hlásí LCP 2,6 s a nevyužitý JavaScript, viz checklist produkce, bod 11.
 - **Jak to odstranit, pokud to vadí:** předat plné srovnání jen jednou, např. jeden serverový slot v `Landing`, který se po odeslání zobrazí v místě odeslání. Druhá možnost je načíst ho až po odeslání ze Server Action. Zatím ne: rozdíl po kompresi je malý a druhé řešení by porušilo slib „zobrazí se hned“ při výpadku sítě.
 
 ### Vizuální systém „Výpis z účtu 2.0“ (krok 8b)
@@ -122,7 +122,7 @@ U děkovacího stavu skript zadrží odeslání v prohlížeči, aby se nic neul
 | Hero A | 736 → 696 ms | 0 → 0 |
 | Hero B | 2 592 → 708 ms | 0 → 0 |
 
-Hero B měl před krokem 8b LCP 2,6 s. Příčinu jsme nezkoumali. Po změně písma je LCP u obou variant pod 0,75 s. Lokální měření nenahrazuje Lighthouse na nasazené stránce (15. 10.).
+Hero B měl před krokem 8b LCP 2,6 s. Příčinu jsme nezkoumali. Po změně písma je LCP u obou variant pod 0,75 s. Lokální měření nenahrazuje Lighthouse na nasazené stránce: ten 2026-10-11 naměřil LCP 2,6 s (checklist produkce, bod 11).
 
 ### Krok 8c: klidnější barvy, velká čísla, děkovací blok, animace
 
@@ -356,10 +356,10 @@ Proti skutečnému Resend (doména `mail.hosek.cc`, region Ireland) a Supabase o
 | --- | --- |
 | Doručení do Gmailu | ✓ doručená pošta (ne spam), odesílatel `srovnani@mail.hosek.cc`, obsah v pořádku |
 | SPF / DKIM | ✓ PASS / PASS (doména `mail.hosek.cc`) |
-| DMARC | ✗ FAIL: chyběl záznam. Přidán TXT `_dmarc.mail.hosek.cc` = `v=DMARC1; p=none;`, čeká se na propagaci DNS, **znovu neověřeno** |
+| DMARC | ✗ FAIL: chyběl záznam. Přidán TXT `_dmarc.mail.hosek.cc` = `v=DMARC1; p=none;`. ✓ PASS ověřeno 2026-10-11 (checklist produkce, bod 10) |
 | Potvrzení tlačítkem na `/potvrzeni` | ✓ vyplní `double_opt_in_at` |
 | Cooldown 10 min | ✓ druhé odeslání na stejnou adresu e-mail neposlalo (jedno `confirm_sent_at`) |
-| `marketing_audience` a odhlášení | **zatím neověřeno** ručně (jen v PGlite a unit testech) |
+| `marketing_audience` a odhlášení | Odkaz na odhlášení v e-mailu funguje (2026-10-11, checklist produkce bod 7). Stav `marketing_audience` v DB ručně neověřen (jen v PGlite a unit testech) |
 
 ### Ruční ověření: cookie lišta a PostHog (krok 4c, 2026-10-09)
 
@@ -376,22 +376,25 @@ Proti skutečnému projektu PostHog Cloud EU ověřil člověk (`npm run dev`, p
 
 ### Ruční ověření: produkce (krok 6)
 
-Na https://etf-srovnani.vercel.app. Vyplní se na konci projektu, po úpravě textů a designu.
+Na https://etf-srovnani.vercel.app, vyplněno 2026-10-11. U každého výsledku je, kdo ho ověřil. „Neověřeno“ znamená, že test na produkci zatím neproběhl, ne že selhal.
 
 | # | Kontrola | Jak | Výsledek |
 | --- | --- | --- | --- |
-| 1 | Region funkcí | `curl -sI -X POST "https://etf-srovnani.vercel.app/api/odhlaseni?u=x"` → hlavička `x-vercel-id` končí na `fra1::…` (nebo Deployment → Functions) | |
-| 2 | noindex | `curl -s https://etf-srovnani.vercel.app/potvrzeni \| grep -o '<meta name="robots"[^>]*>'`, totéž pro `/odhlaseni`, `/zasady`, `/v/b`. `/` noindex mít nesmí | |
-| 3 | Hero B | `/?utm_content=b-zvedavost` ukáže variantu B (proxy na Vercelu) | |
-| 4 | Odeslání formuláře | z mobilu s `?utm_source=test&utm_content=b-test`. V Supabase řádek s `ad_variant`, `utm_*`, `consent_text`, `calc_input`, `calc_result` | |
-| 5 | E-mail a odkazy | dorazí do Gmailu. Odkazy na potvrzení a odhlášení vedou na `https://etf-srovnani.vercel.app`, ne na localhost | |
-| 6 | Potvrzení | tlačítko na `/potvrzeni` vyplní `double_opt_in_at` | |
-| 6b | Obnovení `/potvrzeni` | po potvrzení stránku obnovit → rovnou „Adresu už máte potvrzenou.“ a srovnání, bez tlačítka. `double_opt_in_at` se při obnovení nezmění. Nový odkaz (z čerstvého e-mailu) při otevření ukáže tlačítko a v DB zůstane nepotvrzený | |
-| 7 | One-click odhlášení v Gmailu | tlačítko „Odhlásit“ u odesílatele. U nového odesílatele s malým objemem ho Gmail nemusí ukázat, záložně: „Zobrazit originál“ → URL z `List-Unsubscribe` → `curl -X POST "<URL>"` → „Odhlášeno.“. V DB je pak souhlas s novinkami odvolaný (zároveň ověří `marketing_audience`) | |
-| 8 | Cookie lišta a `/ingest` | před volbou a po „Odmítnout“ žádný požadavek na `/ingest`. Po „Povolit měření“ `POST /ingest/e/` → 200 a event v PostHogu (Activity). Totéž ve Firefoxu v anonymním okně | |
-| 9 | Poloha u eventu v PostHogu | `$geoip_country_code` / `$geoip_city_name` u eventu: ČR, poloha serveru Vercelu (Frankfurt/USA), nebo nic (kvůli „Discard client IP data“) | |
-| 10 | DMARC | `dig +short TXT _dmarc.mail.hosek.cc` vrátí záznam. V Gmailu „Zobrazit originál“: SPF, DKIM i DMARC PASS | |
-| 11 | Lighthouse na mobilu | PageSpeed Insights, mobil: Performance, LCP (cíl < 2,5 s), CLS, Accessibility, datum měření | |
+| 1 | Region funkcí | `curl -sI -X POST "https://etf-srovnani.vercel.app/api/odhlaseni?u=x"` → hlavička `x-vercel-id` končí na `fra1::…` (nebo Deployment → Functions) | ✓ AI přes `curl` 2026-10-11: `x-vercel-id: fra1::fra1::…` (odpověď 400, neplatný odkaz nic nezmění) |
+| 2 | noindex | `curl -s https://etf-srovnani.vercel.app/potvrzeni \| grep -o '<meta name="robots"[^>]*>'`, totéž pro `/odhlaseni`, `/zasady`, `/v/b`. `/` noindex mít nesmí | ✓ AI přes `curl` 2026-10-11: `/potvrzeni`, `/odhlaseni`, `/zasady` i `/v/b` mají `noindex`, `/` meta robots nemá |
+| 3 | Hero B | `/?utm_content=b-zvedavost` ukáže variantu B (proxy na Vercelu) | ✓ AI přes `curl` 2026-10-11: HTML s `utm_content=b-zvedavost` obsahuje otázku o VOO a větu o KID, s `a-uspora` nadpis hero A |
+| 4 | Odeslání formuláře | z mobilu s `?utm_source=test&utm_content=b-test`. V Supabase řádek s `ad_variant`, `utm_*`, `consent_text`, `calc_input`, `calc_result` | Neověřeno: odeslání na produkci s testovacím UTM a kontrolu řádku v Supabase zatím nikdo nezapsal |
+| 5 | E-mail a odkazy | dorazí do Gmailu. Odkazy na potvrzení a odhlášení vedou na `https://etf-srovnani.vercel.app`, ne na localhost | Částečně ✓ člověk 2026-10-11: e-mail dorazil do Gmailu (body 7 a 10). Že odkaz na potvrzení vede na produkční doménu, zapsané není |
+| 6 | Potvrzení | tlačítko na `/potvrzeni` vyplní `double_opt_in_at` | Neověřeno na produkci. Lokálně proti Supabase ✓ (krok 4b) |
+| 6b | Obnovení `/potvrzeni` | po potvrzení stránku obnovit → rovnou „Adresu už máte potvrzenou.“ a srovnání, bez tlačítka. `double_opt_in_at` se při obnovení nezmění. Nový odkaz (z čerstvého e-mailu) při otevření ukáže tlačítko a v DB zůstane nepotvrzený | Neověřeno na produkci. Logiku hlídají unit testy (`tokenStatus`, `handleConfirmStatus`) a E2E test bez databáze |
+| 7 | One-click odhlášení v Gmailu | tlačítko „Odhlásit“ u odesílatele. U nového odesílatele s malým objemem ho Gmail nemusí ukázat, záložně: „Zobrazit originál“ → URL z `List-Unsubscribe` → `curl -X POST "<URL>"` → „Odhlášeno.“. V DB je pak souhlas s novinkami odvolaný (zároveň ověří `marketing_audience`) | Částečně ✓ člověk 2026-10-11: hlavičky `List-Unsubscribe` i `List-Unsubscribe-Post` jsou v e-mailu („Zobrazit originál“), odkaz na odhlášení v patičce e-mailu funguje. Tlačítko „Odhlásit“ v Gmailu a stav v DB (`marketing_audience`) nezapsané |
+| 8 | Cookie lišta a `/ingest` | před volbou a po „Odmítnout“ žádný požadavek na `/ingest`. Po „Povolit měření“ `POST /ingest/e/` → 200 a event v PostHogu (Activity). Totéž ve Firefoxu v anonymním okně | Neověřeno na produkci. Lokálně ✓ včetně Firefoxu přes proxy `/ingest` (krok 4c) |
+| 9 | Poloha u eventu v PostHogu | `$geoip_country_code` / `$geoip_city_name` u eventu: ČR, poloha serveru Vercelu (Frankfurt/USA), nebo nic (kvůli „Discard client IP data“) | ✓ člověk 2026-10-11: u eventů v PostHogu země CZ |
+| 10 | DMARC | `dig +short TXT _dmarc.mail.hosek.cc` vrátí záznam. V Gmailu „Zobrazit originál“: SPF, DKIM i DMARC PASS | ✓ člověk 2026-10-11: v Gmailu („Zobrazit originál“) SPF, DKIM i DMARC PASS |
+| 11 | Lighthouse na mobilu | PageSpeed Insights, mobil: Performance, LCP (cíl < 2,5 s), CLS, Accessibility, datum měření | ✓ člověk 2026-10-11, [PDF](docs/lighthouse/2026-10-11-mobil.pdf): Performance 91, Accessibility 100, Best Practices 100, SEO 100. FCP 1,1 s, **LCP 2,6 s**, TBT 290 ms, CLS 0, Speed Index 1,1 s (Moto G Power, Slow 4G, Lighthouse 13.4.1) |
+| 12 | Vysvětlivky pojmů na telefonu (krok 9) | „KID?“, „UCITS?“, „aktivní?“ a „Co znamenají řádky“: otevřít, zavřít, čitelnost na 375 px | ✓ člověk 2026-10-11 |
+
+**LCP 2,6 s je těsně nad hranicí 2,5 s.** Je to laboratorní hodnota z Lighthouse se škrcením (Slow 4G, emulovaný Moto G Power), ne měření skutečných návštěvníků. Náš [`scripts/vitals.mjs`](scripts/vitals.mjs) naměřil 720 ms (krok 8c). Také škrtí (síť 150 ms / 1,6 Mb/s, CPU 4×), ale běží proti lokálnímu serveru bez skutečné sítě a CDN a měří LCP přímo v prohlížeči. Lighthouse ve výchozím nastavení škrcení simuluje a LCP z běhu dopočítává. Čísla proto nejsou přímo srovnatelná a platí ta z Lighthouse. Lighthouse hlásí nevyužitý JavaScript (~115 KiB), legacy JavaScript (~22 KiB) a 4 dlouhé úlohy. Ty odpovídají TBT 290 ms a nejspíš i pomalejšímu LCP. Oprava je v [backlogu](docs/backlog-texty-design.md), ne teď. Data o skutečných návštěvnících (CrUX) stránka s malou návštěvností mít nebude.
 
 ## Rozhodnutí v nejasnostech
 
@@ -484,16 +487,14 @@ Na https://etf-srovnani.vercel.app. Vyplní se na konci projektu, po úpravě te
 - **Plné znění zásad ochrany osobních údajů** (`/zasady` je kostra).
 - **Limit odeslání je jen v paměti jedné instance.** Na Vercelu může běžet víc instancí, takže limit je orientační. Pro ostrý provoz: rate limiting ve Vercel Firewall nebo Upstash Redis. Turnstile až při skutečném spamu.
 - **Free plán Supabase se po týdnu nečinnosti uspí** a mazání přes pg_cron pak neběží. Pro ostrý provoz Pro plán.
-- **Poloha u eventů přes proxy:** po nasazení na Vercel ověřit, jestli PostHog vidí polohu návštěvníka, nebo serveru Vercelu. Pro kampaň jen v ČR ji nepotřebujeme.
 - **Právní kontrola lišty a měření** (§ 89 zákona 127/2005, GDPR) před spuštěním. Naše řešení je konzervativní, ale není to právní rada.
 - **Reklamní pixely a Conversions API** jsou jen navržené (sekce Měření) a čekají na schválení.
-- **DMARC:** ověřit PASS po propagaci DNS. Před ostrým provozem zvážit přísnější politiku (`p=quarantine`, později `p=reject`) a reporty (`rua`). `p=none` jen sleduje, nic nechrání.
-- **One-click odhlášení v Gmailu** (`List-Unsubscribe-Post`) otestovat až na Vercelu: Gmail volá `SITE_URL`, který lokálně není dostupný z internetu.
-- **Ruční ověření `marketing_audience` a odhlášení** proti Supabase zatím chybí.
+- **DMARC je `p=none`** (PASS ověřen 2026-10-11). Před ostrým provozem zvážit přísnější politiku (`p=quarantine`, později `p=reject`) a reporty (`rua`). `p=none` jen sleduje, nic nechrání.
+- **Zbývající ruční testy na produkci:** odeslání formuláře a řádek v Supabase, potvrzení a obnovení `/potvrzeni`, cookie lišta s `/ingest`, tlačítko „Odhlásit“ v Gmailu a stav `marketing_audience` v DB (checklist produkce, body 4–8). Lokálně proti stejným službám prošly v krocích 4a–4c.
+- **LCP 2,6 s v Lighthouse na mobilu** je těsně nad cílem 2,5 s (checklist produkce, bod 11). Úprava JavaScriptu je v backlogu.
 - **Bounce a stížnosti z Resend (webhooky)** zatím nezpracováváme. Nedoručitelné adresy zůstanou v DB jako nepotvrzené a po 30 dnech se smažou. Pro ostrý provoz napojit webhook a nedoručitelné adrese už nic neposílat.
 - **Kvóta free plánu Resend.** Free plán má denní i měsíční limit e-mailů. Před spuštěním kampaně ověřit v ceníku Resend a podle očekávaného počtu leadů přejít na placený plán. Strop 50 e-mailů za hodinu je ochrana proti zneužití, ne náhrada.
 - **Hobby plán Vercelu je jen pro nekomerční osobní užití.** Podle Fair Use Guidelines Vercel za komerční užití považuje mimo jiné „Advertising the sale of a product or service“ a placenou tvorbu webu. Ukázka do výběrového řízení na Hobby být může, **ostrá kampaň pro klienta potřebuje Pro** (mimo jiné až 5 regionů funkcí místo 1). Spolu s Pro plánem Supabase a placeným Resend to patří do rozpočtu spuštění.
-- **Region `fra1` ověřit na produkci** (rozhodnutí 41, checklist produkce bod 1).
 - **Lhůta uložení potvrzených adres a příjemci údajů** v zásadách: musí doplnit provozovatel.
 - **Migrace se spouští ručně** v SQL editoru Supabase (bez Supabase CLI). Logika SQL funkcí byla během vývoje ověřena v PGlite (Postgres ve WASM): upsert, práva rolí, mazání po 30 dnech, opakované spuštění.
 - **Zásady Meta pro finanční produkty** jsme nenačetli (stránka se nástrojem nenačte). Před spuštěním kampaně je musí přečíst člověk, včetně ověření inzerenta.
