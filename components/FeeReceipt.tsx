@@ -2,6 +2,7 @@
 
 import { type ReactNode, useId, useState } from "react";
 import { More } from "@/components/More";
+import { Term } from "@/components/Term";
 import type { FeeResult } from "@/lib/fees";
 import { formatDate, formatKc, formatPercent } from "@/lib/format";
 import { useTween } from "@/lib/use-tween";
@@ -37,7 +38,7 @@ export function FeeReceipt({
 
         <div className="mt-3 border-b-2 border-ink pb-3" aria-live="polite">
           <p className="font-semibold">
-            Rozdíl {formatPercent(etf.ter)} vs. {formatPercent(active.ter)} za {years}&nbsp;let
+            Rozdíl za {years}&nbsp;let: poplatek {formatPercent(etf.ter)} vs. {formatPercent(active.ter)} ročně
           </p>
           {/* Animované číslo čtečka nečte (hlásila by každý snímek), dostane jen výslednou hodnotu.
               Šířku drží neviditelná výsledná hodnota, animovaná leží přes ni: proporcionální číslice
@@ -52,7 +53,9 @@ export function FeeReceipt({
           </p>
           <p className="sr-only">{formatKc(result.esmaGap)}</p>
           <p className="fine mt-1">
-            O tolik víc stojí průměrný aktivní akciový fond v&nbsp;EU než průměrný ETF (ESMA).
+            O tolik víc stojí průměrný{" "}
+            <Term term="aktivní" name="aktivní fond">Aktivní fond: akcie vybírá správce fondu, místo aby jen kopíroval index jako ETF.</Term>{" "}
+            akciový fond v&nbsp;EU než průměrný ETF (ESMA).
           </p>
         </div>
 
@@ -69,11 +72,11 @@ export function FeeReceipt({
         <div id={breakdownId} className={open ? "" : "hidden sm:block"} data-testid="receipt-breakdown">
           <dl className="mt-2">
             <Line label="Vklady celkem" value={formatKc(result.deposits)} />
-            <Line label={`Modelová hodnota bez poplatků (${annualReturn} %)`} value={formatKc(result.grossValue)} />
+            <Line label={`Kolik by investice měla bez poplatků (${annualReturn} % ročně)`} value={formatKc(result.grossValue)} />
           </dl>
 
           <p className="mt-5 text-[13px] tracking-wide text-muted uppercase">
-            Náklady za {years}&nbsp;let · TER ročně
+            Náklady za {years}&nbsp;let · roční poplatek fondu
           </p>
           <ul className="mt-1">
             {result.rows.map((row) => (
@@ -105,19 +108,22 @@ export function FeeReceipt({
         <p>Kalkulačka počítá náklady, nedoporučuje žádný fond.</p>
         <ul className="list-disc space-y-1 pl-5">
           <li>Modelový výpočet v&nbsp;Kč. Výnos {annualReturn}&nbsp;% je zvolený příklad, ne odhad ani slib.</li>
-          <li>Nezahrnuje měnové riziko USD/CZK, poplatky brokera, směnu měn, spread ani daně.</li>
+          <li>
+            Nezahrnuje změny kurzu koruny, poplatky brokera, směnu měn, rozdíl mezi nákupní a&nbsp;prodejní cenou ani
+            daně.
+          </li>
         </ul>
         <More summary="Jak počítáme">
           <p>
-            <strong className="font-semibold text-ink">Náklad</strong> = zaplacené poplatky + výnos, o&nbsp;který kvůli
-            nim přijdete, proti fondu bez nákladů.
+            Do <strong className="font-semibold text-ink">nákladů</strong> počítáme zaplacené poplatky i&nbsp;výnos, který
+            by tyto peníze vydělaly, kdyby zůstaly investované.
           </p>
           <p className="mt-1">
-            TER fondů od emitentů k&nbsp;{formatDate(fundSource.retrievedAt)} (zdroje u&nbsp;srovnání níže). Průměry{" "}
+            Roční poplatky (TER) fondů od jejich správců k&nbsp;{formatDate(fundSource.retrievedAt)} (zdroje u&nbsp;srovnání níže). Průměry{" "}
             <a className="underline" href={active.sourceUrl}>
               ESMA
             </a>{" "}
-            za rok 2024 (staženo {formatDate(active.retrievedAt)}): průběžné náklady bez vstupních poplatků.
+            za rok 2024 (staženo {formatDate(active.retrievedAt)}): jen roční poplatky, bez vstupních poplatků.
           </p>
         </More>
       </div>

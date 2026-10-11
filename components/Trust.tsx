@@ -13,13 +13,13 @@ export function Trust() {
 
       <More summary="Odkud jsou data" className="mt-4">
         <p>
-          Údaje o&nbsp;fondech pochází přímo od emitentů (Vanguard, iShares, State Street SPDR), z&nbsp;prospektů na SEC
-          EDGAR, z&nbsp;KID a&nbsp;z&nbsp;adresáře NYSE, staženo {formatDate(DATA_RETRIEVED_AT)}. Průměrné náklady fondů
-          v&nbsp;EU z&nbsp;
+          Údaje o&nbsp;fondech pochází přímo od jejich správců (Vanguard, iShares, State Street SPDR), z&nbsp;prospektů
+          na SEC EDGAR (databáze amerického dozoru), z&nbsp;KID a&nbsp;z&nbsp;adresáře NYSE, staženo{" "}
+          {formatDate(DATA_RETRIEVED_AT)}. Průměrné náklady fondů v&nbsp;EU ze&nbsp;
           <a href={ESMA.sourceUrl} className="underline">
-            tržní zprávy ESMA
+            zprávy ESMA
           </a>{" "}
-          (data za rok 2024). U&nbsp;každé hodnoty ve srovnání je odkaz na zdroj.
+          (Evropský orgán pro cenné papíry a&nbsp;trhy, data za rok 2024). U&nbsp;každé hodnoty ve srovnání je odkaz na zdroj.
         </p>
       </More>
 

@@ -2,7 +2,7 @@ import { More } from "@/components/More";
 import type { Fund, FundPair, Sourced } from "@/lib/etfs";
 import { formatBillions, formatDate, formatPercent } from "@/lib/format";
 
-const DISTRIBUTION = { accumulating: "akumulační", distributing: "distribuční" } as const;
+const DISTRIBUTION = { accumulating: "reinvestuje (akumulační)", distributing: "vyplácí (distribuční)" } as const;
 
 type Cell = { text: string; field: Sourced<unknown> | null };
 /** code: kód (ISIN), který se nesmí zalomit – menší písmo, celý na jednom řádku */
@@ -19,17 +19,17 @@ function rows(pair: FundPair, full: boolean): Row[] {
   const { us, ucits } = pair;
   const base: Row[] = [
     { label: "Burza", us: cell(us.exchange, us.exchange.value), ucits: cell(ucits.exchange, ucits.exchange.value) },
-    { label: "Domicil", us: cell(us.domicile, us.domicile.value), ucits: cell(ucits.domicile, `${ucits.domicile.value} (UCITS)`) },
-    { label: "TER ročně", us: cell(us.ter, formatPercent(us.ter.value)), ucits: cell(ucits.ter, formatPercent(ucits.ter.value)) },
+    { label: "Sídlo fondu", us: cell(us.domicile, us.domicile.value), ucits: cell(ucits.domicile, `${ucits.domicile.value} (UCITS)`) },
+    { label: "Poplatek ročně", us: cell(us.ter, formatPercent(us.ter.value)), ucits: cell(ucits.ter, formatPercent(ucits.ter.value)) },
     {
       label: "Dividendy",
       us: cell(us.distribution, DISTRIBUTION[us.distribution.value]),
       ucits: cell(ucits.distribution, DISTRIBUTION[ucits.distribution.value]),
     },
     {
-      label: "Měna",
+      label: "Měna nákupu",
       us: cell(us.currency, us.currency.value),
-      ucits: cell(ucits.currency, `${ucits.currency.value}, fond v ${ucits.base_currency.value}`),
+      ucits: cell(ucits.currency, `${ucits.currency.value} (fond vede hodnotu v ${ucits.base_currency.value})`),
     },
   ];
   if (!full) return base;
@@ -47,6 +47,28 @@ function rows(pair: FundPair, full: boolean): Row[] {
     { label: "ISIN", us: cell(us.isin, us.isin.value), ucits: cell(ucits.isin, ucits.isin.value), code: true },
   ];
 }
+
+/** Vysvětlivky řádků pro laika, každá jedna věta. `full`: řádky jen v plném srovnání. */
+const GLOSSARY: { term: string; text: string; full?: boolean }[] = [
+  { term: "Burza", text: "kde se fond obchoduje; NYSE Arca patří skupině NYSE, Xetra je německá burza." },
+  { term: "Sídlo fondu", text: "země, podle jejíchž pravidel fond vznikl." },
+  { term: "Poplatek ročně (TER)", text: "kolik fond ročně strhne z vaší investice, platíte ho průběžně v ceně fondu." },
+  {
+    term: "Dividendy",
+    text: "zda fond výplatu firem znovu investuje (akumulační), nebo vám ji posílá (distribuční).",
+  },
+  {
+    term: "Měna nákupu",
+    text: "v jaké měně fond na burze koupíte; měnové riziko to neodstraní, fond drží akcie v cizích měnách.",
+  },
+  { term: "Velikost fondu", text: "kolik peněz fond spravuje.", full: true },
+  {
+    term: "Registrace v ČR",
+    text: "zda emitent uvádí Česko mezi zeměmi registrace; v registru ČNB jsme to neověřovali.",
+    full: true,
+  },
+  { term: "ISIN", text: "mezinárodní kód fondu, podle kterého ho najdete u brokera.", full: true },
+];
 
 /** Dvojice NYSE ETF ↔ UCITS: hodnoty z dat, u každé číslo zdroje s odkazem a datem stažení. */
 export function PairCard({ pair, full = false }: { pair: FundPair; full?: boolean }) {
@@ -113,7 +135,16 @@ export function PairCard({ pair, full = false }: { pair: FundPair; full?: boolea
         </tbody>
       </table>
       {(full || !same) && <p className="fine mt-2">{pair.us.ucits_equivalent!.public_note}</p>}
-      <More summary={`Zdroje a data (${sources.length})`} className="mt-1">
+      <More summary="Co znamenají řádky" className="mt-1">
+        <dl className="space-y-1">
+          {GLOSSARY.filter((g) => full || !g.full).map((g) => (
+            <div key={g.term}>
+              <dt className="inline font-semibold text-ink">{g.term}:</dt> <dd className="inline">{g.text}</dd>
+            </div>
+          ))}
+        </dl>
+      </More>
+      <More summary={`Zdroje a data (${sources.length})`}>
         <ol className="space-y-0.5">
           {sources.map((s, i) => (
             <li key={s.url} id={`src-${id}-${i + 1}`}>

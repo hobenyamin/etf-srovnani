@@ -53,9 +53,12 @@ export function LeadForm({ fullComparison }: { fullComparison: ReactNode }) {
           </h2>
           <ul className="mt-4 space-y-2 text-[15px] leading-6">
             <li className="dotted pb-2">
-              VOO, SPY, IVV, VTI a&nbsp;VT vedle UCITS fondů, které jsou v&nbsp;ČR dostupné
+              VOO, SPY, IVV, VTI a&nbsp;VT vedle evropských fondů, které jsou v&nbsp;ČR dostupné
             </li>
-            <li className="dotted pb-2">TER, měna, akumulace, burza, velikost fondu, registrace v&nbsp;ČR, ISIN</li>
+            <li className="dotted pb-2">
+              Roční poplatek, měna, co fond dělá s&nbsp;dividendami, burza, velikost fondu, registrace v&nbsp;ČR a&nbsp;kód
+              ISIN pro vyhledání u&nbsp;brokera
+            </li>
           </ul>
           <p className="mt-3 text-[15px] font-semibold">Zobrazí se hned po odeslání, kopii pošleme e-mailem.</p>
           {flow.activeForm === "bottom" ? (

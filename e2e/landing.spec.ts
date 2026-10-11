@@ -39,7 +39,12 @@ test("hero B podle utm_content", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Proč si v\s+Česku nekoupíte VOO\?/);
   await expect(page.getByText(/jaké alternativy jsou v\s+ČR dostupné/)).toBeVisible();
   // Reklama B vysvětluje „proč“ – hero musí totéž říct hned, ne až ve srovnání
-  await expect(page.locator("#hero")).toContainText(/chybí KID, který nařízení PRIIPs vyžaduje/);
+  await expect(page.locator("#hero")).toContainText(/nemají KID – dokument, který v\s+EU musí drobný investor dostat před nákupem/);
+  // řádek evropského fondu („VUAA · fond z EU (Irsko)“) se nezalomí: stejně vysoký jako řádek VOO
+  const rows = page.locator("#hero dl > div");
+  await expect(rows.nth(1)).toContainText(/fond z\s+EU \(Irsko\)/);
+  const [us, eu] = await Promise.all([0, 1].map(async (i) => (await rows.nth(i).boundingBox())!.height));
+  expect(Math.abs(eu - us)).toBeLessThan(2);
   await expect(page.getByRole("link", { name: "Ukázat srovnání" })).toBeInViewport();
   expect(new URL(page.url()).pathname).toBe("/");
   await expect.poll(() => page.evaluate(() => window.dataLayer?.[0]?.ad_variant)).toBe("b");
@@ -75,7 +80,7 @@ test("rozpis účtenky je na mobilu sbalený a jde rozbalit", async ({ page }) =
   await expect(breakdown).toContainText("Vklady celkem");
   await expect(breakdown).toContainText("720 000 Kč");
   // předpoklady výpočtu jsou vidět vždy, nejsou v rozpisu
-  await expect(page.locator("#kalkulacka").getByText(/Nezahrnuje měnové riziko/)).toBeVisible();
+  await expect(page.locator("#kalkulacka").getByText(/Nezahrnuje změny kurzu koruny/)).toBeVisible();
 });
 
 for (const height of [812, 667]) {
@@ -144,6 +149,31 @@ test("kalkulačka při 2 000 Kč / 20 let / 0 % ukáže stejný rozdíl jako her
   await expect(page.getByTestId("calc-gap")).toHaveText(hero!);
 });
 
+test("pojmy pro laika: „?“ u KID a UCITS se ovládá klávesnicí, řádky srovnání mají vysvětlivky", async ({ page }) => {
+  await page.goto("/");
+  const section = page.locator("#srovnani");
+  const kid = section.getByRole("button", { name: "Co je KID?" });
+  const explanation = section.locator(`#${(await kid.getAttribute("aria-controls"))!.replace(/:/g, "\\:")}`);
+  await expect(kid).toHaveAttribute("aria-expanded", "false");
+  await expect(explanation).toBeHidden();
+  await kid.focus();
+  await page.keyboard.press("Enter");
+  await expect(kid).toHaveAttribute("aria-expanded", "true");
+  await expect(explanation).toContainText("nejvýš 3 strany A4");
+  await page.keyboard.press("Space");
+  await expect(explanation).toBeHidden();
+  await expect(section.getByRole("button", { name: "Co je UCITS?" })).toBeVisible();
+
+  // ukázka: vysvětlivky jen k řádkům, které má (bez ISIN), sbalené
+  const panel = section.getByRole("tabpanel");
+  const glossary = panel.locator("details").filter({ hasText: /^Co znamenají řádky/ });
+  await expect(glossary).not.toHaveAttribute("open");
+  await glossary.getByText("Co znamenají řádky").click();
+  await expect(glossary).toContainText("Poplatek ročně (TER):");
+  await expect(glossary).not.toContainText("ISIN");
+  await expect(panel.getByRole("rowheader")).toHaveText(["Burza", "Sídlo fondu", "Poplatek ročně", "Dividendy", "Měna nákupu"]);
+});
+
 test("porovnání: přepínač 3 dvojic, vybraná VOO se zdroji, zamčené na jednom řádku", async ({ page }) => {
   await page.goto("/");
   const section = page.locator("#srovnani");
@@ -156,7 +186,7 @@ test("porovnání: přepínač 3 dvojic, vybraná VOO se zdroji, zamčené na je
   await expect(visible).toHaveCount(1);
   await expect(visible.getByTestId("pair")).toContainText("VUAA");
   // zdroje jsou ve sbaleném „Zdroje a data“, horní index u hodnoty ho rozbalí
-  const sources = visible.locator("details");
+  const sources = visible.locator("details").filter({ hasText: /^Zdroje a data/ });
   await expect(sources).not.toHaveAttribute("open");
   await visible.locator('sup a[href^="#src-"]').first().click();
   await expect(sources).toHaveAttribute("open");

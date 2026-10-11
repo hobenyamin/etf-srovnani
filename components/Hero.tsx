@@ -60,7 +60,7 @@ function HeroB() {
       </h1>
       <p className="mt-3 text-[17px] leading-7">A&nbsp;jaké alternativy jsou v&nbsp;ČR dostupné.</p>
       <p className="mt-2 text-[15px] leading-6">
-        Fondům z&nbsp;USA chybí KID, který nařízení PRIIPs vyžaduje pro prodej drobným investorům v&nbsp;EU.
+        Fondy z&nbsp;USA nemají KID – dokument, který v&nbsp;EU musí drobný investor dostat před nákupem.
       </p>
       <dl className="receipt mt-5 bg-card px-4 text-[15px]">
         <div className="dotted flex items-baseline justify-between py-2">
@@ -68,14 +68,14 @@ function HeroB() {
             <span className="num font-semibold">{pair.us.ticker.value}</span>{" "}
             <span className="text-muted">· {pair.us.exchange.value}</span>
           </dt>
-          <dd className="num">TER {formatPercent(pair.us.ter.value)}</dd>
+          <dd className="num">{formatPercent(pair.us.ter.value)} ročně</dd>
         </div>
         <div className="flex items-baseline justify-between py-2">
           <dt>
             <span className="num font-semibold">{pair.ucits.ticker.value}</span>{" "}
-            <span className="text-muted">· UCITS, {pair.ucits.domicile.value}</span>
+            <span className="text-muted">· fond z&nbsp;EU ({pair.ucits.domicile.value})</span>
           </dt>
-          <dd className="num">TER {formatPercent(pair.ucits.ter.value)}</dd>
+          <dd className="num">{formatPercent(pair.ucits.ter.value)} ročně</dd>
         </div>
         <p className="fine pt-1">
           Stejný index {pair.us.index.value}. Data emitentů k&nbsp;{formatDate(pair.us.ter.retrieved_at)}.

@@ -1,6 +1,7 @@
 import { LeadFormLink } from "@/components/LeadFormLink";
 import { PairCard } from "@/components/PairCard";
 import { PairTabs } from "@/components/PairTabs";
+import { Term } from "@/components/Term";
 import { TrackView } from "@/components/TrackView";
 import { lockedPairs, previewPairs } from "@/lib/etfs";
 
@@ -19,13 +20,20 @@ export function Comparison() {
         Fondy z&nbsp;NYSE a&nbsp;jejich evropské varianty
       </h2>
       <p className="mt-3 text-[15px] leading-6">
-        Fondy domicilované v&nbsp;USA nemají sdělení klíčových informací (KID), které pro prodej drobným investorům
-        v&nbsp;EU vyžaduje{" "}
+        Fondy se sídlem v&nbsp;USA nemají{" "}
+        <Term term="KID">
+          Sdělení klíčových informací: krátký dokument o rizicích a nákladech fondu, nejvýš 3 strany A4.
+        </Term>
+        , který podle{" "}
         <a className="underline" href={PRIIPS_URL}>
           nařízení PRIIPs
-        </a>
-        . Brokeři je proto drobným investorům v&nbsp;Česku běžně nenabízejí. Stejný index sledují fondy UCITS
-        z&nbsp;Irska. Srovnání je informativní, nejde o&nbsp;doporučení.
+        </a>{" "}
+        musí drobný investor v&nbsp;EU dostat před nákupem. Brokeři je proto v&nbsp;Česku drobným investorům běžně
+        nenabízejí. Stejný index sledují evropské fondy{" "}
+        <Term term="UCITS">
+          Fond podle evropské směrnice UCITS, která stanoví pravidla pro rozložení rizika a ochranu investorů.
+        </Term>{" "}
+        se sídlem v&nbsp;Irsku. Srovnání je informativní, nejde o&nbsp;doporučení.
       </p>
 
       <div className="mt-6">

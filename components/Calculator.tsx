@@ -206,7 +206,7 @@ function CalcLead({ flow, fullComparison }: { flow: ReturnType<typeof useLeadFlo
       className="mt-6 scroll-mt-4 rounded-sm border-2 border-ink bg-card p-4"
     >
       <TrackView event="form_view" props={{ form_location: "calc" }}>
-        <p className="font-semibold">Chcete kompletní srovnání všech 5&nbsp;dvojic fondů NYSE ↔ UCITS?</p>
+        <p className="font-semibold">Chcete srovnání všech 5&nbsp;amerických fondů s&nbsp;evropskými variantami?</p>
         <p className="mt-1 text-[15px] leading-6 text-muted">Zobrazí se hned po odeslání, kopii pošleme e-mailem.</p>
         <LeadFormFields location="calc" submitLabel={SUBMIT_CTA} className="mt-4" />
       </TrackView>

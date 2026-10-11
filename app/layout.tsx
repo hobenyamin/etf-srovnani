@@ -18,7 +18,7 @@ const atkinson = Atkinson_Hyperlegible_Next({
 export const metadata: Metadata = {
   title: "ETF z NYSE – srovnání pro českého investora",
   description:
-    "Porovnání ETF z NYSE s evropskými UCITS alternativami a kalkulačka dopadu poplatků v Kč.",
+    "Porovnání ETF z NYSE s evropskými alternativami dostupnými v ČR a kalkulačka dopadu poplatků v Kč.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
