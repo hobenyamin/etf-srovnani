@@ -24,7 +24,7 @@ Praktický úkol do výběrového řízení Clientelo Czech s.r.o. Hodnoticí ot
 | Po odeslání | Děkovací obrazovka se srovnáním (nečeká se na e-mail), jedna nepovinná otázka „Máte už účet u brokera?“ | – |
 | E-mailem | Potvrzovací e-mail (double opt-in), tlačítko „Potvrdit a otevřít srovnání“ | potvrzení adresy |
 
-**Kdy žádáme o kontakt:** až když návštěvník vidí svůj výsledek z kalkulačky (rozhodnutí 4). Pole pro e-mail se objeví hned pod výsledkem, až po první změně vstupu (rozhodnutí 45). Kdo kalkulačku přeskočí (hero B), najde formulář za ukázkou srovnání. V hero žádné pole ani zmínka o e-mailu není (hlídá E2E test). Spodní lepicí lišta vede před výsledkem na kalkulačku a na formulář až po výsledku.
+**Kdy žádáme o kontakt:** až když návštěvník vidí svůj výsledek z kalkulačky (rozhodnutí 4). Pole pro e-mail se objeví hned pod výsledkem, až po první změně vstupu (rozhodnutí 45). Kdo kalkulačku přeskočí (hero B), najde formulář za ukázkou srovnání. V hero žádné pole ani zmínka o e-mailu není (hlídá E2E test). Spodní lepicí lišta i výzva v patičce vedou vždy k poli pro e-mail (rozhodnutí 55).
 
 Daňový tahák (W-8BEN) stránka zatím neslibuje, protože neexistuje (Co chybí).
 
@@ -43,9 +43,9 @@ Pořadí v kódu: [`components/Landing.tsx`](components/Landing.tsx).
 
 Hero B vede rovnou na srovnání (3), ne na kalkulačku. Kdo přišel s otázkou „proč ne VOO“, chce nejdřív odpověď. Kalkulačku přeskočí, ale formulář (4) má hned pod srovnáním.
 
-Spodní lišta na mobilu se řídí tím, kde návštěvník je. Před výsledkem nabízí „Spočítat své poplatky“, když není vidět hero ani kalkulačka. Po výsledku nabízí „Poslat mi srovnání“ a dá focus do pole pro e-mail. Schová se, když je formulář vidět, po odeslání a dokud je vidět cookie lišta.
+Spodní lišta na mobilu nabízí vždy „Poslat mi srovnání“ a dá focus do pole pro e-mail v aktivním formuláři: po výsledku kalkulačky pod ním, jinak ve spodní sekci (rozhodnutí 55). Před výsledkem se ukáže, až když není vidět hero ani kalkulačka, po výsledku kdekoli. Schová se, když je vidět některý formulář (samotný formulář, ne nadpis sekce nad ním), po odeslání a dokud je vidět cookie lišta.
 
-Stejnou výzvu má i patička (krok 8b): kdo dočte až dolů, nekončí ve slepé uličce. Lišta se schová, když je výzva v patičce vidět, aby nebyly dvě stejné pod sebou. Logiku sdílí [`components/NextStepCta.tsx`](components/NextStepCta.tsx), v eventu se liší jen `cta: "sticky"` a `cta: "footer"`.
+Stejnou výzvu má i patička (krok 8b): kdo dočte až dolů, nekončí ve slepé uličce. Lišta se schová, když je výzva v patičce vidět, aby nebyly dvě stejné pod sebou. Tlačítko sdílí [`components/LeadCta.tsx`](components/LeadCta.tsx), v eventu se liší jen `cta: "sticky"` a `cta: "footer"`.
 
 ### Výška stránky na 375 px
 
@@ -267,7 +267,7 @@ p̄ = (p1 + p2) / 2,   z_α/2 = 1,96,   z_β = 0,84
 Funnel: `page_view → hero_cta_click → calc_start → calc_result → compare_view → form_view → form_submit → lead_confirmed`. Každý event nese `ad_variant` (`a`/`b`) a UTM parametry z URL ([`lib/track.ts`](lib/track.ts)).
 
 - **`form_location`:** `form_view` a `form_submit` nesou místo formuláře, `calc` (pod výsledkem kalkulačky) nebo `bottom` (spodní sekce). `form_view` se posílá jednou za návštěvu, takže říká, který formulář návštěvník uviděl jako první.
-- **`form_cta_click`:** event mimo funnel pro tlačítko „Poslat mi srovnání“ ve spodní liště (`cta: "sticky"`). `hero_cta_click` by po výsledku kalkulačky rozbil pořadí funnelu.
+- **`form_cta_click`:** event mimo funnel pro tlačítko „Poslat mi srovnání“ ve spodní liště (`cta: "sticky"`) a v patičce (`cta: "footer"`). Lišta i patička vedou vždy k formuláři, proto posílají vždy tento event. `hero_cta_click` posílá jen tlačítko v hero (`cta: "calc"` nebo `"compare"`), jinak by se rozbilo pořadí funnelu (hlídá E2E test).
 - **`compare_view` není povinný krok:** od kroku 8a jde formulář odeslat hned pod výsledkem, bez srovnání. Pořadí výše je pořadí sekcí na stránce, ne cesta, kterou musí každý projít.
 
 **Dva zdroje dat, každý na jinou otázku:**
@@ -466,6 +466,7 @@ Na https://etf-srovnani.vercel.app. Vyplní se na konci projektu, po úpravě te
 52. **Velká čísla ve Fraunces, ostatní čísla v Atkinson s přeškrtnutou nulou** (krok 8c, rozhodl člověk). Ve velkých částkách („44 200 Kč“) přeškrtnutá nula ruší. Atkinson Hyperlegible Next ale obyčejnou nulu nemá. Tvrzení z 8b, že ji dává funkce `salt`, bylo chybné (`docs/ai-chyby.md`). Pixelově jsme porovnali písmo z buildu, z Google Fonts i plné písmo z repozitáře autorů a nulu nemění `salt`, `zero`, `ss01–20` ani `cv01–20`. Samostatná velká čísla (hero A, rozdíl v účtence, reklama A) jsou proto ve Fraunces: obyčejná nula, proporcionální číslice, stejné písmo jako nadpisy, takže žádný soubor písma navíc. V textu a tabulkách zůstává Atkinson s tabulkovými číslicemi. U tickerů a ISIN je přeškrtnutá nula výhoda: „VOO“ se nesplete s „V00“. Zamítnuto: číslice z třetího písma přes `unicode-range` (další soubor písma a dvě písma v jednom čísle).
 53. **Červená zůstává jen pro chybu.** Validace formuláře a varování na `/zasady` jsou chybový stav, ne „ztráta“. Bez barvy by chyba ve formuláři byla méně nápadná, a to je přístupnostní riziko. Stejná hodnota `#B03A0A` (5,3 : 1), nový token `error`.
 54. **Tvar místo zelené.** Levnější a dražší řádek v účtence a v reklamě A rozlišuje plný pruh vs. obrys, ne barva. Rozdíl je vidět i bez rozlišování barev a zelená by „levnější variantu“ vizuálně doporučovala (rozhodnutí 5). Plný pruh má jen průměrný aktivní fond, tedy dražší strana srovnání.
+55. **Spodní lišta a patička vedou vždy k e-mailu** (2026-10-11, rozhodl člověk). Dřív před výsledkem kalkulačky nabízely „Spočítat své poplatky“. Kontakt je ale hlavní cíl stránky a před výsledkem se lišta ukazuje, až když návštěvník přeskočil hero i kalkulačku (typicky hero B → srovnání). V tu chvíli hodnotu už viděl (srovnání, číslo v hero), takže výzva k e-mailu nepřichází dřív, než něco dostal (rozhodnutí 4). Kalkulačku má návštěvník pořád nad sebou a tlačítko v hero na ni vede dál. Bez výsledku vede lišta ke spodnímu formuláři, po výsledku k poli u výpočtu (`focusLeadForm`). Riziko: méně lidí projde kalkulačkou. Podíl `calc_start` sledovat v PostHogu.
 
 ## Co chybí a proč
 

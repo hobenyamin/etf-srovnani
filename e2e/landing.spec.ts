@@ -321,6 +321,7 @@ test("měření: celá cesta v pořadí funnelu s ad_variant a UTM", async ({ pa
 
   const funnel = ["page_view", "hero_cta_click", "calc_start", "calc_result", "form_view", "form_submit"];
   expect((await events(page)).filter((e) => funnel.includes(e))).toEqual(funnel);
+  expect(await entry(page, "hero_cta_click")).toMatchObject({ cta: "calc" });
   expect(await entry(page, "form_submit")).toMatchObject({ form_location: "calc" });
   const layer = await page.evaluate(() => window.dataLayer!);
   for (const e of layer) {
@@ -391,19 +392,27 @@ test.describe("double opt-in a odhlášení", () => {
   });
 });
 
-test("kontextová lišta: před výpočtem kalkulačka, po výsledku formulář, schová se u formuláře a po odeslání", async ({ page }) => {
+test("spodní lišta vede vždy k e-mailu: bez výsledku ke spodnímu formuláři, po výsledku k poli u výpočtu", async ({ page }) => {
   const sticky = page.getByTestId("sticky-cta");
   // kus pod začátek sekce: kotva #srovnani (scroll-mt-4) nechá vidět posledních 16 px kalkulačky
   const jumpTo = (id: string) =>
     page.locator(`#${id}`).evaluate((el) => window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + 200, behavior: "instant" }));
 
-  // příchod rovnou na srovnání (kalkulačku přeskočil): lišta nabízí kalkulačku
+  // příchod rovnou na srovnání (kalkulačku přeskočil): lišta vede ke spodnímu formuláři
   await page.goto("/");
   await declineCookies(page);
   await jumpTo("srovnani");
-  await expect(sticky.getByRole("link", { name: "Spočítat své poplatky" })).toBeVisible();
-  await sticky.getByRole("link").click();
+  const toBottom = sticky.getByRole("button", { name: "Poslat mi srovnání" });
+  await expect(toBottom).toBeVisible();
+  await toBottom.click();
+  const bottomField = page.locator("#formular").getByRole("textbox", { name: "E-mail" });
+  await expect(bottomField).toBeFocused();
+  await expect(bottomField).toBeInViewport();
+  // formulář je vidět → lišta zmizí
   await expect(sticky).toHaveCount(0);
+  expect(await entry(page, "form_cta_click")).toMatchObject({ cta: "sticky" });
+  // z lišty nikdy hero_cta_click (rozbil by pořadí funnelu)
+  expect(await events(page)).not.toContain("hero_cta_click");
 
   await calcResult(page);
   // nahoře na stránce není vidět žádný formulář (srovnání je krátké, pod ním už je spodní sekce)
@@ -425,7 +434,7 @@ test("kontextová lišta: před výpočtem kalkulačka, po výsledku formulář,
   await expect(sticky).toHaveCount(0);
 });
 
-/** Posun kus pod začátek sekce, aby hero ani kalkulačka nebyly vidět (lišta nabídne kalkulačku). */
+/** Posun kus pod začátek sekce, aby hero ani kalkulačka nebyly vidět (lišta se ukáže i bez výsledku). */
 const scrollPast = (page: Page, id: string) =>
   page.locator(`#${id}`).evaluate((el) => window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + 200, behavior: "instant" }));
 
@@ -565,17 +574,17 @@ test("omezení pohybu: tlačítka a lišta bez přechodu, číslo skočí rovnou
   expect(await banner.locator(".done-title").evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
 });
 
-test("CTA v patičce: před výsledkem kalkulačka, po výsledku formulář, po odeslání nic; s lištou se nepřekrývá", async ({ page }) => {
+test("CTA v patičce vede vždy k e-mailu, po odeslání zmizí; s lištou se nepřekrývá", async ({ page }) => {
   await page.goto("/");
   await declineCookies(page);
   const footer = page.getByTestId("footer-cta");
   await footer.scrollIntoViewIfNeeded();
   await expect(page.getByTestId("sticky-cta")).toHaveCount(0);
-  const toCalc = footer.getByRole("link", { name: "Spočítat své poplatky" });
-  await expect(toCalc).toHaveAttribute("href", "#kalkulacka");
-  await toCalc.click();
-  await expect(page.locator("#kalkulacka")).toBeInViewport();
-  expect(await entry(page, "hero_cta_click")).toMatchObject({ cta: "footer" });
+  // bez výsledku kalkulačky → spodní formulář
+  await footer.getByRole("button", { name: "Poslat mi srovnání" }).click();
+  await expect(page.locator("#formular").getByRole("textbox", { name: "E-mail" })).toBeFocused();
+  expect(await entry(page, "form_cta_click")).toMatchObject({ cta: "footer" });
+  expect(await events(page)).not.toContain("hero_cta_click");
 
   await calcResult(page);
   await footer.scrollIntoViewIfNeeded();
@@ -583,7 +592,7 @@ test("CTA v patičce: před výsledkem kalkulačka, po výsledku formulář, po 
   await footer.getByRole("button", { name: "Poslat mi srovnání" }).click();
   const field = page.getByTestId("lead-inline").getByRole("textbox", { name: "E-mail" });
   await expect(field).toBeFocused();
-  expect(await entry(page, "form_cta_click")).toMatchObject({ cta: "footer" });
+  expect((await page.evaluate(() => window.dataLayer!)).filter((e) => e.event === "form_cta_click")).toHaveLength(2);
 
   await field.fill("paticka@example.com");
   await page.getByTestId("lead-inline").getByRole("button", { name: "Poslat mi srovnání" }).click();

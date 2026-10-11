@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { FOOTER_CTA_ID } from "@/components/FooterCta";
-import { NextStepCta, useNextStep } from "@/components/NextStepCta";
+import { LeadCta, useLeadCtaOpen } from "@/components/LeadCta";
 import { FORM_ANCHOR } from "@/lib/lead-flow";
 import { useBannerVisible } from "@/lib/use-consent";
 import { useLeadFlow } from "@/lib/use-lead-flow";
@@ -12,13 +12,15 @@ const LEAVE_MS = 200;
 const cta = "btn-primary mx-auto h-12 w-full max-w-xl";
 
 /**
- * Spodní lišta na mobilu podle toho, kde návštěvník je:
- * - před výsledkem kalkulačky odkaz na kalkulačku, když není vidět hero ani kalkulačka (typicky hero B
- *   → srovnání). Kalkulačka začíná už v první obrazovce, „jednou viděná“ by lištu schovala hned po načtení,
- * - po výsledku „Poslat mi srovnání“ → pole pro e-mail. Schová se, když je formulář vidět, a po odeslání,
- * - nikdy současně s toutéž výzvou v patičce (FooterCta).
- * Příchod animuje CSS (@starting-style), odchod usePresence: lišta zůstane 200 ms v DOM jako inert
- * s posledním krokem. S omezením pohybu se odpojí hned.
+ * Spodní lišta na mobilu, vždy „Poslat mi srovnání“ → pole pro e-mail v aktivním formuláři (kontakt je hlavní cíl):
+ * - před výsledkem kalkulačky až když není vidět hero ani kalkulačka (typicky hero B → srovnání): návštěvník
+ *   hodnotu viděl a výzvy hero ani kalkulačky lišta nepřekrývá. Kalkulačka začíná už v první obrazovce,
+ *   „jednou viděná“ by lištu schovala hned po načtení,
+ * - po výsledku kdekoli na stránce,
+ * - schová se, když je vidět některý formulář, po odeslání, dokud je vidět cookie lišta, a nikdy současně
+ *   s toutéž výzvou v patičce (FooterCta).
+ * Příchod animuje CSS (@starting-style), odchod usePresence: lišta zůstane 200 ms v DOM jako inert.
+ * S omezením pohybu se odpojí hned.
  */
 export function StickyCta() {
   const [heroOut, setHeroOut] = useState(false);
@@ -26,7 +28,7 @@ export function StickyCta() {
   const [formVisible, setFormVisible] = useState(false);
   const [footerInView, setFooterInView] = useState(false);
   const flow = useLeadFlow();
-  const step = useNextStep();
+  const open = useLeadCtaOpen();
   // Dvě spodní lišty přes sebe ne: dokud je vidět lišta cookies, CTA počká
   const bannerVisible = useBannerVisible();
 
@@ -50,7 +52,6 @@ export function StickyCta() {
 
   // Formulář pod kalkulačkou vzniká až po výsledku, proto se sleduje znovu při každé změně
   useEffect(() => {
-    if (!flow.calcDone) return;
     const visible = new Set<Element>();
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
@@ -59,20 +60,22 @@ export function StickyCta() {
       }
       setFormVisible(visible.size > 0);
     });
+    // Samotný formulář (pole), ne celá sekce: nad formulářem je nadpis a popis, tam lišta ještě pomáhá.
+    // Bez formuláře (dole po výsledku jen tlačítko nahoru) se sleduje celé místo.
     for (const id of Object.values(FORM_ANCHOR)) {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
+      const box = document.getElementById(id);
+      if (box) observer.observe(box.querySelector("form") ?? box);
     }
     return () => observer.disconnect();
   }, [flow.calcDone, flow.activeForm]);
 
   const hidden =
-    bannerVisible || footerInView || !step || (step === "form" ? formVisible : !heroOut || calcInView);
-  const presence = usePresence(hidden ? null : step, LEAVE_MS);
+    !open || bannerVisible || footerInView || formVisible || (!flow.calcDone && (!heroOut || calcInView));
+  const presence = usePresence(hidden ? null : true, LEAVE_MS);
   if (!presence) return null;
   return (
     <div className={presence.leaving ? `${bar} leaving` : bar} inert={presence.leaving} data-testid="sticky-cta">
-      <NextStepCta step={presence.value} cta="sticky" className={cta} />
+      <LeadCta cta="sticky" className={cta} />
     </div>
   );
 }
