@@ -324,7 +324,54 @@ Dvě reklamy pro Meta (Facebook, Instagram), každá s vlastním hero. Texty, vi
 
 ## Práce s AI
 
-TODO – pokyny agentům. Chyby: [`docs/ai-chyby.md`](docs/ai-chyby.md), exporty konverzací: [`ai-log/`](ai-log/).
+Stránku, data, testy, reklamy i tento README psala AI. Člověk zadával kroky, schvaloval plány a texty, ručně ověřoval data a služby a rozhodoval v nejasnostech. Pracovaly dva nástroje:
+
+- **Claude Code** (v editoru, s přístupem k repozitáři): implementace, testy, dokumentace.
+- **Claude v chatu na claude.ai**: plánování kroků, revize a nezávislá křížová kontrola dat. Neměl přístup ke kódu ani k sessions v Claude Code, jen k tomu, co mu člověk vložil.
+
+### Pokyny agentům
+
+- **Trvalý kontext** je v [`CLAUDE.md`](CLAUDE.md): zadání, klíčová rozhodnutí (UCITS ekvivalent, formulář jen e-mail, žádné doporučení fondu), cílová skupina, pojmenování eventů, právní mantinely a pravidla práce. [`AGENTS.md`](AGENTS.md) posílá agenta do dokumentace Next.js v `node_modules`, protože verze 16 se liší od jeho tréninkových dat.
+- **Každý krok má stejný průběh:** „Přečti CLAUDE.md a README.md“ → návrh v plan mode → člověk plán schválí, často s úpravami → implementace po malých commitech (česky, bez pushe, push dělá člověk) → zastavení na kontrolním bodu → export konverzace do `ai-log/`.
+- **Pravidla, která se v pokynech opakovala:** nevymýšlet čísla ani zdroje (chybějící údaj = `null` s důvodem), každé číslo má zdroj s datem, nebo štítek „vlastní předpoklad“. Texty pro návštěvníky schvaluje člověk před implementací (krok 9: tabulka „místo / současný text / navržený text / proč“). Právní a daňová tvrzení jen se zdrojem.
+- **Pravidla přidaná po chybách:** bez souhlasu žádný `git stash`, `reset` ani `checkout` souborů (po incidentu se stash). Testy a měřicí skripty jen s testovacími proměnnými, nikdy s `.env.local` (po incidentu s portem 3100). Před commitem změny stránky celé E2E, ne výběr testů. Měřicí skripty patří do `scripts/`, ne do dočasné složky.
+
+### Jak se výstup kontroloval
+
+- **Automatické testy** (stav 2026-10-11): 79 unit testů ve Vitestu (6 souborů: výpočet kalkulačky, reklamy proti hero a datům, double opt-in, ukládání leadu, souhlas s cookies, měření) a 43 E2E testů v Playwrightu na mobilním viewportu 375 px (funnel eventů, cookie lišta, přístupnost, lišta nezakryje CTA ani na 375 × 667, výpadek databáze). Testovací server míří na nedostupnou databázi a falešné klíče, `assertSafeTestEnv` ho jinak nespustí ([`e2e/test-env.mjs`](e2e/test-env.mjs)). `npm run check-data` kontroluje strukturu `data/etfs.json`.
+- **Reklamy proti stránce:** [`lib/ads.test.ts`](lib/ads.test.ts) počítá čísla z reklamy stejnou funkcí jako hero a kontroluje, že nadpisy, věta o KID a rizikové věty odpovídají stránce.
+- **Data:** tři vrstvy, níže v „Kontrola dat“.
+- **Ručně člověkem:** tabulky ručních ověření níže (ukládání leadů, e-mail, cookie lišta, produkce), kontrola na telefonu a snímky obrazovky ([`docs/screens/`](docs/screens/)).
+
+### Kde se AI mýlila
+
+Úplný seznam s tím, jak se chyba zjistila a čím se opravila: [`docs/ai-chyby.md`](docs/ai-chyby.md) (29 záznamů z Claude Code, 3 z chatu). Nejzávažnější:
+
+- **Testy zapisovaly do ostré databáze a odeslaly 3 skutečné e-maily** (port 3100 obsadil starý produkční server). Opatření: testovací adresy jen na rezervovaných doménách, `reuseExistingServer: false`, `assertSafeTestEnv`.
+- **Nepravdivé „ověřeno renderem“** u nuly v písmu Atkinson: měřicí skript zůstal jen v dočasné složce a tvrzení neplatilo. AI se pak zastavila a zeptala člověka. Měřicí skripty jsou teď v repozitáři.
+- **Tvrzení bez podmínky:** první text reklamy A („desítky tisíc Kč“) při 500 Kč měsíčně neplatil. Teď je u každého čísla podmínka a hlídá to test.
+- **Rizikové upozornění „Fondy investují v USD“** neplatilo pro globální fondy VT a VWCE (krok 9).
+- **Git stash bez souhlasu**, který kvůli ukončenému shellu na chvíli schoval necommitnuté změny. Opatření: pravidlo v `CLAUDE.md`.
+- **Asistent v chatu** označil správné TER VWCE a SXR4 za chybu podle zastaralé znalosti. Rozhodl web emitenta.
+
+### Exporty konverzací
+
+Exporty z Claude Code (`/export`) v [`ai-log/`](ai-log/). Sessions 8c byly exportované průběžně třikrát, každý pozdější export obsahuje i ty předchozí.
+
+| Soubor | Obsah session |
+| --- | --- |
+| [`2026-10-08-kostra-projektu.txt`](ai-log/2026-10-08-kostra-projektu.txt) | Krok 1: kostra Next.js projektu, README a složky repozitáře. |
+| [`2026-10-09-data-etf.txt`](ai-log/2026-10-09-data-etf.txt) | Krok 2: data 10 fondů od emitentů se zdroji, checklist ručního ověření a doplnění AUM podle kontroly člověkem. |
+| [`2026-10-09-ui-kalkulacka.txt`](ai-log/2026-10-09-ui-kalkulacka.txt) | Krok 3: hero, kalkulačka poplatků, ukázka srovnání a formulář (jen UI), ruční ověření citace ESMA. |
+| [`2026-10-09-leady-emaily-mereni.txt`](ai-log/2026-10-09-leady-emaily-mereni.txt) | Krok 4: Supabase, double opt-in přes Resend, cookie lišta a PostHog s ručními testy 4a–4c, incident se `git stash`. |
+| [`2026-10-10-nasazeni-vercel.txt`](ai-log/2026-10-10-nasazeni-vercel.txt) | Krok 6: příprava nasazení na Vercel (region `fra1`, `noindex`, checklist produkce). |
+| [`2026-10-10-reklamy-readme.txt`](ai-log/2026-10-10-reklamy-readme.txt) | Krok 7: reklamy A a B s vizuály a obsah README (konverze, A/B hypotézy, výpočet vzorku). |
+| [`2026-10-10-konverzni-upravy.txt`](ai-log/2026-10-10-konverzni-upravy.txt) | Krok 8a: formulář pod výsledkem kalkulačky a kontextová lišta. V téže session úklid po incidentu s portem 3100 a pojistky testů. |
+| [`2026-10-10-vizualni-system.txt`](ai-log/2026-10-10-vizualni-system.txt) | Krok 8b: vizuální systém „Výpis z účtu 2.0“ a plán kroku 8c podle designové revize. |
+| [`2026-10-10-zklidneni-animace.txt`](ai-log/2026-10-10-zklidneni-animace.txt) | Krok 8c, první export: kontrola schváleného plánu proti kódu a implementace (barvy, velká čísla, animace). |
+| [`2026-10-11-zklidneni-animace-detaily.txt`](ai-log/2026-10-11-zklidneni-animace-detaily.txt) | Krok 8c, druhý export: úpravy po kontrole na telefonu (nadpis „Odesláno.“, vrstvená informace GDPR). |
+| [`2026-10-11-spodni-lista.txt`](ai-log/2026-10-11-spodni-lista.txt) | Krok 8c, třetí export: spodní lišta a patička vedou vždy k e-mailu. |
+| [`2026-10-11-texty.txt`](ai-log/2026-10-11-texty.txt) | Krok 9: texty pro laika s vysvětlivkami, `/potvrzeni` po obnovení, nadpisy a rizikové věty reklam. |
 
 ### Kontrola dat: tři vrstvy
 
