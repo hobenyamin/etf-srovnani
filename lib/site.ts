@@ -47,7 +47,7 @@ export const CONSENT = {
 /** Upozornění na rizika – stejné znění na stránce (Trust) i v e-mailu. */
 export const RISK_WARNINGS = [
   "Hodnota investice může klesat i stoupat, můžete přijít o část vložených peněz.",
-  "Fondy investují v USD. Změna kurzu USD/CZK může výnos v korunách snížit i zvýšit.",
+  "Fondy vedou hodnotu v USD a drží akcie v cizích měnách. Změna kurzu koruny může výnos v korunách snížit i zvýšit.",
   "Minulé ani modelové výnosy nezaručují výnosy budoucí.",
   "Údaje platí k datu uvedenému u zdroje a mohou se změnit.",
   "Stránka je vzdělávací srovnání s daty, ne investiční doporučení ani nabídka produktu.",

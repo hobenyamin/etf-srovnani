@@ -32,10 +32,10 @@ function operatorLine(): string {
 }
 
 export function confirmationEmail({ confirmUrl, unsubscribeUrl, dataDate }: ConfirmationEmailInput): RenderedEmail {
-  const subject = "Potvrďte e-mail: srovnání ETF z NYSE a UCITS";
+  const subject = "Potvrďte e-mail: srovnání ETF z NYSE";
   const preheader = "Jedním klepnutím potvrdíte adresu a otevřete plné srovnání 5 dvojic fondů.";
   const intro =
-    "na stránce se srovnáním ETF jste zadali tuto adresu a požádali o plné srovnání 5 dvojic fondů: ETF z NYSE vedle UCITS fondů, které jsou v ČR dostupné.";
+    "na stránce se srovnáním ETF jste zadali tuto adresu a požádali o plné srovnání 5 dvojic fondů: ETF z NYSE vedle evropských fondů, které jsou v ČR dostupné.";
   const validity = `Odkaz platí ${CONFIRM_VALID_DAYS} dní. Pokud jste o srovnání nežádali, e-mail ignorujte – nepotvrzenou adresu do ${RETENTION.unconfirmedDays} dnů smažeme.`;
   const dataLine = `Data ve srovnání jsou ke dni ${formatDate(dataDate)}.`;
   const sender = `Odesílá ${operatorLine()}. ${OPERATOR.about}`;
