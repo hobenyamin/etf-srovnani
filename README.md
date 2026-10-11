@@ -7,6 +7,16 @@ Praktický úkol do výběrového řízení Clientelo Czech s.r.o. Hodnoticí ot
 - Nasazená stránka: https://etf-srovnani.vercel.app (Vercel Hobby, funkce ve Frankfurtu)
 - Reklamy: [`ads/`](ads/)
 
+## Dá se zítra spustit reklama?
+
+**Technicky ano.** Stránka běží na produkci. Ukládání leadů, double opt-in, odhlášení a měření prošly ručními testy proti skutečným službám (kroky 4a–4c), na produkci zatím jen část ([checklist produkce](#ruční-ověření-produkce-krok-6), body 4–8 zbývají). Před ostrou kampaní za klienta je potřeba ještě:
+
+- **Správce osobních údajů:** v textech u formuláře, v zásadách a v patičce je teď autor projektu, ne klient (název, IČO, sídlo, kontakt).
+- **Vlastní doména:** stránka běží na `etf-srovnani.vercel.app`, e-maily chodí z domény autora. Kampaň za klienta potřebuje jeho doménu a placené plány (Vercel Pro, Supabase, Resend).
+- **Schválení reklam v Meta Ads:** speciální kategorie pro finanční služby a ověření inzerenta, zásady Meta pro finanční produkty musí přečíst člověk ([Právní upozornění](#právní-upozornění)).
+- **Kontrola právníkem:** že jde o vzdělávací srovnání, ne investiční doporučení ani nabídku produktu (PRIIPs, MiFID II, GDPR, 480/2004).
+- **Rezerva v rychlosti:** LCP v Lighthouse na mobilu je 2,6 s, těsně nad cílem 2,5 s (checklist produkce, bod 11).
+
 ## Cílová skupina
 
 - **Kdo:** Česko, 25–45 let, na mobilu, přichází z reklamy na Facebooku nebo Instagramu (reklama A nebo B). Persona je pracovní předpoklad ze zadání, ne změřená data.
@@ -115,6 +125,8 @@ U děkovacího stavu skript zadrží odeslání v prohlížeči, aby se nic neul
 | Hero A | 107 → 96 (−10 %) | 84 → 74 (−12 %) |
 | Hero B | 101 → 94 (−7 %) | 78 → 72 (−8 %) |
 
+Po kroku 9 (texty pro laika, 2026-10-11) stejný skript: hero A 96 / 74, hero B 96 / 74. U hero B přibyla dvě slova („fond z EU“ místo „UCITS“).
+
 **LCP a CLS** (produkční build s testovacími proměnnými, 375 × 812, síť 150 ms / 1,6 Mb/s, CPU 4× zpomalené, medián z 5 běhů, cookie lišta zobrazená; změřeno Playwrightem přes `PerformanceObserver`, ne Lighthouse):
 
 | | LCP před → po | CLS před → po |
@@ -170,7 +182,7 @@ Podíly jsou z návštěvníků, kteří stránku opravdu viděli (zobrazení st
 
 | Krok | Event | Z prokliků | Ze zobrazení | Z předchozího kroku | Proč |
 | --- | --- | --- | --- | --- | --- |
-| Proklik z reklamy | (Meta: link click) | 100 % | – | – | |
+| Proklik z reklamy | (Meta: link click) | 100 % | – | – | Výchozí bod, 100 % = všechny prokliky |
 | Zobrazení stránky | `page_view` (Meta: landing page view) | 80 % | 100 % | 80 % | Část lidí odejde, než se stránka v prohlížeči Facebooku/Instagramu načte. Stránka je statická (LCP cíl < 2,5 s), takže ztráta by měla být malá |
 | Interakce s kalkulačkou | `calc_start` | 28 % | 35 % | 35 % | Hero A vede tlačítkem přímo na kalkulačku, hero B na srovnání, takže u B bude nižší. Část lidí z feedu stránku jen proletí |
 | Zobrazení formuláře | `form_view` | 24 % | 30 % | – | Formulář je čtvrtý v pořadí. Kdo došel až sem, prošel kalkulačku nebo srovnání. Event počítá i ty, kdo kalkulačku přeskočili |
@@ -319,7 +331,7 @@ Dvě reklamy pro Meta (Facebook, Instagram), každá s vlastním hero. Texty, vi
 | Vizuál | [feed 4:5](ads/a-uspora/feed-4x5.png) | [feed 4:5](ads/b-zvedavost/feed-4x5.png) |
 
 - **Reklama říká totéž co hero.** Každé tvrzení má protějšek v hero (tabulky v [`ads/a-uspora/README.md`](ads/a-uspora/README.md) a [`ads/b-zvedavost/README.md`](ads/b-zvedavost/README.md)). Čísla hlídá unit test [`lib/ads.test.ts`](lib/ads.test.ts) proti stejnému výpočtu, ze kterého je hero.
-- **Každé číslo má podmínku hned u sebe:** v nadpisu, popisu i vizuálu, ne jen v jiném poli. Nadpis A proto začíná „2 000 Kč/měs., 20 let:“, protože se v některých umístěních zobrazí bez primárního textu.
+- **Každé číslo má podmínku hned u sebe:** v nadpisu, popisu i vizuálu, ne jen v jiném poli. Nadpis se v některých umístěních zobrazí bez primárního textu a podmínka se k číslu do 27 znaků nevejde, proto je nadpis A bez čísla („Rozdíl v poplatcích fondů“). Číslo s podmínkou nese vizuál (rozhodnutí 59).
 - **Vizuály jsou HTML šablony** ve stylu stránky („Výpis z účtu 2.0“: stejné tokeny a písma), renderované do PNG Playwrightem (`npm run render-ads`). Pozvánka na stránku je jen typografický řádek, žádné falešné tlačítko (pravidlo Meta).
 
 ## Práce s AI
